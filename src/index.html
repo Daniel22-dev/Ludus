@@ -104,22 +104,12 @@
   .core:not(.show){display:none}
   /* ---- kovářská animace ve výhni ---- */
   .forge{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 4px;text-align:center}
-  .forge svg{display:block;filter:drop-shadow(0 0 26px rgba(245,140,40,.35))}
+  .forge svg{display:block;filter:drop-shadow(0 0 30px rgba(255,140,40,.42))}
   .forge .flabel{font:700 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft)}
   .forge .fsub{font-size:11.5px;color:var(--faint);margin-top:-6px}
   .forge .anvil{fill:#3a3450}
   html[data-theme="light"] .forge .anvil{fill:#5a5170}
-  .forge .billet{fill:#ffb347;animation:billetGlow 1.4s ease-in-out infinite}
-  @keyframes billetGlow{0%,100%{fill:#ff8a2b;filter:none}50%{fill:#ffd27a}}
-  .forge .hammer{transform-origin:62px 30px;animation:hammerSwing .68s cubic-bezier(.3,.1,.4,1) infinite}
-  @keyframes hammerSwing{0%,46%{transform:rotate(-46deg)}66%{transform:rotate(10deg)}74%{transform:rotate(6deg)}100%{transform:rotate(-46deg)}}
-  .forge .spark{fill:#ffd27a;opacity:0;animation:sparkFly .68s ease-out infinite}
-  .forge .spark.s2{animation-delay:.02s;fill:#ff9d3d}
-  .forge .spark.s3{animation-delay:.04s}
-  @keyframes sparkFly{0%,62%{opacity:0;transform:translate(0,0) scale(.4)}66%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--sx,0),var(--sy,-30px)) scale(.2)}}
-  .forge .embers{animation:emberPulse 1.2s ease-in-out infinite}
-  @keyframes emberPulse{0%,100%{opacity:.55}50%{opacity:1}}
-  .forge .fbar{width:150px;height:6px;border-radius:99px;background:rgba(180,160,255,.14);overflow:hidden}
+  .forge .fbar{width:160px;height:6px;border-radius:99px;background:rgba(180,160,255,.14);overflow:hidden}
   .forge .fbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--amber),var(--gold));animation:ffill 2.1s linear forwards}
   @keyframes ffill{from{width:6%}to{width:100%}}
   .resetrow{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -158,6 +148,8 @@
   .badge.free{background:rgba(62,230,143,.12);color:var(--green);border:1px solid rgba(62,230,143,.25)}
   .badge.intern{background:rgba(255,107,125,.12);color:var(--red);border:1px solid rgba(255,107,125,.28)}
   .card.locked{opacity:.5;cursor:not-allowed}
+  .card.dim{opacity:.5;filter:saturate(.7)}
+  .card.dim:hover{opacity:.78;filter:none}
   .card.locked:hover{transform:none}
 
   /* topic step */
@@ -255,14 +247,20 @@
   .ebadge{font:700 10.5px var(--sans);padding:3px 8px;border-radius:999px;border:1px solid var(--line2)}
   .ebadge.on{color:var(--green);border-color:rgba(62,230,143,.4);background:rgba(62,230,143,.08)}
   .ebadge.off{color:var(--gold-soft);border-color:rgba(245,185,66,.35);background:rgba(245,185,66,.06)}
+  .zap{display:inline-flex;align-items:center;gap:2px;font:700 9.5px var(--sans);letter-spacing:.04em;color:var(--amber);
+    border:1px solid rgba(255,194,75,.42);background:rgba(255,194,75,.10);border-radius:999px;padding:2px 6px;white-space:nowrap}
+  .step>span:last-child{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px}
+  .step .zap{margin-top:4px;color:var(--amber);font-size:9.5px}
+  .steps-legend{font-size:11.5px;color:var(--faint);margin:-14px 0 24px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .btn .zap{margin-left:7px;border-color:rgba(0,0,0,.18);background:rgba(0,0,0,.12);color:inherit}
   .dbadge{font:600 10.5px var(--sans);color:var(--faint);letter-spacing:.02em}
   .dbadge.sk{margin:2px 0 6px;color:var(--dim)}
   /* ---- logo ---- */
   .school-logo{height:40px;width:auto;border-radius:8px;display:block;box-shadow:0 4px 14px -6px rgba(0,0,0,.6)}
   /* ---- footer + tools bar ---- */
   .foot{margin-top:46px;border-top:1px solid var(--line);padding-top:22px}
-  .footer-tools-panel{display:flex;flex-direction:column;gap:14px}
-  .footer-tools-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .footer-tools-panel{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+  .footer-tools-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
   .footer-tools-title{font:700 11px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-right:4px}
   .foot-link{border:1px solid var(--line2);background:transparent;color:var(--gold-soft);border-radius:999px;padding:8px 14px;font:700 12.5px var(--sans);cursor:pointer;text-decoration:none}
   .foot-link:hover{border-color:var(--gold);background:rgba(245,185,66,.08)}
@@ -344,8 +342,9 @@
   <nav class="steps" id="steps" aria-label="Postup">
     <button class="step" data-step="0" aria-current="true"><span class="num">I</span><span><b>Mechanika</b><span>jak se hraje</span></span></button>
     <button class="step" data-step="1"><span class="num">II</span><span><b>Svět</b><span>jak to vypadá</span></span></button>
-    <button class="step" data-step="2"><span class="num">III</span><span><b>Obsah</b><span>co se učí</span></span></button>
+    <button class="step" data-step="2"><span class="num">III</span><span><b>Obsah</b><span>co se učí</span><span class="zap" title="Tento krok může spotřebovat požadavek na Gemini">⚡ Gemini</span></span></button>
   </nav>
+  <div class="steps-legend"><span class="zap">⚡ Gemini</span> = krok/akce, která může spotřebovat požadavek na API. Mechanika a svět jsou zdarma; analýza neznámého tématu a generování hry volají Gemini.</div>
 
   <div class="work solo">
     <div class="stage" id="stage"></div>
@@ -359,7 +358,7 @@
     </div>
     <pre id="specpre"></pre>
     <div class="specact">
-      <button class="btn" id="build">✦ Vygenerovat obsah a hru (Gemini)</button>
+      <button class="btn" id="build">✦ Vygenerovat obsah a hru <span class="zap">⚡ Gemini</span></button>
       <button class="btn ghost" id="example">Ukázka offline</button>
       <button class="btn ghost" id="dlClass" disabled>🏫 Třídní soutěž</button>
       <button class="btn ghost" id="dlLesson" disabled>📋 Lesson pack</button>
@@ -1502,18 +1501,22 @@ function stageSkins(){
     <p class="lead">Nejdřív si v kroku I vyber mechaniku — světy se pak ukážou jen ty, které k ní sednou.</p>`;
   const pub=state.exportTarget==='public';
   const list=SKINS.filter(sk=>sk.frames.includes(state.frame));
+  const playable=!!ENGINES[state.frame]; // má vybraná mechanika připojený engine?
+  const engBadge=playable?'<div class="ebadge on">▶ hratelná hra</div>':'<div class="ebadge off">⚙ zatím jen obsah</div>';
   const cards=list.map(sk=>{
     const on=state.skin===sk.id;
+    const dim=!playable&&!on; // bez enginu: světy zeslabit, vybraný nech svítit
     if(sk.twin){
       const internal=!pub;
       // ve vnitřním režimu je originál výchozí; veřejně zamčeno na bezpečné
       const brandedNow = pub ? false : (on ? state.branded : internal);
       const swDisabled=pub;
-      return `<div class="card" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}" tabindex="0" role="button">
+      return `<div class="card${dim?' dim':''}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}" tabindex="0" role="button">
         <span class="ic" style="filter:drop-shadow(0 3px 10px ${sk.c}66)">${sk.ic}</span>
         <h3>${brandedNow?esc(sk.brand):esc(sk.safe)}</h3>
         <div class="tl">${esc(sk.en)}</div>
         ${sk.dom?`<div class="dbadge sk">${sk.dom.map(d=>DOMAIN_CZ[d]).join(' · ')}</div>`:''}
+        ${engBadge}
         <div class="twinline">${brandedNow?'↔ bezpečná verze: '+esc(sk.safe):'↔ originál: '+esc(sk.brand)}</div>
         <div class="brandtoggle">
           <small>${pub?'Veřejně zamčeno na bezpečný vzhled':'Originál ↔ bezpečná verze<br><span style="color:var(--faint)">přepínač jen pro vnitřní výuku</span>'}</small>
@@ -1522,22 +1525,33 @@ function stageSkins(){
         ${brandedNow?'<div class="badge intern">⚠ jen interně</div>':''}
       </div>`;
     }
-    return `<button class="card" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}">
+    return `<button class="card${dim?' dim':''}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}">
       <span class="ic" style="filter:drop-shadow(0 3px 10px ${sk.c}66)">${sk.ic}</span>
       <h3>${esc(sk.safe)}</h3>
       <div class="tl">${esc(sk.en)}</div>
       ${sk.dom?`<div class="dbadge sk">${sk.dom.map(d=>DOMAIN_CZ[d]).join(' · ')}</div>`:''}
+      ${engBadge}
       <div class="badge free">✓ volné dílo — smí všude</div>
     </button>`;
   }).join('');
   const f=FRAMES[state.frame];
   return `<p class="eyebrow">Krok II</p><h2>Vyber svět pro „${f.cz}“</h2>
-    <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.</p>
+    <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.<br><span style="color:var(--faint)">${playable?'Tahle mechanika má engine — z těchto světů vznikne hratelná hra.':'Tahle mechanika zatím nemá engine: světy posvítí jen jako podklad pro obsah / recept / třídní soutěž / lesson pack. Hratelná hra zatím vzniká jen z mechaniky <b>Akademie</b>.'}</span></p>
     <div class="grid">${cards}</div>`;
 }
 
 function stageTopic(){
-  const chips=TOPICS.map(t=>`<button class="chip" data-topic="${t.id}" aria-pressed="${state.topic&&state.topic.id===t.id}">${t.cz}</button>`).join('');
+  // nabídni jen 4 témata, přednostně pasující k oboru vybrané mechaniky
+  const dom=(FRAME_DOM[state.frame]||['language']);
+  const ranked=TOPICS.map((t,i)=>({t,i,match:dom.includes(t.domain||'language')?0:1}))
+    .sort((a,b)=>a.match-b.match||a.i-b.i);
+  let pick=ranked.slice(0,4).map(x=>x.t);
+  // když je vybráno připravené téma, ať je mezi nabídkami vidět
+  if(state.topic&&!state.topic.custom&&!pick.some(t=>t.id===state.topic.id)){
+    const cur=TOPICS.find(t=>t.id===state.topic.id);
+    if(cur)pick=[cur,...pick].slice(0,4);
+  }
+  const chips=pick.map(t=>`<button class="chip" data-topic="${t.id}" aria-pressed="${state.topic&&state.topic.id===t.id}">${t.cz}</button>`).join('');
   const cur=state.topic?`<div class="note">Aktivní téma: <b>${esc(state.topic.cz)}</b> · ${KIND_CZ[state.topic.kind]||'vlastní'} · operace: ${topOps(state.topic).map(o=>OPS[o].cz).join(', ')||'—'}</div>`:'';
   return `<p class="eyebrow">Krok III</p><h2>Vlož učivo</h2>
     <p class="lead">Napiš učivo nebo výukový cíl — gramatiku, ale i děj, proces, model, pojmy či příčiny a důsledky. Nebo klikni na hotové. Jádro vpravo přepočítá, jestli to s tvou mechanikou bude fungovat.</p>
@@ -1545,12 +1559,12 @@ function stageTopic(){
       <label for="ti">Téma / výukový cíl</label>
       <div class="row">
         <input class="input" id="ti" placeholder="např. vztažné věty, fotosyntéza, příčiny 1. světové války, seřaď algoritmus…" value="${state.topic&&state.topic.custom?esc(state.topic.cz):''}" style="flex:1;min-width:240px">
-        <button class="btn" id="analyze">Analyzovat</button>
+        <button class="btn" id="analyze" title="Pokud téma není v knihovně, ověří se přes Gemini (spotřebuje požadavek)">Analyzovat <span class="zap">⚡</span></button>
       </div>
       <div class="note" id="anote"></div>
     </div>
     <div class="field">
-      <label>Nebo vyber z připravených</label>
+      <label>Nebo vyber z připravených <span style="color:var(--faint);font-weight:400">(nabídka podle mechaniky)</span></label>
       <div class="chips">${chips}</div>
     </div>
     ${cur}
@@ -1562,25 +1576,54 @@ function stageTopic(){
 let forgeTimer=null;
 function forgeMarkup(){
   return `<div class="forge">
-    <svg width="190" height="150" viewBox="0 0 190 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <ellipse class="embers" cx="95" cy="132" rx="74" ry="13" fill="#ff7a18"/>
-      <ellipse class="embers" cx="95" cy="132" rx="58" ry="9" fill="#ffd27a" opacity=".6"/>
-      <g class="anvil">
-        <rect x="70" y="104" width="50" height="11" rx="3"/>
-        <path d="M58 92 H132 L120 104 H70 Z"/>
-        <rect x="86" y="115" width="18" height="20"/>
-        <path d="M78 135 H112 L120 146 H70 Z"/>
-        <path d="M132 92 L150 89 L150 95 L134 99 Z"/>
+    <svg width="200" height="170" viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- žhavá svatozář kolem polotovaru -->
+      <circle cx="102" cy="88" r="30" fill="#ff7a18" opacity="0">
+        <animate attributeName="opacity" values="0;.18;0" keyTimes="0;.66;1" dur="0.66s" repeatCount="indefinite"/>
+      </circle>
+      <!-- oheň ve výhni pod kovadlinou -->
+      <g>
+        <ellipse cx="100" cy="158" rx="60" ry="12" fill="#ff7a18">
+          <animate attributeName="opacity" values=".55;1;.6;.9;.55" dur="0.9s" repeatCount="indefinite"/>
+        </ellipse>
+        <path d="M78 158 Q84 134 100 126 Q116 134 122 158 Z" fill="#ffb347">
+          <animate attributeName="opacity" values="1;.6;1" dur="0.5s" repeatCount="indefinite"/>
+          <animateTransform attributeName="transform" type="scale" additive="sum" values="1 1;1 1.12;1 1" dur="0.5s" repeatCount="indefinite"/>
+        </path>
+        <path d="M88 158 Q92 142 100 136 Q108 142 112 158 Z" fill="#ffe08a">
+          <animate attributeName="opacity" values=".9;.5;.9" dur="0.36s" repeatCount="indefinite"/>
+        </path>
       </g>
-      <rect class="billet" x="74" y="86" width="40" height="7" rx="3"/>
-      <circle class="spark"    cx="96" cy="86" r="2.4" style="--sx:-26px;--sy:-34px"/>
-      <circle class="spark s2" cx="96" cy="86" r="2.0" style="--sx:14px;--sy:-40px"/>
-      <circle class="spark s3" cx="96" cy="86" r="1.8" style="--sx:30px;--sy:-26px"/>
-      <circle class="spark s2" cx="96" cy="86" r="1.6" style="--sx:-8px;--sy:-44px"/>
-      <g class="hammer">
-        <rect x="58" y="30" width="8" height="62" rx="3" fill="#7a5230"/>
-        <rect x="44" y="14" width="36" height="20" rx="4" fill="#9aa0b4"/>
-        <rect x="44" y="14" width="9"  height="20" rx="3" fill="#6f7488"/>
+      <!-- kovadlina -->
+      <g class="anvil">
+        <rect x="74" y="104" width="52" height="11" rx="3"/>
+        <path d="M60 92 H140 L126 104 H74 Z"/>
+        <rect x="90" y="115" width="20" height="20"/>
+        <path d="M80 135 H120 L128 148 H72 Z"/>
+        <path d="M140 92 L160 89 L160 96 L142 100 Z"/>
+      </g>
+      <!-- žhavý polotovar na kovadlině -->
+      <rect x="80" y="85" width="44" height="7" rx="3.5" fill="#ff8a2b">
+        <animate attributeName="fill" values="#ff7a18;#ffd27a;#ff8a2b;#ff7a18" dur="0.66s" repeatCount="indefinite"/>
+      </rect>
+      <!-- jiskry z místa úderu -->
+      ${[['-30 -30'],['8 -42'],['32 -26'],['-12 -46'],['20 -14'],['-2 -52']].map((s,i)=>{
+        const col=i%2?'#ff9d3d':'#ffe08a';const r=(2.6-i*0.18).toFixed(1);
+        return `<circle cx="104" cy="84" r="${r}" fill="${col}" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;0" keyTimes="0;.62;.70;1" dur="0.66s" repeatCount="indefinite"/>
+          <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 0;${s}" keyTimes="0;.62;.70;1" dur="0.66s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;.2 .55 .35 1"/>
+        </circle>`;}).join('')}
+      <!-- kladivo (pivot 122,30) -->
+      <g>
+        <rect x="118" y="30" width="8" height="58" rx="3" fill="#7a5230"/>
+        <rect x="118" y="30" width="3.5" height="58" rx="2" fill="#9a6a40"/>
+        <rect x="100" y="80" width="44" height="18" rx="4" fill="#9aa0b4"/>
+        <rect x="100" y="80" width="11" height="18" rx="3" fill="#6f7488"/>
+        <rect x="133" y="80" width="11" height="18" rx="3" fill="#b8bdcd"/>
+        <animateTransform attributeName="transform" attributeType="XML" type="rotate"
+          values="-52 122 30;-52 122 30;6 122 30;-30 122 30;-52 122 30"
+          keyTimes="0;.5;.66;.82;1" dur="0.66s" repeatCount="indefinite"
+          calcMode="spline" keySplines="0 0 1 1;.7 0 .9 .4;.3 .3 .6 1;.4 0 .6 1"/>
       </g>
     </svg>
     <div class="flabel">Kujeme vhodnost…</div>
@@ -1733,6 +1776,7 @@ function wireStage(){
         state.branded = !!(sk&&sk.twin) && state.exportTarget!=='public';
       }
       beep(600,.07,'sine');refresh();renderStage();
+      setTimeout(()=>go(2),260);
     };
     c.onclick=handler;
     c.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();handler(e);}};
@@ -2089,9 +2133,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.4.0';
+const APP_VERSION='1.4.2';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.4.2: kroky/akce volající Gemini jsou označené ⚡ (krok III, Analyzovat, Vygenerovat) s legendou; nabídka připravených témat omezena na 4 nejrelevantnější podle mechaniky; ve světech je teď jasně vidět, které mají engine (svítí „▶ hratelná hra“) a které ne (zeslabené, „⚙ zatím jen obsah“); při prvním spuštění se otevře uvítací návod s tlačítkem „příště nezobrazovat“; nástroje v zápatí zarovnané na střed.',
+  '1.4.1: po výběru světa dílna plynule sama přejde na krok III (jako z mechaniky na svět). Kovářská animace ve výhni je teď skutečná animace (SVG/SMIL) — kladivo bouchá do žhavého polotovaru, odlétají jiskry a ve výhni plápolá oheň, místo statického obrázku.',
   '1.4.0: přejmenováno na LUDUS, logo zarovnané s nadpisem, přibyl přepínač denního/nočního režimu a tlačítko celé obrazovky. Jádro se přesunulo až na konec — během tří kroků se neukazuje; po zadání všech parametrů proběhne kovářská animace ve výhni a pak naskočí % vhodnosti. Ve 3. kroku je tlačítko „Sestavit novou hru“ (reset), aby při návratu nesvítilo staré téma. Světy: na každé kartě přepínač originál ↔ bezpečná verze — vnitřně je originál výchozí, veřejné sdílení je zamčené na bezpečný vzhled.',
   '1.3.0: Modularizace — herní engine (Hogwarts, ~1,9 MB) vyjmut z dílny do samostatného souboru engines/hogwarts.html a načítá se až při stavbě hry (fetch + cache). Dílna zeštíhlela z ~2,8 MB na ~0,2 MB: rychlejší editace, GitHub kód zobrazí, nové hry už dílnu nezvětšují. Build skládá dist přes scripts/build.mjs (GitHub Actions). Pozn.: dílna teď běží ze serveru (GitHub Pages), stažené hry zůstávají plně offline.',
   '1.2.0: Ludus je obecná dílna, ne jen jazyková — nová mechanika Laboratoř / skládání systému (modely, postupy, procesy, příčiny→důsledky, řešení problémů) napříč předměty, nové obecné světy (Forenzní laboratoř, Dino park, Testovací komory, Časová hlídka, Město budoucnosti, Továrna na algoritmy aj.), doménová vrstva a zobecněné texty; mechaniky bez vlastního enginu vytvoří obsah, recept, třídní soutěž i lesson pack.',
@@ -2122,6 +2168,26 @@ function openGuide(){
     '<div class="guide-step"><span class="gnum">II</span><div><b>Svět</b><small>Oblékni mechaniku do atmosféry. Pro veřejné sdílení drž bezpečné nebo volné světy.</small></div></div>'+
     '<div class="guide-step"><span class="gnum">III</span><div><b>Obsah</b><small>Zadej učivo. Jádro spočítá shodu a doporučí vhodné mini-hry, pak vygeneruj hru přes Gemini.</small></div></div>'+
     '<p style="margin-top:12px"><b>Tip pro kolegy:</b> klíč k API zadej nahoře přes 🔑 a zvol „jen pro relaci“ — na sdíleném počítači se po zavření prohlížeče sám zapomene.</p>');
+}
+/* ---- uvítací návod při prvním spuštění ---- */
+const INTRO_SK='ludus_intro_done';
+function showIntro(){
+  modalOpen('Vítej v LUDUS — jak to funguje',
+    '<p>Postav výukovou hru ve třech krocích, bez programování. Postupuj zleva doprava.</p>'+
+    '<div class="guide-step"><span class="gnum">I</span><div><b>Mechanika</b><small>Vyber, jak se hraje (kampaň, quest, únikovka, detektivka, souboj…). U každé je vidět, jestli z ní vznikne hratelná hra, nebo podklad pro obsah · recept · soutěž · lesson pack.</small></div></div>'+
+    '<div class="guide-step"><span class="gnum">II</span><div><b>Svět</b><small>Oblékni mechaniku do atmosféry. Vnitřně je u dvojčat originál, veřejně bezpečná verze. Zeslabené světy zatím nemají hratelný engine.</small></div></div>'+
+    '<div class="guide-step"><span class="gnum">III</span><div><b>Obsah</b><small>Zadej učivo nebo vyber z nabídky. Po zadání všech tří parametrů Jádro „vykuje“ % vhodnosti a doporučí mini-hry.</small></div></div>'+
+    '<p style="margin-top:12px"><b>Co stojí požadavek:</b> krok či akce s <span class="zap">⚡ Gemini</span> může spotřebovat požadavek na API (analýza neznámého tématu, generování hry). Mechanika a svět jsou zdarma.</p>'+
+    '<p><b>Nahoře:</b> 🔑 klíč k API · 🌙 denní/noční režim · ⛶ celá obrazovka. Tlačítkem „Sestavit novou hru“ v kroku III výběr kdykoli vyčistíš.</p>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">'+
+      '<button class="btn" id="introDone" type="button">Rozumím, příště nezobrazovat</button>'+
+      '<button class="btn ghost" id="introLater" type="button">Zatím zavřít</button></div>');
+  const d=$('#introDone'); if(d) d.onclick=()=>{try{localStorage.setItem(INTRO_SK,'true');}catch(_){}modalClose();toast('Návod se příště neotevře — najdeš ho dole jako „Návod“.');};
+  const l=$('#introLater'); if(l) l.onclick=()=>modalClose();
+}
+function maybeShowIntro(){
+  let seen=''; try{seen=localStorage.getItem(INTRO_SK)||'';}catch(_){}
+  if(seen!=='true') setTimeout(showIntro,350);
 }
 
 /* ---- local diagnostics (běží jen v prohlížeči, nic neposílají do API) ---- */
@@ -2271,6 +2337,7 @@ $('#keyInput').addEventListener('input',()=>{geminiApiKey=cleanKey($('#keyInput'
 $('#modelInput').addEventListener('change',e=>setModel(e.target.value));
 loadModel();loadKey();
 renderStage();renderCore();updateSteps();
+maybeShowIntro();
 </script>
 </body>
 </html>
