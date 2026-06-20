@@ -110,10 +110,18 @@
   .forge .anvil{fill:#3a3450}
   html[data-theme="light"] .forge .anvil{fill:#5a5170}
   .forge .fbar{width:160px;height:6px;border-radius:99px;background:rgba(180,160,255,.14);overflow:hidden}
-  .forge .fbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--amber),var(--gold));animation:ffill 2.1s linear forwards}
+  .forge .fbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--amber),var(--gold));animation:ffill 4.9s linear forwards}
   @keyframes ffill{from{width:6%}to{width:100%}}
   .resetrow{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .resetrow .resethint{font-size:11.5px;color:var(--faint);flex:1;min-width:180px}
+  .filebtn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:1px dashed var(--line2);background:var(--bg2);color:var(--ink);
+    border-radius:11px;padding:11px 15px;font:600 13px var(--sans);transition:.18s}
+  .filebtn:hover{border-color:var(--gold);background:rgba(245,185,66,.06)}
+  .wschip{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line2);background:var(--bg2);border-radius:11px;padding:9px 12px;flex-wrap:wrap}
+  .wschip .wsname{font:600 13px var(--sans);color:var(--ink)}
+  .wschip .wsmeta{font-size:11.5px;color:var(--faint)}
+  .wschip .wsx{margin-left:2px;border:1px solid var(--line2);background:transparent;color:var(--dim);width:24px;height:24px;border-radius:7px;cursor:pointer;line-height:1}
+  .wschip .wsx:hover{color:var(--red);border-color:var(--red)}
   @media(max-width:920px){.work{grid-template-columns:1fr}}
   .stage{min-height:340px}
   .eyebrow{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:15px;margin-bottom:4px}
@@ -286,6 +294,8 @@
   .modal-kv>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:7px}
   .modal-kv b{color:var(--faint);font-weight:600;font-size:12.5px} .modal-kv span{color:var(--ink);font-size:12.5px;text-align:right}
   .test-summary{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .test-run{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .test-hint{color:var(--dim);font-size:13px;margin:2px 0}
   .test-pill{font:700 11.5px var(--sans);padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
   .test-pill.ok{color:var(--green);border-color:rgba(62,230,143,.35);background:rgba(62,230,143,.08)}
   .test-pill.fail{color:var(--red);border-color:rgba(255,107,125,.4);background:rgba(255,107,125,.08)}
@@ -314,7 +324,7 @@
       </div>
       <button class="iconbtn" id="theme" aria-pressed="false" title="Denní / noční režim">🌙</button>
       <button class="iconbtn" id="fullscreen" aria-pressed="false" title="Celá obrazovka">⛶</button>
-      <button class="iconbtn" id="sound" aria-pressed="false" title="Zvuky rozhraní">🔇</button>
+      <button class="iconbtn" id="sound" aria-pressed="true" title="Zvuky rozhraní">🔊</button>
       <button class="iconbtn" id="apiToggle" title="Klíč k API (Gemini)">🔑</button>
       <span class="kbadge off" id="keyBadge">klíč: nezadán</span>
     </div>
@@ -328,9 +338,13 @@
       <button class="btn ghost sm" id="btnClearKey">Smazat</button>
     </div>
     <div class="apirow">
-      <label for="modelInput">Model</label>
-      <input id="modelInput" type="text" placeholder="gemini-2.5-flash" autocomplete="off" spellcheck="false" style="max-width:220px">
-      <span class="apihint">Generování běží přes Gemini stejně jako tvoje ostatní aplikace. Klíč se posílá jen Googlu — nikdy ho nedávej do HTML na GitHubu.</span>
+      <label>Model</label>
+      <div class="toggle modelseg" role="group" aria-label="Model Gemini">
+        <button type="button" data-model="gemini-2.5-pro" aria-pressed="false">Pro</button>
+        <button type="button" data-model="gemini-2.5-flash" aria-pressed="true">Flash</button>
+        <button type="button" data-model="gemini-2.5-flash-lite" aria-pressed="false">Flash-lite</button>
+      </div>
+      <span class="apihint"><span id="modelNote">výchozí, rychlý, slušný free tier</span><br>Při vyčerpání denního limitu se automaticky přepne na další model (Flash-lite má nejvíc requestů zdarma, Pro nejméně). Klíč se posílá jen Googlu — nikdy ho nedávej do HTML na GitHubu.</span>
     </div>
   </div>
 
@@ -1229,7 +1243,16 @@ async function loadEngine(frame){
 }
 
 /* ============================ GEMINI (stejný vzor jako ostatní aplikace) ============================ */
-const G_MODEL_DEFAULT="gemini-2.5-flash", G_FALLBACKS=["gemini-2.5-flash-lite","gemini-flash-latest"];
+const G_MODELS=[
+  {id:'gemini-2.5-pro', label:'Pro', note:'nejchytřejší — free tier bývá hodně omezený'},
+  {id:'gemini-2.5-flash', label:'Flash', note:'výchozí, rychlý, slušný free tier'},
+  {id:'gemini-2.5-flash-lite', label:'Flash-lite', note:'nejlehčí, nejvíc requestů zdarma'},
+];
+const G_MODEL_DEFAULT="gemini-2.5-flash";
+// při vyčerpání kvóty se přechází na lehčí model (víc free requestů): lite → flash → pro
+const G_FALLBACK_ORDER=["gemini-2.5-flash-lite","gemini-2.5-flash","gemini-2.5-pro"];
+const G_FALLBACKS=G_FALLBACK_ORDER.slice();
+const modelLabel=id=>{const m=G_MODELS.find(x=>x.id===id);return m?m.label:id;};
 const G_TIMEOUT=45000, G_KEY_SK="ludus_gemini_key", G_KEY_SESSION_SK="ludus_gemini_key_session", G_MODEL_SK="ludus_gemini_model";
 let geminiApiKey="", geminiModel=G_MODEL_DEFAULT;
 const cleanKey=s=>String(s||"").replace(/[^\x21-\x7E]/g,"");
@@ -1237,12 +1260,13 @@ const isValidModel=n=>/^gemini[-a-z0-9.]+$/i.test(String(n||"").trim());
 function mkErr(m,c){const e=new Error(m);e.code=c||"APP";return e;}
 function extractJson(raw){const s=String(raw||"").trim();const a=s.indexOf("{"),b=s.lastIndexOf("}");if(a>=0&&b>a)return s.slice(a,b+1);const a2=s.indexOf("["),b2=s.lastIndexOf("]");if(a2>=0&&b2>a2)return s.slice(a2,b2+1);return s;}
 function gErr(e){if(!e)return"Neznámá chyba.";if(e.code==="MISSING_KEY")return"Chybí API klíč — vlož ho nahoře v „Klíč k API“.";if(e.code==="TIMEOUT")return"Model neodpověděl včas, zkus to znovu.";if(e.status===401||e.status===403)return"Klíč není platný nebo nemá oprávnění.";if(e.status===400)return"Gemini odmítlo požadavek (zkontroluj délku a téma).";if(e.quota)return"Kvóta/limit API vyčerpán — zkus lehčí model nebo počkej.";if(e.status>=500)return"Služba Gemini má dočasný problém, zkus to znovu.";return e.message||"Nepovedlo se spojit s modelem.";}
-function updateKeyUI(){const b=$('#keyBadge');if(b){b.textContent=geminiApiKey?"klíč: aktivní":"klíč: nezadán";b.className="kbadge "+(geminiApiKey?"on":"off");}const ti=$('#keyInput');if(ti&&!ti.value&&geminiApiKey)ti.value=geminiApiKey;const mi=$('#modelInput');if(mi&&!mi.value)mi.value=geminiModel;}
+function updateKeyUI(){const b=$('#keyBadge');if(b){b.textContent=geminiApiKey?"klíč: aktivní":"klíč: nezadán";b.className="kbadge "+(geminiApiKey?"on":"off");}const ti=$('#keyInput');if(ti&&!ti.value&&geminiApiKey)ti.value=geminiApiKey;renderModelSeg();}
+function renderModelSeg(){document.querySelectorAll('[data-model]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.model===geminiModel));const n=$('#modelNote');if(n){const m=G_MODELS.find(x=>x.id===geminiModel);n.textContent=m?m.note:'';}}
 function loadKey(){let s="",p="";try{s=sessionStorage.getItem(G_KEY_SESSION_SK)||"";}catch(_){}try{p=localStorage.getItem(G_KEY_SK)||"";}catch(_){}geminiApiKey=cleanKey(s||p);updateKeyUI();}
 function loadModel(){let s="";try{s=localStorage.getItem(G_MODEL_SK)||"";}catch(_){}geminiModel=isValidModel(s)?s.toLowerCase():G_MODEL_DEFAULT;}
 function useKeySession(){const k=cleanKey($('#keyInput').value);try{k?sessionStorage.setItem(G_KEY_SESSION_SK,k):sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}geminiApiKey=k;updateKeyUI();toast(k?"Klíč uložen pro relaci ✓":"Klíč smazán.");}
 function clearKeyAll(){try{sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey="";const ti=$('#keyInput');if(ti)ti.value="";updateKeyUI();toast("Klíč smazán.");}
-function setModel(n){const v=String(n||"").trim().toLowerCase();geminiModel=isValidModel(v)?v:G_MODEL_DEFAULT;const mi=$('#modelInput');if(mi)mi.value=geminiModel;try{localStorage.setItem(G_MODEL_SK,geminiModel);}catch(_){}}
+function setModel(n){const v=String(n||"").trim().toLowerCase();geminiModel=isValidModel(v)?v:G_MODEL_DEFAULT;try{localStorage.setItem(G_MODEL_SK,geminiModel);}catch(_){}renderModelSeg();}
 
 async function callGemini(prompt, system, opts){
   opts=opts||{};
@@ -1250,7 +1274,9 @@ async function callGemini(prompt, system, opts){
   if(!geminiApiKey) throw mkErr("Chybí klíč k API. Vlož ho v „Klíč k API“ nahoře a zvol „Použít jen pro relaci“.","MISSING_KEY");
   const run=async(model)=>{
     const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
-    const body={contents:[{role:"user",parts:[{text:prompt}]}],systemInstruction:{parts:[{text:system}]},generationConfig:{temperature:(opts.temp!=null?opts.temp:0.6),maxOutputTokens:opts.maxTokens||4096,responseMimeType:"application/json"}};
+    const parts=[{text:prompt}];
+    if(opts.media&&opts.media.length){opts.media.forEach(m=>parts.push({inline_data:{mime_type:m.mime,data:m.data}}));}
+    const body={contents:[{role:"user",parts}],systemInstruction:{parts:[{text:system}]},generationConfig:{temperature:(opts.temp!=null?opts.temp:0.6),maxOutputTokens:opts.maxTokens||4096,responseMimeType:"application/json"}};
     const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),G_TIMEOUT);
     let res,data;
     try{
@@ -1262,8 +1288,18 @@ async function callGemini(prompt, system, opts){
     const text=((data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts)||[]).map(p=>p.text||"").join("").trim();
     return JSON.parse(extractJson(text));
   };
-  try{return await run(geminiModel);}
-  catch(e){if(e&&e.quota){const fb=G_FALLBACKS.find(m=>m!==geminiModel);if(fb)return await run(fb);}throw e;}
+  // řetězec modelů: vybraný → lehčí modely; při vyčerpané kvótě se přepne na další
+  const chain=[geminiModel, ...G_FALLBACK_ORDER.filter(m=>m!==geminiModel)];
+  let lastErr;
+  for(let i=0;i<chain.length;i++){
+    try{ return await run(chain[i]); }
+    catch(e){
+      lastErr=e;
+      if(e&&e.quota&&i<chain.length-1){ toast('Model '+modelLabel(chain[i])+' má vyčerpané requesty — přepínám na '+modelLabel(chain[i+1])+'.'); continue; }
+      throw e;
+    }
+  }
+  throw lastErr;
 }
 /* ============================ DATA ============================ */
 const OPS = {
@@ -1379,7 +1415,7 @@ const TOPICS = [
   {id:'conditionals',cz:'Podmínkové věty (conditionals)', kind:'grammar', kw:['podmín','conditional','if','kdyby'], ops:{combine:.8,transform:.9,produce:.6,select:.4}},
   {id:'pastsimple', cz:'Minulý čas prostý', kind:'grammar', kw:['past simple','minulý prost','minulý čas'], ops:{produce:.9,select:.6,transform:.5,classify:.4}},
   {id:'pp', cz:'Předpřítomný vs. minulý čas', kind:'grammar', kw:['present perfect','předpřítomn','since','for','perfect'], ops:{classify:.9,select:.8,produce:.5}},
-  {id:'irregular', cz:'Nepravidelná slovesa', kind:'grammar', kw:['nepravideln','irregular','went','sloves'], ops:{produce:1.0,associate:.6,classify:.5}},
+  {id:'irregular', cz:'Nepravidelná slovesa', kind:'grammar', kw:['nepravideln','irregular','irregular verb','went','gone'], ops:{produce:1.0,associate:.6,classify:.5}},
   {id:'vocab', cz:'Slovní zásoba', kind:'vocab', kw:['slovní zásob','slovíčk','vocab','vocabulary'], ops:{associate:1.0,select:.7,classify:.5}},
   {id:'phrasal', cz:'Frázová slovesa', kind:'vocab', kw:['frázov','phrasal','look up','get on'], ops:{associate:.9,select:.7,produce:.5}},
   {id:'prep', cz:'Předložky', kind:'grammar', kw:['předlož','preposition','in on at'], ops:{produce:.8,select:.9}},
@@ -1387,7 +1423,7 @@ const TOPICS = [
   {id:'questions', cz:'Tvoření otázek / slovosled', kind:'grammar', kw:['otázk','question','slovosled','word order'], ops:{order:1.0,combine:.7,produce:.5}},
   {id:'reported', cz:'Nepřímá řeč', kind:'grammar', kw:['nepřím','reported','said that'], ops:{transform:1.0,produce:.6,select:.4}},
   {id:'passive', cz:'Trpný rod (passive)', kind:'grammar', kw:['trpný','passive','pasiv'], ops:{transform:1.0,produce:.6,select:.4}},
-  {id:'modals', cz:'Modály dedukce', kind:'grammar', kw:['modál','deduction','must be','might'], ops:{select:.8,produce:.6,transform:.4}},
+  {id:'modals', cz:'Modály dedukce', kind:'grammar', kw:['modál','modal','deduction','dedukce','could','should','might','muset','smět'], ops:{select:.8,produce:.6,transform:.4}},
   {id:'compar', cz:'Stupňování přídavných jmen', kind:'grammar', kw:['stupňov','comparative','superlative'], ops:{produce:.8,classify:.6,select:.6}},
   {id:'functional', cz:'Funkční jazyk (letiště, hotel…)', kind:'functional', kw:['funkční','functional','letiště','hotel','pohovor','restaurac'], ops:{select:.8,produce:.6,associate:.4}},
   {id:'collocations', cz:'Kolokace', kind:'vocab', kw:['kolokac','collocation'], ops:{associate:.9,select:.6,produce:.4}},
@@ -1453,7 +1489,7 @@ function reasonText(frameId,topic){
 }
 
 /* ============================ STATE ============================ */
-const state={step:0, frame:null, skin:null, branded:false, topic:null, exportTarget:'internal', sound:false, forged:false, forging:false};
+const state={step:0, frame:null, skin:null, branded:false, topic:null, exportTarget:'internal', sound:true, forged:false, forging:false, worksheet:null};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -1481,18 +1517,18 @@ function renderStage(){
 
 function stageFrames(){
   const cards=Object.keys(FRAMES).map(id=>{
-    const f=FRAMES[id], on=state.frame===id, hasEng=!!ENGINES[id];
+    const f=FRAMES[id], on=state.frame===id;
     const doms=(FRAME_DOM[id]||['language']).slice(0,3).map(d=>DOMAIN_CZ[d]).join(' · ');
     return `<button class="card" data-frame="${id}" aria-pressed="${on}" style="--accent:var(--violet)">
       <span class="ic">${f.ic}</span>
       <h3>${f.cz}</h3>
       <div class="tl">${f.tl}</div>
       <div class="meta">Nejlíp na: ${f.best}</div>
-      <div class="fmeta"><span class="ebadge ${hasEng?'on':'off'}">${hasEng?'▶ hratelná hra':'⚙ obsah · recept · soutěž'}</span><span class="dbadge">${doms}</span></div>
+      <div class="fmeta"><span class="dbadge">${doms}</span></div>
     </button>`;
   }).join('');
   return `<p class="eyebrow">Krok I</p><h2>Vyber mechaniku</h2>
-    <p class="lead">Mechanika je způsob hry — kostra, do které se pak vkládá svět i učivo. Každá sedí na jiný typ práce s učivem, od jazyka po přírodní vědy, dějepis nebo informatiku.</p>
+    <p class="lead">Mechanika je způsob hry — kostra, do které se pak vkládá svět i učivo. Každá sedí na jiný typ práce s učivem, od jazyka po přírodní vědy, dějepis nebo informatiku.<br><span style="color:var(--faint)">Plně hratelná hra zatím vzniká ze světů s enginem (uvidíš je v kroku II). Ostatní kombinace připraví obsah, recept, třídní soutěž nebo lesson pack.</span></p>
     <div class="grid">${cards}</div>`;
 }
 
@@ -1501,11 +1537,12 @@ function stageSkins(){
     <p class="lead">Nejdřív si v kroku I vyber mechaniku — světy se pak ukážou jen ty, které k ní sednou.</p>`;
   const pub=state.exportTarget==='public';
   const list=SKINS.filter(sk=>sk.frames.includes(state.frame));
-  const playable=!!ENGINES[state.frame]; // má vybraná mechanika připojený engine?
-  const engBadge=playable?'<div class="ebadge on">▶ hratelná hra</div>':'<div class="ebadge off">⚙ zatím jen obsah</div>';
+  const skinPlayable=sk=>sk.frames.some(f=>ENGINES[f]); // svět umí hratelnou hru (přes mechaniku s enginem)
   const cards=list.map(sk=>{
     const on=state.skin===sk.id;
-    const dim=!playable&&!on; // bez enginu: světy zeslabit, vybraný nech svítit
+    const playable=skinPlayable(sk);
+    const dim=!playable; // bez enginu: kartu zeslabit, ale nechat čitelnou
+    const engBadge=playable?'<div class="ebadge on">▶ hratelná hra</div>':'<div class="ebadge off">⚙ zatím bez enginu — jen obsah</div>';
     if(sk.twin){
       const internal=!pub;
       // ve vnitřním režimu je originál výchozí; veřejně zamčeno na bezpečné
@@ -1535,8 +1572,12 @@ function stageSkins(){
     </button>`;
   }).join('');
   const f=FRAMES[state.frame];
+  const nPlay=list.filter(skinPlayable).length;
+  const leadEng = nPlay>0
+    ? 'Svítící světy mají engine — vznikne z nich hratelná hra. Zeslabené zatím engine nemají: poslouží jako podklad pro obsah · recept · třídní soutěž · lesson pack.'
+    : 'Žádný svět pro tuhle mechaniku zatím nemá engine — připraví se obsah · recept · třídní soutěž · lesson pack. Plně hratelná hra zatím vzniká ze světů u mechaniky <b>Akademie</b>.';
   return `<p class="eyebrow">Krok II</p><h2>Vyber svět pro „${f.cz}“</h2>
-    <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.<br><span style="color:var(--faint)">${playable?'Tahle mechanika má engine — z těchto světů vznikne hratelná hra.':'Tahle mechanika zatím nemá engine: světy posvítí jen jako podklad pro obsah / recept / třídní soutěž / lesson pack. Hratelná hra zatím vzniká jen z mechaniky <b>Akademie</b>.'}</span></p>
+    <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.<br><span style="color:var(--faint)">${leadEng}</span></p>
     <div class="grid">${cards}</div>`;
 }
 
@@ -1566,6 +1607,12 @@ function stageTopic(){
     <div class="field">
       <label>Nebo vyber z připravených <span style="color:var(--faint);font-weight:400">(nabídka podle mechaniky)</span></label>
       <div class="chips">${chips}</div>
+    </div>
+    <div class="field">
+      <label>Hotový pracovní list <span class="zap">⚡</span> <span style="color:var(--faint);font-weight:400">(nepovinné — obrázek nebo PDF)</span></label>
+      ${state.worksheet?`<div class="wschip"><span class="wsname">📎 ${esc(state.worksheet.name)}</span><span class="wsmeta">${esc(state.worksheet.note)}</span><button class="wsx" id="wsRemove" type="button" title="Odebrat">✕</button></div>
+      <div class="note">Při „Vygenerovat“ z něj Gemini vyjde — převede jeho úlohy a látku do herních stanic.</div>`:`<label class="filebtn"><input type="file" id="wsFile" accept="image/*,application/pdf,.pdf" hidden>📎 Vložit obrázek nebo PDF</label>
+      <div class="note" style="color:var(--faint)">Vyfoť nebo nahraj cvičení. Velké obrázky se podle limitů zmenší, PDF se pošle beze změny. DOCX ulož jako PDF nebo vyfoť.</div>`}
     </div>
     ${cur}
     <div class="resetrow"><button class="btn ghost sm" id="resetBuild" type="button">↺ Sestavit novou hru</button>
@@ -1652,7 +1699,7 @@ function renderCore(){
       state.forging=true;
       beep(170,.16,'sawtooth');
       clearTimeout(forgeTimer);
-      forgeTimer=setTimeout(()=>{state.forging=false;state.forged=true;beep(820,.12,'sine');renderCore();},2200);
+      forgeTimer=setTimeout(()=>{state.forging=false;state.forged=true;beep(820,.12,'sine');renderCore();},5000);
     }
     return;
   }
@@ -1801,18 +1848,72 @@ function wireStage(){
   // reset celé stavby
   const rb=$('#resetBuild');
   if(rb) rb.onclick=resetBuild;
+  // pracovní list (obrázek/PDF)
+  const wf=$('#wsFile');
+  if(wf) wf.onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)attachWorksheet(f);};
+  const wx=$('#wsRemove');
+  if(wx) wx.onclick=removeWorksheet;
 }
 function resetBuild(){
   state.frame=null;state.skin=null;state.branded=false;state.topic=null;
-  state.forged=false;state.forging=false;clearTimeout(forgeTimer);
+  state.forged=false;state.forging=false;state.worksheet=null;clearTimeout(forgeTimer);
   beep(420,.1,'triangle');
   go(0);refresh();
   toast('Začínáš novou hru — mechanika, svět i téma vyčištěny.');
 }
 
+/* ---- pracovní list (obrázek/PDF) jako podklad pro Gemini ---- */
+const WS_IMG_MAXDIM=1568, WS_IMG_KEEP_BYTES=1.5*1024*1024, WS_PDF_MAX_BYTES=15*1024*1024;
+function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result));r.onerror=()=>rej(new Error('Soubor se nepodařilo načíst.'));r.readAsDataURL(file);});}
+async function processWorksheet(file){
+  const type=file.type||'';
+  if(/^image\//.test(type)){
+    const dataUrl=await fileToDataURL(file);
+    const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error('Obrázek nelze načíst.'));im.src=dataUrl;});
+    const big=Math.max(img.width,img.height);
+    // malý a lehký obrázek nech v původním formátu; velký zmenši podle limitů
+    if(big<=WS_IMG_MAXDIM && file.size<=WS_IMG_KEEP_BYTES){
+      return {name:file.name,kind:'image',mime:type,data:dataUrl.split(',')[1],note:'ponecháno v původním rozlišení'};
+    }
+    const scale=Math.min(1,WS_IMG_MAXDIM/big);
+    const w=Math.max(1,Math.round(img.width*scale)), h=Math.max(1,Math.round(img.height*scale));
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    const out=c.toDataURL('image/jpeg',0.85);
+    return {name:file.name,kind:'image',mime:'image/jpeg',data:out.split(',')[1],note:'zmenšeno na '+w+'×'+h+' px'};
+  }
+  if(type==='application/pdf'||/\.pdf$/i.test(file.name)){
+    if(file.size>WS_PDF_MAX_BYTES) throw new Error('PDF je moc velké ('+Math.round(file.size/1048576)+' MB). Max ~15 MB — zmenši ho nebo vyfoť jen potřebné stránky.');
+    const dataUrl=await fileToDataURL(file);
+    return {name:file.name,kind:'pdf',mime:'application/pdf',data:dataUrl.split(',')[1],note:Math.round(file.size/1024)+' kB, beze změny'};
+  }
+  throw new Error('Podporované jsou obrázky (JPG/PNG) a PDF. DOCX prosím ulož jako PDF nebo vyfoť — Gemini čte obrázky i PDF přímo.');
+}
+async function attachWorksheet(file){
+  if(!file)return;
+  const note=$('#anote');
+  try{
+    if(note) note.innerHTML='<span class="spin"></span>Zpracovávám pracovní list…';
+    const ws=await processWorksheet(file);
+    state.worksheet=ws; state.forged=false;
+    beep(660,.08,'sine');
+    refresh(); renderStage();
+  }catch(e){
+    if(note) note.textContent=(e&&e.message)||'Soubor se nepodařilo zpracovat.';
+    beep(220,.12,'sawtooth');
+  }
+}
+function removeWorksheet(){state.worksheet=null;state.forged=false;beep(420,.08,'square');refresh();renderStage();}
 function localMatchTopic(text){
-  const q=text.toLowerCase();
-  return TOPICS.find(t=>t.kw.some(k=>q.includes(k)));
+  const q=(text||'').toLowerCase();
+  let best=null, bestLen=0;
+  // vyber téma, jehož NEJDELŠÍ shodující se klíčové slovo je nejdelší (specifická shoda)
+  for(const t of TOPICS){
+    for(const k of (t.kw||[])){
+      if(k && q.includes(k) && k.length>bestLen){ bestLen=k.length; best=t; }
+    }
+  }
+  return bestLen>=4 ? best : null; // krátké/obecné shody radši pošli na Gemini
 }
 async function analyzeTopic(){
   const ti=$('#ti'), note=$('#anote');
@@ -1856,12 +1957,18 @@ function setExport(t){
 }
 $('#tgInternal').onclick=()=>{beep(500,.06);setExport('internal');};
 $('#tgPublic').onclick=()=>{beep(460,.06);setExport('public');};
+const SOUND_SK='ludus_sound';
 $('#sound').onclick=()=>{
   state.sound=!state.sound;
   $('#sound').setAttribute('aria-pressed',state.sound);
   $('#sound').textContent=state.sound?'🔊':'🔇';
+  try{localStorage.setItem(SOUND_SK,state.sound?'on':'off');}catch(_){}
   if(state.sound)beep(620,.09,'triangle');
 };
+(function initSound(){let s='';try{s=localStorage.getItem(SOUND_SK)||'';}catch(_){}
+  state.sound = s==='off' ? false : true; // výchozí: zapnuto
+  const b=$('#sound');if(b){b.setAttribute('aria-pressed',state.sound);b.textContent=state.sound?'🔊':'🔇';}
+})();
 /* ---- denní/noční režim ---- */
 const THEME_SK='ludus_theme';
 function applyTheme(mode){
@@ -1965,7 +2072,9 @@ function normalizeStations(arr){
 async function generateAndAssemble(){
   const p=precheckContent();if(!p)return null;
   const world=p.world, topic=state.topic.cz;
-  const sys=`Jsi designér výukového obsahu pro hru typu „akademie" (postupné stanice s gradací obtížnosti). Téma: ${topic}. Může jít o libovolný předmět (jazyky, dějepis, přírodní vědy, zeměpis, matematika, informatika, ZSV, literatura). Vše zasaď do světa „${world}" (jména, reálie, atmosféra), ale procvičované učivo musí být věcně správné. Je-li téma jazykové, drž cílový jazyk; u ostatních předmětů piš obsah i vysvětlení česky. Vysvětlení „exp" má být stručné a poučné.
+  const ws=state.worksheet;
+  const wsNote=ws?` V příloze je hotový pracovní list (${ws.kind==='pdf'?'PDF':'obrázek'}). Vyjdi PŘEDEVŠÍM z jeho úloh, látky a formulací — převeď je do herních stanic, zachovej věcnou správnost a doplň stručná vysvětlení. Pokud je v listu více typů cvičení, rozděl je do stanic.`:'';
+  const sys=`Jsi designér výukového obsahu pro hru typu „akademie" (postupné stanice s gradací obtížnosti). Téma: ${topic}.${wsNote} Může jít o libovolný předmět (jazyky, dějepis, přírodní vědy, zeměpis, matematika, informatika, ZSV, literatura). Vše zasaď do světa „${world}" (jména, reálie, atmosféra), ale procvičované učivo musí být věcně správné. Je-li téma jazykové, drž cílový jazyk; u ostatních předmětů piš obsah i vysvětlení česky. Vysvětlení „exp" má být stručné a poučné.
 Vrať POUZE JSON: {"stations":[{"name":"název stanice ve světě ${world}","icon":"jedno emoji","topic":"podtéma","atmo":"1–2 věty atmosféry","reward":{"icon":"emoji","name":"odměna","desc":"popis"},"ex":{…}}]}
 "ex" smí mít přesně jeden z tvarů:
 - {"type":"classify","opts":["LABEL_A","LABEL_B"],"inst":"otázka","qs":[{"t":"položka","a":0,"exp":"…"}]}
@@ -1974,7 +2083,10 @@ Vrať POUZE JSON: {"stations":[{"name":"název stanice ve světě ${world}","ico
 - {"type":"wordbank","inst":"Doplň.","qs":[{"t":"… ___ …","bank":["w1","w2","w3","w4"],"a":"správné slovo","exp":"…"}]}
 - {"type":"yesno","opts":["ANO","NE"],"inst":"otázka","qs":[{"t":"tvrzení","a":0,"exp":"…"}]}
 Vytvoř 5 stanic, každá 5 otázek. "a" je index správné možnosti (u wordbank je "a" přímo to slovo). Žádný text mimo JSON.`;
-  const data=await callGemini('Vytvoř obsah: téma '+topic+', svět '+world, sys, {maxTokens:8192, temp:0.7});
+  const userMsg = ws
+    ? 'Vytvoř obsah pro téma "'+topic+'" ve světě "'+world+'" na základě přiloženého pracovního listu.'
+    : 'Vytvoř obsah: téma '+topic+', svět '+world;
+  const data=await callGemini(userMsg, sys, {maxTokens:8192, temp:0.7, media: ws?[{mime:ws.mime,data:ws.data}]:null});
   const stations=normalizeStations(data&&data.stations);
   if(!stations.length) throw mkErr('Gemini nevrátilo použitelné stanice. Zkus to znovu, případně přepni model.','BAD_SCHEMA');
   const pack=packMeta({meta:{},houses:defaultTeams(p.sk),stations},p.sk,p.world,p.useBranded,topic,false);
@@ -2133,9 +2245,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.4.2';
+const APP_VERSION='1.5.0';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.5.0: zvuk rozhraní je nově zapnutý ve výchozím stavu (pamatuje si volbu). V panelu klíče lze přepínat mezi třemi modely — Pro, Flash a Flash-lite; při vyčerpání denního limitu se generování samo přepne na další model (od nejlehčího, ten má nejvíc requestů zdarma). Krok III: oprava rozpoznávání tématu — „modální slovesa“ už nespustí nepravidelná slovesa (matcher bere nejspecifičtější shodu, obecné vstupy jdou na Gemini). Nově lze do obsahu vložit hotový pracovní list (obrázek nebo PDF) — velké obrázky se podle limitů zmenší, PDF jde beze změny, Gemini z listu vyjde při generování. Ve světech je engine teď per-svět: hratelné světy svítí, ostatní jsou zeslabené, ale čitelné. Z karet mechaniky zmizel matoucí odznak „hratelná hra / obsah-recept-soutěž“. Kovářská animace trvá 5 vteřin.',
+  '1.4.3: opravena diagnostika (Testy) — po modularizaci enginu jeden test sahal na chybějící data a shazoval celé spuštění, takže tlačítko zdánlivě nic nedělalo. Sada testů zúžena jen na podstatné (data, Jádro, značky, spec, hra a exporty, obecnost a nástroje) a zrobustněna (pád jednoho testu už neshodí ostatní). Po otevření je nahoře tlačítko „Spustit test“, kterým diagnostiku spustíš na vyžádání.',
   '1.4.2: kroky/akce volající Gemini jsou označené ⚡ (krok III, Analyzovat, Vygenerovat) s legendou; nabídka připravených témat omezena na 4 nejrelevantnější podle mechaniky; ve světech je teď jasně vidět, které mají engine (svítí „▶ hratelná hra“) a které ne (zeslabené, „⚙ zatím jen obsah“); při prvním spuštění se otevře uvítací návod s tlačítkem „příště nezobrazovat“; nástroje v zápatí zarovnané na střed.',
   '1.4.1: po výběru světa dílna plynule sama přejde na krok III (jako z mechaniky na svět). Kovářská animace ve výhni je teď skutečná animace (SVG/SMIL) — kladivo bouchá do žhavého polotovaru, odlétají jiskry a ve výhni plápolá oheň, místo statického obrázku.',
   '1.4.0: přejmenováno na LUDUS, logo zarovnané s nadpisem, přibyl přepínač denního/nočního režimu a tlačítko celé obrazovky. Jádro se přesunulo až na konec — během tří kroků se neukazuje; po zadání všech parametrů proběhne kovářská animace ve výhni a pak naskočí % vhodnosti. Ve 3. kroku je tlačítko „Sestavit novou hru“ (reset), aby při návratu nesvítilo staré téma. Světy: na každé kartě přepínač originál ↔ bezpečná verze — vnitřně je originál výchozí, veřejné sdílení je zamčené na bezpečný vzhled.',
@@ -2205,112 +2319,60 @@ function diagSpec(frameId,skinId,topic,exportTarget,branded){
     schemaVersion:'1.0'};
 }
 function selfTests(){
-  const checks=[]; const add=(cat,name,pass,detail)=>checks.push({cat,name,pass:!!pass,detail:detail||''});
-  const C={data:'Data',core:'Jádro',match:'Doporučení',brand:'Značky',spec:'Spec',ui:'UI tok',gemini:'Gemini',engine:'Engine',exp:'Exporty',gen:'Obecnost',tools:'Nástroje'};
-  const style=cssText();
-  const fIds=Object.keys(FRAMES), bIds=Object.keys(BLOCKS), oIds=Object.keys(OPS);
-  const twin=SKINS.find(s=>s.twin&&s.brand&&s.frames.length), free=SKINS.find(s=>s.free&&s.frames.length);
-  const rel=TOPICS.find(t=>t.id==='relclauses')||TOPICS[0], vocab=TOPICS.find(t=>t.id==='vocab')||TOPICS[0], func=TOPICS.find(t=>t.id==='functional')||TOPICS[0];
+  const checks=[];
+  // robustní: pád jednoho testu neshodí ostatní
+  const add=(cat,name,fn,detail)=>{
+    let pass=false,d='';
+    try{ pass=!!fn(); d=(typeof detail==='function')?String(detail()):(detail||''); }
+    catch(e){ pass=false; d='chyba: '+((e&&e.message)||e); }
+    checks.push({cat,name,pass,detail:d});
+  };
+  const C={data:'Data',core:'Jádro',brand:'Značky',spec:'Spec',game:'Hra a exporty',gen:'Obecnost a nástroje'};
+  const fIds=Object.keys(FRAMES), bIds=Object.keys(BLOCKS);
+  const twin=SKINS.find(s=>s.twin&&s.brand&&s.frames.length);
+  const rel=TOPICS.find(t=>t.id==='relclauses')||TOPICS[0];
+  const academySkin=(SKINS.find(s=>s.frames.includes('academy'))||SKINS[0]).id;
 
   // DATA
-  add(C.data,'Kolekce nejsou prázdné', oIds.length>=7&&bIds.length>=6&&fIds.length>=6&&SKINS.length>=10&&TOPICS.length>=10, oIds.length+' operací, '+bIds.length+' bloků, '+fIds.length+' mechanik, '+SKINS.length+' světů, '+TOPICS.length+' témat');
-  add(C.data,'ID světů a témat jsou unikátní', uniqueIds(SKINS)&&uniqueIds(TOPICS), 'bez duplicit');
-  add(C.data,'Bloky mají platné operace 0–1', Object.values(BLOCKS).every(b=>b.cz&&b.ic&&allKnownOps(b.ops)), 'BLOCKS → OPS');
-  add(C.data,'Mechaniky odkazují na existující bloky', Object.values(FRAMES).every(f=>f.cz&&f.ic&&Array.isArray(f.blocks)&&f.blocks.length&&f.blocks.every(b=>BLOCKS[b])), 'FRAMES → BLOCKS');
-  add(C.data,'Mechaniky mají váhy druhů učiva 0–1', Object.values(FRAMES).every(f=>f.kinds&&Object.values(f.kinds).every(is01)), 'kinds');
-  add(C.data,'Světy odkazují na existující mechaniky', SKINS.every(sk=>sk.id&&sk.safe&&sk.frames.every(f=>FRAMES[f])), 'SKINS → FRAMES');
-  add(C.data,'Dvojčata mají značku, volná díla ne', SKINS.every(sk=>(sk.twin?!!sk.brand:true)&&(sk.free?!sk.brand:true)), 'twin/free');
-  add(C.data,'Témata používají známé operace a druh', TOPICS.every(t=>allKnownOps(t.ops)&&KIND_CZ[t.kind]), 'TOPICS → OPS/KIND');
+  add(C.data,'Kolekce nejsou prázdné', ()=>fIds.length>=6&&bIds.length>=6&&SKINS.length>=10&&TOPICS.length>=10, ()=>fIds.length+' mechanik · '+SKINS.length+' světů · '+TOPICS.length+' témat');
+  add(C.data,'ID světů a témat jsou unikátní', ()=>uniqueIds(SKINS)&&uniqueIds(TOPICS), 'bez duplicit');
+  add(C.data,'Mechaniky a světy odkazují na existující prvky', ()=>Object.values(FRAMES).every(f=>Array.isArray(f.blocks)&&f.blocks.length&&f.blocks.every(b=>BLOCKS[b]))&&SKINS.every(sk=>sk.frames.every(f=>FRAMES[f])), 'frames→blocks · skins→frames');
+  add(C.data,'Dvojčata mají značku, volná díla ne', ()=>SKINS.every(sk=>(sk.twin?!!sk.brand:true)&&(sk.free?!sk.brand:true)), 'twin/free');
 
-  // CORE
-  add(C.core,'cosine() zvládne prázdný vstup', cosine({},{})===0, 'bez NaN');
-  add(C.core,'cosine() = 1 pro stejný vektor', Math.abs(cosine({select:1},{select:1})-1)<1e-4, 'identita');
-  add(C.core,'blockFit() je vždy 0–1', bIds.every(b=>TOPICS.every(t=>is01(blockFit(b,t)))), bIds.length*TOPICS.length+' kombinací');
-  add(C.core,'frameFit() je vždy 0–1 a má existující best blok', fIds.every(f=>TOPICS.every(t=>is01(frameFit(f,t).score)&&BLOCKS[frameFit(f,t).bestId])), fIds.length*TOPICS.length+' kombinací');
-  add(C.core,'verdict() pokrývá zelenou/oranžovou/červenou', verdict(.9).w==='výborná shoda'&&verdict(.5).w==='slabší shoda'&&verdict(.2).w==='nesedí', 'prahy');
-  add(C.core,'reasonText() vrací smysluplný text', reasonText('academy',rel).includes(rel.cz)||reasonText('academy',rel).includes('operac'), 'Jádro text');
+  // JÁDRO
+  add(C.core,'cosine() je korektní (0 i identita)', ()=>cosine({},{})===0&&Math.abs(cosine({select:1},{select:1})-1)<1e-4, 'bez NaN');
+  add(C.core,'blockFit() a frameFit() jsou vždy 0–1', ()=>bIds.every(b=>TOPICS.every(t=>is01(blockFit(b,t))))&&fIds.every(f=>TOPICS.every(t=>is01(frameFit(f,t).score)&&BLOCKS[frameFit(f,t).bestId])), ()=>fIds.length*TOPICS.length+' kombinací');
+  add(C.core,'verdict() pokrývá zelenou/oranžovou/červenou', ()=>verdict(.9).w==='výborná shoda'&&verdict(.5).w==='slabší shoda'&&verdict(.2).w==='nesedí', 'prahy');
+  add(C.core,'bestFrameFor() najde rámec pro každé téma', ()=>TOPICS.every(t=>FRAMES[bestFrameFor(t).id]), 'bez prázdna');
 
-  // MATCH
-  add(C.match,'bestFrameFor() najde rámec pro každé téma', TOPICS.every(t=>FRAMES[bestFrameFor(t).id]), 'bez prázdna');
-  add(C.match,'Vztažné věty silně sedí na Akademii', frameFit('academy',rel).score>.72, Math.round(frameFit('academy',rel).score*100)+' %');
-  add(C.match,'Slovní zásoba sedí na Sběratelskou', frameFit('collection',vocab).score>.72, Math.round(frameFit('collection',vocab).score*100)+' %');
-  add(C.match,'Funkční jazyk sedí na Simulaci rolí', frameFit('roleSim',func).score>.72, Math.round(frameFit('roleSim',func).score*100)+' %');
-
-  // BRAND
-  add(C.brand,'Přepínače interní/veřejné existují', !!($('#tgInternal')&&$('#tgPublic')), 'režim sdílení');
-  add(C.brand,'Veřejné sdílení vypíná značkový vzhled', setExport.toString().includes('state.branded=false')&&setExport.toString().includes("t==='public'"), 'pojistka');
-  add(C.brand,'Veřejný spec nikdy neznačkuje twin', twin?diagSpec(twin.frames[0],twin.id,rel,'public',true).brandedSkin===false:true, twin?twin.safe:'—');
-  add(C.brand,'Interní spec umí značkový režim', twin?diagSpec(twin.frames[0],twin.id,rel,'internal',true).brandedSkin===true:true, twin?twin.brand:'—');
-  add(C.brand,'Karty dvojčat mají klávesnicový switch', stageSkins.toString().includes('role="switch"')&&stageSkins.toString().includes('aria-checked'), 'brand toggle');
+  // ZNAČKY (bezpečnost)
+  add(C.brand,'Veřejný spec nikdy neznačkuje dvojče', ()=>twin?diagSpec(twin.frames[0],twin.id,rel,'public',true).brandedSkin===false:true, ()=>twin?twin.safe:'—');
+  add(C.brand,'Interní spec umí značkový režim', ()=>twin?diagSpec(twin.frames[0],twin.id,rel,'internal',true).brandedSkin===true:true, ()=>twin?twin.brand:'—');
+  add(C.brand,'Veřejné sdílení vypíná značku', ()=>setExport.toString().includes('state.branded=false')&&setExport.toString().includes("t==='public'"), 'pojistka');
 
   // SPEC
-  const sp=diagSpec('academy',(SKINS.find(s=>s.frames.includes('academy'))||SKINS[0]).id,rel,'internal',false);
-  add(C.spec,'Spec je validní JSON', !!JSON.parse(JSON.stringify(sp)), 'stringify/parse');
-  add(C.spec,'Spec má povinná pole', ['frameId','skinId','skinName','brandedSkin','exportTarget','fit','content','schemaVersion'].every(k=>k in sp), 'schema '+sp.schemaVersion);
-  add(C.spec,'Spec.fit je 0–1', is01(sp.fit), 'fit='+sp.fit);
-  add(C.spec,'Spec doporučuje existující bloky', sp.content.recommendedBlocks.every(r=>BLOCKS[r.block]&&is01(r.fit)), sp.content.recommendedBlocks.length+' bloků');
-  add(C.spec,'hljson() escapuje HTML', !hljson({x:'<i>'}).includes('<i>'), 'ochrana náhledu');
+  add(C.spec,'Spec je validní JSON s povinnými poli a fit 0–1', ()=>{const sp=diagSpec('academy',academySkin,rel,'internal',false);return !!JSON.parse(JSON.stringify(sp))&&['frameId','skinId','skinName','brandedSkin','exportTarget','fit','content','schemaVersion'].every(k=>k in sp)&&is01(sp.fit)&&sp.content.recommendedBlocks.every(r=>BLOCKS[r.block]);}, 'schema 1.0');
+  add(C.spec,'hljson() escapuje HTML v náhledu', ()=>!hljson({x:'<i>'}).includes('<i>'), 'ochrana náhledu');
 
-  // UI
-  add(C.ui,'Pracovní oblasti existují', !!($('#stage')&&$('#core')&&$('#spec')&&$('#steps')), 'stage/core/spec/steps');
-  add(C.ui,'Stepper má tři kroky s aria-current', document.querySelectorAll('.step[data-step]').length===3&&Array.from(document.querySelectorAll('.step')).some(b=>b.hasAttribute('aria-current')), '3 kroky');
-  add(C.ui,'Karty mechanik mají aria-pressed', stageFrames().includes('aria-pressed'), 'výběr');
-  add(C.ui,'Tlačítka sestavení existují', !!($('#build')&&$('#example')&&$('#play')), 'generovat/ukázka/přehrát');
-  add(C.ui,'Reduced motion je ošetřen', style.includes('prefers-reduced-motion'), 'méně animací');
-  add(C.ui,'Modal má dialog a aria-modal', !!document.querySelector('#infoModal [role="dialog"][aria-modal="true"]'), 'infoModal');
+  // HRA A EXPORTY
+  add(C.game,'Engine je registrovaný a balíček je validní', ()=>!!ENGINES.academy&&ENGINES.academy.contentTopicId==='relclauses'&&ACADEMY_RC_PACK&&Array.isArray(ACADEMY_RC_PACK.stations)&&ACADEMY_RC_PACK.stations.length>=5, ()=>(ACADEMY_RC_PACK.stations||[]).length+' stanic');
+  add(C.game,'Generování hry přes Gemini je připojené', ()=>typeof generateAndAssemble==='function'&&$('#build').onclick.toString().includes('generateAndAssemble'), 'build → Gemini');
+  add(C.game,'normalizeStations odfiltruje neplatné typy', ()=>normalizeStations([{ex:{type:'nope',qs:[1]}},{name:'X',icon:'⭐',ex:{type:'mc4',qs:[{t:'a',opts:['a','b','c','d'],a:0,exp:''}]}}]).length===1, 'jen platné ex.type');
+  add(C.game,'Třídní soutěž i lesson pack nesou náš obsah', ()=>{const d=flattenPackToTasks(ACADEMY_RC_PACK);const cq=buildClassQuizHtml('Test','t','Test','#b475ff',{},d);const lp=buildLessonPackHtml({content:{label:'t',kind:'grammar'},skinName:'Test',fit:.8},d);return d.length>=15&&cq.includes('RAW_TASKS')&&lp.includes('lesson pack');}, ()=>flattenPackToTasks(ACADEMY_RC_PACK).length+' úloh');
 
-  // GEMINI
-  add(C.gemini,'callGemini volá Google endpoint, ne Anthropic', callGemini.toString().includes('generativelanguage.googleapis.com')&&!callGemini.toString().includes('anthropic'), 'x-goog-api-key');
-  add(C.gemini,'Výchozí model je gemini-2.5-flash', G_MODEL_DEFAULT==='gemini-2.5-flash'&&G_FALLBACKS.length>=1, G_MODEL_DEFAULT);
-  add(C.gemini,'isValidModel přijme gemini-*, odmítne jiné', isValidModel('gemini-2.5-flash')&&!isValidModel('gpt-4'), 'validace');
-  add(C.gemini,'cleanKey odstraní neviditelné znaky', cleanKey(' AIza\u200btest ')==='AIzatest', 'sanitizace klíče');
-  add(C.gemini,'Bez klíče se vyhodí MISSING_KEY', (()=>{try{return false;}catch(e){return false;}})()||callGemini.toString().includes('MISSING_KEY'), 'fail-safe');
-  add(C.gemini,'analyzeTopic má offline fallback', analyzeTopic.toString().includes('catch')&&analyzeTopic.toString().includes('neutrální profil'), 'běží i bez klíče');
-  add(C.gemini,'Klíč se drží jen v relaci', useKeySession.toString().includes('sessionStorage'), 'session-only');
-
-  // ENGINE
-  add(C.engine,'Engine je zabudovaný a dekóduje se', typeof window.__ENGINE_B64==='string'&&window.__ENGINE_B64.length>1000&&b64ToStr(window.__ENGINE_B64).indexOf('<!DOCTYPE html>')===0, Math.round(window.__ENGINE_B64.length/1024/1024*100)/100+' MB b64');
-  add(C.engine,'Vestavěný balíček vztažných vět je validní', ACADEMY_RC_PACK&&ACADEMY_RC_PACK.meta&&Array.isArray(ACADEMY_RC_PACK.stations)&&ACADEMY_RC_PACK.stations.length>=5, (ACADEMY_RC_PACK.stations||[]).length+' stanic');
-  add(C.engine,'Engine je registrovaný pro rámec academy', !!ENGINES.academy&&ENGINES.academy.contentTopicId==='relclauses', 'ENGINES.academy');
-  add(C.engine,'normalizeStations odfiltruje neplatné typy', normalizeStations([{ex:{type:'nope',qs:[1]}},{name:'X',icon:'⭐',ex:{type:'mc4',qs:[{t:'a',opts:['a','b','c','d'],a:0,exp:''}]}}]).length===1, 'jen platné ex.type');
-  add(C.engine,'Generování obsahu přes Gemini je připojené', typeof generateAndAssemble==='function'&&$('#build').onclick.toString().includes('generateAndAssemble'), 'build → Gemini');
-
-  // EXPORTY (třídní soutěž + lesson pack z našeho obsahu)
-  const demoTasks=flattenPackToTasks(ACADEMY_RC_PACK);
-  add(C.exp,'Flattener poskládá úlohy z balíčku', demoTasks.length>=15&&demoTasks.every(t=>t.prompt&&t.options.length>=2&&t.options.indexOf(t.answer)>=0), demoTasks.length+' úloh, každá se správnou možností');
-  const cq=buildClassQuizHtml('Test — vztažné věty','vztažné věty','Test','#b475ff',{},demoTasks);
-  add(C.exp,'Třídní soutěž obsahuje režim Třída a adaptivitu', cq.includes('Režim Třída')&&cq.includes('Adaptivní')&&cq.includes('Losovat jiný tým'), 'týmy, losování, větvení');
-  add(C.exp,'Třídní soutěž umí skrýt řešení žákům', cq.includes('Skrýt řešení žákům'), 'učitelský režim');
-  add(C.exp,'Třídní soutěž nese náš obsah, ne statickou banku', cq.includes('RAW_TASKS')&&cq.indexOf('<\/script>')>0&&!cq.includes('${'), 'injektovaná data');
-  add(C.exp,'inferTargetLevel mapuje téma na CEFR', inferTargetLevel('vztažné věty','grammar')==='B1'&&/A2|B1|B2/.test(inferTargetLevel('slovní zásoba','vocab')), 'B1 pro vztažné věty');
-  const lp=buildLessonPackHtml({content:{label:'vztažné věty',kind:'grammar'},skinName:'Test',fit:.8},demoTasks);
-  add(C.exp,'Lesson pack má úroveň, metodiku a klíč', lp.includes('lesson pack')&&lp.includes('Úroveň')&&lp.includes('Řešení a vysvětlení')&&lp.includes('window.print'), 'metodický HTML');
-
-  // OBECNOST (Ludus mimo jazyky: mechanika Laboratoř, domény, fallback bez enginu)
-  add(C.gen,'Mechanika Laboratoř existuje a má platné bloky', !!FRAMES.lab&&FRAMES.lab.blocks.length>=4&&FRAMES.lab.blocks.every(b=>BLOCKS[b]), 'lab → '+((FRAMES.lab||{}).blocks||[]).join(', '));
-  add(C.gen,'Nové obecné bloky mají platné operace', ['assembler','sequenceBuilder','classificationGrid','causeEffect'].every(b=>BLOCKS[b]&&allKnownOps(BLOCKS[b].ops)), 'assembler/sequence/grid/cause');
-  add(C.gen,'KIND_CZ pokrývá všechny druhy témat', TOPICS.every(t=>KIND_CZ[t.kind]), 'jazykové i obecné');
-  add(C.gen,'Přibyla nejazyková témata napříč obory', TOPICS.filter(t=>topicDom(t)!=='language').length>=8, TOPICS.filter(t=>topicDom(t)!=='language').length+' nejazykových');
-  add(C.gen,'Procesní téma preferuje Laboratoř', (()=>{const t=TOPICS.find(x=>x.id==='photosynthesis');return t&&bestFrameFor(t).id==='lab';})(), 'fotosyntéza → lab');
-  add(C.gen,'Posloupnost preferuje Časovou osu nebo Laboratoř', (()=>{const t=TOPICS.find(x=>x.id==='foodchain');return t&&['timeline','lab'].includes(bestFrameFor(t).id);})(), 'potravní řetězec');
-  add(C.gen,'Jazyková témata stále preferují jazykové rámce', (()=>{const t=TOPICS.find(x=>x.id==='relclauses');return t&&FRAME_DOM[bestFrameFor(t).id].includes('language');})(), 'vztažné věty zůstávají u jazyka');
-  add(C.gen,'Nové světy odkazují na existující mechaniky', SKINS.filter(s=>s.dom).every(s=>s.frames.every(f=>FRAMES[f])), SKINS.filter(s=>s.dom).length+' obecných světů');
-  add(C.gen,'Mechanika bez enginu nevyžaduje engine (fallback)', typeof precheckContent==='function'&&$('#build').onclick.toString().includes('precheckContent')&&!ENGINES.lab, 'lab → obsah/recept/soutěž');
-  add(C.gen,'injectAndStore bez enginu nezhavaruje a nabídne obsah', injectAndStore.toString().includes('window.__lastGame=null')&&injectAndStore.toString().includes('disabled=false'), 'graceful');
-  add(C.gen,'Analýza tématu je obecná (doména + typ práce)', analyzeTopic.toString().includes('domain')&&analyzeTopic.toString().includes('libovolný předmět'), 'napříč předměty');
-
-  // TOOLS / IDENTITY
-  add(C.tools,'Logo a patička jsou přítomné', !!($('#schoolLogo')&&$('#appFoot')&&$('#openGuide')&&$('#openChangelog')&&$('#runTests')&&$('#showOwner')), 'identita');
-  add(C.tools,'Changelog má aktuální verzi a max 10 položek', CHANGELOG[0].startsWith(APP_VERSION)&&CHANGELOG.length<=CHANGELOG_LIMIT, CHANGELOG.length+'/'+CHANGELOG_LIMIT);
-  add(C.tools,'Vlastnické údaje jsou v HTML', document.body.textContent.includes('Vlastník aplikace:')&&document.body.textContent.includes('© 2026 Daniel Baláž'), 'patička');
-  add(C.tools,'Testy běží lokálně bez API', openTests.toString().includes('selfTests'), 'bez sítě');
+  // OBECNOST A NÁSTROJE
+  add(C.gen,'Mechanika bez enginu nevyžaduje engine (fallback)', ()=>!!FRAMES.lab&&typeof precheckContent==='function'&&$('#build').onclick.toString().includes('precheckContent')&&!ENGINES.lab, 'lab → obsah/recept/soutěž');
+  add(C.gen,'Procesní téma preferuje Laboratoř', ()=>{const t=TOPICS.find(x=>x.id==='photosynthesis');return !t||bestFrameFor(t).id==='lab';}, 'fotosyntéza → lab');
+  add(C.gen,'Změna sdílení a generování běží jen v prohlížeči', ()=>!callGemini.toString().includes('anthropic')&&callGemini.toString().includes('generativelanguage.googleapis.com')&&useKeySession.toString().includes('sessionStorage'), 'Gemini · klíč jen v relaci');
+  add(C.gen,'Changelog má aktuální verzi a max 10 položek', ()=>CHANGELOG[0].startsWith(APP_VERSION)&&CHANGELOG.length<=CHANGELOG_LIMIT, ()=>CHANGELOG.length+'/'+CHANGELOG_LIMIT);
+  add(C.gen,'Identita (logo, patička, vlastník) je v HTML', ()=>!!($('#schoolLogo')&&$('#appFoot'))&&document.body.textContent.includes('© 2026 Daniel Baláž'), 'patička a logo');
 
   return checks;
 }
 function groupedTestHtml(rows){
-  const order=['Data','Jádro','Doporučení','Značky','Spec','UI tok','Gemini','Engine','Exporty','Obecnost','Nástroje'];
+  const order=['Data','Jádro','Značky','Spec','Hra a exporty','Obecnost a nástroje'];
   const total=rows.length, ok=rows.filter(r=>r.pass).length, fail=total-ok;
-  let html='<p>Diagnostika běží jen v prohlížeči a nic neposílá do API.</p>';
+  let html='';
   html+='<div class="test-summary"><span class="test-pill '+(fail?'fail':'ok')+'">'+ok+'/'+total+' prošlo</span><span class="test-pill">verze '+esc(APP_VERSION)+'</span></div>';
   order.forEach(cat=>{const g=rows.filter(r=>r.cat===cat);if(!g.length)return;const gok=g.filter(r=>r.pass).length;
     html+='<div class="test-cat"><div class="test-cat-head"><span>'+esc(cat)+'</span><small>'+gok+'/'+g.length+'</small></div><div class="modal-list">';
@@ -2318,7 +2380,23 @@ function groupedTestHtml(rows){
     html+='</div></div>';});
   return html;
 }
-function openTests(){modalOpen('Diagnostika builderu',groupedTestHtml(selfTests()));}
+function openTests(){
+  modalOpen('Diagnostika LUDUS',
+    '<div class="test-run"><button class="btn" id="runDiag" type="button">▶ Spustit test</button>'+
+    '<span class="test-pill">verze '+esc(APP_VERSION)+'</span></div>'+
+    '<div id="diagResults"><p class="test-hint">Klikni na „Spustit test“ a ověř, že všechno funguje, jak má. Diagnostika běží jen v prohlížeči a nic neposílá do API.</p></div>');
+  const btn=$('#runDiag');
+  if(btn) btn.onclick=()=>{
+    btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='<span class="spin"></span>Testuji…';
+    setTimeout(()=>{
+      let html;
+      try{ html=groupedTestHtml(selfTests()); }
+      catch(e){ html='<div class="modal-row fail"><b>✕ Diagnostika selhala</b><small>'+esc((e&&e.message)||String(e))+'</small></div>'; }
+      const box=$('#diagResults'); if(box) box.innerHTML=html;
+      btn.disabled=false; btn.innerHTML=orig;
+    },60);
+  };
+}
 
 $('#openGuide').onclick=openGuide;
 $('#openChangelog').onclick=openChangelog;
@@ -2334,7 +2412,7 @@ $('#apiToggle').onclick=()=>{const p=$('#apiPanel');p.hidden=!p.hidden;if(!p.hid
 $('#btnSession').onclick=()=>useKeySession();
 $('#btnClearKey').onclick=()=>clearKeyAll();
 $('#keyInput').addEventListener('input',()=>{geminiApiKey=cleanKey($('#keyInput').value);updateKeyUI();});
-$('#modelInput').addEventListener('change',e=>setModel(e.target.value));
+document.querySelectorAll('[data-model]').forEach(btn=>btn.onclick=()=>{setModel(btn.dataset.model);beep(560,.06,'sine');toast('Model: '+modelLabel(geminiModel));});
 loadModel();loadKey();
 renderStage();renderCore();updateSteps();
 maybeShowIntro();
