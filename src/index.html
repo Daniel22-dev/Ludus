@@ -1274,8 +1274,8 @@ function b64ToStr(b64){const bin=atob(b64);const u=new Uint8Array(bin.length);fo
 const ENGINE_BASE='engines/';
 /* =====================================================================
    GAME_ENGINES — registr enginů podle dvojice svět + mechanika (skinId:frame).
-   Stav: ready (hotová samostatná hra) | draft (rozpracovaný engine) |
-         generic (přes obecný engine) | content-only (jen obsah) | planned.
+   Stav: ready (připravená) | draft (rozpracovaná) | planned (plánovaná).
+   Interně mohou ještě existovat fallback stavy generic/content-only.
    Svět svítí jako hratelný jen tehdy, když má pro zvolenou mechaniku engine.
    ===================================================================== */
 const ENGINE_STATUSES={ready:1,draft:1,generic:1,'content-only':1,planned:1};
@@ -1296,14 +1296,14 @@ const READY_CONTRACT=['manifest','supportedExerciseTypes','i18n','themeVariants'
 const ALL_CONTENT_LANGS=['cs','en'];
 const GAME_ENGINES={
   'arcanum:academy':{gameId:'arcanum',mechanicId:'academy',title:'Akademie Arkána',engine:ENGINE_BASE+'hogwarts.html',status:'ready',pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'čeká na ověření v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'čeká na engine',themeVariants:'čeká na engine',adapter:'čeká na engine',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
-  'knights:academy':{gameId:'knights',mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',status:'draft',pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'chybí / doplnit do HTML hry',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'chybí / doplnit',themeVariants:'chybí / doplnit official+safe',adapter:'chybí adaptér na LUDUS_CONTENT v2',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
+  'knights:academy':{gameId:'knights',mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',status:'ready',pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'chybí / doplnit',themeVariants:'chybí / doplnit official+safe',adapter:'chybí adaptér na LUDUS_CONTENT v2',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
   'sundered:quest':{gameId:'sundered',mechanicId:'quest',title:'Rozlomené království',engine:ENGINE_BASE+'middle-earth.html',status:'draft',pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'branchingQuest',capabilities:GAME_CAPS.questNoBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'chybí / doplnit do HTML hry',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'chybí / doplnit',themeVariants:'chybí / doplnit official+safe',adapter:'chybí adaptér na LUDUS_CONTENT v2',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}}
 };
 function gameKey(skinId,frame){return String(skinId)+':'+String(frame);}
 function getGameEngine(skinId,frame){return GAME_ENGINES[gameKey(skinId,frame)]||null;}
 function selectedEngine(){try{return getGameEngine(state.skin,state.frame);}catch(_){return null;}}
 function engineStatusFor(skinId,frame){const e=getGameEngine(skinId,frame);return e?e.status:null;}
-function engineStatusLabel(st){return ({ready:'samostatná hra',draft:'rozpracovaný engine',generic:'obecný engine','content-only':'jen obsah',planned:'plánováno'})[st]||'bez enginu';}
+function engineStatusLabel(st){return ({ready:'připravená',draft:'rozpracovaná',generic:'připravená','content-only':'plánovaná',planned:'plánovaná'})[st]||'plánovaná';}
 function flowLabel(id){return FLOW_MODELS[id]||id||'neuvedeno';}
 function capLabel(k){return ({hasMap:'mapa',hasStations:'stanice',hasBoss:'boss',hasClues:'stopy',hasFinalCode:'finální kód',hasLeaderboard:'žebříček',hasSimulation:'simulace'})[k]||k;}
 function engineCaps(eng){return Object.assign({},GAME_CAPS.contentOnly,(eng&&eng.capabilities)||{});}
@@ -1785,11 +1785,11 @@ function stageSkins(){
   const list=SKINS.filter(sk=>sk.frames.includes(state.frame));
   // engine se vyhodnocuje pro dvojici svět + zvolená mechanika (ne jen mechaniku)
   const STATUS_BADGE={
-    ready:'<div class="ebadge on">▶ samostatná hra</div>',
-    draft:'<div class="ebadge draft">▶ rozpracovaný engine</div>',
-    generic:'<div class="ebadge on">▶ přes obecný engine</div>',
-    'content-only':'<div class="ebadge off">⚙ zatím bez enginu — jen obsah</div>',
-    planned:'<div class="ebadge off">⌛ plánováno — zatím bez enginu</div>'
+    ready:'<div class="ebadge on">▶ připravená</div>',
+    draft:'<div class="ebadge draft">▶ rozpracovaná</div>',
+    generic:'<div class="ebadge on">▶ připravená</div>',
+    'content-only':'<div class="ebadge off">⌛ plánovaná</div>',
+    planned:'<div class="ebadge off">⌛ plánovaná</div>'
   };
   const skinStatus=sk=>engineStatusFor(sk.id,state.frame)||'content-only';
   const isPlayable=st=>st==='ready'||st==='draft'||st==='generic';
@@ -2630,15 +2630,16 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.9.2';
+const APP_VERSION='1.9.3';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.9.3: Star Wars / Hvězdní rytíři jsou v registru enginů přepnuté na připravenou hru; viditelné názvy stavů jsou sjednocené na připravená / rozpracovaná / plánovaná.',
   '1.9.2: Pas hry a souhrn před generováním rozlišují brandovanou školní a veřejnou safe variantu; safe režim posílá do promptu zákaz chráněných názvů, postav, symbolů a bossů.',
   '1.9.1: Nastavení výsledné hry se zobrazuje jen v kroku Obsah před generováním; jazykové volby zjednodušeny na češtinu/angličtinu.',
   '1.9.0: Přidán Pas hry, preflight souhrn před generováním, flowModel a capabilities v registru enginů, omezení jazyka rozhraní podle možností enginu, rozšířený LUDUS_CONTENT v2 o game/flow/capabilities a tlačítko pro kopírování LUDUS_CONTENT pro testování enginů.',
   '1.8.0: Příprava na budoucí engine s adaptérem (manuál 02). Vygenerovaná hra teď vedle stávajícího obsahu (window.GAME_CONTENT, který čte současný engine) nese i kanonický obsah v2 (window.LUDUS_CONTENT, schema 2) — typované stanice, jazyky, motiv a povolené typy v jednom objektu. Je to čistě aditivní a neprůlomové: hratelné hry fungují dál beze změny, v2 je jen pro budoucí přepojené enginy. Úplné přejmenování (v2 jako jediný zdroj) přijde až s retrofitem konkrétního enginu ve vlastním vlákně.',
   '1.7.0: Fáze 4+5 — typy cvičení a jazyky. Nový registr typů (výběr ze 4, A/B, ano/ne, doplň z nabídky, roztřiď) nad existujícími typy enginu: ke každému je uvedeno, pro co se hodí, co engine podporuje a že jde objektivně vyhodnotit. Dílna teď do Gemini promptu vypíše jen typy povolené pro dané téma a engine a ostatní zakáže; při kontrole odpovědi se nepovolený nebo neúplný typ rovnou odmítne a zaznamená do Diagnostiky (Testy), místo aby tiše propadl. Přibyla tři jazyková nastavení — rozhraní hry, jazyk obsahu a jazyk podpory (panel klíče): obsah se generuje v jazyce obsahu, vysvětlení v jazyce podpory; volba se pamatuje a propíše se do balíčku i promptu. Tvar obsahu zůstává schema 1 (engine čte beze změny); přejmenování na LUDUS_CONTENT a v2 schema přijde až s retrofitem jednotlivých enginů.',
-  '1.6.0: Engine se nově rozpoznává podle dvojice svět + mechanika, ne jen podle mechaniky. Nový registr GAME_ENGINES: Akademie Arkána (Hogwarts) je „samostatná hra“, Hvězdní rytíři (Star Wars) a Rozlomené království (Middle-earth) jsou „rozpracovaný engine“. Svět teď svítí jako hratelný jen tehdy, když má pro zvolenou mechaniku vlastní engine — dřív se každý svět s mechanikou Akademie tvářil hratelně a spouštěl Hogwarts. Karty světů ukazují stav: samostatná hra / rozpracovaný engine / jen obsah / plánováno. Spuštění i offline ukázka řeší engine přes svět+mechaniku.',
+  '1.6.0: Engine se nově rozpoznává podle dvojice svět + mechanika, ne jen podle mechaniky. Nový registr GAME_ENGINES: Akademie Arkána (Hogwarts) je „připravená“, Hvězdní rytíři (Star Wars) jsou „připravená“ a Rozlomené království (Middle-earth) je „rozpracovaná“. Svět teď svítí jako hratelný jen tehdy, když má pro zvolenou mechaniku vlastní engine — dřív se každý svět s mechanikou Akademie tvářil hratelně a spouštěl Hogwarts. Karty světů ukazují stav: připravená / rozpracovaná / plánovaná. Spuštění i offline ukázka řeší engine přes svět+mechaniku.',
   '1.5.0: zvuk rozhraní je nově zapnutý ve výchozím stavu (pamatuje si volbu). V panelu klíče lze přepínat mezi třemi modely — Pro, Flash a Flash-lite; při vyčerpání denního limitu se generování samo přepne na další model (od nejlehčího, ten má nejvíc requestů zdarma). Krok III: oprava rozpoznávání tématu — „modální slovesa“ už nespustí nepravidelná slovesa (matcher bere nejspecifičtější shodu, obecné vstupy jdou na Gemini). Nově lze do obsahu vložit hotový pracovní list (obrázek nebo PDF) — velké obrázky se podle limitů zmenší, PDF jde beze změny, Gemini z listu vyjde při generování. Ve světech je engine teď per-svět: hratelné světy svítí, ostatní jsou zeslabené, ale čitelné. Z karet mechaniky zmizel matoucí odznak „hratelná hra / obsah-recept-soutěž“. Kovářská animace trvá 5 vteřin.',
   '1.4.3: opravena diagnostika (Testy) — po modularizaci enginu jeden test sahal na chybějící data a shazoval celé spuštění, takže tlačítko zdánlivě nic nedělalo. Sada testů zúžena jen na podstatné (data, Jádro, značky, spec, hra a exporty, obecnost a nástroje) a zrobustněna (pád jednoho testu už neshodí ostatní). Po otevření je nahoře tlačítko „Spustit test“, kterým diagnostiku spustíš na vyžádání.',
   '1.4.2: kroky/akce volající Gemini jsou označené ⚡ (krok III, Analyzovat, Vygenerovat) s legendou; nabídka připravených témat omezena na 4 nejrelevantnější podle mechaniky; ve světech je teď jasně vidět, které mají engine (svítí „▶ hratelná hra“) a které ne (zeslabené, „⚙ zatím jen obsah“); při prvním spuštění se otevře uvítací návod s tlačítkem „příště nezobrazovat“; nástroje v zápatí zarovnané na střed.',
