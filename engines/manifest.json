@@ -11,7 +11,7 @@
       "id": "starwars",
       "name": "Star Wars",
       "file": "star-wars.html",
-      "contentTopicId": "starwars",
+      "contentTopicId": "template",
       "addedVersion": "1.3.0"
     }
   ]
