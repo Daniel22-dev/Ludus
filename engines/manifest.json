@@ -1,4 +1,24 @@
 {
+  "schemaVersion": "ludus-engines-manifest-v1",
+  "updatedAt": "2026-06-24",
+  "statusLabels": {
+    "ready": {
+      "cs": "Hotová",
+      "en": "Ready"
+    },
+    "draft": {
+      "cs": "Rozpracovaná",
+      "en": "In progress"
+    },
+    "wip": {
+      "cs": "Rozpracovaná",
+      "en": "In progress"
+    },
+    "in-progress": {
+      "cs": "Rozpracovaná",
+      "en": "In progress"
+    }
+  },
   "engines": [
     {
       "id": "academy",
@@ -6,7 +26,12 @@
       "file": "hogwarts.html",
       "contentTopicId": "relclauses",
       "addedVersion": "1.3.0",
-      "status": "ready"
+      "status": "ready",
+      "uiStatus": "hotová",
+      "statusLabel": {
+        "cs": "Hotová",
+        "en": "Ready"
+      }
     },
     {
       "id": "starwars",
@@ -14,7 +39,56 @@
       "file": "star-wars.html",
       "contentTopicId": "template",
       "addedVersion": "1.3.0",
-      "status": "ready"
+      "status": "ready",
+      "uiStatus": "hotová",
+      "statusLabel": {
+        "cs": "Hotová",
+        "en": "Ready"
+      }
+    },
+    {
+      "id": "lotr",
+      "gameId": "lotr",
+      "mechanicId": "quest",
+      "name": "LOTR: A Grammar Quest",
+      "title": {
+        "cs": "LOTR: Gramatická výprava",
+        "en": "LOTR: A Grammar Quest"
+      },
+      "file": "lotr.html",
+      "url": "engines/lotr.html",
+      "contentTopicId": "template",
+      "flowModel": "mapStationsFinalChallenge",
+      "addedVersion": "1.0.0-ludus.1",
+      "status": "ready",
+      "uiStatus": "hotová",
+      "statusLabel": {
+        "cs": "Hotová",
+        "en": "Ready"
+      },
+      "supportedMechanics": [
+        "quest"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank",
+        "ordering"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en",
+        "es"
+      ],
+      "brandModes": [
+        "official",
+        "safe"
+      ],
+      "engineKind": "single-html"
     }
   ]
 }
