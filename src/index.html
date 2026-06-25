@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUDUS — dílna výukových her</title>
+<meta name="application-name" content="LUDUS">
+<meta name="apple-mobile-web-app-title" content="LUDUS">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#12092c">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <style>
   :root{
     --bg:#0c0a1a; --bg2:#14102b; --panel:#1c1640; --panel2:#251d52;
@@ -2636,9 +2646,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.9.4';
+const APP_VERSION='1.9.5';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.9.5: Přidána instalovatelná PWA verze LUDUSu — vlastní prémiová ikona, manifest, service worker, mobilní standalone režim a kopírování PWA souborů do dist při buildu.',
   '1.9.4: LOTR je připojený jako hotová hra pro mechaniku Quest; štítky v kartách, Pasu hry a preflightu teď čtou uiStatus/statusLabel a zobrazují hotová / rozpracovaná / plánovaná.',
   '1.9.3: Star Wars / Hvězdní rytíři jsou v registru enginů přepnuté na hotovou hru; viditelné názvy stavů jsou sjednocené na hotová / rozpracovaná / plánovaná.',
   '1.9.2: Pas hry a souhrn před generováním rozlišují brandovanou školní a veřejnou safe variantu; safe režim posílá do promptu zákaz chráněných názvů, postav, symbolů a bossů.',
@@ -2828,6 +2839,13 @@ document.querySelectorAll('[data-model]').forEach(btn=>btn.onclick=()=>{setModel
 loadModel();loadKey();loadLangs();
 renderStage();renderCore();updateSteps();updatePreflightPanel();
 maybeShowIntro();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('LUDUS service worker registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>

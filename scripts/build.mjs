@@ -6,6 +6,7 @@ const SRC_INDEX   = path.join(ROOT, "src", "index.html");
 const ENGINES_DIR = path.join(ROOT, "engines");
 const DIST        = path.join(ROOT, "dist");
 const DIST_ENG    = path.join(DIST, "engines");
+const PUBLIC_DIR  = path.join(ROOT, "public");
 
 // čistý dist
 fs.rmSync(DIST, { recursive: true, force: true });
@@ -21,6 +22,11 @@ const buildTime = new Date().toISOString();
 let html = fs.readFileSync(SRC_INDEX, "utf8");
 html = html.replace(/(<html[^>]*>)/i, `$1\n<!-- BUILD: ${buildTime} -->`);
 fs.writeFileSync(path.join(DIST, "index.html"), html, "utf8");
+
+// 2) PWA / public assets -> dist/
+if (fs.existsSync(PUBLIC_DIR)) {
+  fs.cpSync(PUBLIC_DIR, DIST, { recursive: true });
+}
 
 // 2) enginy + manifest -> dist/engines/
 let engineCount = 0;
