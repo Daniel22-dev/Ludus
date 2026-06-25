@@ -1305,9 +1305,9 @@ const FLOW_MODELS={
 const READY_CONTRACT=['manifest','supportedExerciseTypes','i18n','themeVariants','adapter','contentV2','flowModel','capabilities'];
 const ALL_CONTENT_LANGS=['cs','en'];
 const GAME_ENGINES={
-  'arcanum:academy':{gameId:'arcanum',mechanicId:'academy',title:'Akademie Arkána',engine:ENGINE_BASE+'hogwarts.html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'čeká na ověření v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'čeká na engine',themeVariants:'čeká na engine',adapter:'čeká na engine',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
-  'knights:academy':{gameId:'knights',mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'chybí / doplnit',themeVariants:'chybí / doplnit official+safe',adapter:'chybí adaptér na LUDUS_CONTENT v2',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
-  'sundered:quest':{gameId:'lotr',mechanicId:'quest',title:'LOTR: A Grammar Quest',engine:ENGINE_BASE+'lotr.html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,brandModes:['official','safe'],contract:{manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUS manifestu',i18n:'vložený v HTML enginu',themeVariants:'official + safe vloženo v HTML enginu',adapter:'adaptér na LUDUS_CONTENT v2 vložený',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'mapa · stanice · závěrečná výzva',capabilities:'deklarováno v LUDUSu'}}
+  'arcanum:academy':{gameId:'arcanum',mechanicId:'academy',title:'Akademie Arkána',engine:ENGINE_BASE+'hogwarts.html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'vložené v HTML enginu',themeVariants:'official + safe vložené v HTML enginu',adapter:'adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
+  'knights:academy':{gameId:'knights',mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['classify','mc4','mc2','wordbank','yesno'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,contract:{manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v LUDUSu',i18n:'vložené v HTML enginu',themeVariants:'official + safe vložené v HTML enginu',adapter:'adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v LUDUSu',capabilities:'deklarováno v LUDUSu'}},
+  'sundered:quest':{gameId:'lotr',mechanicId:'quest',title:'LOTR: A Grammar Quest',engine:ENGINE_BASE+'lotr.html',status:'draft',uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,brandModes:['official','safe'],contract:{manifest:'engine soubor je prázdný — čeká na build',supportedExerciseTypes:'deklarováno v LUDUS manifestu',i18n:'čeká na build enginu',themeVariants:'čeká na build enginu',adapter:'čeká na build enginu',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'mapa · stanice · závěrečná výzva',capabilities:'deklarováno v LUDUSu'}}
 };
 function gameKey(skinId,frame){return String(skinId)+':'+String(frame);}
 function getGameEngine(skinId,frame){return GAME_ENGINES[gameKey(skinId,frame)]||null;}
@@ -1419,6 +1419,40 @@ async function loadEngine(skinId,frame){
   const res=await fetch(eng.engine,{cache:'force-cache'});
   if(!res.ok) throw new Error('Engine '+frame+' se nepodařilo načíst ('+res.status+'). Spouštíš dílnu ze serveru (GitHub Pages)?');
   const html=await res.text(); __engineCache[__k]=html; return html;
+}
+
+/* Stav her se přednostně bere z engines/manifest.json (jeden zdroj pravdy).
+   Hodnoty status/uiStatus/statusLabel v GAME_ENGINES výš slouží už jen jako
+   fallback, když manifest nejde načíst (offline / lokální file://). Přepisuje
+   se jen stav a jeho štítek; engine se páruje přes název .html souboru. */
+async function applyEngineManifest(){
+  try{
+    const res=await fetch(ENGINE_BASE+'manifest.json',{cache:'no-cache'});
+    if(!res.ok) return false;
+    const data=await res.json();
+    const list=(data&&Array.isArray(data.engines))?data.engines:[];
+    if(!list.length) return false;
+    const labels=(data&&data.statusLabels)||{};
+    const byFile={};
+    list.forEach(m=>{ if(m&&m.file) byFile[String(m.file).toLowerCase()]=m; });
+    let changed=false;
+    Object.keys(GAME_ENGINES).forEach(k=>{
+      const eng=GAME_ENGINES[k];
+      const file=(eng&&eng.engine)?String(eng.engine).split('/').pop().toLowerCase():'';
+      const m=byFile[file]; if(!m) return;
+      const raw=String(m.status||'').toLowerCase();
+      if(!ENGINE_STATUSES[raw]) return;             // neznámý stav v manifestu ignorujeme, ponecháme fallback
+      const ns=normalizeEngineStatus(raw);
+      if(eng.status!==ns){ eng.status=ns; changed=true; }
+      // štítek odvozujeme ZE STAVU (mapa statusLabels v manifestu), aby v manifestu stačilo měnit jen status
+      const lbl=labels[ns]||labels[raw]||((m.statusLabel&&(m.statusLabel.cs||m.statusLabel.en))?m.statusLabel:null);
+      if(lbl){
+        eng.statusLabel={cs:(lbl.cs||null),en:(lbl.en||null)};
+        eng.uiStatus=lbl.cs?String(lbl.cs).toLowerCase():eng.uiStatus; changed=true;
+      } else { delete eng.uiStatus; delete eng.statusLabel; changed=true; } // bez štítku → odvodí se z vestavěné mapy buildera
+    });
+    return changed;
+  }catch(_e){ return false; }
 }
 
 /* ============================ GEMINI (stejný vzor jako ostatní aplikace) ============================ */
@@ -2387,7 +2421,7 @@ function toContentV2(pack){
     theme:{ variant:(m.skinSafe!==false?'safe':'official'), label:m.themeLabel||themeModeLabel(m.skinSafe!==false?'safe':'official'), displayName:m.certSchool||m.introTitle||'', safeName:m.themeSafeName||'', brandName:m.themeBrandName||'', publication:m.publishHint||publicationHint(m.skinSafe!==false?'safe':'official') },
     exerciseTypes:Array.isArray(m.exerciseTypes)?m.exerciseTypes.slice():allowedExerciseTypes(state.topic,eng),
     flow:{model:flowModel,label:flowLabel(flowModel),capabilities:caps,blocks:{stations:stations,finalChallenge:finalChallenge}},
-    teams:Array.isArray(pack.houses)?pack.houses:[],
+    teams:(pack.houses&&typeof pack.houses==='object'&&!Array.isArray(pack.houses))?pack.houses:{},
     stations:stations,
     finalChallenge:finalChallenge
   };
@@ -2646,9 +2680,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.9.5';
+const APP_VERSION='1.9.7';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.9.7: Stav her (hotová / rozpracovaná / plánovaná) se teď čte z engines/manifest.json — je to jediný zdroj pravdy. Stačí ho změnit na jednom místě v manifestu; hodnota v registru enginů zůstává jen jako záloha pro případ, že by manifest nešel načíst (offline). Stav se páruje přes název .html souboru a po načtení manifestu se karty světů, Pas hry i preflight překreslí.',
+  '1.9.6: Star Wars / Hvězdní rytíři engine teď přijímá obsah z dílny i ve tvaru LUDUS_CONTENT v2 — typy mc4/mc2/yesno/wordbank/classify a stanice (jedno cvičení s polem qs) se v enginu převedou na samostatné úlohy a doplnil se bezpečný fallback v2→v1→ukázka, takže žáci uvidí vygenerovaný obsah místo dema. LOTR (Rozlomené království) vrácen na rozpracovaný, protože engine soubor je zatím prázdný; narovnány smlouvy hotových her v Pasu hry; teams se z dílny posílají jako objekt.',
   '1.9.5: Přidána instalovatelná PWA verze LUDUSu — vlastní prémiová ikona, manifest, service worker, mobilní standalone režim a kopírování PWA souborů do dist při buildu.',
   '1.9.4: LOTR je připojený jako hotová hra pro mechaniku Quest; štítky v kartách, Pasu hry a preflightu teď čtou uiStatus/statusLabel a zobrazují hotová / rozpracovaná / plánovaná.',
   '1.9.3: Star Wars / Hvězdní rytíři jsou v registru enginů přepnuté na hotovou hru; viditelné názvy stavů jsou sjednocené na hotová / rozpracovaná / plánovaná.',
@@ -2839,6 +2875,7 @@ document.querySelectorAll('[data-model]').forEach(btn=>btn.onclick=()=>{setModel
 loadModel();loadKey();loadLangs();
 renderStage();renderCore();updateSteps();updatePreflightPanel();
 maybeShowIntro();
+applyEngineManifest().then(function(changed){ if(changed){ try{ renderStage(); renderCore(); updatePreflightPanel(); }catch(_e){} } });
 </script>
 <script>
 if ('serviceWorker' in navigator) {
