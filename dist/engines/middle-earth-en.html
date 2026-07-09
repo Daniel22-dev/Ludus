@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Middle-earth: A Grammar Quest</title>
+<style>
+/* ════════════════════════════════════════════════════════════
+   MIDDLE-EARTH: A GRAMMAR QUEST
+   Race themes via CSS variables --r-*
+════════════════════════════════════════════════════════════ */
+:root{
+  --r-bg:#0c0a06;--r-pri:#6b5320;--r-acc:#c9a542;--r-acc-l:#eed27a;
+  --r-card:rgba(20,16,8,.92);--r-border:rgba(201,165,66,.35);
+  --r-text:rgba(238,224,190,.92);--r-dim:#8a7a55;--r-danger:#b33a2a;
+}
+body[data-race="hobit"]{--r-bg:#0a1206;--r-pri:#3e6b22;--r-acc:#d9a93c;--r-acc-l:#f2cf6e;--r-card:rgba(12,22,7,.92);--r-border:rgba(217,169,60,.38);--r-text:rgba(235,240,210,.92);--r-dim:#7e9058}
+body[data-race="elf"]{--r-bg:#050b12;--r-pri:#1f4a66;--r-acc:#a8c8de;--r-acc-l:#dcecf8;--r-card:rgba(6,14,22,.92);--r-border:rgba(168,200,222,.32);--r-text:rgba(214,232,244,.92);--r-dim:#5e7e94}
+body[data-race="trpaslik"]{--r-bg:#120b05;--r-pri:#7e4516;--r-acc:#d98e3c;--r-acc-l:#f4ba6e;--r-card:rgba(24,13,6,.92);--r-border:rgba(217,142,60,.38);--r-text:rgba(244,226,200,.92);--r-dim:#9a7350}
+body[data-race="hranicar"]{--r-bg:#080c0e;--r-pri:#2e4a42;--r-acc:#9cb8aa;--r-acc-l:#cce0d4;--r-card:rgba(9,15,16,.93);--r-border:rgba(156,184,170,.3);--r-text:rgba(212,228,220,.92);--r-dim:#5e7a6e}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--r-bg);color:var(--r-text);
+  font-family:Georgia,'Palatino Linotype',Palatino,'Times New Roman',serif;
+  overflow:hidden;transition:background .8s ease;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, color-mix(in srgb,var(--r-pri) 22%,transparent), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 115%, rgba(0,0,0,.55), transparent 60%);
+}
+canvas{position:fixed;inset:0;pointer-events:none}
+#px-canvas{z-index:1}
+#trail-canvas{z-index:60}
+#fx-canvas{z-index:55;display:none}
+#confetti-canvas{z-index:56;display:none}
+#trans-canvas{z-index:90;display:none}
+
+.screen{display:none;position:fixed;inset:0;z-index:5;overflow-y:auto;overflow-x:hidden}
+.screen.on{display:block}
+.wrap{max-width:880px;margin:0 auto;padding:22px 16px 50px;position:relative;z-index:6}
+
+h1,h2,h3,.btn-quest,.loc-go{font-family:'Palatino Linotype',Palatino,Georgia,serif}
+
+/* ── top bar ── */
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.topbar .tb-title{font-size:13px;letter-spacing:2.5px;text-transform:uppercase;color:var(--r-dim)}
+.tb-btns{display:flex;gap:8px}
+.tb-btn{background:rgba(0,0,0,.4);border:1px solid var(--r-border);color:var(--r-text);
+  width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
+.tb-btn:hover{border-color:var(--r-acc)}
+
+/* ── INTRO ── */
+#intro{text-align:center}
+.intro-stage{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 16px}
+.ring-wrap{width:min(230px,55vw);margin:0 auto 8px;filter:drop-shadow(0 0 28px rgba(255,170,40,.35))}
+.ring-spin{animation:ringFloat 7s ease-in-out infinite}
+@keyframes ringFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.eyebrow{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--r-dim);margin-bottom:10px}
+.title-main{font-size:clamp(30px,7vw,54px);letter-spacing:2px;color:var(--r-acc-l);
+  text-shadow:0 0 30px color-mix(in srgb,var(--r-acc) 45%,transparent);line-height:1.12;margin-bottom:6px}
+.title-sub{font-style:italic;color:var(--r-dim);font-size:clamp(14px,3vw,18px);margin-bottom:30px}
+.scroll-card{background:var(--r-card);border:1px solid var(--r-border);border-radius:14px;
+  padding:24px 22px;max-width:480px;margin:0 auto;box-shadow:0 16px 50px rgba(0,0,0,.55)}
+.scroll-card p{font-size:14.5px;line-height:1.65;color:var(--r-text);margin-bottom:16px}
+.scroll-card p em{color:var(--r-acc-l)}
+.name-input{width:100%;padding:13px 15px;border-radius:9px;border:1.5px solid var(--r-border);
+  background:rgba(0,0,0,.45);color:var(--r-text);font-family:inherit;font-size:16px;margin-bottom:13px;outline:none}
+.name-input:focus{border-color:var(--r-acc)}
+.name-input.shake{animation:shakeX .3s ease}
+@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.btn-quest{width:100%;padding:14px;border:none;border-radius:10px;cursor:pointer;
+  font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:#1a1206;font-weight:bold;
+  background:linear-gradient(160deg,var(--r-acc-l),var(--r-acc) 55%,color-mix(in srgb,var(--r-acc) 60%,#000));
+  box-shadow:0 4px 18px color-mix(in srgb,var(--r-acc) 35%,transparent);position:relative;overflow:hidden}
+.btn-quest::after{content:'';position:absolute;top:0;left:-80%;width:55%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);
+  animation:btnSheen 3.4s ease-in-out infinite}
+@keyframes btnSheen{0%,55%{left:-80%}80%,100%{left:130%}}
+.btn-quest:active{transform:scale(.97)}
+.btn-ghost{width:100%;margin-top:10px;padding:11px;border-radius:10px;cursor:pointer;
+  background:transparent;border:1px solid var(--r-border);color:var(--r-dim);font-family:inherit;font-size:13px}
+.btn-ghost:hover{color:var(--r-text);border-color:var(--r-acc)}
+
+/* ── VOLBA RASY ── */
+.race-title{text-align:center;font-size:clamp(22px,5vw,32px);color:var(--r-acc-l);margin:14px 0 4px}
+.race-sub{text-align:center;color:var(--r-dim);font-style:italic;font-size:14px;margin-bottom:22px}
+.race-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.race-card{border-radius:14px;padding:20px 14px 18px;text-align:center;cursor:pointer;
+  border:1.5px solid;transition:transform .18s ease,box-shadow .18s ease;position:relative;overflow:hidden}
+.race-card:hover{transform:translateY(-4px)}
+.race-card .rc-svg{width:84px;height:84px;margin:0 auto 10px;display:block}
+.race-card h3{font-size:18px;letter-spacing:1px;margin-bottom:3px}
+.race-card .rc-sub{font-size:11.5px;font-style:italic;opacity:.75;margin-bottom:8px}
+.race-card .rc-trait{font-size:12px;line-height:1.5;opacity:.85}
+.race-card.rc-hobit{background:linear-gradient(170deg,#101e08,#0a1505);border-color:rgba(217,169,60,.4);color:#e8eecd}
+.race-card.rc-elf{background:linear-gradient(170deg,#081523,#050d18);border-color:rgba(168,200,222,.4);color:#d6e8f4}
+.race-card.rc-trpaslik{background:linear-gradient(170deg,#1e1106,#140a04);border-color:rgba(217,142,60,.4);color:#f4e2c8}
+.race-card.rc-hranicar{background:linear-gradient(170deg,#0d1517,#080e10);border-color:rgba(156,184,170,.36);color:#d4e4dc}
+
+/* ── MAPA ── */
+.map-head{text-align:center;margin-bottom:10px}
+.map-head h2{font-size:clamp(20px,4.5vw,28px);color:var(--r-acc-l);letter-spacing:1px}
+.map-head .mh-sub{color:var(--r-dim);font-style:italic;font-size:13px}
+.map-svg-wrap{border:1px solid var(--r-border);border-radius:14px;overflow:hidden;
+  background:#070604;box-shadow:0 14px 44px rgba(0,0,0,.6);margin-bottom:18px}
+.map-svg-wrap svg{display:block;width:100%;height:auto}
+.loc-marker{cursor:pointer}
+.loc-marker.locked{cursor:default;opacity:.45}
+.loc-list{display:grid;gap:10px}
+.loc-card{display:flex;align-items:center;gap:13px;background:var(--r-card);
+  border:1px solid var(--r-border);border-radius:12px;padding:12px 14px;transition:border-color .15s}
+.loc-card.unlocked:hover{border-color:var(--r-acc)}
+.loc-card.locked{opacity:.5}
+.loc-card .lc-num{flex:0 0 38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid var(--r-border);font-size:15px;color:var(--r-acc-l);background:rgba(0,0,0,.35)}
+.loc-card.done .lc-num{background:var(--r-pri);border-color:var(--r-acc);color:#fff}
+.loc-card .lc-body{flex:1;min-width:0}
+.loc-card .lc-name{font-size:15.5px;color:var(--r-acc-l);letter-spacing:.4px}
+.loc-card .lc-desc{font-size:12px;color:var(--r-dim);font-style:italic}
+.loc-go{flex:0 0 auto;background:linear-gradient(150deg,var(--r-pri),color-mix(in srgb,var(--r-pri) 55%,#000));
+  color:var(--r-text);border:1px solid var(--r-border);padding:8px 15px;border-radius:8px;
+  font-size:11.5px;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.loc-go:hover{border-color:var(--r-acc)}
+.loc-go.boss{background:linear-gradient(150deg,#7a1d10,#3d0c05);border-color:rgba(255,120,50,.45);color:#ffd9b0}
+.bag-strip{margin-top:20px;background:var(--r-card);border:1px solid var(--r-border);border-radius:12px;padding:13px 15px}
+.bag-strip h3{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--r-dim);margin-bottom:9px}
+.bag-row{display:flex;gap:9px;flex-wrap:wrap}
+.bag-slot{width:52px;height:52px;border-radius:10px;border:1px dashed var(--r-border);
+  display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3)}
+.bag-slot svg{width:40px;height:40px}
+.bag-slot.empty span{color:var(--r-dim);font-size:18px;opacity:.5}
+
+/* ── EXERCISE ── */
+.ex-head{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--r-border);
+  margin-bottom:14px;box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.ex-head svg{display:block;width:100%;height:auto}
+.ex-head .eh-label{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 10px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));text-align:center}
+.ex-head .eh-label h2{font-size:clamp(17px,4vw,24px);color:#f4e6c0;letter-spacing:1.4px;text-shadow:0 2px 10px #000}
+.ex-head .eh-label .eh-sub{font-size:12px;font-style:italic;color:rgba(244,230,192,.75)}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.prog-bar{flex:1;height:9px;border-radius:6px;background:rgba(0,0,0,.45);border:1px solid var(--r-border);overflow:hidden}
+.prog-fill{height:100%;width:0;border-radius:6px;transition:width .4s ease;
+  background:linear-gradient(90deg,var(--r-pri),var(--r-acc))}
+.prog-txt{font-size:12px;color:var(--r-dim);white-space:nowrap}
+.q-card{background:var(--r-card);border:1px solid var(--r-border);border-radius:14px;
+  padding:20px 18px;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:opacity .22s ease,transform .22s ease}
+.q-card.fade{opacity:0;transform:translateY(8px)}
+.q-task{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--r-dim);margin-bottom:9px}
+.q-text{font-size:clamp(16px,3.6vw,19.5px);line-height:1.55;margin-bottom:18px}
+.q-text b{color:var(--r-acc-l)}
+.opt-grid{display:grid;gap:9px}
+.opt-grid.two{grid-template-columns:1fr 1fr}
+.opt-btn{padding:13px 10px;border-radius:10px;border:1.5px solid color-mix(in srgb,var(--r-acc) 28%,transparent);
+  background:rgba(0,0,0,.35);color:var(--r-text);font-family:inherit;font-size:14.5px;cursor:pointer;
+  line-height:1.35;transition:transform .13s,background .13s,border-color .13s;text-align:center}
+.opt-btn:hover{border-color:var(--r-acc);background:color-mix(in srgb,var(--r-pri) 22%,transparent);transform:translateY(-1px)}
+.opt-btn:active{transform:scale(.96)}
+.opt-btn.ok{background:rgba(34,110,52,.25);border-color:#46b06a;color:#9fe8b4}
+.opt-btn.bad{background:rgba(150,40,28,.22);border-color:#c4503a;color:#f0a896}
+.opt-btn:disabled{cursor:default}
+.gap-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.gap-chip{padding:9px 16px;border-radius:999px;border:1.5px solid var(--r-border);
+  background:rgba(0,0,0,.4);color:var(--r-acc-l);cursor:pointer;font-family:inherit;font-size:14.5px}
+.gap-chip:hover{border-color:var(--r-acc)}
+.ord-line{min-height:46px;border:1.5px dashed var(--r-border);border-radius:10px;
+  padding:8px;display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;background:rgba(0,0,0,.25)}
+.ord-word{padding:8px 13px;border-radius:8px;border:1.5px solid var(--r-border);cursor:pointer;
+  background:rgba(0,0,0,.42);color:var(--r-text);font-family:inherit;font-size:14.5px}
+.ord-word.in-line{background:color-mix(in srgb,var(--r-pri) 35%,transparent);border-color:var(--r-acc);color:var(--r-acc-l)}
+.ord-bank{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:12px}
+.fb-box{margin-top:15px;border-radius:10px;padding:13px 14px;font-size:13.5px;line-height:1.55;display:none}
+.fb-box.show{display:block;animation:fbIn .25s ease}
+@keyframes fbIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fb-box.good{background:rgba(34,110,52,.16);border:1px solid rgba(70,176,106,.5);color:#bfeccb}
+.fb-box.bad{background:rgba(150,40,28,.15);border:1px solid rgba(196,80,58,.5);color:#f4c0b2}
+.fb-box .fb-next{margin-top:11px;width:100%;padding:11px;border-radius:8px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;letter-spacing:1px;text-transform:uppercase;
+  background:linear-gradient(150deg,var(--r-acc-l),var(--r-acc));color:#1a1206;font-weight:bold}
+.review-banner{background:rgba(120,80,20,.2);border:1px solid rgba(217,169,60,.45);border-radius:10px;
+  padding:10px 13px;font-size:13px;color:var(--r-acc-l);margin-bottom:12px;text-align:center;font-style:italic}
+.shake-screen{animation:scrShake .45s ease}
+@keyframes scrShake{0%,100%{transform:translate(0)}15%{transform:translate(-9px,3px)}30%{transform:translate(8px,-4px)}45%{transform:translate(-7px,-3px)}60%{transform:translate(6px,3px)}75%{transform:translate(-4px,2px)}90%{transform:translate(3px,-2px)}}
+
+/* ── BOSS ── */
+.boss-hud{display:flex;justify-content:space-between;gap:14px;margin-bottom:13px}
+.hp-block{flex:1}
+.hp-name{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:5px;color:var(--r-dim)}
+.hp-name.enemy{text-align:right;color:#ff9a6a}
+.hp-bar{height:14px;border-radius:8px;background:rgba(0,0,0,.5);border:1px solid var(--r-border);overflow:hidden}
+.hp-fill{height:100%;border-radius:8px;transition:width .5s ease}
+.hp-fill.player{background:linear-gradient(90deg,#2e7d46,#5fc97e)}
+.hp-fill.enemy{background:linear-gradient(90deg,#ff7a2a,#c41e0e);float:right}
+.boss-stage{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(255,110,40,.35);
+  margin-bottom:14px;box-shadow:0 0 44px rgba(200,60,10,.25)}
+.boss-stage svg{display:block;width:100%;height:auto}
+.flash-hit{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(255,220,120,.85),transparent 65%)}
+.flash-hit.go{animation:flashGo .5s ease}
+.flash-dmg{position:absolute;inset:0;pointer-events:none;opacity:0;background:rgba(170,20,5,.55)}
+.flash-dmg.go{animation:flashGo .5s ease}
+@keyframes flashGo{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.cut-overlay{position:fixed;inset:0;z-index:80;background:rgba(2,1,0,.92);display:none;
+  align-items:center;justify-content:center;padding:20px;text-align:center}
+.cut-overlay.on{display:flex;animation:fbIn .4s ease}
+.cut-box{max-width:520px}
+.cut-box svg{width:min(260px,60vw);margin:0 auto 16px;display:block}
+.cut-box h2{font-size:clamp(22px,5.5vw,34px);color:#ffd98a;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 26px rgba(255,150,40,.5)}
+.cut-box p{font-size:15px;line-height:1.6;color:rgba(244,230,200,.85);font-style:italic;margin-bottom:20px}
+
+/* ── REWARD ── */
+.reward-overlay{position:fixed;inset:0;z-index:78;background:rgba(3,2,0,.9);display:none;
+  align-items:center;justify-content:center;padding:20px}
+.reward-overlay.on{display:flex}
+.reward-card{background:var(--r-card);border:1px solid var(--r-acc);border-radius:16px;
+  padding:28px 24px;max-width:380px;width:100%;text-align:center;
+  box-shadow:0 0 60px color-mix(in srgb,var(--r-acc) 30%,transparent);animation:rwIn .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes rwIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.reward-card .rw-rays{width:170px;height:170px;margin:0 auto 6px;position:relative}
+.reward-card .rw-rays::before{content:'';position:absolute;inset:-22px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 14deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 14deg 22deg,transparent 22deg 36deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 36deg 44deg,transparent 44deg 58deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 58deg 66deg,transparent 66deg 80deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 80deg 88deg,transparent 88deg 102deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 102deg 110deg,transparent 110deg 124deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 124deg 132deg,transparent 132deg 146deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 146deg 154deg,transparent 154deg 168deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 168deg 176deg,transparent 176deg 190deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 190deg 198deg,transparent 198deg 212deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 212deg 220deg,transparent 220deg 234deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 234deg 242deg,transparent 242deg 256deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 256deg 264deg,transparent 264deg 278deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 278deg 286deg,transparent 286deg 300deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 300deg 308deg,transparent 308deg 322deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 322deg 330deg,transparent 330deg 344deg,color-mix(in srgb,var(--r-acc) 18%,transparent) 344deg 352deg,transparent 352deg);
+  animation:raysSpin 14s linear infinite}
+@keyframes raysSpin{to{transform:rotate(360deg)}}
+.reward-card .rw-rays svg{position:relative;width:100%;height:100%}
+.reward-card h3{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--r-dim);margin-bottom:5px}
+.reward-card .rw-name{font-size:clamp(19px,5vw,25px);color:var(--r-acc-l);margin-bottom:8px}
+.reward-card .rw-quote{font-size:13px;font-style:italic;color:var(--r-dim);line-height:1.55;margin-bottom:18px}
+
+/* ── CERTIFICATE ── */
+.cert-frame{background:linear-gradient(165deg,#f4e8cc,#e8d8b0 60%,#dcc89a);color:#3a2c14;
+  border-radius:8px;padding:6px;box-shadow:0 20px 60px rgba(0,0,0,.6);max-width:620px;margin:14px auto}
+.cert-inner{border:2px solid #8a6a30;border-radius:5px;padding:26px 22px;position:relative;text-align:center;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,250,230,.6),transparent 70%),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(138,106,48,.04) 3px 4px)}
+.cert-inner::before{content:'';position:absolute;inset:5px;border:1px solid rgba(138,106,48,.5);border-radius:3px;pointer-events:none}
+.cert-tree{width:120px;margin:0 auto 4px;opacity:.92}
+.cert-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#8a6a30;margin-bottom:6px}
+.cert-h{font-size:clamp(20px,5vw,30px);letter-spacing:1.5px;color:#4a3415;margin-bottom:2px}
+.cert-sub{font-size:12px;font-style:italic;color:#7a5c28;margin-bottom:16px}
+.cert-name{font-size:clamp(22px,6vw,34px);color:#2c1e08;border-bottom:1.5px solid #8a6a30;
+  display:inline-block;padding:0 22px 4px;margin-bottom:6px}
+.cert-race{font-size:13px;font-style:italic;color:#7a5c28;margin-bottom:14px}
+.cert-body{font-size:13.5px;line-height:1.6;color:#4a3415;max-width:440px;margin:0 auto 16px}
+.cert-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:14px;font-size:11px;color:#7a5c28}
+.cert-foot .cf-sig{font-style:italic;font-size:15px;color:#4a3415;border-top:1px solid #8a6a30;padding-top:3px}
+.cert-actions{max-width:620px;margin:0 auto;display:grid;gap:9px}
+
+.gap-chip.ok{border-color:#46b06a;color:#9fe8b4;background:rgba(34,110,52,.18)}
+.gap-chip.bad{border-color:#c4503a;color:#f0a896;background:rgba(150,40,28,.16)}
+.gap-chip:disabled{cursor:default}
+.opt-btn.ok,.gap-chip.ok{animation:okPop .4s ease}
+@keyframes okPop{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
+.title-main{animation:titleGlow 5.5s ease-in-out infinite}
+@keyframes titleGlow{0%,100%{text-shadow:0 0 26px color-mix(in srgb,var(--r-acc) 38%,transparent)}50%{text-shadow:0 0 46px color-mix(in srgb,var(--r-acc) 62%,transparent)}}
+.rw-rays svg{animation:artFloat 3.6s ease-in-out infinite}
+@keyframes artFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.cert-score{font-size:13px;color:#5c4418;letter-spacing:.4px;margin:-4px 0 14px}
+.cert-score b{color:#2c1e08}
+.cert-seal{position:absolute;right:14px;bottom:58px;width:62px;height:62px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#c04a30,#8a1a10 62%,#5c0e06);
+  color:#ffe0c8;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transform:rotate(-9deg);box-shadow:0 4px 12px rgba(60,10,0,.4),inset 0 0 0 3px rgba(255,200,160,.25)}
+.cert-seal .cs-g{font-size:25px;font-weight:bold;line-height:1}
+.cert-seal .cs-t{font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+
+/* ── helpers ── */
+.center{text-align:center}
+.mt{margin-top:16px}
+.hidden{display:none !important}
+
+/* ── Teacher preview ── */
+.t-banner{position:fixed;top:52px;left:10px;z-index:200;display:none; /* pod LUDUS badge, aby se nepřekrývaly */
+  background:rgba(201,165,66,.92);color:#1a1206;font-weight:bold;
+  padding:5px 12px;border-radius:14px;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;
+  border:1px solid rgba(120,90,20,.6);box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.skip-btn{display:none;background:color-mix(in srgb,var(--r-acc) 18%,transparent);
+  border:1px solid color-mix(in srgb,var(--r-acc) 50%,transparent);color:var(--r-acc-l);
+  padding:8px 14px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.skip-btn:hover{border-color:var(--r-acc)}
+.t-banner{cursor:pointer}
+.t-reveal{margin:-2px 0 14px;padding:9px 12px;border-radius:9px;font-size:13px;
+  background:rgba(201,165,66,.14);border:1px dashed rgba(201,165,66,.6);color:var(--r-acc-l);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.t-reveal b{color:#fff3c4}
+.t-skip-q{background:transparent;border:1px solid rgba(201,165,66,.55);color:var(--r-acc-l);
+  border-radius:7px;padding:5px 11px;font-family:inherit;font-size:11.5px;cursor:pointer;white-space:nowrap}
+.t-skip-q:hover{border-color:var(--r-acc)}
+.t-panel{position:fixed;left:10px;top:42px;z-index:210;display:none;background:rgba(12,9,4,.97);
+  border:1px dashed rgba(201,165,66,.6);border-radius:12px;padding:11px;max-width:250px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.t-panel.on{display:block}
+.t-panel h4{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--r-dim);margin-bottom:8px}
+.tp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tp-grid button{background:rgba(201,165,66,.12);border:1px solid rgba(201,165,66,.4);color:var(--r-acc-l);
+  border-radius:7px;padding:7px 4px;font-family:inherit;font-size:11px;cursor:pointer;white-space:nowrap}
+.tp-grid button:hover{border-color:var(--r-acc)}
+
+/* ── Accessibility ── */
+button:focus-visible,.opt-btn:focus-visible,.gap-chip:focus-visible,.ord-word:focus-visible,
+.race-card:focus-visible,.loc-go:focus-visible,input:focus-visible,.tb-btn:focus-visible{
+  outline:3px solid var(--r-acc-l);outline-offset:3px;border-radius:8px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+@media (max-width:560px){
+  .opt-grid.two{grid-template-columns:1fr}
+  .boss-hud{flex-direction:column;gap:8px}
+  .hp-name.enemy{text-align:left}
+}
+</style>
+</head>
+<body>
+<div id="ludus-badge" title="LUDUS">LUDUS</div>
+<style>#ludus-badge{position:fixed;top:10px;left:10px;z-index:230;cursor:pointer;user-select:none;-webkit-user-select:none;
+  font-family:Georgia,serif;font-weight:700;font-size:12px;letter-spacing:.22em;color:rgba(240,212,136,.75);
+  background:rgba(12,9,4,.6);border:1px solid rgba(201,162,75,.4);border-radius:8px;padding:7px 11px;backdrop-filter:blur(2px)}
+#ludus-badge:active{transform:scale(.95)}</style>
+<!-- ▼ HUDBA: sem vlož řádek <source src="data:audio/mpeg;base64,..."> z původního souboru ▼ -->
+<audio id="lotr-theme" preload="auto" loop>
+</audio>
+<!-- ▲ HUDBA ▲ -->
+<button id="music-btn" onclick="toggleMusic()" title="Music"
+  style="position:fixed;bottom:14px;right:14px;z-index:500;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.8);font-size:18px;cursor:pointer;align-items:center;justify-content:center;transition:background .15s;display:none">🎵</button>
+<canvas id="px-canvas"></canvas>
+<canvas id="trail-canvas"></canvas>
+<canvas id="fx-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+<canvas id="trans-canvas"></canvas>
+<div class="t-banner" id="t-banner" onclick="tPanelToggle()" title="Open teacher panel">📋 Teacher preview ▾</div>
+<div class="t-panel" id="t-panel">
+  <h4>Jump to any screen</h4>
+  <div class="tp-grid">
+    <button onclick="tJump('intro')">Intro</button>
+    <button onclick="tJump('race')">Races</button>
+    <button onclick="tJump('map')">Map</button>
+    <button onclick="tJumpLoc(0)">1 Hobbiton</button>
+    <button onclick="tJumpLoc(1)">2 Bree</button>
+    <button onclick="tJumpLoc(2)">3 Rivendell</button>
+    <button onclick="tJumpLoc(3)">4 Moria</button>
+    <button onclick="tJumpLoc(4)">5 Lórien</button>
+    <button onclick="tJumpLoc(5)">6 Helm’s D.</button>
+    <button onclick="tJumpLoc(6)">⚔ Boss</button>
+    <button onclick="tJump('cert')">Charter</button>
+  </div>
+</div>
+
+<!-- ════════ OBRAZOVKY ════════ -->
+<div class="screen on" id="intro">
+  <div class="intro-stage">
+    <div class="ring-wrap ring-spin" id="logo-ring">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff3c4"/><stop offset=".45" stop-color="#e8b93a"/>
+            <stop offset=".75" stop-color="#a4761a"/><stop offset="1" stop-color="#fceaa0"/>
+          </linearGradient>
+          <radialGradient id="ringInner" cx=".5" cy=".5" r=".5">
+            <stop offset=".82" stop-color="transparent"/><stop offset="1" stop-color="rgba(120,70,0,.55)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="72" fill="none" stroke="url(#ringGold)" stroke-width="22"/>
+        <circle cx="100" cy="100" r="72" fill="url(#ringInner)"/>
+        <circle cx="100" cy="100" r="83" fill="none" stroke="rgba(255,200,80,.35)" stroke-width="1"/>
+        <circle cx="100" cy="100" r="61" fill="none" stroke="rgba(120,70,0,.5)" stroke-width="1"/>
+        <path id="scriptPath" d="M 100,100 m -68,0 a 68,68 0 1,1 136,0 a 68,68 0 1,1 -136,0" fill="none"/>
+        <text font-size="13" fill="rgba(180,60,10,.95)" font-style="italic" letter-spacing="3">
+          <textPath href="#scriptPath">⌁υrg zʌmʌk ðûl ⌁gor vʌs̆nʌk θûl ⌁υrg zʌmʌk ðûl ⌁bυz mʌrgh kʌ-θûl</textPath>
+        </text>
+      </svg>
+    </div>
+    <div class="eyebrow">One game to teach them all</div>
+    <h1 class="title-main">Middle-earth</h1>
+    <div class="title-sub">A Grammar Quest · from the Shire to Mount Doom</div>
+    <div class="scroll-card">
+      <p>The Dark Lord Sauron has spread <em>grammatical chaos</em> across Middle-earth. Only a traveller who passes six waypoints and stands before the Eye itself can restore order to the land.</p>
+      <p><em>Write your name in the chronicle, traveller:</em></p>
+      <input class="name-input" id="name-in" maxlength="40" placeholder="Your name..." autocomplete="off" onkeydown="if(event.key==='Enter')startQuest()">
+      <button class="btn-quest" onclick="startQuest()">Begin the quest</button>
+      <button class="btn-ghost hidden" id="continue-btn" onclick="continueQuest()">Continue your quest</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="race">
+  <div class="wrap">
+    <h2 class="race-title">Who will you travel as?</h2>
+    <div class="race-sub">Your choice sets the colours of your quest</div>
+    <div class="race-grid">
+      <div class="race-card rc-hobit" tabindex="0" role="button" onclick="pickRace('hobit')">
+        <svg class="rc-svg" viewBox="0 0 100 100"><circle cx="50" cy="62" r="30" fill="#4a7a2a"/><circle cx="50" cy="58" r="26" fill="#5e9438"/><circle cx="50" cy="60" r="9" fill="#2c1a08"/><circle cx="50" cy="60" r="9" fill="none" stroke="#d9a93c" stroke-width="2.5"/><circle cx="56" cy="60" r="1.8" fill="#d9a93c"/><path d="M20 70 Q50 50 80 70" fill="none" stroke="#3a6020" stroke-width="3"/><circle cx="30" cy="40" r="4" fill="#d9a93c" opacity=".8"/><circle cx="68" cy="35" r="3" fill="#d9a93c" opacity=".6"/></svg>
+        <h3>Hobbit</h3><div class="rc-sub">of the Shire</div>
+        <div class="rc-trait">Resilience and good cheer, even in the darkest hour.</div>
+      </div>
+      <div class="race-card rc-elf" tabindex="0" role="button" onclick="pickRace('elf')">
+        <svg class="rc-svg" viewBox="0 0 100 100"><path d="M50 14 L60 44 L50 86 L40 44 Z" fill="#a8c8de"/><path d="M50 14 L60 44 L50 60 L40 44 Z" fill="#dcecf8"/><path d="M30 38 Q50 26 70 38" fill="none" stroke="#dcecf8" stroke-width="2.5"/><circle cx="50" cy="38" r="4" fill="#fff"/><path d="M22 60 Q35 52 42 58 M78 60 Q65 52 58 58" stroke="#5e7e94" stroke-width="2" fill="none"/></svg>
+        <h3>Elf</h3><div class="rc-sub">of Rivendell</div>
+        <div class="rc-trait">A keen eye and memory older than the ages of Men.</div>
+      </div>
+      <div class="race-card rc-trpaslik" tabindex="0" role="button" onclick="pickRace('trpaslik')">
+        <svg class="rc-svg" viewBox="0 0 100 100"><rect x="44" y="20" width="12" height="40" rx="3" fill="#7a5a30"/><path d="M28 22 L72 22 L66 44 L34 44 Z" fill="#b8b8c0"/><path d="M28 22 L72 22 L69 32 L31 32 Z" fill="#d8d8e0"/><path d="M30 64 Q50 78 70 64 L70 84 Q50 96 30 84 Z" fill="#d98e3c"/><path d="M36 68 L36 84 M44 72 L44 89 M52 73 L52 90 M60 72 L60 89" stroke="#a4661c" stroke-width="2.5"/></svg>
+        <h3>Dwarf</h3><div class="rc-sub">of Erebor</div>
+        <div class="rc-trait">Firm as stone, loyal as forged steel.</div>
+      </div>
+      <div class="race-card rc-hranicar" tabindex="0" role="button" onclick="pickRace('hranicar')">
+        <svg class="rc-svg" viewBox="0 0 100 100"><path d="M50 12 L54 70 L50 76 L46 70 Z" fill="#c8d8d0"/><path d="M50 12 L54 70 L50 66 Z" fill="#e8f4ee"/><rect x="42" y="70" width="16" height="6" rx="2" fill="#3a5048"/><rect x="47" y="76" width="6" height="14" rx="2" fill="#5a4028"/><path d="M26 30 Q50 18 74 30" fill="none" stroke="#9cb8aa" stroke-width="2"/><circle cx="50" cy="24" r="3.5" fill="#9cb8aa"/></svg>
+        <h3>Ranger</h3><div class="rc-sub">of the North</div>
+        <div class="rc-trait">Not every wanderer has lost the way — some quietly guard it.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="map">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="tb-title" id="tb-player">Traveller</div>
+      <div class="tb-btns">
+        <button class="tb-btn" onclick="resetGame()" title="New quest">↺</button>
+      </div>
+    </div>
+    <div class="map-head">
+      <h2>Map of Middle-earth</h2>
+      <div class="mh-sub" id="mh-sub">The journey begins in the Shire…</div>
+    </div>
+    <div class="map-svg-wrap" id="map-svg-wrap"></div>
+    <div class="loc-list" id="loc-list"></div>
+    <div class="bag-strip">
+      <h3>Traveller’s pack — artefacts earned</h3>
+      <div class="bag-row" id="bag-row"></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="exercise">
+  <div class="wrap" id="ex-wrap">
+    <div class="topbar">
+      <button class="btn-ghost" style="width:auto;margin:0;padding:8px 16px" onclick="confirmLeave()">← Map</button>
+      <div class="tb-btns">
+        <button class="skip-btn" id="skip-btn" onclick="skipStation()">Skip waypoint →</button>
+      </div>
+    </div>
+    <div class="ex-head" id="ex-head"></div>
+    <div class="review-banner hidden" id="review-banner">⚔ Second attempt — fix the questions that defeated you the first time.</div>
+    <div class="prog-row">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-txt" id="prog-txt"></div>
+    </div>
+    <div class="boss-hud hidden" id="boss-hud">
+      <div class="hp-block"><div class="hp-name" id="hp-pname">The Fellowship</div>
+        <div class="hp-bar"><div class="hp-fill player" id="hp-player" style="width:100%"></div></div></div>
+      <div class="hp-block"><div class="hp-name enemy">The Eye of Sauron</div>
+        <div class="hp-bar"><div class="hp-fill enemy" id="hp-enemy" style="width:100%"></div></div></div>
+    </div>
+    <div class="boss-stage hidden" id="boss-stage"></div>
+    <div class="q-card" id="q-card">
+      <div class="q-task" id="q-task"></div>
+      <div class="q-text" id="q-text"></div>
+      <div id="q-body"></div>
+      <div class="fb-box" id="fb-box"></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="cert">
+  <div class="wrap">
+    <div class="cert-frame">
+      <div class="cert-inner">
+        <svg class="cert-tree" viewBox="0 0 120 110" aria-hidden="true">
+          <path d="M60 100 L60 46" stroke="#4a3415" stroke-width="4" fill="none"/>
+          <path d="M60 66 Q40 60 30 44 M60 66 Q80 60 90 44 M60 56 Q46 48 42 34 M60 56 Q74 48 78 34 M60 48 Q54 38 54 28 M60 48 Q66 38 66 28"
+            stroke="#4a3415" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="30" cy="42" r="3.5" fill="#7a5c28"/><circle cx="90" cy="42" r="3.5" fill="#7a5c28"/>
+          <circle cx="42" cy="32" r="3" fill="#7a5c28"/><circle cx="78" cy="32" r="3" fill="#7a5c28"/>
+          <circle cx="54" cy="26" r="2.6" fill="#7a5c28"/><circle cx="66" cy="26" r="2.6" fill="#7a5c28"/>
+          <g fill="#8a6a30">
+            <path d="M60 6 l1.6 4 4 .4 -3 2.8 .9 4 -3.5-2.1 -3.5 2.1 .9-4 -3-2.8 4-.4 Z"/>
+            <path d="M22 16 l1.3 3.2 3.2.3 -2.4 2.2 .7 3.2 -2.8-1.7 -2.8 1.7 .7-3.2 -2.4-2.2 3.2-.3 Z"/>
+            <path d="M98 16 l1.3 3.2 3.2.3 -2.4 2.2 .7 3.2 -2.8-1.7 -2.8 1.7 .7-3.2 -2.4-2.2 3.2-.3 Z"/>
+            <path d="M8 38 l1.1 2.7 2.7.25 -2 1.85 .6 2.7 -2.4-1.45 -2.4 1.45 .6-2.7 -2-1.85 2.7-.25 Z"/>
+            <path d="M112 38 l1.1 2.7 2.7.25 -2 1.85 .6 2.7 -2.4-1.45 -2.4 1.45 .6-2.7 -2-1.85 2.7-.25 Z"/>
+            <path d="M38 8 l1.1 2.7 2.7.25 -2 1.85 .6 2.7 -2.4-1.45 -2.4 1.45 .6-2.7 -2-1.85 2.7-.25 Z"/>
+            <path d="M82 8 l1.1 2.7 2.7.25 -2 1.85 .6 2.7 -2.4-1.45 -2.4 1.45 .6-2.7 -2-1.85 2.7-.25 Z"/>
+          </g>
+        </svg>
+        <div class="cert-eyebrow">Gondor · Fourth Age</div>
+        <h2 class="cert-h">Charter of King Elessar</h2>
+        <div class="cert-sub">issued in everlasting memory of heroic deeds</div>
+        <div class="cert-name" id="cert-name">—</div>
+        <div class="cert-race" id="cert-race">traveller of Middle-earth</div>
+        <div class="cert-body">has passed every waypoint from the Shire to Mount Doom, overcome the grammatical shadow, and restored order to the speech of Middle-earth. The White Tower shall not forget this name.</div>
+        <div class="cert-score" id="cert-score">—</div>
+        <div class="cert-seal"><div class="cs-g" id="cert-grade">—</div><div class="cs-t">grade</div></div>
+        <div class="cert-foot">
+          <div><div id="cert-date">—</div><div id="cert-tid">Test ID —</div><div>Minas Tirith</div></div>
+          <div><div class="cf-sig">Elessar Telcontar</div><div>King of the Reunited Kingdom</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cert-actions">
+      <button class="btn-quest" onclick="goMap()">Back to the map</button>
+      <button class="btn-ghost" onclick="resetGame()">New quest</button>
+    </div>
+  </div>
+</div>
+
+<div class="cut-overlay" id="cut-overlay">
+  <div class="cut-box">
+    <div id="cut-art"></div>
+    <h2 id="cut-title"></h2>
+    <p id="cut-text"></p>
+    <button class="btn-quest" id="cut-btn">Continue</button>
+  </div>
+</div>
+
+<div class="reward-overlay" id="reward-overlay">
+  <div class="reward-card">
+    <div class="rw-rays" id="rw-art"></div>
+    <h3>Artefact earned</h3>
+    <div class="rw-name" id="rw-name"></div>
+    <div class="rw-quote" id="rw-quote"></div>
+    <button class="btn-quest" onclick="closeReward()">Into the pack</button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   CORE SETUP
+════════════════════════════════════════════════════════════════ */
+const SAVE_KEY='lotr_quest_v1';
+const REDUCED_MOTION=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ════════════════════════════════════════════════════════════════
+   ✏️  EDITABLE DATA — CHANGE THE GRAMMAR HERE BEFORE EACH LESSON
+   ────────────────────────────────────────────────────────────────
+   Each waypoint (LOCATIONS) has a `q` array of questions. Question types:
+
+   1) Multiple choice:
+      {t:'mc', q:'Sentence with a ___ gap', opts:['a','b','c','d'], ok:1, ex:'Explanation.'}
+      → `ok` is the index of the correct option (counting from 0!)
+      → there can be 2, 3 or 4 options
+
+   2) True / false:
+      {t:'tf', q:'A statement or sentence.', ok:true, ex:'Explanation.'}
+
+   3) Fill the gap (chips):
+      {t:'gap', q:'Sentence with a ___ gap', chips:['went','has gone','goes'], ok:'went', ex:'Explanation.'}
+
+   4) Put the words in order:
+      {t:'ord', q:'Build the sentence:', words:['He','has','never','seen','the','sea'], ex:'Explanation.'}
+      → correct order = the order in the `words` array (the game shuffles them)
+
+   • Use <b>bold</b> inside `q` to highlight text.
+   • The explanation `ex` is shown after answering (keep it short).
+   • Any number of questions per waypoint (5–8 recommended).
+   • At the boss (last waypoint) every correct answer damages the Eye,
+     every mistake damages the Fellowship.
+   • `task` = short instruction above the question, `topic` = waypoint subtitle.
+
+   TEACHER PREVIEW — two ways to open it:
+   • add ?teacher=1 to the page address,
+   • triple-tap the LUDUS logo (top-left) or the Ring logo on the intro screen.
+   In preview: answers are revealed, every question has a "Skip →" button,
+   the "Skip waypoint" button clears a whole waypoint, and tapping the
+   "Teacher preview" badge opens a panel with jumps to any screen.
+
+   GRADING: the final charter shows first-try score, percentage and a
+   Czech grade (90 % → 1, 75 % → 2, 60 % → 3, 45 % → 4, else 5),
+   plus a Test ID and timestamp — sized for one phone screenshot.
+
+   Sample content: PAST SIMPLE vs PRESENT PERFECT.
+════════════════════════════════════════════════════════════════ */
+const QUEST_TITLE='Past simple vs Present perfect';
+/* Teacher activation by name was removed (LUDUS unification) — use triple-tap on the LUDUS logo or ?teacher=1. */
+
+const LOCATIONS=[
+{ id:0, name:'Hobbiton', sub:'the Shire · comfort of a hobbit-hole', topic:'Pick the right tense',
+  task:'Choose the correct verb form',
+  q:[
+   {t:'mc', q:'Bilbo <b>___</b> his magic ring in a cave many years ago.', opts:['has found','found','finds'], ok:1, ex:'"Many years ago" = finished past time, so we use the past simple.'},
+   {t:'mc', q:'Frodo <b>___</b> the Shire yet — he is still packing.', opts:['hasn\u2019t left','didn\u2019t leave','doesn\u2019t leave'], ok:0, ex:'"Yet" signals the present perfect.'},
+   {t:'mc', q:'Sam <b>___</b> in the garden all morning. Look at his hands!', opts:['worked','has worked','works'], ok:1, ex:'The result is visible now, so we use the present perfect.'},
+   {t:'tf', q:'The sentence "Gandalf <b>arrived</b> last night" correctly uses the past simple.', ok:true, ex:'"Last night" = a finished time, so the past simple is right.'},
+   {t:'mc', q:'"<b>___</b> you ever <b>___</b> an elf?" asked Sam.', opts:['Did / see','Have / seen','Do / see'], ok:1, ex:'"Ever" + life experience calls for the present perfect.'},
+   {t:'gap', q:'Pippin <b>___</b> two breakfasts today — and it is only nine o\u2019clock!', chips:['ate','has eaten','eats'], ok:'has eaten', ex:'"Today" is not finished yet, so the present perfect fits.'}
+  ]},
+{ id:1, name:'Bree', sub:'The Prancing Pony inn', topic:'Questions and negatives',
+  task:'Complete the question or the negative',
+  q:[
+   {t:'mc', q:'"When <b>___</b> you <b>___</b> Gandalf last?" asked Strider.', opts:['have / seen','did / see','do / see'], ok:1, ex:'"When" asks about a specific time, so use the past simple.'},
+   {t:'gap', q:'The hobbits <b>___</b> a Ranger before that night.', chips:['never met','have never met','had never met'], ok:'had never met', ex:'An action before another past action takes the past perfect (a stretch question).'},
+   {t:'mc', q:'"I <b>___</b> that name in years," whispered the innkeeper.', opts:['didn\u2019t hear','haven\u2019t heard','don\u2019t hear'], ok:1, ex:'"In years" = a period up to now, so the present perfect.'},
+   {t:'tf', q:'The sentence "Did you have seen the riders?" is grammatically correct.', ok:false, ex:'Correct: "Have you seen…?" or "Did you see…?" — never both at once.'},
+   {t:'ord', q:'Build the question:', words:['Have','you','ever','stayed','at','this','inn','?'], ex:'Present perfect: Have + subject + ever + past participle.'},
+   {t:'mc', q:'Frodo <b>___</b> the ring on by accident — and vanished!', opts:['has put','put','puts'], ok:1, ex:'Telling a story in the past, so the past simple.'}
+  ]},
+{ id:2, name:'Rivendell', sub:'the Last Homely House', topic:'Signal words',
+  task:'Decide based on the signal word',
+  q:[
+   {t:'mc', q:'Elrond <b>___</b> in Rivendell since the Second Age.', opts:['lived','has lived','lives'], ok:1, ex:'"Since" + duration up to now means the present perfect.'},
+   {t:'mc', q:'The Council <b>___</b> for three hours yesterday.', opts:['has met','met','meets'], ok:1, ex:'"Yesterday" → past simple.'},
+   {t:'gap', q:'Aragorn <b>___</b> Narsil — the sword is reforged now.', chips:['just received','has just received','receives'], ok:'has just received', ex:'"Just" + a result now means the present perfect.'},
+   {t:'tf', q:'"Already", "yet" and "just" are typical words for the present perfect.', ok:true, ex:'Yes — they go with the present perfect.'},
+   {t:'mc', q:'Bilbo <b>___</b> his book yet. He keeps adding chapters.', opts:['didn\u2019t finish','hasn\u2019t finished','doesn\u2019t finish'], ok:1, ex:'"Yet" → present perfect; the negative is "hasn\u2019t finished".'},
+   {t:'ord', q:'Build the sentence:', words:['The','Fellowship','has','already','chosen','its','path'], ex:'"Already" sits between "has" and the past participle.'}
+  ]},
+{ id:3, name:'Moria', sub:'the dwarf mines · dark and deep', topic:'Irregular verbs',
+  task:'Choose the right form of the irregular verb',
+  q:[
+   {t:'mc', q:'The dwarves <b>___</b> too deep and too greedily.', opts:['digged','dug','have dug'], ok:1, ex:'Telling the past → past simple; dig–dug–dug.'},
+   {t:'mc', q:'"I <b>___</b> this place before," said Gandalf quietly.', opts:['have saw','have seen','seed'], ok:1, ex:'see–saw–seen; present perfect = "have seen".'},
+   {t:'gap', q:'Something <b>___</b> in the deep — listen!', chips:['woke','has woken','wakes'], ok:'has woken', ex:'A result right now → present perfect; wake–woke–woken.'},
+   {t:'mc', q:'Pippin <b>___</b> a stone into the well. Fool of a Took!', opts:['threw','thrown','has threw'], ok:0, ex:'throw–threw–thrown; a single past moment → past simple.'},
+   {t:'tf', q:'The form "has went" is a correct present perfect of "go".', ok:false, ex:'Correct is "has gone". go–went–gone.'},
+   {t:'mc', q:'The Balrog <b>___</b> from shadow and flame.', opts:['rised','rose','has rose'], ok:1, ex:'rise–rose–risen; past simple = "rose".'}
+  ]},
+{ id:4, name:'Lothlórien', sub:'the golden wood of Lady Galadriel', topic:'Tense in context',
+  task:'Choose the tense by the meaning of the whole sentence',
+  q:[
+   {t:'mc', q:'"You <b>___</b> far, and you are weary," said Galadriel.', opts:['travelled','have travelled','travel'], ok:1, ex:'The journey continues until now, the result matters → present perfect.'},
+   {t:'mc', q:'The Elves <b>___</b> these trees thousands of years ago.', opts:['have planted','planted','plant'], ok:1, ex:'"Thousands of years ago" → past simple.'},
+   {t:'gap', q:'"I <b>___</b> into the Mirror, and I am afraid," said Frodo.', chips:['looked','have looked','look'], ok:'have looked', ex:'The result (fear) lasts now → present perfect.'},
+   {t:'ord', q:'Build the sentence:', words:['Time','has','changed','little','in','this','wood'], ex:'Present perfect: has + changed.'},
+   {t:'tf', q:'In "We stayed in Lórien for a month" the past simple is correct if the stay is now over.', ok:true, ex:'A finished action → past simple.'},
+   {t:'mc', q:'Galadriel <b>___</b> each traveller a gift before they left.', opts:['has given','gave','gives'], ok:1, ex:'A sequence of past events → past simple.'}
+  ]},
+{ id:5, name:'Helm\u2019s Deep', sub:'the fortress of Rohan · night of battle', topic:'Mixed review',
+  task:'Everything together — hold the line!',
+  q:[
+   {t:'mc', q:'"The fortress <b>___</b> — never while men defend it!" cried Théoden.', opts:['has never fallen','never fell','never falls'], ok:0, ex:'From its building up to now → present perfect.'},
+   {t:'gap', q:'Riders <b>___</b> at dawn on the fifth day.', chips:['arrived','have arrived','arrive'], ok:'arrived', ex:'A specific past moment → past simple.'},
+   {t:'mc', q:'Legolas: "I <b>___</b> forty-two!" Gimli: "Forty-three!"', opts:['counted','have counted','count'], ok:1, ex:'A running total right now → present perfect.'},
+   {t:'ord', q:'Build the sentence:', words:['The','horn','of','Helm','sounded','in','the','deep'], ex:'Narrating the battle → past simple: "sounded".'},
+   {t:'tf', q:'"How long have you known Gandalf?" correctly asks about a relationship lasting until now.', ok:true, ex:'How long + present perfect = duration up to now.'},
+   {t:'mc', q:'By morning the army <b>___</b> the battle.', opts:['has won','won','wins'], ok:1, ex:'Narrating finished past → past simple.'},
+   {t:'mc', q:'"I <b>___</b> such courage in halflings before," said Éomer.', opts:['never saw','have never seen','never see'], ok:1, ex:'Life experience up to now → present perfect.'}
+  ]},
+{ id:6, name:'Mount Doom', sub:'Mordor · the final trial', topic:'Battle with the Eye', boss:true,
+  task:'Every correct answer strikes the Eye!',
+  q:[
+   {t:'mc', q:'Frodo and Sam <b>___</b> across the whole of Middle-earth.', opts:['have walked','walked yesterday','walks'], ok:0, ex:'The result of the journey lasts now → present perfect.'},
+   {t:'mc', q:'Gollum <b>___</b> the Ring for five hundred years before he lost it.', opts:['has kept','kept','keeps'], ok:1, ex:'A finished period in the past → past simple.'},
+   {t:'gap', q:'"I <b>___</b> my way home," said Frodo, "and it is here, at the end."', chips:['found','have found','find'], ok:'have found', ex:'The result holds at the moment of speaking → present perfect.'},
+   {t:'mc', q:'"The Eye <b>___</b> us!" shouted Sam. "Run!"', opts:['saw','has seen','sees'], ok:1, ex:'It has just spotted us, the result lasts → present perfect.'},
+   {t:'ord', q:'Build the sentence:', words:['Sauron','has','lost','his','greatest','weapon'], ex:'Present perfect: has lost.'},
+   {t:'tf', q:'"The Ring fell into the fire" is correct — it is a single moment of the story.', ok:true, ex:'A narrated moment → past simple.'},
+   {t:'mc', q:'"It <b>___</b>," whispered Frodo. "It\u2019s over."', opts:['has gone','went long ago','goes'], ok:0, ex:'It happened just now and the result lasts → present perfect.'},
+   {t:'mc', q:'And so the Third Age of Middle-earth <b>___</b> to its end.', opts:['has come','came','comes'], ok:1, ex:'A chronicler narrating → past simple.'}
+  ]}
+];
+
+/* Artefacts for each waypoint (id matches LOCATIONS) */
+const ARTIFACTS=[
+ {name:'Old Toby Pipe', quote:'"After a hard day, nothing beats a proper ring of smoke."'},
+ {name:'Ranger\u2019s Dagger', quote:'"A gift from the Strider. Sharp as his eyes."'},
+ {name:'Sting', quote:'"It glows blue when orcs are near — and grammar errors too."'},
+ {name:'Mithril Shirt', quote:'"Lighter than a feather, harder than dragon scales."'},
+ {name:'Phial of Galadriel', quote:'"The light of Eärendil, saved for the darkest stretch of your road."'},
+ {name:'Horn of Helm Hammerhand', quote:'"Once it rang in the Deep — and the enemy fled."'},
+ {name:'The Ring, Unmade', quote:'"The burden is lifted. Middle-earth is free."'}
+];
+
+/* Race titles for the charter */
+const RACE_TITLES={hobit:'Hobbit of the Shire',elf:'Elf of Rivendell',trpaslik:'Dwarf of Erebor',hranicar:'Ranger of the North'};
+const RACE_NAMES={hobit:'Hobbit',elf:'Elf',trpaslik:'Dwarf',hranicar:'Ranger'};
+
+/* ════════ GAME STATE ════════ */
+let G={name:'',race:'',done:[false,false,false,false,false,false,false],finished:false,teacher:false,tid:'',stats:{}};
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(G));}catch(e){}}
+function loadSave(){try{const d=localStorage.getItem(SAVE_KEY);if(d){G=Object.assign(G,JSON.parse(d));return true;}}catch(e){}return false;}
+function applyTeacherUI(){
+  const on=!!G.teacher;
+  document.getElementById('t-banner').style.display=on?'block':'none';
+  document.getElementById('skip-btn').style.display=on?'inline-block':'none';
+  const p=document.getElementById('t-panel');
+  if(p&&!on)p.classList.remove('on');
+}
+function tPanelToggle(){
+  if(!G.teacher)return;
+  document.getElementById('t-panel').classList.toggle('on');
+}
+function tJump(id){
+  /* panel zůstává otevřený — sekce se ukáže hned a dá se proklikávat */
+  if(id==='map')goMap();
+  else if(id==='cert')showCert();
+  else show(id,true);
+}
+function tJumpLoc(i){
+  openStation(i); /* panel zůstává otevřený */
+}
+function tSkipQ(){
+  if(!G.teacher)return;
+  if(EX.boss){EX.eHP-=10;updateHP();if(EX.eHP<=0){bossVictory();return;}}
+  EX.qi++;
+  if(EX.qi<EX.qs.length){renderQ();return;}
+  if(EX.boss){bossVictory();return;}
+  finishStation();
+}
+function resetGame(){
+  if(!confirm('Really begin a new quest? Your progress will be erased.'))return;
+  try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+  G={name:'',race:'',done:[false,false,false,false,false,false,false],finished:false,teacher:T_FORCE,tid:'',stats:{}};
+  document.body.removeAttribute('data-race');
+  document.getElementById('name-in').value='';
+  document.getElementById('continue-btn').classList.add('hidden');
+  applyTeacherUI();
+  show('intro',true);
+}
+
+/* ════════ SCREEN SWITCHING — ring transition ════════ */
+function show(id,instant){
+  const sw=()=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+    const el=document.getElementById(id);el.classList.add('on');el.scrollTop=0;};
+  if(instant||REDUCED_MOTION){sw();return;}
+  ringTransition(sw);
+}
+function ringTransition(cb){
+  const cv=document.getElementById('trans-canvas');
+  const ctx=cv.getContext&&cv.getContext('2d');
+  if(!ctx){cb();return;}
+  cv.width=window.innerWidth;cv.height=window.innerHeight;cv.style.display='block';
+  const cx=cv.width/2,cy=cv.height/2;
+  const maxR=Math.sqrt(cx*cx+cy*cy)*1.15;
+  let t=0;const T1=16,T2=14;let switched=false;
+  function frame(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    if(t<=T1){
+      const p=t/T1;const r=maxR*p;
+      ctx.fillStyle='rgba(4,2,0,.97)';
+      ctx.beginPath();ctx.arc(cx,cy,maxR+4,0,Math.PI*2);
+      ctx.arc(cx,cy,Math.max(0,maxR-r),0,Math.PI*2,true);ctx.fill();
+      drawRing(ctx,cx,cy,Math.max(0,maxR-r));
+    } else {
+      if(!switched){cb();switched=true;}
+      const p=(t-T1)/T2;const r=maxR*(1-p);
+      ctx.fillStyle='rgba(4,2,0,.97)';
+      ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+      drawRing(ctx,cx,cy,r);
+    }
+    t++;
+    if(t<=T1+T2)requestAnimationFrame(frame);
+    else{cv.style.display='none';}
+  }
+  function drawRing(c,x,y,r){
+    if(r<=2)return;
+    const g=c.createRadialGradient(x,y,Math.max(0,r-10),x,y,r+10);
+    g.addColorStop(0,'rgba(255,190,70,0)');g.addColorStop(.5,'rgba(255,190,70,.9)');g.addColorStop(1,'rgba(255,120,20,0)');
+    c.strokeStyle=g;c.lineWidth=14;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();
+  }
+  frame();
+}
+
+/* ════════ SOUND (WebAudio, all synthesised, offline) ════════ */
+let AC=null,_muted=false;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(AC&&AC.state==='suspended')AC.resume();return AC;}
+function tone(f,dur,type,vol,when,slide){
+  const c=ac();if(!c||_muted)return;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(f,c.currentTime+(when||0));
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,c.currentTime+(when||0)+dur);
+  g.gain.setValueAtTime(0,c.currentTime+(when||0));
+  g.gain.linearRampToValueAtTime(vol||.16,c.currentTime+(when||0)+.015);
+  g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+(when||0)+dur);
+  o.connect(g).connect(c.destination);
+  o.start(c.currentTime+(when||0));o.stop(c.currentTime+(when||0)+dur+.05);
+}
+function sfxCorrect(){tone(523,.16,'triangle',.14);tone(659,.16,'triangle',.13,.08);tone(784,.3,'triangle',.13,.16);}
+function sfxWrong(){tone(160,.3,'sawtooth',.1);tone(110,.4,'sawtooth',.1,.06);}
+function sfxOpen(){tone(392,.14,'sine',.1);tone(523,.22,'sine',.1,.07);}
+function sfxHit(){tone(90,.35,'sawtooth',.16,0,40);tone(620,.1,'square',.06);}
+function sfxFanfare(){[392,523,659,784].forEach((f,i)=>tone(f,.34,'triangle',.15,i*.13));tone(1046,.7,'triangle',.14,.55);}
+function ludusSetSound(on){
+  _muted=!on;
+  const a=document.getElementById('lotr-theme');
+  if(!on){ if(a) a.pause(); }
+  else{ _musicOff=false;
+    if(a&&a.querySelector('source')){
+      if(a.currentTime>0){ a.volume=.55; a.play().catch(()=>{}); }
+      else{ _musicStarted=false; startMusic(); }
+    }
+  }
+  try{ if(window.__ludusSoundtrack){ on?window.__ludusSoundtrack.play():window.__ludusSoundtrack.stop(); } }catch(e){}
+}
+function toggleMute(){ ludusSetSound(_muted); }
+function toggleFS(){
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});}
+  else{document.exitFullscreen&&document.exitFullscreen();}
+}
+/* ══════ BACKGROUND MUSIC — embedded theme (audio element above) ══════ */
+let _musicOff=false,_musicStarted=false;
+function startMusic(){
+  const a=document.getElementById('lotr-theme');
+  if(!a||!a.querySelector('source')||_musicOff||_musicStarted)return;
+  _musicStarted=true;a.volume=0;
+  a.play().then(()=>{
+    let v=0;const iv=setInterval(()=>{v=Math.min(.55,v+.02);a.volume=v;if(v>=.55)clearInterval(iv);},80);
+  }).catch(()=>{_musicStarted=false;});
+}
+function toggleMusic(){
+  const a=document.getElementById('lotr-theme'),b=document.getElementById('music-btn');
+  if(!a||!a.querySelector('source'))return;
+  _musicOff=!_musicOff;
+  if(_musicOff){a.pause();}
+  else if(a.currentTime>0){a.volume=.55;a.play().catch(()=>{});}
+  else{_musicStarted=false;startMusic();}
+  if(b)b.textContent=_musicOff?'🔇':'🎵';
+}
+
+/* ════════ AMBIENT PARTICLES — fireflies/embers by race ════════ */
+(function initParticles(){
+  const cv=document.getElementById('px-canvas');
+  const ctx=cv&&cv.getContext&&cv.getContext('2d');if(!ctx)return;
+  const PX=[];const N=42;
+  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  function col(){
+    const r=document.body.getAttribute('data-race');
+    if(r==='elf')return ['rgba(168,200,222,','rgba(220,236,248,','rgba(120,170,210,'];
+    if(r==='trpaslik')return ['rgba(244,186,110,','rgba(217,142,60,','rgba(255,210,140,'];
+    if(r==='hranicar')return ['rgba(156,184,170,','rgba(204,224,212,','rgba(120,160,140,'];
+    return ['rgba(238,210,122,','rgba(201,165,66,','rgba(255,236,170,'];
+  }
+  for(let i=0;i<N;i++)PX.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:Math.random()*1.9+.5,vx:(Math.random()-.5)*.26,vy:-(Math.random()*.34+.07),
+    a:Math.random()*6,fade:Math.random()*.012+.004,ci:Math.floor(Math.random()*3)});
+  let running=false;
+  function frame(){
+    if(document.hidden||REDUCED_MOTION){ctx.clearRect(0,0,cv.width,cv.height);running=false;return;}
+    const C=col();
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(const p of PX){
+      p.x+=p.vx;p.y+=p.vy;p.a+=p.fade;
+      const op=.45*(1-Math.abs(Math.sin(p.a)));
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=C[p.ci]+op+')';ctx.fill();
+      if(p.y<-5){p.y=cv.height+5;p.x=Math.random()*cv.width;}
+      if(p.x<-5)p.x=cv.width+5;if(p.x>cv.width+5)p.x=-5;
+    }
+    requestAnimationFrame(frame);
+  }
+  function start(){if(!running&&!document.hidden&&!REDUCED_MOTION){running=true;requestAnimationFrame(frame);}}
+  document.addEventListener('visibilitychange',start);
+  start();
+})();
+
+/* ════════ FINGER/MOUSE TRAIL ════════ */
+(function initTrail(){
+  const cv=document.getElementById('trail-canvas');
+  const ctx=cv&&cv.getContext&&cv.getContext('2d');if(!ctx)return;
+  let pts=[],raf,drawing=false;
+  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  function cols(){
+    const r=document.body.getAttribute('data-race');
+    if(r==='elf')return ['rgba(220,236,248,','rgba(168,200,222,'];
+    if(r==='trpaslik')return ['rgba(255,200,120,','rgba(217,142,60,'];
+    if(r==='hranicar')return ['rgba(204,224,212,','rgba(156,184,170,'];
+    return ['rgba(238,210,122,','rgba(255,236,170,'];
+  }
+  function addPoint(x,y){
+    const C=cols();const c=C[Math.floor(Math.random()*C.length)];
+    for(let i=0;i<3;i++){
+      const a=Math.random()*Math.PI*2,s=1+Math.random()*2.4;
+      pts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-.5,r:Math.random()*2.8+1.3,a:.9,c});
+    }
+  }
+  function loop(){
+    if(!pts.length){drawing=false;ctx.clearRect(0,0,cv.width,cv.height);return;}
+    ctx.clearRect(0,0,cv.width,cv.height);
+    pts=pts.filter(p=>p.a>.02);
+    for(const p of pts){
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.055;p.a*=.88;p.r*=.97;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c+p.a+')';ctx.fill();
+    }
+    raf=requestAnimationFrame(loop);
+  }
+  function wake(){if(!drawing&&!document.hidden&&!REDUCED_MOTION){drawing=true;raf=requestAnimationFrame(loop);}}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);drawing=false;}else wake();});
+  document.addEventListener('mousemove',e=>{if(Math.random()>.5){addPoint(e.clientX,e.clientY);wake();}});
+  document.addEventListener('touchmove',e=>{for(const t of e.touches)if(Math.random()>.35)addPoint(t.clientX,t.clientY);wake();},{passive:true});
+  document.addEventListener('touchstart',e=>{for(const t of e.touches)addPoint(t.clientX,t.clientY);wake();},{passive:true});
+})();
+
+/* ════════ MAP OF MIDDLE-EARTH ════════ */
+const LOC_XY=[[110,205],[215,188],[360,140],[430,238],[500,292],[520,398],[820,330]];
+
+function renderMap(){
+  const doneCount=G.done.filter(Boolean).length;
+  const unlocked=Math.min(doneCount,6);
+  const fin=G.finished;
+  let s='<svg viewBox="0 0 1000 520" role="img" aria-label="Map of Middle-earth">';
+  s+='<defs>'
+    +'<linearGradient id="mSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15110a"/><stop offset="1" stop-color="#0b0805"/></linearGradient>'
+    +'<linearGradient id="mSea" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0e1a22"/><stop offset="1" stop-color="#101410"/></linearGradient>'
+    +'<radialGradient id="mEye" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff0b0"/><stop offset=".25" stop-color="#ffae34"/><stop offset=".6" stop-color="#d6420e"/><stop offset="1" stop-color="rgba(120,20,0,0)"/></radialGradient>'
+    +'<radialGradient id="mMordor" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="rgba(190,50,8,.3)"/><stop offset="1" stop-color="rgba(120,20,0,0)"/></radialGradient>'
+    +'</defs>';
+  s+='<rect width="1000" height="520" fill="url(#mSky)"/>';
+  /* sea to the west */
+  s+='<path d="M0 0 L70 0 Q40 110 75 200 Q110 290 60 380 Q30 450 55 520 L0 520 Z" fill="url(#mSea)"/>';
+  s+='<path d="M70 40 Q55 120 80 190 M65 260 Q48 330 62 400" stroke="rgba(140,180,200,.18)" stroke-width="2" fill="none"/>';
+  /* Misty Mountains */
+  s+='<path d="M330 40 L355 95 L375 60 L400 120 L420 85 L445 150 L468 110 L492 185 L470 200 L440 170 L410 195 L380 150 L355 175 L325 110 Z" fill="#1e1812" stroke="rgba(201,165,66,.25)" stroke-width="1.5"/>';
+  s+='<path d="M355 95 L375 60 L385 80 M420 85 L445 150 M468 110 L480 140" stroke="rgba(238,224,190,.3)" stroke-width="1.5" fill="none"/>';
+  /* White Mountains */
+  s+='<path d="M420 440 L455 380 L485 425 L515 365 L545 420 L580 380 L610 445 L580 460 L500 455 L450 462 Z" fill="#1a1712" stroke="rgba(201,165,66,.2)" stroke-width="1.5"/>';
+  /* Mordor — hradba hor */
+  s+='<path d="M690 230 L730 195 L770 225 L820 190 L870 222 L920 200 L960 240 L965 430 L915 460 L860 435 L800 462 L740 438 L695 455 Z" fill="#160d08" stroke="rgba(214,66,14,.35)" stroke-width="2"/>';
+  s+='<ellipse cx="825" cy="330" rx="150" ry="120" fill="url(#mMordor)" opacity="'+(0.35+doneCount*0.1)+'"/>';
+  /* stars */
+  s+='<g fill="rgba(238,224,190,.45)"><circle cx="150" cy="34" r="1.4"/><circle cx="260" cy="58" r="1.1"/><circle cx="560" cy="30" r="1.3"/><circle cx="640" cy="70" r="1"/><circle cx="90" cy="90" r="1.1"/><circle cx="720" cy="40" r="1.2"/></g>';
+  /* River Anduin */
+  s+='<path d="M520 60 Q545 150 530 230 Q515 310 560 380 Q600 440 590 520" stroke="rgba(110,160,190,.4)" stroke-width="5" fill="none" stroke-linecap="round"/>';
+  s+='<path d="M520 60 Q545 150 530 230 Q515 310 560 380 Q600 440 590 520" stroke="rgba(180,215,240,.28)" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+  /* region names */
+  s+='<g font-size="15" font-style="italic" letter-spacing="4" fill="rgba(238,224,190,.26)" text-anchor="middle">'
+    +'<text x="190" y="76">ERIADOR</text><text x="600" y="76">RHOVANION</text>'
+    +'<text x="470" y="502">ROHAN</text><text x="648" y="502">GONDOR</text><text x="836" y="502">MORDOR</text></g>';
+  /* forests */
+  s+=forest(250,290,5)+forest(560,120,7)+forest(478,300,4);
+  /* Mount Doom */
+  s+='<path d="M790 380 L825 290 L860 380 Z" fill="#241108" stroke="rgba(255,140,40,.5)" stroke-width="2"/>';
+  s+='<path d="M816 312 L825 290 L834 312 L825 322 Z" fill="#ff7a22"/>';
+  if(!fin)s+='<path d="M825 292 Q818 268 828 250 Q822 262 832 272" fill="rgba(255,150,60,.5)"/>';
+  /* Barad-dûr + the Eye */
+  s+='<path d="M880 360 L884 250 L890 244 L896 250 L900 360 Z" fill="#0d0705" stroke="rgba(214,66,14,.4)" stroke-width="1.5"/>';
+  if(fin){
+    s+='<path d="M872 250 Q890 228 908 250 M878 236 Q890 220 902 236" stroke="rgba(150,150,150,.35)" stroke-width="3" fill="none"/>';
+  }else{
+    const eyeR=14+doneCount*2.2;
+    s+='<g class="eye-pulse"><ellipse cx="890" cy="236" rx="'+eyeR+'" ry="'+(eyeR*0.72)+'" fill="url(#mEye)"/>'
+      +'<ellipse cx="890" cy="236" rx="3.2" ry="'+(eyeR*0.5)+'" fill="#100400"/></g>';
+  }
+  /* route */
+  s+=routePath(unlocked,fin);
+  /* location markers */
+  for(let i=0;i<LOCATIONS.length;i++){
+    const xy=LOC_XY[i];const done=G.done[i];const open=i<=unlocked;
+    const cls=open?'loc-marker':'loc-marker locked';
+    s+='<g class="'+cls+'" '+(open?('onclick="openStation('+i+')"'):'')+'>';
+    if(done)s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="20" fill="var(--r-acc)" opacity=".13"/>';
+    s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="13" fill="'+(done?'var(--r-pri)':'rgba(0,0,0,.55)')+'" stroke="'+(done?'var(--r-acc)':'rgba(201,165,66,.45)')+'" stroke-width="2"/>';
+    if(done)s+='<path d="M'+(xy[0]-5)+' '+xy[1]+' l3.5 4 l6.5 -8" stroke="#ffe9b0" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+    else s+='<text x="'+xy[0]+'" y="'+(xy[1]+4.5)+'" text-anchor="middle" font-size="12" fill="#eed27a">'+(i+1)+'</text>';
+    if(i===unlocked&&!done&&!fin)s+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="13" fill="none" stroke="var(--r-acc-l)" stroke-width="2" class="mark-ping"/>';
+    s+='<text x="'+xy[0]+'" y="'+(xy[1]+30)+'" text-anchor="middle" font-size="13" fill="rgba(238,224,190,.85)" font-style="italic">'+LOCATIONS[i].name+'</text>';
+    s+='</g>';
+  }
+  /* compass */
+  s+='<g opacity=".7" transform="translate(945,60)"><circle r="22" fill="none" stroke="rgba(201,165,66,.5)" stroke-width="1.5"/>'
+    +'<path d="M0 -18 L5 0 L0 18 L-5 0 Z" fill="rgba(238,210,122,.8)"/><path d="M0 -18 L5 0 L0 4 Z" fill="#fff3c4"/>'
+    +'<text y="-27" text-anchor="middle" font-size="11" fill="rgba(238,210,122,.8)">N</text></g>';
+  s+='<style>.eye-pulse{animation:eyeP 2.6s ease-in-out infinite}@keyframes eyeP{0%,100%{opacity:.85}50%{opacity:1}}'
+    +'.mark-ping{transform-box:fill-box;transform-origin:center;animation:mPing 1.8s ease-out infinite}@keyframes mPing{0%{transform:scale(.85);opacity:.9}70%{transform:scale(1.9);opacity:0}100%{transform:scale(1.9);opacity:0}}'
+    +'.route-dash{stroke-dasharray:7 7;animation:rDash 1.4s linear infinite}@keyframes rDash{to{stroke-dashoffset:-28}}</style>';
+  s+='</svg>';
+  document.getElementById('map-svg-wrap').innerHTML=s;
+}
+function forest(x,y,n){
+  let s='<g>';
+  for(let i=0;i<n;i++){
+    const tx=x+i*22+(i%2)*8,ty=y+(i%3)*14;
+    s+='<path d="M'+tx+' '+(ty+16)+' L'+(tx+8)+' '+ty+' L'+(tx+16)+' '+(ty+16)+' Z" fill="#142008" stroke="rgba(120,160,80,.25)" stroke-width="1"/>';
+  }
+  return s+'</g>';
+}
+function routePath(unlocked,fin){
+  const upto=fin?6:unlocked;
+  if(upto<=0&&!fin)return routeSegment(0,0,true);
+  let s='';
+  for(let i=0;i<upto;i++)s+=routeSegment(i,i+1,false);
+  if(!fin&&upto<6)s+=routeSegment(upto,upto,true);
+  return s;
+}
+function routeSegment(a,b,pulseOnly){
+  if(pulseOnly)return '';
+  const A=LOC_XY[a],B=LOC_XY[b];
+  const mx=(A[0]+B[0])/2+(b%2?18:-14),my=(A[1]+B[1])/2+(b%2?-16:14);
+  return '<path d="M'+A[0]+' '+A[1]+' Q'+mx+' '+my+' '+B[0]+' '+B[1]+'" fill="none" stroke="rgba(238,210,122,.75)" stroke-width="3" class="route-dash" stroke-linecap="round"/>';
+}
+
+/* ════════ LOCATION LIST + PACK ════════ */
+function renderLocList(){
+  const doneCount=G.done.filter(Boolean).length;
+  const unlocked=Math.min(doneCount,6);
+  let h='';
+  for(let i=0;i<LOCATIONS.length;i++){
+    const L=LOCATIONS[i];const done=G.done[i];const open=i<=unlocked;
+    h+='<div class="loc-card '+(done?'done ':'')+(open?'unlocked':'locked')+'">';
+    h+='<div class="lc-num">'+(done?'✓':(i+1))+'</div>';
+    h+='<div class="lc-body"><div class="lc-name">'+L.name+(L.boss?' ⚔':'')+'</div>';
+    h+='<div class="lc-desc">'+L.sub+' · '+L.topic+'</div></div>';
+    if(open)h+='<button class="loc-go'+(L.boss?' boss':'')+'" onclick="openStation('+i+')">'+(done?'Replay':(L.boss?'Battle':'Enter'))+'</button>';
+    else h+='<div style="font-size:18px;opacity:.5">🔒</div>';
+    h+='</div>';
+  }
+  document.getElementById('loc-list').innerHTML=h;
+  let b='';
+  for(let i=0;i<ARTIFACTS.length;i++){
+    if(G.done[i])b+='<div class="bag-slot" title="'+ARTIFACTS[i].name+'">'+artifactSvg(i)+'</div>';
+    else b+='<div class="bag-slot empty"><span>?</span></div>';
+  }
+  document.getElementById('bag-row').innerHTML=b;
+  const dn=G.done.filter(Boolean).length;
+  const sub=G.finished?'The Ring is destroyed. Middle-earth is free!':
+    dn===0?'The journey begins in the Shire…':
+    dn<6?('Next waypoint: '+LOCATIONS[Math.min(dn,6)].name):
+    'One step remains — Mount Doom.';
+  document.getElementById('mh-sub').textContent=sub;
+  document.getElementById('tb-player').textContent=(G.name||'Traveller')+(G.race?(' · '+RACE_NAMES[G.race]):'');
+}
+function goMap(){renderMap();renderLocList();show('map');}
+
+/* ════════ ARTEFACTS (SVG) ════════ */
+function artifactSvg(i){
+  const A='<svg viewBox="0 0 100 100">';
+  const Z='</svg>';
+  switch(i){
+    case 0: /* pipe */
+      return A+'<path d="M22 70 Q22 84 38 84 Q52 84 52 70 L52 62 L40 62 L40 70 Q40 73 36 73 Q33 73 33 70 Z" fill="#7a4a22" stroke="#caa05c" stroke-width="2"/>'
+        +'<rect x="48" y="56" width="36" height="9" rx="4" transform="rotate(-18 48 60)" fill="#8a5a2c" stroke="#caa05c" stroke-width="1.5"/>'
+        +'<path d="M40 52 Q34 42 42 34 Q36 28 44 18" stroke="rgba(220,220,230,.6)" stroke-width="3" fill="none" stroke-linecap="round"/>'+Z;
+    case 1: /* dagger */
+      return A+'<path d="M50 12 L56 56 L50 64 L44 56 Z" fill="#cdd8dc"/><path d="M50 12 L56 56 L50 60 Z" fill="#eef6f8"/>'
+        +'<rect x="38" y="62" width="24" height="7" rx="3" fill="#3a5048"/><rect x="46" y="69" width="8" height="17" rx="3" fill="#5a4028"/>'
+        +'<circle cx="50" cy="89" r="4" fill="#caa05c"/>'+Z;
+    case 2: /* Sting */
+      return A+'<path d="M50 8 L57 62 L50 72 L43 62 Z" fill="#b8d8ee"/><path d="M50 8 L57 62 L50 68 Z" fill="#e6f4ff"/>'
+        +'<path d="M50 14 L50 62" stroke="#7ab0d8" stroke-width="1.5"/>'
+        +'<path d="M34 70 Q50 60 66 70" stroke="#caa05c" stroke-width="5" fill="none" stroke-linecap="round"/>'
+        +'<rect x="46" y="72" width="8" height="16" rx="3" fill="#4a3a20"/>'
+        +'<circle cx="50" cy="40" r="16" fill="rgba(120,190,255,.18)"/>'+Z;
+    case 3: /* mithril */
+      return A+'<path d="M32 26 Q50 16 68 26 L72 44 Q72 74 50 86 Q28 74 28 44 Z" fill="#dfe6ee" stroke="#aab8c8" stroke-width="2"/>'
+        +'<path d="M36 32 Q50 24 64 32 M34 42 Q50 33 66 42 M34 52 Q50 43 66 52 M37 62 Q50 53 63 62 M42 71 Q50 64 58 71" stroke="#9cb0c4" stroke-width="1.6" fill="none"/>'
+        +'<circle cx="42" cy="38" r="1.6" fill="#fff"/><circle cx="60" cy="48" r="1.4" fill="#fff"/>'+Z;
+    case 4: /* phial */
+      return A+'<path d="M44 22 L56 22 L56 34 L64 48 Q70 60 64 72 Q58 84 50 84 Q42 84 36 72 Q30 60 36 48 L44 34 Z" fill="rgba(190,225,255,.3)" stroke="#bcd8ec" stroke-width="2"/>'
+        +'<rect x="43" y="14" width="14" height="9" rx="3" fill="#caa05c"/>'
+        +'<circle cx="50" cy="60" r="11" fill="rgba(240,250,255,.85)"/>'
+        +'<circle cx="50" cy="60" r="18" fill="rgba(220,240,255,.25)"/>'
+        +'<path d="M50 42 l2 5 5 .5 -3.8 3.4 1.2 5 -4.4-2.7 -4.4 2.7 1.2-5 -3.8-3.4 5-.5 Z" fill="#fff" opacity=".9" transform="translate(0,12)"/>'+Z;
+    case 5: /* horn */
+      return A+'<path d="M22 36 Q50 30 74 52 Q86 64 80 76 Q72 86 60 78 Q40 64 26 50 Q18 42 22 36 Z" fill="#e8dcc0" stroke="#b09a6a" stroke-width="2"/>'
+        +'<path d="M26 40 Q48 38 68 56 M24 46 Q44 48 62 64" stroke="#b09a6a" stroke-width="1.5" fill="none"/>'
+        +'<ellipse cx="23" cy="40" rx="6" ry="8" fill="#4a3a20"/>'
+        +'<path d="M70 50 Q78 44 84 48" stroke="#caa05c" stroke-width="3" fill="none"/>'+Z;
+    default: /* ruined ring */
+      return A+'<circle cx="50" cy="50" r="26" fill="none" stroke="#caa05c" stroke-width="9" stroke-dasharray="40 14 60 18"/>'
+        +'<path d="M64 30 L78 16 M70 44 L88 40" stroke="rgba(255,160,60,.7)" stroke-width="3" stroke-linecap="round"/>'
+        +'<path d="M40 70 Q50 78 60 70" stroke="rgba(150,150,150,.5)" stroke-width="3" fill="none"/>'+Z;
+  }
+}
+
+/* ════════ WAYPOINT SCENE BANNERS ════════ */
+function sceneSvg(i){
+  const A='<svg viewBox="0 0 800 240" preserveAspectRatio="xMidYMid slice">';
+  const Z='</svg>';
+  switch(i){
+    case 0: /* Hobbiton */
+      return A+'<defs><linearGradient id="s0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8db8d8"/><stop offset=".6" stop-color="#cfe0c0"/></linearGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s0)"/>'
+        +'<circle cx="660" cy="52" r="30" fill="#fff3b0"/><circle cx="660" cy="52" r="44" fill="rgba(255,240,170,.35)"/>'
+        +'<ellipse cx="180" cy="250" rx="280" ry="120" fill="#5e9438"/><ellipse cx="560" cy="270" rx="340" ry="130" fill="#4a7e2c"/>'
+        +'<ellipse cx="180" cy="240" rx="280" ry="112" fill="#6aa844"/>'
+        +'<circle cx="180" cy="186" r="34" fill="#2c1a08"/><circle cx="180" cy="186" r="34" fill="none" stroke="#d9a93c" stroke-width="6"/>'
+        +'<circle cx="192" cy="186" r="3.4" fill="#d9a93c"/>'
+        +'<rect x="148" y="214" width="64" height="6" fill="#8a6a3a"/>'
+        +'<path d="M120 170 Q132 150 150 158 M236 162 Q224 146 210 154" stroke="#3a6020" stroke-width="4" fill="none"/>'
+        +'<circle cx="120" cy="166" r="9" fill="#e84a6a"/><circle cx="242" cy="158" r="8" fill="#f2cf6e"/>'
+        +'<path d="M380 200 q14 -38 30 0 M430 206 q12 -30 24 0" stroke="#3a6020" stroke-width="3" fill="none"/>'
+        +'<path d="M0 238 L800 238" stroke="rgba(40,60,20,.4)" stroke-width="4"/>'+Z;
+    case 1: /* Bree */
+      return A+'<defs><linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0e1c"/><stop offset="1" stop-color="#141420"/></linearGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s1)"/>'
+        +'<circle cx="120" cy="46" r="22" fill="#e8e8d8" opacity=".9"/><circle cx="112" cy="42" r="20" fill="#0a0e1c"/>'
+        +'<rect x="260" y="80" width="290" height="160" fill="#241a10" stroke="#3c2c1a" stroke-width="3"/>'
+        +'<path d="M250 84 L405 30 L560 84 Z" fill="#171008"/>'
+        +'<rect x="290" y="120" width="42" height="46" fill="#ffba4a" rx="3"/><rect x="360" y="120" width="42" height="46" fill="#ffba4a" rx="3"/><rect x="466" y="120" width="42" height="46" fill="#ffc860" rx="3"/>'
+        +'<path d="M290 143 h42 M311 120 v46 M360 143 h42 M381 120 v46 M466 143 h42 M487 120 v46" stroke="#241a10" stroke-width="3"/>'
+        +'<rect x="408" y="160" width="44" height="80" fill="#100a05" rx="4"/>'
+        +'<rect x="585" y="96" width="58" height="44" rx="5" fill="#2c1c0c" stroke="#caa05c" stroke-width="2"/>'
+        +'<path d="M600 112 q8 -14 16 0 q6 10 -8 18 q-14 -8 -8 -18" fill="#e8c87a"/>'
+        +'<path d="M614 86 L614 96" stroke="#caa05c" stroke-width="3"/>'
+        +'<g stroke="rgba(140,160,190,.25)" stroke-width="1.6"><path d="M80 0 L60 240 M170 0 L150 240 M650 0 L630 240 M730 0 L710 240"/></g>'+Z;
+    case 2: /* Rivendell */
+      return A+'<defs><linearGradient id="s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#28425e"/><stop offset="1" stop-color="#16283c"/></linearGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s2)"/>'
+        +'<path d="M0 110 L120 30 L240 120 L240 240 L0 240 Z" fill="#1c3048"/>'
+        +'<path d="M560 120 L680 26 L800 104 L800 240 L560 240 Z" fill="#1c3048"/>'
+        +'<path d="M120 60 L128 240 L112 240 Z" fill="#bcd8ec" opacity=".85"/>'
+        +'<path d="M676 56 L684 240 L668 240 Z" fill="#bcd8ec" opacity=".8"/>'
+        +'<g stroke="#d8c89a" stroke-width="5" fill="none">'
+        +'<path d="M290 240 L290 130 Q400 60 510 130 L510 240"/>'
+        +'<path d="M320 240 L320 142 Q400 92 480 142 L480 240"/></g>'
+        +'<path d="M330 240 h140 v-10 h-140 Z" fill="#caba8a"/>'
+        +'<circle cx="400" cy="118" r="7" fill="#fff3c4"/>'
+        +'<g fill="#c87838"><path d="M180 200 l14 -34 14 34 Z"/><path d="M226 206 l11 -26 11 26 Z"/><path d="M580 204 l13 -30 13 30 Z"/></g>'+Z;
+    case 3: /* Moria */
+      return A+'<rect width="800" height="240" fill="#07060a"/>'
+        +'<g fill="#100e16" stroke="rgba(120,130,160,.3)" stroke-width="2">'
+        +'<path d="M90 240 L90 60 Q110 36 130 60 L130 240 Z"/><path d="M260 240 L260 48 Q282 22 304 48 L304 240 Z"/>'
+        +'<path d="M470 240 L470 48 Q492 22 514 48 L514 240 Z"/><path d="M650 240 L650 60 Q670 36 690 60 L690 240 Z"/></g>'
+        +'<g stroke="rgba(120,130,160,.25)" stroke-width="1.4"><path d="M96 80 h28 M96 120 h28 M266 66 h32 M266 110 h32 M476 66 h32 M476 110 h32 M656 80 h28 M656 120 h28"/></g>'
+        +'<ellipse cx="390" cy="234" rx="330" ry="20" fill="#0c0a10"/>'
+        +'<circle cx="390" cy="150" r="9" fill="#ffba4a"/><circle cx="390" cy="150" r="22" fill="rgba(255,170,60,.2)"/><circle cx="390" cy="150" r="44" fill="rgba(255,150,50,.08)"/>'
+        +'<rect x="386" y="158" width="8" height="50" fill="#3a2c18"/>'
+        +'<g fill="rgba(140,200,255,.5)"><circle cx="180" cy="40" r="1.6"/><circle cx="560" cy="32" r="1.4"/><circle cx="730" cy="56" r="1.5"/><circle cx="320" cy="26" r="1.3"/></g>'
+        +'<path d="M0 240 Q200 226 400 234 Q600 242 800 230 L800 240 Z" fill="#050408"/>'+Z;
+    case 4: /* Lothlórien */
+      return A+'<defs><linearGradient id="s4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2410"/><stop offset="1" stop-color="#0e1408"/></linearGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s4)"/>'
+        +'<g stroke="#6a5a30" stroke-width="14" fill="none"><path d="M140 240 Q150 130 130 60"/><path d="M400 240 Q394 120 410 40"/><path d="M660 240 Q668 130 650 56"/></g>'
+        +'<g fill="rgba(240,210,110,.8)"><ellipse cx="130" cy="64" rx="98" ry="48"/><ellipse cx="408" cy="48" rx="120" ry="54"/><ellipse cx="652" cy="60" rx="100" ry="48"/></g>'
+        +'<g fill="rgba(255,236,160,.55)"><ellipse cx="130" cy="56" rx="70" ry="32"/><ellipse cx="408" cy="40" rx="86" ry="36"/><ellipse cx="652" cy="52" rx="72" ry="32"/></g>'
+        +'<g fill="#fff8d8"><circle cx="200" cy="120" r="3.4"/><circle cx="340" cy="100" r="3"/><circle cx="500" cy="118" r="3.2"/><circle cx="600" cy="96" r="2.8"/><circle cx="260" cy="160" r="2.6"/><circle cx="540" cy="166" r="2.6"/></g>'
+        +'<g stroke="rgba(255,240,180,.4)" stroke-width="1.4"><path d="M200 124 L200 150 M340 104 L340 128 M500 122 L500 148 M600 100 L600 122"/></g>'
+        +'<path d="M0 232 Q400 218 800 232 L800 240 L0 240 Z" fill="#0a0e06"/>'+Z;
+    case 5: /* Helm’s Deep */
+      return A+'<defs><linearGradient id="s5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1018"/><stop offset="1" stop-color="#14181e"/></linearGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s5)"/>'
+        +'<path d="M0 130 L130 26 L300 140 Z" fill="#0e1218"/><path d="M520 140 L690 30 L800 124 L800 240 L520 240 Z" fill="#0e1218"/>'
+        +'<path d="M120 240 L120 120 L210 120 L210 84 L260 84 L260 120 L680 120 L680 240 Z" fill="#2a3140" stroke="#3e4858" stroke-width="2"/>'
+        +'<g fill="#2a3140" stroke="#3e4858" stroke-width="2"><path d="M120 120 h28 v-16 h-28 Z M180 120 h28 v-16 h-28 Z M300 120 h28 v-16 h-28 Z M360 120 h28 v-16 h-28 Z M420 120 h28 v-16 h-28 Z M480 120 h28 v-16 h-28 Z M540 120 h28 v-16 h-28 Z M600 120 h28 v-16 h-28 Z M652 120 h28 v-16 h-28 Z"/></g>'
+        +'<rect x="214" y="88" width="42" height="32" fill="#222a38" stroke="#3e4858" stroke-width="2"/>'
+        +'<path d="M380 240 L380 178 Q400 158 420 178 L420 240 Z" fill="#10141c"/>'
+        +'<g><circle cx="180" cy="146" r="5" fill="#ffba4a"/><circle cx="330" cy="146" r="5" fill="#ffba4a"/><circle cx="470" cy="146" r="5" fill="#ffc860"/><circle cx="620" cy="146" r="5" fill="#ffba4a"/></g>'
+        +'<g fill="rgba(255,190,90,.18)"><circle cx="180" cy="146" r="14"/><circle cx="330" cy="146" r="14"/><circle cx="470" cy="146" r="14"/><circle cx="620" cy="146" r="14"/></g>'
+        +'<g fill="rgba(230,240,255,.75)"><circle cx="90" cy="40" r="1.5"/><circle cx="420" cy="26" r="1.6"/><circle cx="610" cy="50" r="1.3"/><circle cx="730" cy="30" r="1.4"/></g>'+Z;
+    default: /* Mount Doom */
+      return A+'<defs><linearGradient id="s6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0804"/><stop offset="1" stop-color="#0c0402"/></linearGradient>'
+        +'<radialGradient id="s6e" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff0b0"/><stop offset=".3" stop-color="#ffae34"/><stop offset=".65" stop-color="#d6420e"/><stop offset="1" stop-color="rgba(120,20,0,0)"/></radialGradient></defs>'
+        +'<rect width="800" height="240" fill="url(#s6)"/>'
+        +'<path d="M40 240 L210 70 L390 240 Z" fill="#190a05" stroke="rgba(255,120,40,.4)" stroke-width="2"/>'
+        +'<path d="M186 110 L210 70 L234 110 L210 128 Z" fill="#ff7a22"/>'
+        +'<path d="M196 128 Q188 170 200 240 M224 128 Q236 176 226 240" stroke="#ff5a10" stroke-width="6" fill="none" opacity=".8"/>'
+        +'<path d="M210 72 Q198 40 212 16 Q204 36 220 50" fill="rgba(255,150,60,.4)"/>'
+        +'<path d="M560 240 L568 60 L578 48 L588 60 L596 240 Z" fill="#0c0503" stroke="rgba(214,66,14,.5)" stroke-width="2"/>'
+        +'<ellipse cx="578" cy="44" rx="34" ry="24" fill="url(#s6e)"/>'
+        +'<ellipse cx="578" cy="44" rx="5" ry="17" fill="#100400"/>'
+        +'<g fill="rgba(255,140,50,.55)"><circle cx="120" cy="200" r="2.2"/><circle cx="320" cy="180" r="2"/><circle cx="450" cy="210" r="2.4"/><circle cx="680" cy="190" r="2"/><circle cx="740" cy="150" r="1.8"/></g>'
+        +'<path d="M0 236 Q400 224 800 236 L800 240 L0 240 Z" fill="#080302"/>'+Z;
+  }
+}
+
+/* ════════ GAME FLOW ════════ */
+function normName(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+
+function genTid(){return 'ME-'+Math.random().toString(36).slice(2,6).toUpperCase();}
+let T_FORCE=false;
+function startQuest(){
+  const inp=document.getElementById('name-in');
+  const n=inp.value.trim();
+  if(!n){inp.classList.add('shake');inp.placeholder='The chronicle needs a name!';
+    setTimeout(()=>{inp.classList.remove('shake');inp.placeholder='Your name...';},600);return;}
+  ac();sfxOpen();
+  G.name=n;
+  G.teacher=T_FORCE;
+  if(!G.tid)G.tid=genTid();
+  applyTeacherUI();
+  save();
+  if(!G.race)show('race');else goMap();
+}
+function continueQuest(){ac();sfxOpen();startMusic();
+  if(!G.race)show('race');
+  else if(G.finished)showCert();
+  else goMap();}
+function pickRace(r){
+  G.race=r;save();
+  document.body.setAttribute('data-race',r);
+  sfxFanfare();
+  startMusic();
+  goMap();
+}
+
+/* ════════ EXERCISE ENGINE ════════ */
+let EX={loc:0,qs:[],qi:0,wrong:[],review:false,boss:false,pHP:0,eHP:0,pMax:0,eMax:0};
+
+function openStation(i){
+  const L=LOCATIONS[i];
+  ac();sfxOpen();
+  EX={loc:i,qs:shuffle(L.q.slice()),qi:0,wrong:[],review:false,boss:!!L.boss,pHP:0,eHP:0,pMax:0,eMax:0,fOk:0,fTot:0};
+  document.getElementById('ex-head').innerHTML=sceneSvg(i)
+    +'<div class="eh-label"><h2>'+L.name+'</h2><div class="eh-sub">'+L.sub+' · '+QUEST_TITLE+'</div></div>';
+  document.getElementById('review-banner').classList.add('hidden');
+  document.getElementById('q-task').textContent='';
+  document.getElementById('q-text').textContent='';
+  document.getElementById('q-body').innerHTML='';
+  document.querySelector('.t-reveal')?.remove();
+  const fb0=document.getElementById('fb-box');fb0.className='fb-box';fb0.innerHTML='';
+  if(EX.boss){
+    EX.eMax=Math.max(10,(EX.qs.length-2)*10);EX.eHP=EX.eMax; /* win = at least N-2 correct */
+    EX.pMax=40;EX.pHP=EX.pMax;                               /* lose = 4 mistakes */
+    document.getElementById('boss-hud').classList.remove('hidden');
+    document.getElementById('boss-stage').classList.remove('hidden');
+    document.getElementById('boss-stage').innerHTML=bossStageSvg()
+      +'<div class="flash-hit" id="flash-hit"></div><div class="flash-dmg" id="flash-dmg"></div>';
+    document.getElementById('hp-pname').textContent=G.name||'The Fellowship';
+    updateHP();
+    bossIntro();
+  }else{
+    document.getElementById('boss-hud').classList.add('hidden');
+    document.getElementById('boss-stage').classList.add('hidden');
+    show('exercise');
+    renderQ();
+  }
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function confirmLeave(){if(confirm('Leave this waypoint? Your progress here will not be saved.'))goMap();}
+
+function renderQ(){
+  const q=EX.qs[EX.qi];
+  const card=document.getElementById('q-card');
+  card.classList.add('fade');
+  setTimeout(()=>{
+    if(q!==EX.qs[EX.qi]){card.classList.remove('fade');return;} /* state moved on — skip stale render */
+    document.getElementById('q-task').textContent=(EX.review?'Review · ':'')+LOCATIONS[EX.loc].task;
+    document.getElementById('q-text').innerHTML=q.t==='ord'?q.q:q.q.replace('___','<b>___</b>');
+    const body=document.getElementById('q-body');
+    const fb=document.getElementById('fb-box');fb.className='fb-box';fb.innerHTML='';
+    if(q.t==='mc'){
+      let h='<div class="opt-grid'+(q.opts.length===2?' two':'')+'">';
+      const order=shuffle(q.opts.map((o,ix)=>ix));
+      order.forEach(ix=>{h+='<button class="opt-btn" onclick="ansMC(this,'+ix+')">'+esc(q.opts[ix])+'</button>';});
+      body.innerHTML=h+'</div>';
+    }else if(q.t==='tf'){
+      body.innerHTML='<div class="opt-grid two">'
+        +'<button class="opt-btn" onclick="ansTF(this,true)">✔ True</button>'
+        +'<button class="opt-btn" onclick="ansTF(this,false)">✘ False</button></div>';
+    }else if(q.t==='gap'){
+      let h='<div class="gap-chips">';
+      shuffle(q.chips.slice()).forEach(c=>{h+='<button class="gap-chip" onclick="ansGap(this)">'+esc(c)+'</button>';});
+      body.innerHTML=h+'</div>';
+    }else if(q.t==='ord'){
+      ORD={line:[],bank:shuffle(q.words.map((w,ix)=>ix))};
+      body.innerHTML='<div class="ord-line" id="ord-line"></div><div class="ord-bank" id="ord-bank"></div>'
+        +'<button class="btn-quest" onclick="ansOrd()">Confirm sentence</button>';
+      renderOrd();
+    }
+    updateProg();
+    if(G.teacher)teacherReveal(q);
+    card.classList.remove('fade');
+  },220);
+}
+function teacherReveal(q){
+  document.querySelector('.t-reveal')?.remove();
+  let ans='';
+  if(q.t==='mc')ans=esc(q.opts[q.ok]);
+  else if(q.t==='tf')ans=q.ok?'True':'False';
+  else if(q.t==='gap')ans=esc(q.ok);
+  else if(q.t==='ord')ans=esc(q.words.join(' ').replace(/ ([?.!,])/g,'$1'));
+  const el=document.createElement('div');
+  el.className='t-reveal';
+  el.innerHTML='<span>📋 Answer: <b>'+ans+'</b></span><button class="t-skip-q" onclick="tSkipQ()">Skip →</button>';
+  document.getElementById('q-body').insertAdjacentElement('beforebegin',el);
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function updateProg(){
+  const total=EX.qs.length;
+  document.getElementById('prog-fill').style.width=Math.round(EX.qi/total*100)+'%';
+  document.getElementById('prog-txt').textContent=(EX.qi+1)+' / '+total;
+}
+
+/* — answers — */
+function ansMC(btn,ix){
+  const q=EX.qs[EX.qi];lockOpts();
+  const right=ix===q.ok;
+  btn.classList.add(right?'ok':'bad');
+  if(!right)markCorrectMC(q);
+  feedback(right,q.ex);
+}
+function markCorrectMC(q){
+  document.querySelectorAll('#q-body .opt-btn').forEach(b=>{
+    if(b.textContent===q.opts[q.ok])b.classList.add('ok');
+  });
+}
+function ansTF(btn,val){
+  const q=EX.qs[EX.qi];lockOpts();
+  const right=val===q.ok;
+  btn.classList.add(right?'ok':'bad');
+  if(!right)document.querySelectorAll('#q-body .opt-btn').forEach(b=>{
+    const isTrue=b.textContent.indexOf('True')>-1;
+    if(isTrue===q.ok)b.classList.add('ok');
+  });
+  feedback(right,q.ex);
+}
+function ansGap(btn){
+  const q=EX.qs[EX.qi];
+  document.querySelectorAll('#q-body .gap-chip').forEach(b=>b.disabled=true);
+  const right=btn.textContent===q.ok;
+  btn.classList.add(right?'ok':'bad');
+  if(!right)document.querySelectorAll('#q-body .gap-chip').forEach(b=>{
+    if(b.textContent===q.ok)b.classList.add('ok');});
+  feedback(right,q.ex);
+}
+let ORD={line:[],bank:[]};
+function renderOrd(){
+  const q=EX.qs[EX.qi];if(!q)return;
+  const lh=ORD.line.map((ix,pos)=>'<button class="ord-word in-line" onclick="ordOut('+pos+')">'+esc(q.words[ix])+'</button>').join('');
+  const bh=ORD.bank.map((ix,pos)=>'<button class="ord-word" onclick="ordIn('+pos+')">'+esc(q.words[ix])+'</button>').join('');
+  document.getElementById('ord-line').innerHTML=lh||'<span style="color:var(--r-dim);font-size:12.5px;font-style:italic;padding:6px">Tap the words in the correct order…</span>';
+  document.getElementById('ord-bank').innerHTML=bh;
+}
+function ordIn(pos){ORD.line.push(ORD.bank.splice(pos,1)[0]);renderOrd();}
+function ordOut(pos){ORD.bank.push(ORD.line.splice(pos,1)[0]);renderOrd();}
+function ansOrd(){
+  const q=EX.qs[EX.qi];
+  if(ORD.line.length!==q.words.length){sfxWrong();return;}
+  const right=ORD.line.every((ix,pos)=>q.words[ix]===q.words[pos]);
+  document.querySelectorAll('#q-body .ord-word, #q-body .btn-quest').forEach(b=>b.disabled=true);
+  const correct=q.words.join(' ').replace(/ ([?.!,])/g,'$1');
+  feedback(right,(right?'':'Correct: “'+correct+'” — ')+q.ex);
+}
+function lockOpts(){document.querySelectorAll('#q-body button').forEach(b=>b.disabled=true);}
+
+function feedback(right,ex){
+  const q=EX.qs[EX.qi];
+  if(!EX.review){EX.fTot++;if(right)EX.fOk++;}
+  const fb=document.getElementById('fb-box');
+  if(right){sfxCorrect();burstFx();}
+  else{sfxWrong();shakeScreen();if(!EX.boss)EX.wrong.push(q);}
+  if(EX.boss)bossHit(right);
+  const last=EX.qi>=EX.qs.length-1;
+  fb.className='fb-box show '+(right?'good':'bad');
+  fb.innerHTML=(right?'<b>✔ Well done!</b> ':'<b>✘ Not quite.</b> ')+ex
+    +'<button class="fb-next" onclick="nextQ()">'+(last?'Finish':'Next question')+'</button>';
+  if(EX.boss&&(EX.eHP<=0||EX.pHP<=0)){
+    fb.querySelector('.fb-next').textContent=EX.eHP<=0?'Destroy the Ring!':'The battle is over…';
+  }
+}
+function shakeScreen(){
+  const w=document.getElementById('ex-wrap');
+  w.classList.remove('shake-screen');void w.offsetWidth;
+  if(!REDUCED_MOTION)w.classList.add('shake-screen');
+  setTimeout(()=>w.classList.remove('shake-screen'),500);
+}
+function nextQ(){
+  if(EX.boss){
+    if(EX.eHP<=0){bossVictory();return;}
+    if(EX.pHP<=0){bossDefeat();return;}
+  }
+  EX.qi++;
+  if(EX.qi<EX.qs.length){renderQ();return;}
+  if(!EX.boss&&EX.wrong.length&&!EX.review){
+    EX.review=true;EX.qs=shuffle(EX.wrong.slice());EX.wrong=[];EX.qi=0;
+    document.getElementById('review-banner').classList.remove('hidden');
+    renderQ();return;
+  }
+  if(EX.boss){if(EX.eHP<=0)bossVictory();else bossDefeat();return;}
+  finishStation();
+}
+function finishStation(){
+  const i=EX.loc;
+  if(EX.fTot>0)G.stats[i]={ok:EX.fOk,total:EX.fTot};
+  G.done[i]=true;save();
+  sfxFanfare();
+  showReward(i);
+}
+function skipStation(){
+  if(!G.teacher)return;
+  if(EX.boss){EX.eHP=0;EX.pHP=EX.pMax;updateHP();bossVictory();return;}
+  finishStation();
+}
+
+/* ════════ BOSS ════════ */
+function bossStageSvg(){
+  return '<svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">'
+    +'<defs><linearGradient id="bb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#170603"/><stop offset="1" stop-color="#090201"/></linearGradient>'
+    +'<radialGradient id="be" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff0b0"/><stop offset=".28" stop-color="#ffae34"/><stop offset=".62" stop-color="#d6420e"/><stop offset="1" stop-color="rgba(120,20,0,0)"/></radialGradient></defs>'
+    +'<rect width="800" height="300" fill="url(#bb)"/>'
+    +'<path d="M0 300 L160 120 L330 300 Z" fill="#150804"/>'
+    +'<path d="M140 156 L160 120 L180 156 L160 172 Z" fill="#ff7a22"/>'
+    +'<path d="M150 172 Q142 230 152 300 M172 172 Q182 236 174 300" stroke="#ff5a10" stroke-width="7" fill="none" opacity=".85"/>'
+    +'<path d="M520 300 L532 84 L548 64 L564 84 L576 300 Z" fill="#0c0503" stroke="rgba(214,66,14,.55)" stroke-width="2.5"/>'
+    +'<path d="M524 120 h52 M528 170 h44 M531 220 h40" stroke="rgba(214,66,14,.3)" stroke-width="2"/>'
+    +'<g id="boss-eye"><ellipse cx="548" cy="52" rx="56" ry="38" fill="url(#be)"/>'
+    +'<ellipse cx="548" cy="52" rx="8" ry="28" fill="#100400"/></g>'
+    +'<g fill="rgba(255,140,50,.6)"><circle cx="100" cy="250" r="2.4"/><circle cx="300" cy="230" r="2"/><circle cx="430" cy="262" r="2.6"/><circle cx="700" cy="240" r="2.2"/><circle cx="660" cy="160" r="1.8"/></g>'
+    +'<path d="M0 296 Q400 282 800 296 L800 300 L0 300 Z" fill="#060201"/>'
+    +'<style>#boss-eye{animation:bEye 2.2s ease-in-out infinite;transform-origin:548px 52px}@keyframes bEye{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}</style>'
+    +'</svg>';
+}
+function updateHP(){
+  document.getElementById('hp-player').style.width=Math.max(0,EX.pHP/EX.pMax*100)+'%';
+  document.getElementById('hp-enemy').style.width=Math.max(0,EX.eHP/EX.eMax*100)+'%';
+}
+function bossHit(right){
+  if(right){EX.eHP-=10;sfxHit();flash('flash-hit');}
+  else{EX.pHP-=10;flash('flash-dmg');}
+  updateHP();
+}
+function flash(id){const el=document.getElementById(id);if(!el)return;
+  el.classList.remove('go');void el.offsetWidth;if(!REDUCED_MOTION)el.classList.add('go');}
+function bossIntro(){
+  cut(eyeArt(),'The Eye has seen you','\u201cI see you… Every mistake brings you closer to my power. Every correct answer is a wound I cannot bear.\u201d',
+    ()=>{show('exercise');renderQ();});
+}
+function bossVictory(){
+  if(EX.fTot>0)G.stats[6]={ok:EX.fOk,total:EX.fTot};
+  G.done[6]=true;G.finished=true;save();
+  sfxFanfare();launchConfetti();
+  cut(ringFallArt(),'The Ring is destroyed!','The Eye has gone dark, the towers of Mordor are crumbling. The shadow of grammatical chaos has left Middle-earth — thanks to you.',
+    ()=>{showReward(6,true);});
+}
+function bossDefeat(){
+  cut(eyeArt(),'The shadow overcame you…','\u201cReturn when you are stronger.\u201d Even Frodo did not reach the Mountain on his first try. Rest, then face the battle again.',
+    ()=>{goMap();});
+}
+function cut(art,title,text,cb){
+  document.getElementById('cut-art').innerHTML=art;
+  document.getElementById('cut-title').textContent=title;
+  document.getElementById('cut-text').textContent=text;
+  const ov=document.getElementById('cut-overlay');
+  ov.classList.add('on');
+  document.getElementById('cut-btn').onclick=()=>{ov.classList.remove('on');cb();};
+}
+function eyeArt(){
+  return '<svg viewBox="0 0 200 140"><defs><radialGradient id="ce" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff0b0"/><stop offset=".3" stop-color="#ffae34"/><stop offset=".65" stop-color="#d6420e"/><stop offset="1" stop-color="rgba(120,20,0,0)"/></radialGradient></defs>'
+    +'<ellipse cx="100" cy="70" rx="88" ry="56" fill="url(#ce)"/>'
+    +'<ellipse cx="100" cy="70" rx="11" ry="42" fill="#100400"/>'
+    +'<g stroke="rgba(255,170,60,.6)" stroke-width="2"><path d="M14 70 Q4 70 0 66 M186 70 Q196 70 200 66 M100 16 Q100 8 96 2 M100 124 Q100 132 104 138"/></g></svg>';
+}
+function ringFallArt(){
+  return '<svg viewBox="0 0 200 140"><defs><linearGradient id="cr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".5" stop-color="#e8b93a"/><stop offset="1" stop-color="#a4761a"/></linearGradient></defs>'
+    +'<path d="M30 120 Q100 96 170 120 L170 140 L30 140 Z" fill="#3a1404"/>'
+    +'<path d="M40 120 Q100 100 160 120" stroke="#ff7a22" stroke-width="5" fill="none"/>'
+    +'<path d="M60 116 Q70 104 66 96 M130 114 Q138 102 134 92" stroke="rgba(255,150,60,.7)" stroke-width="3" fill="none"/>'
+    +'<circle cx="100" cy="62" r="26" fill="none" stroke="url(#cr)" stroke-width="9" stroke-dasharray="50 12 70 16"/>'
+    +'<path d="M118 42 L134 26 M82 42 L66 26 M122 70 L142 74" stroke="rgba(255,210,120,.8)" stroke-width="3" stroke-linecap="round"/></svg>';
+}
+
+/* ════════ REWARD ════════ */
+let _rwAfter=null;
+function showReward(i,toCert){
+  document.getElementById('rw-art').innerHTML=artifactSvg(i);
+  document.getElementById('rw-name').textContent=ARTIFACTS[i].name;
+  document.getElementById('rw-quote').textContent=ARTIFACTS[i].quote;
+  _rwAfter=toCert?(()=>showCert()):(()=>goMap());
+  document.getElementById('reward-overlay').classList.add('on');
+}
+function closeReward(){
+  document.getElementById('reward-overlay').classList.remove('on');
+  if(_rwAfter)_rwAfter();_rwAfter=null;
+}
+
+/* ════════ CERTIFICATE ════════ */
+function showCert(){
+  document.getElementById('cert-name').textContent=G.name||'—';
+  document.getElementById('cert-race').textContent=RACE_TITLES[G.race]||'traveller of Middle-earth';
+  const now=new Date();
+  document.getElementById('cert-date').textContent=
+    now.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})
+    +' · '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('cert-tid').textContent='Test ID '+(G.tid||'—');
+  let ok=0,tot=0;Object.values(G.stats||{}).forEach(s=>{ok+=s.ok;tot+=s.total;});
+  const pct=tot?Math.round(ok/tot*100):null;
+  const gr=pct===null?'—':(pct>=90?1:pct>=75?2:pct>=60?3:pct>=45?4:5);
+  document.getElementById('cert-score').innerHTML=pct===null
+    ?'Completed in teacher preview'
+    :'First-try answers: <b>'+ok+' / '+tot+'</b> · <b>'+pct+' %</b>';
+  document.getElementById('cert-grade').textContent=gr;
+  show('cert');
+  if(!REDUCED_MOTION)setTimeout(launchConfetti,500);
+}
+
+/* ════════ EFFECTS (canvas) ════════ */
+function burstFx(){
+  if(REDUCED_MOTION)return;
+  const cv=document.getElementById('fx-canvas');
+  const ctx=cv.getContext&&cv.getContext('2d');if(!ctx)return;
+  cv.width=innerWidth;cv.height=innerHeight;cv.style.display='block';
+  const cx=cv.width/2,cy=cv.height*.42;const PX=[];
+  const cs=getComputedStyle(document.body);
+  const c1=cs.getPropertyValue('--r-acc-l').trim()||'#eed27a';
+  const c2=cs.getPropertyValue('--r-acc').trim()||'#c9a542';
+  for(let i=0;i<36;i++){const a=Math.random()*Math.PI*2,s=2+Math.random()*4.5;
+    PX.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:Math.random()*3.6+1,a:1,col:Math.random()>.5?c1:c2});}
+  let t=0;
+  function frame(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(const p of PX){p.x+=p.vx;p.y+=p.vy;p.vy+=.11;p.a-=.026;
+      ctx.globalAlpha=Math.max(0,p.a);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.col;ctx.fill();}
+    ctx.globalAlpha=1;t++;
+    if(t<55)requestAnimationFrame(frame);
+    else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}
+  }
+  frame();
+}
+function launchConfetti(){
+  if(REDUCED_MOTION)return;
+  const cv=document.getElementById('confetti-canvas');
+  const ctx=cv.getContext&&cv.getContext('2d');if(!ctx)return;
+  cv.width=innerWidth;cv.height=innerHeight;cv.style.display='block';
+  const C=['#eed27a','#c9a542','#fff3c4','#9cb8aa','#a8c8de','#d98e3c'];
+  const px=[];
+  for(let i=0;i<50;i++)px.push({x:cv.width*(.2+Math.random()*.6),y:cv.height+5,vx:(Math.random()-.5)*3.4,vy:-(8+Math.random()*12),r:Math.random()*7+4,col:C[i%C.length],rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.14,a:1,g:.3,burst:true});
+  for(let i=0;i<80;i++)px.push({x:Math.random()*cv.width,y:-10-Math.random()*cv.height*.3,vx:(Math.random()-.5)*2.2,vy:2+Math.random()*3.4,r:Math.random()*6+3,col:C[i%C.length],rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.12,a:1,g:0,burst:false});
+  let t=0;
+  function frame(){
+    ctx.clearRect(0,0,cv.width,cv.height);t++;let alive=0;
+    for(const p of px){
+      if(!p.burst&&t<26)continue;
+      p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.rot+=p.rv;
+      if(t>190)p.a=Math.max(0,p.a-.02);
+      if(p.y>cv.height+20||p.a<=0){if(!p.burst&&t<150){p.y=-10;p.x=Math.random()*cv.width;alive++;}continue;}
+      alive++;
+      ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      ctx.fillStyle=p.col;ctx.fillRect(-p.r/2,-p.r/3,p.r,p.r*0.66);ctx.restore();
+    }
+    if(alive>0||t<150)requestAnimationFrame(frame);
+    else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}
+  }
+  frame();
+}
+
+/* ════════ INIT ════════ */
+(function init(){
+  if(loadSave()&&G.name){
+    document.getElementById('name-in').value=G.name;
+    document.getElementById('continue-btn').classList.remove('hidden');
+    if(G.race)document.body.setAttribute('data-race',G.race);
+  }
+  /* teacher via URL: ?teacher=1 */
+  try{if(new URLSearchParams(location.search).get('teacher')==='1'){T_FORCE=true;G.teacher=true;}}catch(e){}
+  /* teacher via triple-tap on the LUDUS badge (all screens) or the Ring logo (intro) */
+  let taps=0,tapT=0;
+  const tapTarget=(el)=>{ if(!el)return; el.addEventListener('click',()=>{
+    const now=Date.now();if(now-tapT>900)taps=0;tapT=now;
+    if(++taps>=3){taps=0;G.teacher=!G.teacher;applyTeacherUI();save();}
+  });};
+  tapTarget(document.getElementById('logo-ring'));
+  tapTarget(document.getElementById('ludus-badge'));
+  /* keyboard access for race cards */
+  document.querySelectorAll('.race-card').forEach(c=>c.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}
+  }));
+  applyTeacherUI();
+  show('intro',true);
+})();
+</script>
+
+
+
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return !_muted; }catch(e){ return true; } },
+  setSound: function(on){ try{ ludusSetSound(!!on); }catch(e){} },
+  getLang: function(){ return "en"; },
+  save: function(){ try{ if(!G || !G.name) return false; save(); return true; }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{ resetGame(); }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<div id="ludus-cine" hidden>
+  <video id="ludus-cine-vid" playsinline muted preload="auto"></video>
+  <div id="ludus-cine-grad"></div>
+  <div id="ludus-cine-enter">
+    <h1 id="ludus-cine-title"></h1>
+    <button id="ludus-cine-go" type="button"></button>
+  </div>
+  <button id="ludus-cine-skip" type="button"></button>
+</div>
+<audio id="ludus-soundtrack" loop preload="auto"></audio>
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Middle-earth: A Grammar Quest" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
+</body>
+</html>

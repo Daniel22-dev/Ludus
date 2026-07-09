@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#05060a">
+<title>Tajemství v Javorové rokli — LUDUS</title>
+<!--
+  ============================================================================
+  LUDUS engine: ÚNIKOVÁ HRA  ·  skin: Stranger Things / Maple Falls Mystery
+  ----------------------------------------------------------------------------
+  • Single-file, offline, žádné externí závislosti, system fonts, UTF-8.
+  • Kontrakt: window.LUDUS_CONTENT (v2, schema 2) → fallback window.GAME_CONTENT
+    (v1) → vestavěný SAMPLE.  Re-injekce z builderu: window.LUDUS_LOAD(content).
+  • Typy úloh (klíče se NIKDY nepřejmenovávají): mc4, mc2, yesno, wordbank, classify
+  • Dva skiny: "safe" (výchozí, veřejné — Javorová rokle) ↔ "original" (jen
+    interně — Hawkins / Obrácený svět / Démogorgon). Skin mění jen chrome a
+    názvy, NIKDY výukový obsah.
+  • Save/resume (localStorage), teacher mód (3× ťuk na logo / ?teacher=1),
+    i18n cs/en, self-testy.
+  ----------------------------------------------------------------------------
+  Revize 9:
+  • FIX (herní): volby mc4/mc2, banka slov i classify pool se míchají —
+    správná odpověď už není vždy "A" a při requeue je pořadí jiné.
+  • FIX (herní): kód zámku se nevypisuje jako text — hráč ho čte z rozsvícené
+    stěny světel, která se nově zobrazuje i na obrazovce zámku.
+  • Přepínač originálního skinu je vidět jen v učitelském módu (gated).
+    Aktivace učitele jménem byla při unifikaci zrušena.
+  • FIX: zvuk trhliny se nepřehrává znovu při každém překreslení.
+  • VIZUÁL: originální skin má obrysový titulek (stroke) à la neonové logo;
+    rozsvícené žárovky vrhají světlo na tapetu; písmena na zdi občas probleskují.
+  • UX: fyzická klávesnice na zámku (číslice/Backspace/Enter), jemné vibrace,
+    dveře se po otevření samy nascrollují do záběru, aria-live na zpětné vazbě.
+  • Výsledková karta: nový řádek "Doba úniku" (mm:ss).
+  ============================================================================
+-->
+<style>
+/* ===========================================================================
+   TOKENY  — výchozí = SAFE skin (Javorová rokle).  Originál přebíjí níž.
+   =========================================================================== */
+:root{
+  --bg:#0a0e16;            /* půlnoční podklad */
+  --bg2:#0d1322;
+  --fog-a:rgba(46,86,120,.30);
+  --fog-b:rgba(28,40,70,.35);
+  --rift:#54e07a;          /* zlověstná zelená trhlina */
+  --rift-soft:rgba(84,224,122,.55);
+  --accent:#ffb23e;        /* jantarová záře žárovek */
+  --accent2:#37d3c4;       /* studený teal */
+  --glow:#ffd089;
+  --ink:#eaf2ff;
+  --muted:#9fb0c8;
+  --faint:#6c7c96;
+  --panel:rgba(17,24,38,.72);
+  --panel-solid:#121826;
+  --line:rgba(120,150,190,.16);
+  --good:#46e08a;
+  --bad:#ff5470;
+  --title:#ffce6b;         /* barva neonového titulku */
+  --title-glow:#ff9e2c;
+  --wall-a:#1a1410;        /* dřevo/cihla stěny */
+  --wall-b:#241a13;
+  --radius:16px;
+  --shadow:0 18px 50px -20px rgba(0,0,0,.8);
+  --maxw:660px;
+  --display:"Times New Roman",Georgia,"Iowan Old Style",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+}
+body[data-skin="original"]{
+  --bg:#05060a;
+  --bg2:#0a0e1c;
+  --fog-a:rgba(28,46,104,.34);
+  --fog-b:rgba(90,12,24,.30);
+  --rift:#ff2740;
+  --rift-soft:rgba(255,39,64,.55);
+  --accent:#ff1f3d;        /* ikonická červená */
+  --accent2:#3b6fff;       /* studené modré nasvícení Obráceného světa */
+  --glow:#ff5d72;
+  --ink:#f3f5ff;
+  --muted:#a9b2cf;
+  --faint:#737da0;
+  --panel:rgba(10,12,24,.72);
+  --panel-solid:#0a0e1c;
+  --line:rgba(120,140,210,.18);
+  --title:#e8112d;
+  --title-glow:#ff1f3d;
+  --wall-a:#161013;
+  --wall-b:#221318;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--body); color:var(--ink); background:var(--bg);
+  min-height:100dvh; overflow-x:hidden;
+  -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent;
+  text-rendering:optimizeLegibility;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ---------- atmosférické vrstvy (fixed, za vším) ---------- */
+#fx{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.fog{position:absolute; inset:-20%; opacity:.9;
+  background:
+    radial-gradient(60% 50% at 20% 18%, var(--fog-a), transparent 60%),
+    radial-gradient(55% 55% at 82% 30%, var(--fog-b), transparent 62%),
+    radial-gradient(75% 60% at 50% 108%, var(--rift-soft), transparent 55%);
+  filter:blur(8px); animation:fogdrift 26s ease-in-out infinite alternate}
+.fog.b{animation-duration:38s; animation-direction:alternate-reverse; opacity:.6; mix-blend-mode:screen}
+@keyframes fogdrift{
+  0%{transform:translate3d(-3%,-2%,0) scale(1.05)}
+  100%{transform:translate3d(4%,3%,0) scale(1.12)}
+}
+#stars{position:absolute; inset:0; width:100%; height:100%}
+.vignette{position:absolute; inset:0;
+  background:radial-gradient(120% 100% at 50% 35%, transparent 52%, rgba(0,0,0,.55) 100%)}
+.grain{position:absolute; inset:0; opacity:.05; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation:grainshift .9s steps(3) infinite}
+@keyframes grainshift{to{transform:translate(6px,4px)}}
+.scan{position:absolute; inset:0; opacity:.06; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.4) 0 1px, transparent 1px 3px)}
+
+/* ---------- topbar ---------- */
+.topbar{position:relative; z-index:5; display:flex; align-items:center; gap:8px;
+  max-width:var(--maxw); margin:0 auto; padding:14px 16px 4px}
+.brand{font-family:var(--mono); font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--faint); margin-right:auto; display:flex; align-items:center; gap:8px}
+.brand .dot{width:7px; height:7px; border-radius:50%; background:var(--rift);
+  box-shadow:0 0 10px var(--rift); animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4; box-shadow:0 0 4px var(--rift)}}
+.iconbtn{appearance:none; border:1px solid var(--line); background:var(--panel);
+  color:var(--ink); width:40px; height:40px; border-radius:12px; cursor:pointer;
+  font-size:17px; display:grid; place-items:center; backdrop-filter:blur(6px);
+  transition:transform .12s, border-color .2s, background .2s}
+.iconbtn:hover{border-color:var(--accent); color:var(--accent)}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn:focus-visible{outline:2px solid var(--accent2); outline-offset:2px}
+/* jazyk řídí LUDUS → tlačítko jen v teacher/preview módu, ne pro hráče */
+#btnLang{display:none}
+body.teacher #btnLang{display:grid}
+
+/* ---------- layout stage ---------- */
+#screen{position:relative; z-index:4; max-width:var(--maxw); margin:0 auto;
+  padding:10px 16px calc(40px + env(safe-area-inset-bottom)); min-height:60vh}
+
+/* ---------- karta ---------- */
+.card{position:relative; background:linear-gradient(180deg, var(--panel), rgba(8,10,20,.82));
+  border:1px solid var(--line); border-radius:var(--radius); padding:22px 20px;
+  box-shadow:var(--shadow); backdrop-filter:blur(10px);
+  animation:cardin .5s cubic-bezier(.16,.84,.34,1) both}
+@keyframes cardin{from{opacity:0; transform:translateY(14px) scale(.985)}}
+.card.hero{padding:28px 22px 26px; text-align:center; overflow:hidden}
+
+/* ---------- neonový titulek (homage) ---------- */
+.marquee{font-family:var(--display); font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; line-height:.96; font-size:clamp(30px,8.4vw,56px);
+  color:var(--title); position:relative; padding:2px 0;
+  text-shadow:
+    0 0 4px var(--title-glow), 0 0 12px var(--title-glow),
+    0 0 28px var(--title-glow), 0 0 52px var(--title-glow);
+  animation:flicker 5.5s linear infinite}
+.marquee::before,.marquee::after{content:""; display:block; height:2px; width:64%;
+  margin:10px auto; background:linear-gradient(90deg,transparent,var(--title-glow),transparent);
+  box-shadow:0 0 10px var(--title-glow); opacity:.8}
+@keyframes flicker{
+  0%,19%,21%,55%,57%,100%{opacity:1}
+  20%,56%{opacity:.45} 22%{opacity:.85} 56.5%{opacity:.6}
+}
+/* originální skin: obrysové serif litery à la ikonický neonový titul (stroke, ne výplň) */
+@supports ((-webkit-text-stroke:2px red) or (text-stroke:2px red)){
+  body[data-skin="original"] .marquee{
+    color:transparent;
+    -webkit-text-stroke:2px var(--title);
+    letter-spacing:.1em;
+    text-shadow:0 0 14px rgba(232,17,45,.55), 0 0 34px rgba(232,17,45,.4), 0 0 70px rgba(232,17,45,.25);
+  }
+}
+.subtitle{font-family:var(--mono); font-size:12.5px; letter-spacing:.34em;
+  text-transform:uppercase; color:var(--accent2); margin-top:14px}
+.lede{color:var(--muted); max-width:46ch; margin:14px auto 0; font-size:15px; line-height:1.6}
+
+/* ---------- HERO SCÉNA (kultovní pohled: děti na kolech vs. bouře) ---------- */
+.hero-scene{position:relative; width:calc(100% + 44px); margin:-28px -22px 8px; height:206px; overflow:hidden; border-radius:var(--radius) var(--radius) 0 0}
+@media (min-width:560px){.hero-scene{height:244px}}
+.hero-scene svg{width:100%; height:100%; display:block}
+.hs-storm{transform-box:view-box; transform-origin:200px 80px; animation:stormchurn 16s ease-in-out infinite}
+@keyframes stormchurn{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(7px) scale(1.04)}}
+.hs-flash{opacity:0; animation:skyflash 6.5s linear infinite}
+@keyframes skyflash{0%,2.4%,100%{opacity:0}1.2%{opacity:.45}}
+.hs-bolt{opacity:0}
+.hs-bolt.b1{animation:bolt 6.5s linear infinite}
+.hs-bolt.b2{animation:bolt 6.5s linear infinite 2.2s}
+.hs-bolt.b3{animation:bolt 8s linear infinite 4.6s}
+@keyframes bolt{0%,3%,7%,100%{opacity:0}1.5%{opacity:1}5%{opacity:.6}}
+.hs-rift-glow{animation:riftpulse 3.2s ease-in-out infinite}
+@keyframes riftpulse{50%{opacity:.55; filter:brightness(1.35)}}
+
+/* ---------- přepínač skinu ---------- */
+.toggle-line{display:flex; align-items:center; justify-content:center; gap:12px;
+  margin:22px auto 4px; flex-wrap:wrap}
+.toggle-cap{font-family:var(--mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--faint)}
+.switch{position:relative; display:inline-block; width:54px; height:30px}
+.switch input{opacity:0; width:0; height:0}
+.slider{position:absolute; inset:0; cursor:pointer; border-radius:30px;
+  background:rgba(120,140,180,.22); border:1px solid var(--line); transition:.3s}
+.slider::before{content:""; position:absolute; height:22px; width:22px; left:3px; top:3px;
+  background:var(--muted); border-radius:50%; transition:.3s}
+.switch input:checked + .slider{background:rgba(255,31,61,.3); border-color:var(--accent)}
+.switch input:checked + .slider::before{transform:translateX(24px);
+  background:var(--accent); box-shadow:0 0 12px var(--accent)}
+.switch input:focus-visible + .slider{outline:2px solid var(--accent2); outline-offset:2px}
+
+.badge{display:inline-flex; align-items:center; gap:7px; font-family:var(--mono);
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; padding:6px 12px;
+  border-radius:999px; border:1px solid}
+.badge.warn{color:#ffd166; border-color:rgba(255,209,102,.4); background:rgba(255,180,40,.08);
+  box-shadow:0 0 18px -6px rgba(255,180,40,.5); animation:warnpulse 2.6s ease-in-out infinite}
+@keyframes warnpulse{50%{box-shadow:0 0 26px -4px rgba(255,180,40,.7)}}
+
+/* ---------- pole + tlačítka ---------- */
+.fld{display:block; text-align:left; max-width:360px; margin:22px auto 0}
+.fld span{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--faint); margin-bottom:7px}
+.fld input{width:100%; padding:14px 16px; font-size:16px; color:var(--ink);
+  background:rgba(0,0,0,.32); border:1px solid var(--line); border-radius:12px;
+  font-family:var(--body); transition:border-color .2s, box-shadow .2s}
+.fld input:focus{outline:none; border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(255,31,61,.16)}
+
+.btn-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:24px}
+.btn{appearance:none; border:none; cursor:pointer; font-family:var(--body);
+  font-weight:650; font-size:15px; padding:14px 26px; border-radius:12px;
+  min-height:50px; position:relative; overflow:hidden; letter-spacing:.01em;
+  transition:transform .12s, filter .2s, box-shadow .2s}
+.btn:active{transform:translateY(1px) scale(.985)}
+.btn:focus-visible{outline:2px solid var(--accent2); outline-offset:3px}
+.btn-primary{color:#0a0510; background:linear-gradient(180deg, var(--accent), color-mix(in srgb,var(--accent) 78%, #000));
+  box-shadow:0 10px 26px -10px var(--accent), inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-primary:hover{filter:brightness(1.08); box-shadow:0 14px 34px -10px var(--accent)}
+.btn-ghost{color:var(--ink); background:rgba(255,255,255,.05); border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent); color:var(--accent)}
+.btn .ink{position:absolute; border-radius:50%; transform:translate(-50%,-50%) scale(0);
+  background:rgba(255,255,255,.5); pointer-events:none; animation:ripple .55s ease-out}
+@keyframes ripple{to{transform:translate(-50%,-50%) scale(8); opacity:0}}
+
+/* ---------- HUD ---------- */
+.hud{display:flex; align-items:center; gap:12px; margin:2px 0 14px;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.1em}
+.room-name{text-transform:uppercase; color:var(--accent); font-weight:700;
+  letter-spacing:.12em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.progress{flex:1; height:5px; border-radius:5px; background:rgba(255,255,255,.08); overflow:hidden}
+.progress i{display:block; height:100%; background:linear-gradient(90deg,var(--accent2),var(--accent));
+  box-shadow:0 0 12px var(--accent); transition:width .5s ease}
+.score-pill{color:var(--muted); white-space:nowrap}
+
+/* ---------- otázka ---------- */
+.qmeta{margin-bottom:14px}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--accent2); border:1px solid var(--line);
+  padding:4px 10px; border-radius:999px; background:rgba(59,111,255,.06)}
+.qtext{font-size:clamp(17px,4.6vw,21px); line-height:1.5; font-weight:600; margin:4px 0 18px}
+
+/* volby (mc) */
+.opts{display:grid; gap:10px}
+.opt{display:flex; align-items:center; gap:12px; text-align:left; width:100%;
+  padding:15px 16px; border-radius:13px; cursor:pointer; font-size:16px; color:var(--ink);
+  background:rgba(255,255,255,.035); border:1px solid var(--line);
+  transition:transform .1s, border-color .2s, background .2s}
+.opt:hover{border-color:var(--accent); background:rgba(255,31,61,.06)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent2); outline-offset:2px}
+.opt .mk{flex:none; width:26px; height:26px; border-radius:8px; display:grid; place-items:center;
+  font-family:var(--mono); font-size:12px; color:var(--faint);
+  border:1px solid var(--line); background:rgba(0,0,0,.25)}
+.opt.correct{border-color:var(--good); background:rgba(70,224,138,.14);
+  box-shadow:0 0 24px -8px var(--good)}
+.opt.correct .mk{color:var(--good); border-color:var(--good)}
+.opt.wrong{border-color:var(--bad); background:rgba(255,84,112,.12); animation:shake .4s}
+.opt.wrong .mk{color:var(--bad); border-color:var(--bad)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+
+/* yesno */
+.yn{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.yn .opt{justify-content:center; font-weight:650; font-size:17px}
+
+/* wordbank */
+.wb-sentence{font-size:clamp(17px,4.6vw,20px); line-height:2.1; margin:6px 0 12px}
+.wb-blank{display:inline-block; min-width:62px; text-align:center; padding:2px 10px;
+  margin:0 3px; border-bottom:2px solid var(--accent); color:var(--accent); font-weight:700;
+  border-radius:6px 6px 0 0; transition:.2s}
+.wb-blank.filled{background:rgba(255,31,61,.1)}
+.wb-bank{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px}
+.chip{appearance:none; cursor:pointer; font-family:var(--body); font-size:15px; font-weight:600;
+  padding:10px 16px; min-height:42px; border-radius:11px; color:var(--ink);
+  background:rgba(59,111,255,.1); border:1px solid var(--line); transition:.15s}
+.chip:hover{border-color:var(--accent2); transform:translateY(-1px)}
+.chip:active{transform:scale(.95)}
+.chip.used{opacity:.28; pointer-events:none; transform:scale(.9)}
+.chip:disabled{cursor:default}
+
+/* classify */
+.cl-pool{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; padding:14px;
+  border:1px dashed var(--line); border-radius:13px; min-height:58px; margin-bottom:14px;
+  background:rgba(0,0,0,.18)}
+.cl-token{appearance:none; cursor:pointer; font-family:var(--body); font-size:15px; font-weight:600;
+  padding:9px 15px; min-height:40px; border-radius:10px; color:var(--ink);
+  background:rgba(255,255,255,.06); border:1px solid var(--line);
+  transition:transform .12s, border-color .2s}
+.cl-token:hover{border-color:var(--accent)}
+.cl-token:active{transform:scale(.93)}
+.cl-token.ok{border-color:var(--good); background:rgba(70,224,138,.16)}
+.cl-token.no{border-color:var(--bad); background:rgba(255,84,112,.14)}
+.cl-cats{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.cl-cat{border:1px solid var(--line); border-radius:13px; padding:10px; background:rgba(255,255,255,.025)}
+.cl-cat h4{margin:0 0 8px; font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent2); text-align:center}
+.cl-cat .drop{display:flex; flex-wrap:wrap; gap:7px; justify-content:center; min-height:42px}
+
+.note{font-size:12px; color:var(--faint); margin:2px 0 10px}
+.actions{margin-top:18px; display:flex; justify-content:center}
+
+/* feedback + hint */
+.feedback{min-height:22px; text-align:center; font-weight:650; font-size:14px; margin-top:14px; transition:.2s}
+.feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)}
+.hintbtn{margin:14px auto 0; display:block; font-size:13px; padding:9px 18px; min-height:40px}
+.hint-box{margin:12px auto 0; max-width:44ch; padding:12px 16px; border-radius:11px;
+  background:rgba(255,180,40,.08); border:1px solid rgba(255,180,40,.25);
+  color:var(--glow); font-size:14px; line-height:1.5; text-align:center;
+  animation:cardin .3s both}
+.hint-box.hide{display:none}
+
+/* ===========================================================================
+   SIGNATURE — ŽÁROVKOVÁ / ABECEDNÍ STĚNA
+   =========================================================================== */
+.wall{position:relative; margin-top:18px; padding:18px 14px 16px; border-radius:var(--radius);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.5)),
+    repeating-linear-gradient(90deg, var(--wall-a) 0 38px, var(--wall-b) 38px 76px);
+  border:1px solid var(--line); box-shadow:inset 0 2px 30px rgba(0,0,0,.6)}
+.wall-title{font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--faint); text-align:center; margin-bottom:14px}
+.wall-string{position:absolute; left:0; right:0; top:34px; height:42px; pointer-events:none}
+.bulbs{display:flex; flex-wrap:wrap; gap:10px 14px; justify-content:center; position:relative; z-index:2}
+.bulb{display:flex; flex-direction:column; align-items:center; gap:6px; width:46px; position:relative}
+/* rozsvícená žárovka vrhá kužel teplého světla na tapetu pod sebou */
+.bulb.lit::before{content:""; position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  width:70px; height:70px; border-radius:50%; pointer-events:none; z-index:-1;
+  background:radial-gradient(circle, color-mix(in srgb, var(--accent) 26%, transparent), transparent 68%);
+  animation:castin .8s ease-out}
+@keyframes castin{from{opacity:0; transform:translateX(-50%) scale(.4)}}
+.bulb .glass{width:26px; height:26px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:rgba(255,255,255,.06); border:1px solid var(--line); position:relative;
+  transition:.45s cubic-bezier(.16,.84,.34,1)}
+.bulb .glass::after{content:""; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+  width:8px; height:6px; background:#2a2a2a; border-radius:2px}
+.bulb.lit .glass{background:radial-gradient(circle at 50% 40%, #fff, var(--accent) 55%, color-mix(in srgb,var(--accent) 60%,#000));
+  border-color:var(--accent); box-shadow:0 0 14px var(--accent), 0 0 34px var(--accent);
+  animation:ignite .6s ease-out}
+@keyframes ignite{0%{transform:scale(.4); filter:brightness(3)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.bulb .digit{font-family:var(--display); font-weight:700; font-size:20px; color:var(--faint);
+  line-height:1; min-height:22px; opacity:.25; transition:.3s}
+.bulb.lit .digit{color:var(--glow); opacity:1; text-shadow:0 0 10px var(--accent); animation:flipin .5s ease-out}
+@keyframes flipin{from{transform:rotateX(90deg); opacity:0}}
+.bulb.lit:not(.scored) .digit{color:var(--muted)}
+
+/* ---- ŽIVÁ STĚNA: trvalé blikání + houpání řetězu ---- */
+.bulb.lit .glass{animation:ignite .6s ease-out, bulbflicker 3.6s ease-in-out .6s infinite}
+@keyframes bulbflicker{0%,100%{filter:brightness(1)}43%{filter:brightness(1.3)}48%{filter:brightness(.65)}52%{filter:brightness(1.2)}68%{filter:brightness(.92)}}
+.wall-sway{position:relative; transform-origin:top center; animation:stringsway 6.5s ease-in-out infinite}
+@keyframes stringsway{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
+.wall-svg{position:absolute; left:6px; right:6px; top:2px; width:calc(100% - 12px); height:46px; pointer-events:none; z-index:1; overflow:visible}
+.wall-svg .wire{stroke:rgba(0,0,0,.65); stroke-width:2; fill:none}
+.wall::after{content:""; position:absolute; inset:0; border-radius:var(--radius); pointer-events:none;
+  box-shadow:inset 0 0 44px -12px var(--accent); opacity:0; animation:wallpulse 5s ease-in-out infinite}
+@keyframes wallpulse{50%{opacity:.55}}
+
+/* ---- PAŘÁTOVÝ ŠKRT přes obrazovku při chybě (herní animace) ---- */
+.claw-swipe{position:fixed; inset:0; z-index:36; pointer-events:none; overflow:hidden}
+.claw-swipe i{position:absolute; top:-12%; height:150%; width:5px; border-radius:5px;
+  background:linear-gradient(180deg,transparent,var(--bad),transparent);
+  filter:drop-shadow(0 0 12px var(--bad)); opacity:0}
+.claw-swipe i:nth-child(1){left:32%; animation:claw .55s ease-out}
+.claw-swipe i:nth-child(2){left:48%; animation:claw .55s ease-out .05s}
+.claw-swipe i:nth-child(3){left:64%; animation:claw .55s ease-out .1s}
+@keyframes claw{0%{opacity:0; transform:rotate(16deg) translateX(-70vw)}28%{opacity:1}100%{opacity:0; transform:rotate(16deg) translateX(46vw)}}
+
+/* ---- ÚPONKY Obráceného světa (ambient herní atmosféra) ---- */
+.vines{position:absolute; bottom:0; width:150px; height:52vh; opacity:.32; pointer-events:none; z-index:1}
+.vines.l{left:0} .vines.r{right:0; transform:scaleX(-1)}
+.vines path{stroke:var(--rift-soft); fill:none; stroke-linecap:round; transform-origin:bottom center;
+  animation:vinesway 9s ease-in-out infinite}
+.vines.r path{animation-duration:11.5s}
+@keyframes vinesway{0%,100%{transform:translateX(0) rotate(0)}50%{transform:translateX(7px) rotate(1.6deg)}}
+
+/* ---- STVŮRA: dýchání hlavy/těla + cukání pařátů (herní animace na finále) ---- */
+.cre-body{transform-box:fill-box; transform-origin:center top; animation:crebreathe 4.2s ease-in-out infinite}
+@keyframes crebreathe{0%,100%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(1.025) translateY(-2px)}}
+.cre-petal{transform-box:fill-box; transform-origin:center bottom; animation:petalbreathe 3.4s ease-in-out infinite}
+@keyframes petalbreathe{0%,100%{transform:rotate(0)}50%{transform:rotate(var(--pa,6deg))}}
+.cre-claw{transform-box:fill-box; transform-origin:top center; animation:clawtwitch 2.6s ease-in-out infinite}
+@keyframes clawtwitch{0%,100%{transform:rotate(0)}45%{transform:rotate(2.5deg)}70%{transform:rotate(-1.5deg)}}
+.cre-maw{transform-box:fill-box; transform-origin:center; animation:mawpulse 3.4s ease-in-out infinite}
+@keyframes mawpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* ---------- ZÁMEK / klávesnice ---------- */
+.lock-wrap{text-align:center}
+.lock-display{display:inline-flex; gap:8px; margin:10px auto 18px}
+.lock-cell{width:42px; height:54px; border-radius:10px; display:grid; place-items:center;
+  font-family:var(--mono); font-size:24px; color:var(--ink);
+  background:rgba(0,0,0,.4); border:1px solid var(--line); transition:.2s}
+.lock-cell.on{border-color:var(--accent); box-shadow:0 0 16px -4px var(--accent); color:var(--accent)}
+.keypad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:280px; margin:0 auto}
+.key{appearance:none; cursor:pointer; font-family:var(--mono); font-size:22px; font-weight:600;
+  color:var(--ink); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.3));
+  border:1px solid var(--line); border-radius:13px; height:58px; transition:transform .08s, box-shadow .15s}
+.key:hover{border-color:var(--accent)}
+.key:active{transform:translateY(2px) scale(.96); box-shadow:0 0 18px -6px var(--accent)}
+.key:focus-visible{outline:2px solid var(--accent2); outline-offset:2px}
+.key.wide{grid-column:span 1}
+.key.act{color:var(--accent); border-color:var(--accent)}
+.lock-msg{min-height:20px; margin-top:14px; font-family:var(--mono); font-size:12px;
+  letter-spacing:.1em; color:var(--bad)}
+.lock-msg.ok{color:var(--good)}
+
+/* dveře / přechod */
+.door{position:relative; width:140px; height:180px; margin:8px auto 0; border-radius:8px;
+  background:linear-gradient(180deg,#1a1a22,#0c0c12); border:2px solid var(--line); overflow:hidden}
+.door .crack{position:absolute; top:0; bottom:0; left:50%; width:0; transform:translateX(-50%);
+  background:radial-gradient(circle, var(--rift), transparent 70%); box-shadow:0 0 40px var(--rift)}
+.door.open .crack{width:120%; transition:width 1s ease-in}
+.door .panel-l,.door .panel-r{position:absolute; top:0; bottom:0; width:50%;
+  background:linear-gradient(180deg,#23232e,#15151d); transition:transform 1s ease-in}
+.door .panel-l{left:0; border-right:1px solid #000}
+.door .panel-r{right:0; border-left:1px solid #000}
+.door.open .panel-l{transform:translateX(-100%)}
+.door.open .panel-r{transform:translateX(100%)}
+
+/* ---------- finále / stvůra ---------- */
+.finale{text-align:center; position:relative}
+.creature{width:min(280px,76vw); height:auto; margin:6px auto 0; display:block;
+  filter:drop-shadow(0 0 30px var(--rift-soft)); animation:emerge 1.6s ease-out both}
+@keyframes emerge{0%{opacity:0; transform:translateY(30px) scale(.7); filter:blur(14px) drop-shadow(0 0 30px var(--rift-soft))}
+  100%{opacity:1; transform:translateY(0) scale(1); filter:blur(0) drop-shadow(0 0 30px var(--rift-soft))}}
+.petal{transform-box:fill-box; transform-origin:center bottom; animation:petalopen 2.2s ease-out both 1s}
+@keyframes petalopen{from{transform:rotate(0)}}
+.shakeit{animation:bigshake .5s ease-in-out 1.6s}
+@keyframes bigshake{0%,100%{transform:translate(0,0)}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,2px)}80%{transform:translate(3px,-2px)}}
+
+/* ---------- výsledková karta (kompakt ≤700px) ---------- */
+.result-card{max-width:440px; margin:0 auto; max-height:700px; text-align:center; padding:24px 22px}
+.escape-stamp{font-family:var(--mono); font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--good); border:1px solid rgba(70,224,138,.4); border-radius:999px;
+  padding:6px 16px; display:inline-block; margin-bottom:14px;
+  box-shadow:0 0 26px -8px var(--good); animation:stampin .6s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes stampin{from{transform:scale(1.5); opacity:0}}
+.grade-ring{position:relative; width:104px; height:104px; margin:6px auto 16px}
+.grade-ring svg{transform:rotate(-90deg)}
+.grade-ring svg circle:last-child{transition:stroke-dashoffset 1.1s ease-out}
+.grade-num{position:absolute; inset:0; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:48px}
+.res-rows{display:flex; flex-direction:column; gap:9px; max-width:320px; margin:0 auto}
+.res-row{display:flex; justify-content:space-between; align-items:baseline;
+  border-bottom:1px solid var(--line); padding-bottom:8px}
+.res-row .k{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint)}
+.res-row .v{font-size:15px; font-weight:600} .res-row .v.big{font-size:18px; color:var(--accent)}
+
+.review{margin:18px auto 0; max-width:520px; border:1px solid var(--line); border-radius:12px;
+  background:rgba(0,0,0,.2)}
+.review summary{cursor:pointer; padding:13px 16px; font-family:var(--mono); font-size:12px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted); list-style:none}
+.review summary::-webkit-details-marker{display:none}
+.review summary::after{content:"▾"; float:right}
+.review[open] summary::after{content:"▴"}
+.rev-item{display:flex; gap:10px; padding:11px 16px; border-top:1px solid var(--line)}
+.rev-dot{flex:none; width:9px; height:9px; border-radius:50%; margin-top:6px}
+.rev-dot.ok{background:var(--good); box-shadow:0 0 8px var(--good)}
+.rev-dot.no{background:var(--bad); box-shadow:0 0 8px var(--bad)}
+.rev-q{display:block; font-size:14px; line-height:1.45}
+.rev-a{display:block; font-size:12px; color:var(--faint); margin-top:3px}
+
+/* ---------- teacher bar ---------- */
+#teacherBar{display:none}
+body.teacher #teacherBar{position:relative; z-index:5; display:flex; align-items:center; gap:10px;
+  flex-wrap:wrap; max-width:var(--maxw); margin:6px auto 0; padding:10px 16px;
+  border-top:1px dashed var(--line)}
+#teacherBar .tlabel{font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent2)}
+#teacherBar select{font-family:var(--body); font-size:13px; padding:8px 10px; border-radius:9px;
+  background:var(--panel-solid); color:var(--ink); border:1px solid var(--line)}
+#teacherBar .tbtn{appearance:none; cursor:pointer; font-family:var(--body); font-size:12.5px; font-weight:600;
+  color:var(--ink); background:rgba(255,255,255,.05); border:1px solid var(--line);
+  padding:8px 12px; min-height:38px; border-radius:9px; transition:.15s}
+#teacherBar .tbtn:hover{border-color:var(--accent); color:var(--accent)}
+#teacherBar .tbtn:active{transform:scale(.96)}
+#teacherBar .tbtn.on{border-color:var(--accent); color:var(--accent); background:rgba(255,31,61,.08)}
+#teacherBar .tb-break{flex-basis:100%; height:0}
+.brand{cursor:default; user-select:none}
+.skipbtn{display:none; margin:14px auto 0; font-size:12.5px; padding:9px 16px; min-height:38px;
+  color:var(--accent2); background:rgba(59,111,255,.08); border:1px dashed var(--accent2)}
+body.teacher .skipbtn{display:block}
+.skipbtn:hover{filter:brightness(1.15)}
+
+/* ---------- splash / intro ---------- */
+#splash{position:fixed; inset:0; z-index:30; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:18px; padding:24px;
+  background:radial-gradient(120% 100% at 50% 30%, var(--bg2), var(--bg)); text-align:center}
+#splash.gone{opacity:0; pointer-events:none; transition:opacity .7s ease}
+#splashVideo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000}
+.splash-inner{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px}
+.enter-hint{font-family:var(--mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--muted); margin-top:26px; animation:breathe 2.2s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.35}}
+.skip{position:absolute; right:18px; bottom:calc(18px + env(safe-area-inset-bottom)); z-index:3;
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); background:rgba(0,0,0,.4); border:1px solid var(--line);
+  padding:9px 16px; border-radius:999px; cursor:pointer}
+.splash-bulbs{display:flex; gap:10px; margin-top:8px}
+.splash-bulbs i{width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.1);
+  border:1px solid var(--line)}
+.splash-bulbs i.on{background:radial-gradient(circle,#fff,var(--accent));
+  box-shadow:0 0 14px var(--accent); border-color:var(--accent)}
+
+/* ---------- chybový stav ---------- */
+.errbox{color:var(--bad); text-align:center; font-family:var(--mono); font-size:14px}
+
+/* ---------- responsivita ---------- */
+@media (min-width:560px){
+  .wall{padding:22px 20px 20px}
+  .bulb{width:54px}
+}
+@media (max-width:380px){
+  .keypad{max-width:240px} .key{height:52px; font-size:20px}
+  .cl-cats,.yn{gap:8px}
+}
+
+/* ---------- PŘECHOD: roztržení trhliny ---------- */
+.rift-stage{position:relative; height:280px; margin:12px auto 6px; display:flex; align-items:center;
+  justify-content:center; overflow:hidden; border-radius:var(--radius);
+  background:radial-gradient(60% 60% at 50% 50%, transparent, rgba(0,0,0,.45))}
+.rift-tear{position:relative; width:200px; height:260px}
+.rift-tear svg{width:100%; height:100%; overflow:visible; display:block}
+.rift-core{transform-box:fill-box; transform-origin:center; animation:tearopen 1.5s cubic-bezier(.2,.7,.3,1) both}
+@keyframes tearopen{0%{transform:scaleX(.02)}62%{transform:scaleX(1.1)}100%{transform:scaleX(1)}}
+.rift-edge{animation:riftflicker 2.4s ease-in-out infinite}
+@keyframes riftflicker{50%{opacity:.7; filter:brightness(1.35)}}
+.rift-spore{position:absolute; left:50%; top:50%; width:5px; height:5px; margin:-2.5px 0 0 -2.5px;
+  border-radius:50%; background:var(--rift); box-shadow:0 0 8px var(--rift); opacity:0;
+  animation:suck 2.6s ease-in infinite}
+@keyframes suck{0%{transform:translate(var(--sx,0),var(--sy,0)) scale(1); opacity:0}
+  16%{opacity:.9}100%{transform:translate(0,0) scale(.2); opacity:0}}
+
+/* ---------- HERO: cedule + houpání dětí + víc blesků ---------- */
+.hs-kids{transform-box:view-box; transform-origin:center; animation:kidbob 3.4s ease-in-out infinite}
+@keyframes kidbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+.hs-bolt.b4{animation:bolt 7.5s linear infinite 1.1s}
+.hs-bolt.b5{animation:bolt 9s linear infinite 5.6s}
+.hs-sign-glow{animation:signflick 4.5s steps(1) infinite}
+@keyframes signflick{0%,92%,100%{opacity:1}94%{opacity:.45}96%{opacity:.9}}
+
+/* ---------- BYERSOVA ABECEDNÍ ZEĎ ---------- */
+.wall-alpha{display:flex; flex-wrap:wrap; gap:1px 7px; justify-content:center; margin-top:14px; --aop:.22}
+.wall-alpha span{font-family:var(--display); font-weight:700; font-size:15px; line-height:1.1;
+  color:var(--glow); opacity:var(--aop); transform:rotate(var(--r,0deg)); text-shadow:0 1px 0 rgba(0,0,0,.45)}
+/* pár náhodných písmen občas probleskne — komunikace "z druhé strany" */
+.wall-alpha span.fl{animation:alphaflick 9s linear infinite; animation-delay:var(--fd,0s)}
+@keyframes alphaflick{
+  0%,88%,100%{opacity:var(--aop); text-shadow:0 1px 0 rgba(0,0,0,.45)}
+  90%,94%{opacity:1; color:var(--glow); text-shadow:0 0 12px var(--accent), 0 0 26px var(--accent)}
+  92%{opacity:.3}
+}
+body[data-skin="original"] .wall-alpha{--aop:.3}
+body[data-skin="original"] .wall{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.55)),
+    repeating-linear-gradient(90deg, #1b1422 0 22px, #211728 22px 44px),
+    radial-gradient(circle at 22% 26%, rgba(200,140,90,.06) 0 5px, transparent 6px),
+    radial-gradient(circle at 68% 64%, rgba(200,140,90,.05) 0 5px, transparent 6px);
+  background-size:auto, auto, 88px 88px, 88px 88px}
+
+/* ---------- OBRÁZKOVÉ SLOTY: kinematická animace tvých obrázků ---------- */
+.hs-img-wrap{position:absolute; inset:0; overflow:hidden}
+.hs-img{position:absolute; inset:-7%; background-size:cover; background-position:center;
+  animation:kenburns 22s ease-in-out infinite alternate}
+@keyframes kenburns{0%{transform:scale(1.06) translate(0,0)}100%{transform:scale(1.18) translate(-2.5%,-2%)}}
+.hs-img-fx{position:absolute; inset:0; width:100%; height:100%}
+.hs-img-vig{position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 28%, transparent 48%, rgba(0,0,0,.6))}
+
+.cre-img-wrap{position:relative; width:min(300px,80vw); height:min(340px,92vw); margin:6px auto 0;
+  animation:emerge 1.7s ease-out both}
+.cre-img{position:absolute; inset:0; background-size:contain; background-repeat:no-repeat;
+  background-position:center bottom; animation:crebreathe 4.4s ease-in-out infinite;
+  filter:drop-shadow(0 0 26px var(--rift-soft))}
+.cre-img-glow{position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 70px -12px var(--rift)}
+
+#roombg{position:fixed; inset:0; z-index:0; opacity:0; pointer-events:none;
+  background-size:cover; background-position:center; transition:opacity .7s ease;
+  animation:bgdrift 30s ease-in-out infinite alternate}
+#roombg::after{content:""; position:absolute; inset:0; background:rgba(5,6,11,.74)}
+#roombg.on{opacity:1}
+@keyframes bgdrift{0%{transform:scale(1.04) translate(0,0)}100%{transform:scale(1.12) translate(-1.5%,1.5%)}}
+
+/* ---------- a11y: omezený pohyb ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important;
+    transition-duration:.05ms !important}
+  .fog,.grain,.marquee{animation:none}
+}
+</style>
+<style>
+#btnSound,#btnFS{display:none!important} /* nahrazeno jednotným LUDUS ovládáním vpravo nahoře */
+.topbar,.hdr,header{padding-right:200px}
+@media (max-width:560px){.topbar,.hdr,header{padding-right:170px}}
+</style>
+</head>
+<body data-skin="safe">
+
+<div id="roombg" aria-hidden="true"></div>
+
+<!-- atmosférické vrstvy -->
+<div id="fx" aria-hidden="true">
+  <canvas id="stars"></canvas>
+  <div class="fog"></div>
+  <div class="fog b"></div>
+  <svg class="vines l" viewBox="0 0 150 520" preserveAspectRatio="xMidYMax meet">
+    <path d="M20 520 C30 420 8 360 24 280 C36 220 18 170 30 110 C36 80 30 50 38 18" stroke-width="3"/>
+    <path d="M20 520 C30 420 8 360 24 280 C36 220 18 170 30 110" stroke-width="2" transform="translate(14 0)"/>
+    <path d="M24 300 C44 290 56 300 64 286 M30 200 C50 192 60 202 70 190 M28 120 C46 112 58 122 66 110" stroke-width="2"/>
+  </svg>
+  <svg class="vines r" viewBox="0 0 150 520" preserveAspectRatio="xMidYMax meet">
+    <path d="M28 520 C18 430 40 360 22 290 C8 230 30 175 18 115 C12 82 20 48 12 16" stroke-width="3"/>
+    <path d="M28 520 C18 430 40 360 22 290 C8 230 30 175 18 115" stroke-width="2" transform="translate(-12 0)"/>
+    <path d="M22 310 C42 300 54 310 62 296 M18 210 C38 202 48 212 58 200 M24 130 C42 122 54 132 62 120" stroke-width="2"/>
+  </svg>
+  <div class="scan"></div>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+</div>
+
+<!-- topbar -->
+<header class="topbar">
+  <div class="brand"><span class="dot"></span><span>LUDUS · úniková hra</span></div>
+  <button class="iconbtn" id="btnLang" title="Jazyk / Language">CZ</button>
+  <button class="iconbtn" id="btnSound" title="Zvuk">♪</button>
+  <button class="iconbtn" id="btnFS" title="Celá obrazovka">⛶</button>
+  <button class="iconbtn" id="btnMenu" title="Menu">⟲</button>
+</header>
+
+<!-- teacher / náhledový panel (plní se v JS) -->
+<div id="teacherBar"></div>
+
+<!-- herní plocha -->
+<main id="screen"></main>
+
+<!-- splash / intro -->
+<div id="splash">
+  <video id="splashVideo" muted playsinline style="display:none"></video>
+  <button class="skip" id="splashSkip" style="display:none">Přeskočit ⏭</button>
+  <div class="splash-inner" id="splashInner"></div>
+</div>
+
+<script>
+/* ===========================================================================
+   ÚVODNÍ ZNĚLKA + ANIMAČNÍ VIDEO  (stejně jako u předchozích her)
+   ---------------------------------------------------------------------------
+   Sem vlož base64 médií. Když je necháš prázdné, naběhne vestavěná
+   animovaná intro-sekvence (rozsvěcení neonu) a "Klepnutím vstoupíš".
+     • videoBase64 — celé intro video (např. "data:video/mp4;base64,AAAA...")
+     • audioBase64 — znělka (např. "data:audio/mpeg;base64,SUQz...")
+   =========================================================================== */
+const INTRO = {
+  videoBase64: "",     // <- sem vlož intro video
+  audioBase64: "",     // <- sem vlož znělku
+  holdMs: 2600         // jak dlouho držet vestavěné intro, než nabídne vstup
+};
+
+/* ===========================================================================
+   OBRÁZKOVÉ SLOTY  (tvoje obrázky → engine je sám rozhýbe)
+   ---------------------------------------------------------------------------
+   Sem vlož base64 obrázků. Prázdný slot = padá zpět na vestavěné SVG.
+   Engine na ně sám aplikuje animaci (nájezd kamery, blesky, "dýchání", spóry).
+     • hero     — úvodní scéna / plakát  (Ken Burns + blesky + vinětace)
+     • creature — stvůra na finále        (vynoří se z tmy + dýchá + otřes)
+     • roomBg   — pozadí místností         (ztmavené, pomalý drift za kartou)
+   Lze také vložit přes window.LUDUS_IMAGES = { hero:"...", creature:"...", roomBg:"..." }.
+   =========================================================================== */
+const IMAGES = Object.assign({ hero:"", creature:"", roomBg:"" }, (window.LUDUS_IMAGES||{}));
+
+/* ===========================================================================
+   SKINY — mění JEN chrome a názvy, nikdy výukový obsah (ten je z LUDUS_CONTENT)
+   =========================================================================== */
+const SKINS = {
+  safe:{
+    internalOnly:false,
+    name:{cs:"Tajemství v Javorové rokli", en:"Maple Falls Mystery"},
+    town:{cs:"Javorová rokle", en:"Maple Falls"},
+    creature:"shade",
+    creatureName:{cs:"Stín", en:"the Shade"},
+    flavor:{
+      intro:{
+        cs:"Ve městě Javorová rokle zhasla světla. Pod starou elektrárnou se otevřela Trhlina. Rozsviť žárovky, slož kódy a dostaň se ven dřív, než tě najde Stín.",
+        en:"The lights went out in Maple Falls. Beneath the old power station, a Rift has opened. Light the bulbs, crack the codes and get out before the Shade finds you."
+      },
+      finale:{
+        cs:"Poslední dveře. Za nimi čeká Stín — a jediná cesta ven.",
+        en:"The final door. Beyond it waits the Shade — and the only way out."
+      },
+      escape:{
+        cs:"Trhlina se za tebou zavřela. Javorová rokle může zase dýchat.",
+        en:"The Rift sealed behind you. Maple Falls can breathe again."
+      }
+    }
+  },
+  original:{
+    internalOnly:true,
+    name:{cs:"Stranger Things", en:"Stranger Things"},
+    town:{cs:"Hawkins", en:"Hawkins"},
+    creature:"demogorgon",
+    creatureName:{cs:"Démogorgon", en:"Demogorgon"},
+    flavor:{
+      intro:{
+        cs:"V Hawkinsu zhasla světla. Pod národní laboratoří se otevřela Brána do Obráceného světa. Rozsviť řetěz světel, slož kódy a unikni dřív, než tě dostihne Démogorgon.",
+        en:"The lights went out in Hawkins. Beneath the National Laboratory, a Gate to the Upside Down has opened. Light the string, crack the codes and escape before the Demogorgon reaches you."
+      },
+      finale:{
+        cs:"Poslední dveře. Za nimi číhá Démogorgon — a jediná cesta z Obráceného světa.",
+        en:"The final door. The Demogorgon lurks beyond — and the only way out of the Upside Down."
+      },
+      escape:{
+        cs:"Brána se zavřela. Hawkins je zase v bezpečí — alespoň prozatím.",
+        en:"The Gate is closed. Hawkins is safe again — for now."
+      }
+    }
+  }
+};
+
+/* ===========================================================================
+   i18n — chrome (cs/en)
+   =========================================================================== */
+const STR = {
+  cs:{
+    enter:"Klepnutím vstoupíš", skip:"Přeskočit",
+    start_codename:"Tvé krycí jméno", start_placeholder:"např. Eleven",
+    start_play:"Spustit únik", start_resume:"Pokračovat",
+    toggle_skin:"Bezpečná verze ↔ originál", internal_only:"jen interně",
+    room:"Místnost", room_pick:"Skok do místnosti", teacher:"Učitel",
+    type_mc4:"výběr", type_mc2:"výběr", type_yesno:"ano/ne", type_wordbank:"doplň", type_classify:"zařaď",
+    yes:"Ano", no:"Ne", check:"Potvrdit", hint:"Nápověda",
+    bank_hint:"Klepni na slovo a doplň ho do mezery. Klepnutím na mezeru ho vrátíš.",
+    classify_hint:"Klepnutím přesuneš kartičku do kategorie.",
+    fb_correct:"Správně!", fb_wrong:"Skoro — zkus to znovu.",
+    fb_fill:"Doplň všechny mezery.", fb_sort:"Zařaď všechny kartičky.",
+    wall_title:"Stěna světel — rozsviť celý kód",
+    lock_title:"Zámek", lock_prompt:"Zadej rozsvícený kód",
+    lock_open:"Otevřít", lock_clear:"Smazat", lock_wrong:"Špatný kód", lock_ok:"Otevřeno!",
+    next_room:"Další místnost", to_lock:"K zámku",
+    escaped:"Úspěšný únik", res_codename:"Krycí jméno", res_id:"ID hry",
+    res_time:"Čas", res_dur:"Doba úniku", res_points:"Body", res_pct:"Úspěšnost",
+    review:"Přehled odpovědí", correct_was:"Správně:", again:"Hrát znovu",
+    no_content:"Žádný obsah. Builder nevložil LUDUS_CONTENT.",
+    face_it:"Postavit se tomu", skip_ex:"⏭ Přeskočit cvičení"
+  },
+  en:{
+    enter:"Tap to enter", skip:"Skip",
+    start_codename:"Your codename", start_placeholder:"e.g. Eleven",
+    start_play:"Start the escape", start_resume:"Continue",
+    toggle_skin:"Safe version ↔ original", internal_only:"internal only",
+    room:"Room", room_pick:"Jump to room", teacher:"Teacher",
+    type_mc4:"choice", type_mc2:"choice", type_yesno:"yes/no", type_wordbank:"fill in", type_classify:"sort",
+    yes:"Yes", no:"No", check:"Confirm", hint:"Hint",
+    bank_hint:"Tap a word to drop it into a gap. Tap the gap to take it back.",
+    classify_hint:"Tap to move a card into a category.",
+    fb_correct:"Correct!", fb_wrong:"Almost — try again.",
+    fb_fill:"Fill in all the gaps.", fb_sort:"Sort all the cards.",
+    wall_title:"Wall of lights — reveal the full code",
+    lock_title:"Lock", lock_prompt:"Enter the lit code",
+    lock_open:"Open", lock_clear:"Clear", lock_wrong:"Wrong code", lock_ok:"Open!",
+    next_room:"Next room", to_lock:"To the lock",
+    escaped:"You escaped", res_codename:"Codename", res_id:"Game ID",
+    res_time:"Time", res_dur:"Escape time", res_points:"Score", res_pct:"Accuracy",
+    review:"Answer review", correct_was:"Correct:", again:"Play again",
+    no_content:"No content. The builder did not inject LUDUS_CONTENT.",
+    face_it:"Face it", skip_ex:"⏭ Skip exercise"
+  }
+};
+function T(k){ return (STR[lang]&&STR[lang][k]) || STR.cs[k] || k; }
+
+/* ---------- mini helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function el(tag,cls,html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!==undefined)e.innerHTML=html; return e; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function skinName(){ return SKINS[skin].name[lang]||SKINS[skin].name.cs; }
+function flavor(k){ const f=SKINS[skin].flavor[k]; return f?(f[lang]||f.cs):""; }
+/* ===========================================================================
+   SAMPLE — vestavěný obsah (anglická gramatika, 3 místnosti, všech 5 typů)
+   =========================================================================== */
+const SAMPLE = {
+  schema:2,
+  meta:{ title:"", subtitle:"", lang:"cs", subject:"Angličtina · revize" },
+  rounds:[
+    { id:"r1", title:{cs:"Vstupní hala", en:"The Entrance"}, items:[
+      { type:"mc4", q:"She ___ to Prague last summer.", options:["went","has gone","goes","go"], answer:0,
+        hint:"Konkrétní moment v minulosti → past simple." },
+      { type:"yesno", q:"„I have seen that film yesterday.“ — Je věta správně?", answer:false,
+        hint:"„yesterday“ + present perfect nejdou dohromady." },
+      { type:"mc2", q:"They ___ already left.", options:["have","has"], answer:0,
+        hint:"They → have." }
+    ]},
+    { id:"r2", title:{cs:"Laboratoř", en:"The Lab"}, items:[
+      { type:"mc4", q:"If it ___ tomorrow, we'll stay home.", options:["rains","will rain","rained","would rain"], answer:0,
+        hint:"1. kondicionál: if + přítomný čas." },
+      { type:"wordbank", q:"If I ___ rich, I ___ travel the world.", bank:["were","would","was","will"], answer:["were","would"],
+        hint:"2. kondicionál: if + were, would + infinitiv." },
+      { type:"yesno", q:"„If I would have known, I would have come.“ — Správně?", answer:false,
+        hint:"Po „if“ nepatří „would“ — patří past perfect." }
+    ]},
+    { id:"r3", title:{cs:"Trhlina", en:"The Rift"}, items:[
+      { type:"classify", q:"Zařaď slovesa: pravidelná vs. nepravidelná.",
+        categories:["Regular","Irregular"],
+        items:[{text:"played",cat:0},{text:"went",cat:1},{text:"watched",cat:0},{text:"took",cat:1},{text:"called",cat:0},{text:"saw",cat:1}],
+        hint:"Pravidelná končí na -ed." },
+      { type:"mc4", q:"He said, „I am tired.“ → He said he ___ tired.", options:["was","is","has been","were"], answer:0,
+        hint:"Nepřímá řeč: am → was." }
+    ]}
+  ]
+};
+
+/* ===========================================================================
+   Normalizace obsahu (permisivní — toleruje aliasy klíčů)
+   =========================================================================== */
+function pick(o,keys,d){ if(!o) return d; for(const k of keys){ if(o[k]!==undefined && o[k]!==null) return o[k]; } return d; }
+function toBool(v){ if(typeof v==="boolean") return v; const s=String(v).toLowerCase().trim();
+  return s==="true"||s==="yes"||s==="ano"||s==="1"||s==="y"; }
+function chunk(a,n){ const out=[]; for(let i=0;i<a.length;i+=n) out.push(a.slice(i,i+n)); return out; }
+function loc(v,lng){ if(v==null) return ""; if(typeof v==="object") return v[lng]||v.cs||v.en||Object.values(v)[0]||""; return String(v); }
+
+function normItem(raw){
+  const type=String(pick(raw,["type","kind","t"],"mc4")).toLowerCase();
+  const out={ type, q:pick(raw,["q","question","prompt","text","stem"],""), hint:pick(raw,["hint","help","clue"],""), raw };
+  if(type==="mc4"||type==="mc2"){
+    out.options=(pick(raw,["options","choices","answers","opts"],[])||[]).slice();
+    let a=pick(raw,["answer","correct","correctIndex","a","solution"],0);
+    if(typeof a==="string"){ const i=out.options.indexOf(a); out.answer=i>=0?i:0; }
+    else out.answer=Number(a)||0;
+  } else if(type==="yesno"){
+    out.answer=toBool(pick(raw,["answer","correct","a","solution"],true));
+  } else if(type==="wordbank"){
+    out.bank=(pick(raw,["bank","words","pool"],[])||[]).slice();
+    let s=pick(raw,["answer","solution","blanks","correct"],[]);
+    out.answer=Array.isArray(s)?s.slice():[s];
+    if(out.bank.length===0) out.bank=out.answer.slice();
+  } else if(type==="classify"){
+    out.categories=(pick(raw,["categories","cats","groups","buckets"],[])||[]).slice();
+    const items=pick(raw,["items","cards","tokens"],[])||[];
+    out.items=items.map(it=>{
+      if(typeof it==="string") return {text:it,cat:0};
+      const text=pick(it,["text","label","word","t"],"");
+      let cat=pick(it,["cat","category","group","bucket","c"],0);
+      if(typeof cat==="string"){ const ci=out.categories.indexOf(cat); cat=ci>=0?ci:0; }
+      return {text,cat:Number(cat)||0};
+    });
+  }
+  return out;
+}
+function normContent(src){
+  if(!src) return null;
+  const meta=pick(src,["meta","metadata"],{})||{};
+  let rounds=pick(src,["rounds","stations","rooms","stages","sections","groups"],null);
+  if(!rounds){
+    const flat=pick(src,["items","questions","exercises","tasks"],null);
+    if(flat&&flat.length) rounds=chunk(flat,4).map((arr,i)=>({title:"Room "+(i+1),items:arr}));
+  }
+  if(!rounds) return null;
+  rounds=rounds.map((r,i)=>({
+    id:pick(r,["id"],"r"+(i+1)),
+    title:pick(r,["title","name","label"],""),
+    items:(pick(r,["items","questions","exercises","tasks"],[])||[]).map(normItem)
+  })).filter(r=>r.items.length>0);
+  return { meta, rounds };
+}
+function resolveContent(){
+  return normContent(window.LUDUS_CONTENT) || normContent(window.GAME_CONTENT) || normContent(SAMPLE);
+}
+
+/* Fisher–Yates: náhodné pořadí voleb (aby správná odpověď nebyla vždy "A") */
+function shufIdx(n){ const a=Array.from({length:n},(_,i)=>i);
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function shuffleArr(arr){ return shufIdx(arr.length).map(i=>arr[i]); }
+
+/* deterministická číslice na otázku */
+function hashStr(s){ let h=2166136261>>>0; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function digitFor(ri,qi,item){ return hashStr(ri+"|"+qi+"|"+(item.q||"")) % 10; }
+
+/* ===========================================================================
+   Audio (generovaný, bez souborů)
+   =========================================================================== */
+const Audio8 = (()=>{
+  let ctx=null, on=true, jingle=null;
+  function ac(){ if(!ctx){ try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return ctx; }
+  function tone(f,dur,type,vol){ const c=ac(); if(!c||!on) return;
+    const o=c.createOscillator(), g=c.createGain(); o.type=type||"sine"; o.frequency.value=f;
+    g.gain.setValueAtTime(0,c.currentTime); g.gain.linearRampToValueAtTime(vol||.12,c.currentTime+.01);
+    g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+dur); o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime+dur); }
+  return {
+    set(v){ on=v; if(jingle){ jingle.muted=!v; } try{ if(v) ac()&&ac().resume(); }catch(e){} },
+    get(){ return on; },
+    click(){ tone(420,.05,"square",.05); },
+    good(){ tone(660,.09,"triangle",.1); setTimeout(()=>tone(990,.12,"triangle",.1),70); },
+    bad(){ tone(150,.2,"sawtooth",.09); setTimeout(()=>tone(110,.16,"sawtooth",.07),60); },
+    unlock(){ tone(330,.12,"triangle",.1); setTimeout(()=>tone(495,.12,"triangle",.1),90); setTimeout(()=>tone(740,.24,"triangle",.12),180); },
+    key(){ tone(540,.04,"square",.05); },
+    rift(){ tone(70,.5,"sawtooth",.08); setTimeout(()=>tone(90,.6,"sine",.06),120); },
+    setJingle(a){ jingle=a; }
+  };
+})();
+
+/* ===========================================================================
+   Stav hry
+   =========================================================================== */
+const SAVE_KEY="ludus_escape_v1";
+let CONTENT=null, S=null, lang="cs", skin="safe";
+
+function freshState(name){
+  return { name:name||"", roomIdx:0, qIdx:0, revealed:{}, queue:{}, firstTry:{},
+    answeredCount:0, total:0, lang, skin, id:genId(), started:Date.now(), phase:"start" };
+}
+function countTotal(){ return CONTENT.rounds.reduce((a,r)=>a+r.items.length,0); }
+function genId(){ const h="0123456789ABCDEF"; let s=""; for(let i=0;i<4;i++) s+=h[Math.floor(Math.random()*16)];
+  const L="ABCDEFGHJKLMNPQRSTUVWXYZ"; return L[Math.floor(Math.random()*L.length)]+L[Math.floor(Math.random()*L.length)]+"-"+s; }
+function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+function loadState(){ try{ const r=localStorage.getItem(SAVE_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+function clearState(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+
+/* ===========================================================================
+   Částicový engine (canvas) — spóry / popel Obráceného světa
+   =========================================================================== */
+const Particles=(()=>{
+  let cv,ctx,W,H,DPR,parts=[],raf=0,reduce=false,px=0,py=0;
+  function init(){
+    cv=$("stars"); if(!cv) return; ctx=cv.getContext&&cv.getContext("2d"); if(!ctx) return;
+    reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches);
+    resize(); seed();
+    window.addEventListener("resize", ()=>{ resize(); seed(); });
+    window.addEventListener("pointermove", e=>{ px=(e.clientX/W-.5); py=(e.clientY/H-.5); }, {passive:true});
+    if(!reduce){ loop(); } else { drawStatic(); }
+  }
+  function resize(){ DPR=Math.min(2,window.devicePixelRatio||1); W=innerWidth; H=innerHeight;
+    cv.width=W*DPR; cv.height=H*DPR; cv.style.width=W+"px"; cv.style.height=H+"px"; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  function count(){ const a=W*H; return Math.max(20, Math.min(reduce?30:80, Math.round(a/20000))); }
+  function seed(){ const n=count(); parts=[]; for(let i=0;i<n;i++) parts.push(mk()); }
+  function mk(){ const depth=Math.random()*.8+.2; return {
+    x:Math.random()*W, y:Math.random()*H, r:depth*1.7+.3, d:depth,
+    vy:-(depth*.20+.04), vx:(Math.random()-.5)*.22*depth,
+    a:Math.random()*.26+.08, tw:Math.random()*Math.PI*2 }; }
+  function colour(){ return getComputedStyle(document.body).getPropertyValue("--accent2").trim()||"#3b6fff"; }
+  function loop(){
+    const acc=colour();
+    ctx.clearRect(0,0,W,H);
+    for(const p of parts){
+      p.y+=p.vy; p.x+=p.vx+Math.sin(p.tw)*.10; p.tw+=.009;
+      if(p.y< -8){ p.y=H+8; p.x=Math.random()*W; }
+      if(p.x< -8) p.x=W+8; if(p.x>W+8) p.x=-8;
+      const ox=px*18*p.d, oy=py*13*p.d;
+      const fl=.6+Math.sin(p.tw*2)*.4;
+      ctx.beginPath(); ctx.arc(p.x+ox, p.y+oy, p.r, 0, 6.283);
+      ctx.fillStyle=acc; ctx.globalAlpha=p.a*fl*.4; ctx.fill();
+      ctx.globalAlpha=p.a*fl*.7; ctx.beginPath(); ctx.arc(p.x+ox,p.y+oy,p.r*.4,0,6.283); ctx.fillStyle="#dfe9ff"; ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    raf=requestAnimationFrame(loop);
+  }
+  function drawStatic(){ const acc=colour(); ctx.clearRect(0,0,W,H);
+    for(const p of parts){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle=acc; ctx.globalAlpha=p.a*.4; ctx.fill(); }
+    ctx.globalAlpha=1; }
+  function reskin(){ /* barva se čte z CSS proměnné za běhu */ if(reduce) drawStatic(); }
+  return { init, reskin };
+})();
+/* ===========================================================================
+   RENDER — dispečer
+   =========================================================================== */
+function render(){
+  document.body.setAttribute("data-skin", skin);
+  document.documentElement.lang=lang;
+  document.onkeydown=null;   // klávesnice zámku se váže jen ve fázi "lock"
+  Particles.reskin();
+  buildTeacher();
+  const bl=$("btnLang"); if(bl) bl.textContent = lang==="cs"?"CZ":"EN";
+  const bs=$("btnSound"); if(bs) bs.textContent = Audio8.get()?"♪":"⨯";
+  const phase = S? S.phase : "start";
+  const rb=$("roombg");
+  if(rb){ if(IMAGES.roomBg){ rb.style.backgroundImage='url("'+IMAGES.roomBg+'")'; rb.classList.toggle("on", !!(S && (phase==="play"||phase==="lock"||phase==="trans"||phase==="finale"))); } else { rb.classList.remove("on"); } }
+  const scr=$("screen"); if(!scr) return; scr.innerHTML="";
+  if(!CONTENT || !CONTENT.rounds.length){ scr.appendChild(el("div","card","<p class='errbox'>"+esc(T("no_content"))+"</p>")); return; }
+  let node;
+  if(!S || phase==="start") node=renderStart();
+  else if(phase==="play")  node=renderRoom();
+  else if(phase==="lock")  node=renderLock();
+  else if(phase==="trans") node=renderTrans();
+  else if(phase==="finale")node=renderFinale();
+  else if(phase==="done")  node=renderResult();
+  else node=renderStart();
+  scr.appendChild(node);
+}
+
+/* ---------- HERO SCÉNA (původní SVG, animovaná) ---------- */
+function heroScene(){
+  if(IMAGES.hero){
+    return '<div class="hs-img-wrap">'+
+      '<div class="hs-img" style="background-image:url(\''+IMAGES.hero+'\')"></div>'+
+      '<svg class="hs-img-fx" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+
+        '<path class="hs-bolt b1" d="M150 22 L142 68 L156 62 L146 102 L158 96" stroke="#dff0ff" stroke-width="2" fill="none"/>'+
+        '<path class="hs-bolt b3" d="M262 18 L256 60 L270 54 L260 94" stroke="#eaf4ff" stroke-width="1.8" fill="none"/>'+
+        '<path class="hs-bolt b5" d="M118 26 L110 62 L122 56 L114 94" stroke="#cfe6ff" stroke-width="1.6" fill="none"/>'+
+        '<rect class="hs-flash" width="400" height="240" fill="#ff6a44"/>'+
+      '</svg>'+
+      '<div class="hs-img-vig"></div>'+
+    '</div>';
+  }
+  const orig = SKINS[skin].creature==="demogorgon";
+  const sky = orig
+    ? '<stop offset="0%" stop-color="#190307"/><stop offset="42%" stop-color="#5e0a12"/><stop offset="68%" stop-color="#bf2710"/><stop offset="84%" stop-color="#ff7a18"/><stop offset="100%" stop-color="#2a0908"/>'
+    : '<stop offset="0%" stop-color="#06121a"/><stop offset="45%" stop-color="#0c3b3f"/><stop offset="70%" stop-color="#1f7d6e"/><stop offset="86%" stop-color="#ffb23e"/><stop offset="100%" stop-color="#07120f"/>';
+  const sunStop = orig ? '#ff7a18' : '#ffb23e';
+  let storm;
+  if(orig){
+    // Mind Flayer: churnoucí mračno + pavoučí chapadla (silueta)
+    storm='<g class="hs-storm">'+
+      '<path d="M132 66 Q200 26 268 66 Q300 92 268 120 Q200 144 132 120 Q100 92 132 66 Z" fill="#160407"/>'+
+      '<path d="M150 56 Q200 40 250 56 Q270 74 250 92 Q200 106 150 92 Q130 74 150 56 Z" fill="#2a060b" opacity=".7"/>'+
+      '<g stroke="#130406" stroke-width="7" stroke-linecap="round" fill="none">'+
+        '<path d="M168 96 Q116 70 56 28"/><path d="M184 102 Q150 54 122 8"/><path d="M200 104 Q202 50 200 4"/>'+
+        '<path d="M216 102 Q252 54 282 10"/><path d="M232 96 Q300 68 352 30"/>'+
+        '<path d="M158 102 Q88 96 28 78"/><path d="M242 102 Q312 96 372 82"/>'+
+      '</g></g>';
+  } else {
+    // bezpečná verze: beztvará bouřková masa, žádný ikonický Mind Flayer
+    storm='<g class="hs-storm" fill="#0a1418">'+
+      '<path d="M120 70 Q200 30 280 70 Q310 100 280 126 Q200 150 120 126 Q90 100 120 70 Z"/>'+
+      '<path d="M150 58 Q200 44 250 58 Q272 78 250 96 Q200 110 150 96 Q128 78 150 58 Z" opacity=".6"/>'+
+      '<g stroke="#0a1418" stroke-width="6" stroke-linecap="round" fill="none" opacity=".7"><path d="M160 110 Q120 122 80 112"/><path d="M240 110 Q280 122 320 112"/><path d="M200 122 Q200 140 200 150"/></g></g>';
+  }
+  const bike=(x,y,s)=>'<g transform="translate('+x+' '+y+') scale('+s+')" fill="#040406">'+
+    '<circle cx="-7" cy="0" r="5" fill="none" stroke="#040406" stroke-width="2"/>'+
+    '<circle cx="7" cy="0" r="5" fill="none" stroke="#040406" stroke-width="2"/>'+
+    '<path d="M-7 0 L0 -8 L7 0 M0 -8 L0 -3" stroke="#040406" stroke-width="2" fill="none"/>'+
+    '<path d="M0 -8 C-1 -14 -2 -18 -2 -21" stroke="#040406" stroke-width="3.4" fill="none" stroke-linecap="round"/>'+
+    '<circle cx="-2" cy="-24" r="3.4"/></g>';
+  const town = orig ? "HAWKINS" : (SKINS.safe.town.en||"MAPLE FALLS").toUpperCase();
+  const signCol = orig ? "#2f5e34" : "#2f4a5e";
+  const sign = '<g class="hs-sign-glow" transform="translate(322 150)">'+
+    '<rect x="-2" y="0" width="3" height="46" fill="#161417"/><rect x="30" y="0" width="3" height="46" fill="#161417"/>'+
+    '<rect x="-12" y="-30" width="56" height="34" rx="2" fill="'+signCol+'" stroke="#0c1a10" stroke-width="1.5"/>'+
+    '<rect x="-8" y="-26" width="48" height="26" rx="1.5" fill="none" stroke="#dfe7c8" stroke-width="1" opacity=".7"/>'+
+    '<text x="16" y="-18" text-anchor="middle" font-family="Arial,sans-serif" font-size="5.5" fill="#eef4dd" letter-spacing=".3">WELCOME TO</text>'+
+    '<text x="16" y="-6" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="9.5" fill="#fff">'+town+'</text>'+
+    '</g>';
+  return '<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+
+    '<defs>'+
+      '<linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1">'+sky+'</linearGradient>'+
+      '<radialGradient id="hsun" cx="50%" cy="100%" r="62%"><stop offset="0%" stop-color="'+sunStop+'"/><stop offset="45%" stop-color="'+sunStop+'" stop-opacity=".35"/><stop offset="100%" stop-color="'+sunStop+'" stop-opacity="0"/></radialGradient>'+
+      '<linearGradient id="hroad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b2730"/><stop offset="100%" stop-color="#0b0910"/></linearGradient>'+
+    '</defs>'+
+    '<rect width="400" height="240" fill="url(#hsky)"/>'+
+    '<ellipse cx="200" cy="152" rx="160" ry="46" fill="url(#hsun)"/>'+
+    storm+
+    '<path class="hs-bolt b1" d="M150 40 L142 78 L156 72 L146 110 L158 104" stroke="#cfe6ff" stroke-width="2" fill="none"/>'+
+    '<path class="hs-bolt b2" d="M262 36 L256 70 L270 64 L260 100" stroke="#cfe6ff" stroke-width="2" fill="none"/>'+
+    '<path class="hs-bolt b3" d="M206 28 L200 64 L212 58 L204 92" stroke="#eaf4ff" stroke-width="1.6" fill="none"/>'+
+    '<path class="hs-bolt b4" d="M120 44 L112 76 L124 72 L116 102" stroke="#bfe0ff" stroke-width="1.6" fill="none"/>'+
+    '<path class="hs-bolt b5" d="M312 40 L306 72 L318 66 L310 98" stroke="#bfe0ff" stroke-width="1.6" fill="none"/>'+
+    '<rect class="hs-flash" width="400" height="240" fill="#ff6a44"/>'+
+    '<rect y="150" width="400" height="90" fill="#070709"/>'+
+    '<path d="M150 240 L192 150 L208 150 L250 240 Z" fill="url(#hroad)"/>'+
+    '<line x1="200" y1="152" x2="200" y2="240" stroke="#caa23a" stroke-width="3" stroke-dasharray="5 8" opacity=".8"/>'+
+    sign+
+    '<g class="hs-rift-glow" stroke="var(--rift)" stroke-width="2.2" fill="none" style="filter:drop-shadow(0 0 5px var(--rift))">'+
+      '<path d="M200 240 L196 222 L205 210 L198 196"/><path d="M200 230 L184 224 M205 210 L222 205 M198 196 L209 188 M200 222 L212 232"/>'+
+    '</g>'+
+    '<g class="hs-kids">'+bike(170,224,1.15)+bike(189,221,1.02)+bike(213,221,1.02)+bike(232,224,1.15)+'</g>'+
+  '</svg>';
+}
+
+/* ---------- ÚVODNÍ OBRAZOVKA ---------- */
+function renderStart(){
+  const sk=SKINS[skin];
+  const c=el("div","card hero");
+  const metaTitle=loc(CONTENT.meta.title, lang);
+  const metaSub  =loc(CONTENT.meta.subtitle, lang) || loc(CONTENT.meta.subject, lang);
+  const title=metaTitle || skinName();
+  c.innerHTML =
+    '<div class="hero-scene">'+heroScene()+'</div>'+
+    '<div class="marquee">'+esc(title)+'</div>'+
+    (metaSub? '<div class="subtitle">'+esc(metaSub)+'</div>' : '<div class="subtitle">'+esc(sk.town[lang])+'</div>')+
+    '<p class="lede">'+esc(flavor("intro"))+'</p>';
+
+  // Přepínač skinu je "gated": žák ho nikdy nevidí. Zobrazí se jen v učitelském
+  // náhledu (3× ťuknutí na logo / ?teacher=1). Skin jinak řídí
+  // meta z LUDUS_CONTENT nebo ?skin= pro testování.
+  if(isTeacher()){
+    const tl=el("div","toggle-line");
+    tl.appendChild(el("span","toggle-cap",esc(T("toggle_skin"))));
+    const sw=el("label","switch");
+    const inp=document.createElement("input"); inp.type="checkbox"; inp.id="skinToggle"; inp.checked=(skin==="original");
+    inp.onchange=()=>{ Audio8.click(); skin=inp.checked?"original":"safe"; if(S) S.skin=skin; render(); };
+    sw.appendChild(inp); sw.appendChild(el("span","slider"));
+    tl.appendChild(sw); c.appendChild(tl);
+  }
+  if(sk.internalOnly){
+    const wrap=el("div"); wrap.style.textAlign="center"; wrap.style.marginTop="6px";
+    wrap.appendChild(el("span","badge warn","⚠ "+esc(T("internal_only")))); c.appendChild(wrap);
+  }
+
+  const lab=el("label","fld");
+  lab.innerHTML='<span>'+esc(T("start_codename"))+'</span>'+
+    '<input type="text" id="nameInput" maxlength="28" placeholder="'+esc(T("start_placeholder"))+'" value="'+esc(S&&S.name||"")+'">';
+  c.appendChild(lab);
+
+  const saved=loadState();
+  const row=el("div","btn-row");
+  const play=el("button","btn btn-primary",esc(T("start_play")));
+  play.onclick=()=>{ Audio8.click(); startNew($("nameInput").value.trim()); };
+  row.appendChild(play);
+  if(saved && saved.phase && saved.phase!=="done" && saved.phase!=="start"){
+    const res=el("button","btn btn-ghost",esc(T("start_resume")));
+    res.onclick=()=>{ Audio8.click(); resume(saved); };
+    row.appendChild(res);
+  }
+  c.appendChild(row);
+  return c;
+}
+/* Aktivace učitele jménem zrušena (unifikace LUDUS) — pouze 3× ťuk na logo LUDUS nebo ?teacher=1. */
+function startNew(name){
+  S=freshState(name); S.total=countTotal();
+  CONTENT.rounds.forEach((r,ri)=>{ S.queue[ri]=r.items.map((_,qi)=>qi); });
+  S.roomIdx=0; S.phase="play"; pickNextQuestion(); saveState(); render();
+}
+function resume(saved){
+  S=saved; lang=S.lang||lang; skin=S.skin||skin;
+  if(!S.queue) S.queue={};
+  CONTENT.rounds.forEach((r,ri)=>{ if(!S.queue[ri]) S.queue[ri]=r.items.map((_,qi)=>qi); });
+  render();
+}
+
+/* ---------- vyber další otázku (requeue) ---------- */
+function pickNextQuestion(){
+  const ri=S.roomIdx, q=S.queue[ri];
+  if(!q || q.length===0){ S.phase="lock"; return; }
+  S.qIdx=q[0];
+}
+function pct(){ return Math.round((S.answeredCount/Math.max(1,S.total))*100); }
+
+/* ---------- MÍSTNOST ---------- */
+function renderRoom(){
+  const ri=S.roomIdx, room=CONTENT.rounds[ri], item=room.items[S.qIdx];
+  const wrap=el("div");
+  const hud=el("div","hud");
+  hud.innerHTML=
+    '<span class="room-name">'+esc(loc(room.title,lang)||T("room")+" "+(ri+1))+'</span>'+
+    '<div class="progress"><i style="width:'+pct()+'%"></i></div>'+
+    '<span class="score-pill">'+(ri+1)+"/"+CONTENT.rounds.length+'</span>';
+  wrap.appendChild(hud);
+
+  const card=el("div","card");
+  card.appendChild(el("div","qmeta",'<span class="tag">'+esc(T("type_"+item.type)||item.type)+'</span>'));
+  card.appendChild(renderQuestion(item, ri, S.qIdx));
+  wrap.appendChild(card);
+  wrap.appendChild(renderWall(ri, room));
+  return wrap;
+}
+
+/* ---------- OTÁZKA (5 typů) ---------- */
+function renderQuestion(item, ri, qi){
+  const box=el("div");
+  const fb=el("div","feedback"); fb.id="fb";
+  const advance=(correct)=>{
+    const key=ri+"-"+qi;
+    if(S.firstTry[key]===undefined) S.firstTry[key]=!!correct;
+    if(correct){
+      S.revealed[key]=true;
+      S.queue[ri]=S.queue[ri].filter(x=>x!==qi);
+      S.answeredCount++; Audio8.good(); saveState();
+      setTimeout(advanceRoom, 700);
+    } else {
+      const arr=S.queue[ri], idx=arr.indexOf(qi);
+      if(idx>=0){ arr.splice(idx,1); arr.push(qi); }
+      Audio8.bad(); clawSwipe(); saveState();
+      setTimeout(()=>{ pickNextQuestion(); render(); }, 950);
+    }
+  };
+
+  if(item.type==="mc4"||item.type==="mc2"){
+    box.appendChild(el("div","qtext",esc(item.q)));
+    const opts=el("div", item.type==="mc2"?"opts yn":"opts");
+    // volby se míchají při každém zobrazení → správná odpověď není vždy "A"
+    // a při opakování (requeue) je otázka v jiném pořadí
+    const order=shufIdx(item.options.length);
+    order.forEach((oi,i)=>{
+      const b=el("button","opt"); b.type="button";
+      b.innerHTML='<span class="mk">'+String.fromCharCode(65+i)+'</span><span>'+esc(item.options[oi])+'</span>';
+      b.onclick=()=>{ Audio8.click(); const correct=(oi===item.answer);
+        [...opts.children].forEach((c,j)=>{ c.disabled=true; if(order[j]===item.answer) c.classList.add("correct"); });
+        if(!correct) b.classList.add("wrong");
+        showFb(fb,correct); advance(correct); };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+  }
+  else if(item.type==="yesno"){
+    box.appendChild(el("div","qtext",esc(item.q)));
+    const yn=el("div","yn");
+    [[true,T("yes")],[false,T("no")]].forEach(([val,lbl])=>{
+      const b=el("button","opt"); b.type="button"; b.textContent=lbl;
+      b.onclick=()=>{ Audio8.click(); const correct=(val===item.answer);
+        [...yn.children].forEach(c=>c.disabled=true);
+        const right=item.answer?yn.children[0]:yn.children[1];
+        right.classList.add("correct"); if(!correct) b.classList.add("wrong");
+        showFb(fb,correct); advance(correct); };
+      yn.appendChild(b);
+    });
+    box.appendChild(yn);
+  }
+  else if(item.type==="wordbank"){
+    const blanks=item.answer.length, parts=splitBlanks(item.q,blanks), filled=new Array(blanks).fill(null);
+    const sent=el("div","wb-sentence");
+    const render_sent=()=>{ sent.innerHTML=""; let bi=0;
+      parts.forEach((p,i)=>{ sent.appendChild(document.createTextNode(p));
+        if(i<parts.length-1){ const idx=bi++;
+          const sp=el("span","wb-blank"+(filled[idx]?" filled":""), filled[idx]?esc(filled[idx]):"____"); sp.dataset.b=idx;
+          sp.onclick=()=>{ if(filled[idx]){ const w=filled[idx]; filled[idx]=null;
+            const chip=[...bank.children].find(c=>c.dataset.w===w && c.classList.contains("used")); if(chip) chip.classList.remove("used"); render_sent(); } };
+          sent.appendChild(sp); } }); };
+    const bank=el("div","wb-bank");
+    shuffleArr(item.bank).forEach(w=>{ const ch=el("button","chip"); ch.type="button"; ch.dataset.w=w; ch.textContent=w;
+      ch.onclick=()=>{ if(ch.classList.contains("used")) return; const slot=filled.indexOf(null); if(slot<0) return;
+        filled[slot]=w; ch.classList.add("used"); Audio8.key(); render_sent(); }; bank.appendChild(ch); });
+    render_sent(); box.appendChild(sent);
+    box.appendChild(el("div","note",esc(T("bank_hint"))));
+    box.appendChild(bank);
+    const act=el("div","actions"); const chk=el("button","btn btn-primary",esc(T("check")));
+    chk.onclick=()=>{ Audio8.click();
+      if(filled.includes(null)){ fb.className="feedback bad"; fb.textContent=T("fb_fill"); return; }
+      const correct=filled.every((w,i)=>norm(w)===norm(item.answer[i]));
+      [...sent.querySelectorAll(".wb-blank")].forEach((sp,i)=>{ sp.style.color=norm(filled[i])===norm(item.answer[i])?"var(--good)":"var(--bad)"; });
+      chk.disabled=true; bank.querySelectorAll(".chip").forEach(c=>c.disabled=true);
+      showFb(fb,correct); advance(correct); };
+    act.appendChild(chk); box.appendChild(act);
+  }
+  else if(item.type==="classify"){
+    box.appendChild(el("div","qtext",esc(item.q)));
+    box.appendChild(el("div","note",esc(T("classify_hint"))));
+    const pool=el("div","cl-pool"); const placement={}; item.items.forEach((_,i)=>placement[i]=null);
+    const cats=el("div","cl-cats"); const catBoxes=[];
+    item.categories.forEach(cat=>{ const cb=el("div","cl-cat","<h4>"+esc(cat)+"</h4>"); const drop=el("div","drop"); cb.appendChild(drop); catBoxes.push(drop); cats.appendChild(cb); });
+    const mkToken=(i)=>{ const it=item.items[i]; const tk=el("button","cl-token"); tk.type="button"; tk.textContent=it.text; tk.dataset.i=i;
+      tk.onclick=()=>{ Audio8.key(); let cur=placement[i]; let nxt=cur===null?0:(cur+1);
+        if(nxt>=item.categories.length){ placement[i]=null; pool.appendChild(tk); } else { placement[i]=nxt; catBoxes[nxt].appendChild(tk); } };
+      return tk; };
+    shufIdx(item.items.length).forEach(i=>pool.appendChild(mkToken(i)));
+    box.appendChild(pool); box.appendChild(cats);
+    const act=el("div","actions"); const chk=el("button","btn btn-primary",esc(T("check")));
+    chk.onclick=()=>{ Audio8.click();
+      if(Object.values(placement).some(v=>v===null)){ fb.className="feedback bad"; fb.textContent=T("fb_sort"); return; }
+      let correct=true;
+      item.items.forEach((it,i)=>{ const tk=box.querySelector('.cl-token[data-i="'+i+'"]'); const ok=placement[i]===it.cat; if(tk) tk.classList.add(ok?"ok":"no"); if(!ok) correct=false; });
+      chk.disabled=true; box.querySelectorAll(".cl-token").forEach(t=>t.style.pointerEvents="none");
+      showFb(fb,correct); advance(correct); };
+    act.appendChild(chk); box.appendChild(act);
+  }
+
+  box.appendChild(fb);
+  if(item.hint){
+    const hb=el("button","btn btn-ghost hintbtn",esc(T("hint")));
+    const hint=el("div","hint-box hide",esc(item.hint));
+    hb.onclick=()=>{ Audio8.click(); hint.classList.toggle("hide"); };
+    box.appendChild(hb); box.appendChild(hint);
+  }
+  // teacher's preview: přeskočit toto cvičení a jet dál v reálném pořadí hry
+  if(isTeacher()){
+    const sk=el("button","btn skipbtn",esc(T("skip_ex")));
+    sk.onclick=()=>{ Audio8.click(); skipExercise(ri,qi); };
+    box.appendChild(sk);
+  }
+  return box;
+}
+/* přeskočení cvičení (jen teacher's preview): rozsvítí žárovku, posune hru dál,
+   ale NEpočítá se jako úspěch (firstTry=false) */
+function skipExercise(ri,qi){
+  const key=ri+"-"+qi;
+  S.revealed[key]=true;
+  if(S.firstTry[key]===undefined) S.firstTry[key]=false;
+  S.queue[ri]=(S.queue[ri]||[]).filter(x=>x!==qi);
+  S.answeredCount=Math.min(S.total, S.answeredCount+1);
+  saveState(); advanceRoom();
+}
+function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+function showFb(fb,correct){ fb.className="feedback "+(correct?"good":"bad");
+  fb.setAttribute("aria-live","polite");
+  fb.textContent=(correct?"✓ ":"✕ ")+T(correct?"fb_correct":"fb_wrong");
+  buzz(correct?20:70); }
+function clawSwipe(){ if(window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const o=el("div","claw-swipe"); o.innerHTML='<i></i><i></i><i></i>'; document.body.appendChild(o); setTimeout(()=>o.remove(),650); }
+function norm(s){ return String(s).toLowerCase().trim().replace(/\s+/g," "); }
+function splitBlanks(q,n){ let parts=String(q).split(/_{2,}|\{\}/g);
+  if(parts.length-1<n){ while(parts.length-1<n) parts.push(""); }
+  else if(parts.length-1>n){ const head=parts.slice(0,n); const tail=parts.slice(n).join(" ___ "); parts=head.concat([tail]); }
+  return parts; }
+
+function advanceRoom(){
+  const ri=S.roomIdx;
+  if(!S.queue[ri] || S.queue[ri].length===0){ S.phase="lock"; saveState(); render(); return; }
+  pickNextQuestion(); saveState(); render();
+}
+
+/* ---------- SIGNATURE: stěna světel ---------- */
+function renderWall(ri, room){
+  const wall=el("div","wall");
+  wall.appendChild(el("div","wall-title",esc(T("wall_title"))));
+  const sway=el("div","wall-sway");
+  sway.insertAdjacentHTML("beforeend",
+    '<svg class="wall-svg" viewBox="0 0 300 46" preserveAspectRatio="none" aria-hidden="true">'+
+    '<path class="wire" d="M0 8 Q150 40 300 8"/></svg>');
+  const bulbs=el("div","bulbs");
+  room.items.forEach((it,qi)=>{
+    const lit=!!S.revealed[ri+"-"+qi];
+    const scored=!!S.firstTry[ri+"-"+qi];
+    const d=digitFor(ri,qi,it);
+    const b=el("div","bulb"+(lit?" lit":"")+(scored?" scored":""));
+    b.innerHTML='<div class="glass"></div><div class="digit">'+(lit?d:"?")+'</div>';
+    bulbs.appendChild(b);
+  });
+  sway.appendChild(bulbs);
+  wall.appendChild(sway);
+  // ručně malovaná abeceda A–Z (Byersova zeď)
+  const alpha=el("div","wall-alpha");
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((ch,i)=>{
+    const s=el("span",null,ch); s.style.setProperty("--r",(Math.random()*8-4).toFixed(1)+"deg");
+    if(Math.random()<0.18){ s.classList.add("fl"); s.style.setProperty("--fd",(Math.random()*9).toFixed(1)+"s"); }
+    alpha.appendChild(s);
+  });
+  wall.appendChild(alpha);
+  return wall;
+}
+
+/* ---------- ZÁMEK + dveře ---------- */
+function renderLock(){
+  const ri=S.roomIdx, room=CONTENT.rounds[ri];
+  const expected=room.items.map((it,qi)=>String(digitFor(ri,qi,it))).join("");
+  const wrap=el("div");
+  const hud=el("div","hud");
+  hud.innerHTML='<span class="room-name">'+esc(loc(room.title,lang)||T("room")+" "+(ri+1))+'</span>'+
+    '<div class="progress"><i style="width:'+pct()+'%"></i></div><span class="score-pill">🔒</span>';
+  wrap.appendChild(hud);
+
+  // kód se NEvypisuje jako text — hráč ho čte z rozsvícené stěny světel
+  wrap.appendChild(renderWall(ri, room));
+
+  const c=el("div","card lock-wrap");
+  c.appendChild(el("div","subtitle",esc(T("lock_prompt"))));
+  // display
+  let entered="";
+  const disp=el("div","lock-display");
+  const drawDisp=()=>{ disp.innerHTML=""; for(let i=0;i<expected.length;i++){ const cell=el("div","lock-cell"+(i<entered.length?" on":"")); cell.textContent=entered[i]||""; disp.appendChild(cell);} };
+  drawDisp(); c.appendChild(disp);
+
+  const msg=el("div","lock-msg"); msg.id="lockMsg"; msg.setAttribute("aria-live","polite");
+  const pad=el("div","keypad");
+  const press=(d)=>{ if(entered.length>=expected.length) return; entered+=d; Audio8.key(); drawDisp(); };
+  for(let n=1;n<=9;n++){ const k=el("button","key",String(n)); k.type="button"; k.onclick=()=>press(String(n)); pad.appendChild(k); }
+  const kClear=el("button","key","⌫"); kClear.type="button"; kClear.onclick=()=>{ entered=entered.slice(0,-1); Audio8.click(); drawDisp(); msg.textContent=""; };
+  const kZero=el("button","key","0"); kZero.type="button"; kZero.onclick=()=>press("0");
+  const kOpen=el("button","key act","✓"); kOpen.type="button";
+  kOpen.onclick=()=>{
+    if(entered===expected){
+      msg.className="lock-msg ok"; msg.textContent=T("lock_ok"); Audio8.unlock(); buzz(30);
+      const door=el("div","door"); door.innerHTML='<div class="crack"></div><div class="panel-l"></div><div class="panel-r"></div>';
+      c.appendChild(door); requestAnimationFrame(()=>door.classList.add("open"));
+      try{ door.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){}
+      Audio8.rift();
+      setTimeout(()=>{ if(ri<CONTENT.rounds.length-1){ S.phase="trans"; } else { S.phase="finale"; } saveState(); render(); }, 1250);
+    } else {
+      msg.className="lock-msg"; msg.textContent=T("lock_wrong"); Audio8.bad(); buzz(80);
+      disp.querySelectorAll(".lock-cell").forEach(c=>c.classList.add("on"));
+      c.classList.remove("shakeit"); void c.offsetWidth; c.style.animation="shake .4s";
+      setTimeout(()=>{ c.style.animation=""; entered=""; drawDisp(); }, 500);
+    }
+  };
+  pad.appendChild(kClear); pad.appendChild(kZero); pad.appendChild(kOpen);
+  c.appendChild(pad); c.appendChild(msg);
+  wrap.appendChild(c);
+  // fyzická klávesnice (desktop): číslice, Backspace, Enter
+  document.onkeydown=(e)=>{
+    if(!S || S.phase!=="lock") return;
+    if(/^[0-9]$/.test(e.key)){ press(e.key); }
+    else if(e.key==="Backspace"){ kClear.onclick(); }
+    else if(e.key==="Enter"){ e.preventDefault(); kOpen.onclick(); }
+  };
+  return wrap;
+}
+
+/* ---------- PŘECHOD: roztržení trhliny ---------- */
+function riftSVG(){
+  return '<svg viewBox="0 0 200 260" aria-hidden="true">'+
+    '<defs><radialGradient id="rg" cx="50%" cy="50%" r="50%">'+
+      '<stop offset="0%" stop-color="#fff"/><stop offset="20%" stop-color="var(--rift)"/>'+
+      '<stop offset="58%" stop-color="var(--rift)" stop-opacity=".22"/><stop offset="100%" stop-color="var(--rift)" stop-opacity="0"/>'+
+    '</radialGradient></defs>'+
+    '<ellipse class="rift-edge" cx="100" cy="130" rx="74" ry="124" fill="url(#rg)" opacity=".7"/>'+
+    '<g class="rift-core">'+
+      '<path class="rift-edge" d="M100 6 C111 44 95 74 108 104 C95 134 114 164 100 200 C110 224 96 242 100 254 C92 242 104 224 92 200 C106 164 86 134 99 104 C86 74 106 44 100 6 Z" fill="#070207" stroke="var(--rift)" stroke-width="2.4" style="filter:drop-shadow(0 0 9px var(--rift))"/>'+
+      '<g stroke="var(--rift)" stroke-width="1.6" opacity=".75" style="filter:drop-shadow(0 0 4px var(--rift))"><path d="M104 66 L122 56"/><path d="M96 118 L76 110"/><path d="M106 168 L126 178"/><path d="M97 212 L80 222"/></g>'+
+    '</g></svg>';
+}
+function renderTrans(){
+  const next=S.roomIdx+1, room=CONTENT.rounds[next];
+  const c=el("div","card hero");
+  c.innerHTML='<div class="subtitle">'+esc(T("room"))+" "+(next+1)+'</div>'+
+    '<div class="marquee" style="font-size:clamp(24px,7vw,40px)">'+esc(loc(room.title,lang)||T("room")+" "+(next+1))+'</div>';
+  const stage=el("div","rift-stage");
+  stage.innerHTML='<div class="rift-tear">'+riftSVG()+'</div>';
+  const spores=el("div"); spores.style.cssText="position:absolute;inset:0;pointer-events:none";
+  for(let i=0;i<14;i++){ const s=el("i","rift-spore");
+    const ang=Math.random()*6.283, dist=60+Math.random()*150;
+    s.style.setProperty("--sx",(Math.cos(ang)*dist).toFixed(0)+"px");
+    s.style.setProperty("--sy",(Math.sin(ang)*dist).toFixed(0)+"px");
+    s.style.animationDelay=(Math.random()*2.6).toFixed(2)+"s";
+    spores.appendChild(s); }
+  stage.appendChild(spores);
+  c.appendChild(stage);
+  const row=el("div","btn-row");
+  const go=el("button","btn btn-primary",esc(T("next_room")));
+  go.onclick=()=>{ Audio8.click(); S.roomIdx++; if(!S.queue[S.roomIdx]) S.queue[S.roomIdx]=CONTENT.rounds[S.roomIdx].items.map((_,qi)=>qi); S.phase="play"; pickNextQuestion(); saveState(); render(); };
+  row.appendChild(go); c.appendChild(row);
+  // zvuk trhliny NEhraje tady (render se opakuje např. při změně jazyka) —
+  // přehrává se jednou při otevření zámku
+  return c;
+}
+
+/* ---------- FINÁLE (stvůra) ---------- */
+function creatureSVG(){
+  if(SKINS[skin].creature==="demogorgon"){
+    const cx=120, cy=98;
+    const pt=(r,d)=>{ const a=(-90+d)*Math.PI/180; return (cx+r*Math.cos(a)).toFixed(1)+" "+(cy+r*Math.sin(a)).toFixed(1); };
+    // kanonický plátek (míří nahoru) umístěný rotací → 5cípá hvězda (jako tlama Démogorgona)
+    const petalPath="M"+pt(22,-17)+" Q"+pt(58,-12)+" "+pt(80,0)+" Q"+pt(58,12)+" "+pt(22,17)+" Z";
+    const veinPath="M"+pt(26,0)+" L"+pt(70,0);
+    let petals="";
+    [0,72,144,216,288].forEach((a,idx)=>{ const pa=[0,6,-6,6,-6][idx];
+      petals+='<g transform="rotate('+a+' '+cx+' '+cy+')"><g class="cre-petal" style="--pa:'+pa+'deg">'+
+        '<path d="'+petalPath+'" fill="url(#pet)" stroke="#5e1620" stroke-width="1.6"/>'+
+        '<path d="'+veinPath+'" stroke="#48101a" stroke-width="2" fill="none" opacity=".55"/>'+
+      '</g></g>'; });
+    // prstenec zubů kolem tlamy
+    let teeth=""; const n=14, tipR=11, baseR=21;
+    for(let i=0;i<n;i++){ const a0=i/n*6.28319, a1=(i+1)/n*6.28319, am=(i+0.5)/n*6.28319;
+      const x0=(cx+Math.cos(a0)*baseR).toFixed(1), y0=(cy+Math.sin(a0)*baseR).toFixed(1);
+      const x1=(cx+Math.cos(a1)*baseR).toFixed(1), y1=(cy+Math.sin(a1)*baseR).toFixed(1);
+      const xm=(cx+Math.cos(am)*tipR).toFixed(1), ym=(cy+Math.sin(am)*tipR).toFixed(1);
+      teeth+="M"+x0+" "+y0+"L"+xm+" "+ym+"L"+x1+" "+y1+"Z"; }
+    return '<svg class="creature shakeit" viewBox="0 0 240 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+      '<defs>'+
+        '<radialGradient id="bod" cx="50%" cy="26%" r="82%"><stop offset="0%" stop-color="#d6c9c4"/><stop offset="45%" stop-color="#9a7f7d"/><stop offset="100%" stop-color="#2a1820"/></radialGradient>'+
+        '<radialGradient id="pet" cx="50%" cy="78%" r="82%"><stop offset="0%" stop-color="#2e0c14"/><stop offset="55%" stop-color="#5e1622"/><stop offset="100%" stop-color="#7d2230"/></radialGradient>'+
+      '</defs>'+
+      '<g class="cre-claw"><path d="M78 176 C50 190 36 230 32 280" stroke="#b9aaa4" stroke-width="11" stroke-linecap="round"/>'+
+        '<g stroke="#cdbdb6" stroke-width="5" stroke-linecap="round"><path d="M32 280 l-10 20"/><path d="M33 282 l-1 25"/><path d="M37 280 l10 22"/></g></g>'+
+      '<g class="cre-claw"><path d="M162 176 C190 190 204 230 208 280" stroke="#b9aaa4" stroke-width="11" stroke-linecap="round"/>'+
+        '<g stroke="#cdbdb6" stroke-width="5" stroke-linecap="round"><path d="M208 280 l10 20"/><path d="M207 282 l1 25"/><path d="M203 280 l-10 22"/></g></g>'+
+      '<path d="M106 116 L98 154 L142 154 L134 116 Z" fill="url(#bod)"/>'+
+      '<path class="cre-body" d="M120 150 C152 150 174 170 178 198 C182 226 170 242 168 266 C166 296 146 320 120 326 C94 320 74 296 72 266 C70 242 58 226 62 198 C66 170 88 150 120 150 Z" fill="url(#bod)" stroke="#3a2d31" stroke-width="2"/>'+
+      '<path d="M82 170 C66 160 50 166 46 184 C60 178 72 180 88 190 Z M158 170 C174 160 190 166 194 184 C180 178 168 180 152 190 Z" fill="url(#bod)" stroke="#3a2d31" stroke-width="1.5"/>'+
+      '<g stroke="rgba(58,18,26,.4)" stroke-width="1.6" fill="none"><path d="M120 176 C110 190 110 210 120 224"/><path d="M96 186 q24 18 48 0"/><path d="M100 208 q20 14 40 0"/><path d="M104 230 q16 12 32 0"/></g>'+
+      petals+
+      '<g class="cre-maw"><circle cx="'+cx+'" cy="'+cy+'" r="20" fill="#0a0405"/><path d="'+teeth+'" fill="#e7d4ba"/><circle cx="'+cx+'" cy="'+cy+'" r="7" fill="#000"/></g>'+
+    '</svg>';
+  }
+  // shade (safe) — bezobličejová stínová postava se žhnoucí prasklinou
+  return '<svg class="creature" viewBox="0 0 240 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+    '<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#222c3c"/><stop offset="100%" stop-color="#05080e"/></linearGradient></defs>'+
+    '<g class="cre-claw"><path d="M92 132 C60 150 44 196 40 244" stroke="#1c2532" stroke-width="8" stroke-linecap="round"/>'+
+      '<g stroke="#26313f" stroke-width="3" stroke-linecap="round"><path d="M40 244 l-9 18"/><path d="M41 246 l-1 22"/><path d="M44 244 l8 19"/></g></g>'+
+    '<g class="cre-claw"><path d="M148 132 C180 150 196 196 200 244" stroke="#1c2532" stroke-width="8" stroke-linecap="round"/>'+
+      '<g stroke="#26313f" stroke-width="3" stroke-linecap="round"><path d="M200 244 l9 18"/><path d="M199 246 l1 22"/><path d="M196 244 l-8 19"/></g></g>'+
+    '<path class="cre-body" d="M120 300 C98 292 84 268 84 232 C84 188 90 168 90 120 C90 92 102 74 120 74 C138 74 150 92 150 120 C150 168 156 188 156 232 C156 268 142 292 120 300 Z" fill="url(#sg)" stroke="#2c3a4c" stroke-width="2"/>'+
+    '<ellipse cx="120" cy="72" rx="22" ry="27" fill="#0a0f17" stroke="#2c3a4c" stroke-width="2"/>'+
+    '<path class="cre-maw" d="M120 54 V196" stroke="var(--rift)" stroke-width="3" opacity=".85" stroke-linecap="round" style="filter:drop-shadow(0 0 9px var(--rift))"/>'+
+  '</svg>';
+}
+function creatureNode(){
+  if(IMAGES.creature) return '<div class="cre-img-wrap shakeit"><div class="cre-img" style="background-image:url(\''+IMAGES.creature+'\')"></div><div class="cre-img-glow"></div></div>';
+  return creatureSVG();
+}
+function renderFinale(){
+  const c=el("div","card finale");
+  c.innerHTML='<div class="subtitle" style="color:var(--bad)">'+esc(SKINS[skin].creatureName[lang]||SKINS[skin].creatureName.cs)+'</div>';
+  c.insertAdjacentHTML("beforeend", creatureNode());
+  const p=el("p","lede"); p.textContent=flavor("finale"); c.appendChild(p);
+  const row=el("div","btn-row");
+  const go=el("button","btn btn-primary",esc(T("face_it")));
+  go.onclick=()=>{ Audio8.unlock();
+    const flash=el("div"); flash.style.cssText="position:fixed;inset:0;z-index:40;background:var(--accent);opacity:0;pointer-events:none;transition:opacity .25s";
+    document.body.appendChild(flash); requestAnimationFrame(()=>flash.style.opacity=".85");
+    setTimeout(()=>{ flash.style.opacity="0"; setTimeout(()=>flash.remove(),400);
+      S.phase="done"; S.finished=Date.now(); saveState(); render(); }, 360);
+  };
+  row.appendChild(go); c.appendChild(row);
+  return c;
+}
+/* ---------- VÝSLEDKOVÁ KARTA (kompakt ≤700px) ---------- */
+function gradeFromPct(p){ if(p>=90)return 1; if(p>=75)return 2; if(p>=60)return 3; if(p>=45)return 4; return 5; }
+function gradeColor(g){ return ["","#34d399","#a3e635","#f59e0b","#fb923c","#f43f5e"][g]; }
+function correctText(it){
+  if(it.type==="mc4"||it.type==="mc2") return it.options[it.answer];
+  if(it.type==="yesno") return it.answer? T("yes"):T("no");
+  if(it.type==="wordbank") return it.answer.join(" / ");
+  if(it.type==="classify") return it.items.map(x=>x.text+"→"+(it.categories[x.cat]||"?")).join(", ");
+  return "—";
+}
+function countUp(node,to,suffix){ let cur=0; const step=Math.max(1,Math.ceil(to/24));
+  const t=setInterval(()=>{ cur+=step; if(cur>=to){ cur=to; clearInterval(t); } node.textContent=cur+(suffix||""); }, 26); }
+
+function renderResult(){
+  const total=S.total; let correct=0; Object.values(S.firstTry).forEach(v=>{ if(v) correct++; });
+  const p=Math.round((correct/Math.max(1,total))*100), g=gradeFromPct(p);
+  const when=new Date(S.finished||Date.now());
+  const ts=when.toLocaleDateString(lang==="cs"?"cs-CZ":"en-GB")+" "+when.toLocaleTimeString(lang==="cs"?"cs-CZ":"en-GB",{hour:"2-digit",minute:"2-digit"});
+  const durS=Math.max(0, Math.round(((S.finished||Date.now())-(S.started||Date.now()))/1000));
+  const dur=Math.floor(durS/60)+":"+String(durS%60).padStart(2,"0");
+  const wrap=el("div");
+  const c=el("div","card result-card");
+  const circ=2*Math.PI*46, off=circ*(1-p/100);
+  c.innerHTML=
+    '<div class="escape-stamp">✓ '+esc(T("escaped"))+'</div>'+
+    '<div class="grade-ring"><svg width="104" height="104">'+
+      '<circle cx="52" cy="52" r="46" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="7"/>'+
+      '<circle id="gring" cx="52" cy="52" r="46" fill="none" stroke="'+gradeColor(g)+'" stroke-width="7" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'"/>'+
+      '</svg><div class="grade-num" style="color:'+gradeColor(g)+'">'+g+'</div></div>'+
+    '<div class="res-rows">'+
+      '<div class="res-row"><span class="k">'+esc(T("res_codename"))+'</span><span class="v">'+esc(S.name||"—")+'</span></div>'+
+      '<div class="res-row"><span class="k">'+esc(T("res_id"))+'</span><span class="v">'+esc(S.id)+'</span></div>'+
+      '<div class="res-row"><span class="k">'+esc(T("res_time"))+'</span><span class="v">'+esc(ts)+'</span></div>'+
+      '<div class="res-row"><span class="k">'+esc(T("res_dur"))+'</span><span class="v">'+esc(dur)+'</span></div>'+
+      '<div class="res-row"><span class="k">'+esc(T("res_points"))+'</span><span class="v big" id="rPts">0 / '+total+'</span></div>'+
+      '<div class="res-row"><span class="k">'+esc(T("res_pct"))+'</span><span class="v big" id="rPct">0 %</span></div>'+
+    '</div>';
+  wrap.appendChild(c);
+
+  const fl=el("p"); fl.style.cssText="text-align:center;color:var(--muted);max-width:44ch;margin:14px auto 0;font-size:14px";
+  fl.textContent=flavor("escape"); wrap.appendChild(fl);
+
+  const rev=el("details","review"); rev.innerHTML='<summary>'+esc(T("review"))+'</summary>';
+  CONTENT.rounds.forEach((room,ri)=>{ room.items.forEach((it,qi)=>{
+    const ok=!!S.firstTry[ri+"-"+qi]; const item=el("div","rev-item");
+    item.innerHTML='<span class="rev-dot '+(ok?"ok":"no")+'"></span><div><span class="rev-q">'+esc(it.q)+'</span>'+
+      '<span class="rev-a">'+esc(T("correct_was"))+' '+esc(correctText(it))+'</span></div>';
+    rev.appendChild(item); }); });
+  wrap.appendChild(rev);
+
+  const row=el("div","btn-row");
+  const again=el("button","btn btn-primary",esc(T("again")));
+  again.onclick=()=>{ Audio8.click(); clearState(); S=freshState(S.name); S.phase="start"; render(); };
+  row.appendChild(again); wrap.appendChild(row);
+
+  setTimeout(()=>{ const ring=$("gring"); if(ring) ring.setAttribute("stroke-dashoffset", off);
+    const pts=$("rPts"); if(pts){ pts.textContent="0 / "+total; let c2=0; const st=Math.max(1,Math.ceil(correct/16));
+      const t=setInterval(()=>{ c2+=st; if(c2>=correct){ c2=correct; clearInterval(t);} pts.textContent=c2+" / "+total; },30); }
+    const pc=$("rPct"); if(pc) countUp(pc,p," %"); },60);
+  return wrap;
+}
+
+/* ---------- TEACHER mód ---------- */
+let previewForced=false;
+function isTeacher(){ try{ return previewForced || new URLSearchParams(location.search).get("teacher")==="1"; }catch(e){ return previewForced; } }
+
+/* ---------- náhled: pomocníci pro skok na obrazovky ---------- */
+function pvEnsure(){ if(!S){ S=freshState(""); S.total=countTotal(); CONTENT.rounds.forEach((r,ri)=>S.queue[ri]=r.items.map((_,qi)=>qi)); } if(!S.queue) S.queue={}; CONTENT.rounds.forEach((r,ri)=>{ if(!S.queue[ri]) S.queue[ri]=r.items.map((_,qi)=>qi); }); }
+function pvRoom(idx){ pvEnsure(); S.roomIdx=idx; S.queue[idx]=CONTENT.rounds[idx].items.map((_,qi)=>qi); S.phase="play"; pickNextQuestion(); saveState(); render(); }
+function pvSolveRoom(){ pvEnsure(); const ri=S.roomIdx; CONTENT.rounds[ri].items.forEach((it,qi)=>{ S.revealed[ri+"-"+qi]=true; if(S.firstTry[ri+"-"+qi]===undefined) S.firstTry[ri+"-"+qi]=true; }); S.queue[ri]=[]; S.answeredCount=Object.keys(S.revealed).length; S.phase="lock"; saveState(); render(); }
+function pvFinale(){ pvEnsure(); S.phase="finale"; saveState(); render(); }
+function pvResult(){ pvEnsure(); S.total=countTotal(); let i=0; CONTENT.rounds.forEach((r,ri)=>r.items.forEach((it,qi)=>{ S.firstTry[ri+"-"+qi]=((i++)%10)<7; })); S.finished=Date.now(); S.phase="done"; saveState(); render(); }
+
+/* ---------- nahrávání obrázků za běhu (teacher) — bez kódu, funguje na mobilu ---------- */
+const IMG_KEY="ludus_escape_imgs";
+function loadImages(){ try{ const r=localStorage.getItem(IMG_KEY); if(r) Object.assign(IMAGES, JSON.parse(r)); }catch(e){} }
+function saveImages(){ try{ localStorage.setItem(IMG_KEY, JSON.stringify(IMAGES)); return true; }catch(e){ return false; } }
+function clearImages(){ IMAGES.hero=""; IMAGES.creature=""; IMAGES.roomBg=""; try{ localStorage.removeItem(IMG_KEY); }catch(e){} render(); }
+function downscaleDataURL(src,maxDim,cb){
+  const img=new Image();
+  img.onload=()=>{ try{ let w=img.naturalWidth||img.width, h=img.naturalHeight||img.height;
+    const sc=Math.min(1, maxDim/Math.max(w,h||1)); w=Math.round(w*sc); h=Math.round(h*sc);
+    const cv=document.createElement("canvas"); cv.width=w; cv.height=h;
+    cv.getContext("2d").drawImage(img,0,0,w,h); cb(cv.toDataURL("image/jpeg",0.82)); }catch(e){ cb(src); } };
+  img.onerror=()=>cb(src); img.src=src;
+}
+function pickImage(slot){
+  const inp=document.createElement("input"); inp.type="file"; inp.accept="image/*";
+  inp.onchange=()=>{ const f=inp.files&&inp.files[0]; if(!f) return;
+    const fr=new FileReader();
+    fr.onload=()=>{ downscaleDataURL(String(fr.result),1400,(url)=>{ IMAGES[slot]=url;
+      const okSave=saveImages();
+      // ukaž rovnou náhled toho slotu
+      if(slot==="creature"){ pvFinale(); } else if(slot==="roomBg"){ pvRoom(S?S.roomIdx:0); } else { if(S) S.phase="start"; render(); }
+      if(!okSave){ const b=$("teacherBar"); if(b){ const w=el("span","tlabel"); w.style.color="var(--bad)"; w.textContent="obrázek je velký – uložen jen pro tuto relaci"; b.appendChild(w); } }
+    }); };
+    fr.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+function buildTeacher(){
+  const on=isTeacher(); document.body.classList.toggle("teacher", on);
+  const bar=$("teacherBar"); if(!bar) return; bar.innerHTML=""; if(!on) return;
+
+  bar.appendChild(el("span","tlabel","🔧 "+esc(T("teacher"))));
+
+  // přepínač skinu
+  const skBtn=el("button","tbtn"+(skin==="original"?" on":""), skin==="original"?"Skin: ST":"Skin: Safe");
+  skBtn.onclick=()=>{ Audio8.click(); skin=skin==="original"?"safe":"original"; if(S) S.skin=skin; render(); };
+  bar.appendChild(skBtn);
+
+  // skok do místnosti
+  bar.appendChild(el("span","tlabel",esc(T("room_pick"))));
+  const sel=document.createElement("select");
+  CONTENT.rounds.forEach((r,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=(i+1)+". "+(loc(r.title,lang)||T("room")+" "+(i+1)); sel.appendChild(o); });
+  if(S) sel.value=S.roomIdx;
+  sel.onchange=()=>{ Audio8.click(); pvRoom(parseInt(sel.value,10)); };
+  bar.appendChild(sel);
+
+  bar.appendChild(el("div","tb-break"));
+
+  // skoky na obrazovky
+  const bSolve=el("button","tbtn","✅ Vyřešit → zámek"); bSolve.onclick=()=>{ Audio8.click(); pvSolveRoom(); };
+  const bFin  =el("button","tbtn","👹 Finále");          bFin.onclick  =()=>{ Audio8.click(); pvFinale(); };
+  const bRes  =el("button","tbtn","🏁 Výsledek (ukázka)"); bRes.onclick =()=>{ Audio8.click(); pvResult(); };
+  const bStart=el("button","tbtn","⟲ Úvod");             bStart.onclick=()=>{ Audio8.click(); if(S) S.phase="start"; render(); };
+  bar.appendChild(bSolve); bar.appendChild(bFin); bar.appendChild(bRes); bar.appendChild(bStart);
+
+  // nahrání vlastních obrázků (z galerie v mobilu) — bez kódu
+  bar.appendChild(el("div","tb-break"));
+  bar.appendChild(el("span","tlabel","🖼 Vlož vlastní obrázek do:"));
+  const mkImg=(label,slot)=>{ const b=el("button","tbtn"+(IMAGES[slot]?" on":""),label); b.onclick=()=>{ Audio8.click(); pickImage(slot); }; return b; };
+  bar.appendChild(mkImg("Úvodní scéna (plakát)","hero"));
+  bar.appendChild(mkImg("Nestvůra (finále)","creature"));
+  bar.appendChild(mkImg("Pozadí místností","roomBg"));
+  if(IMAGES.hero||IMAGES.creature||IMAGES.roomBg){ const clr=el("button","tbtn","↺ Zpět na kresbu"); clr.onclick=()=>{ Audio8.click(); clearImages(); }; bar.appendChild(clr); }
+}
+
+/* ---------- SPLASH / INTRO ---------- */
+function runIntro(){
+  const splash=$("splash"), inner=$("splashInner"), vid=$("splashVideo"), skip=$("splashSkip");
+  if(!splash){ return; }
+  document.body.setAttribute("data-skin", skin);
+  let jingle=null;
+  const done=()=>{ splash.classList.add("gone"); setTimeout(()=>{ splash.style.display="none"; },800); };
+  if(INTRO.audioBase64){ try{ jingle=new Audio(INTRO.audioBase64); jingle.loop=false; jingle.muted=!Audio8.get(); Audio8.setJingle(jingle); }catch(e){} }
+
+  if(INTRO.videoBase64){
+    vid.style.display="block"; skip.style.display="block"; vid.src=INTRO.videoBase64;
+    vid.play().catch(()=>{}); if(jingle) jingle.play().catch(()=>{});
+    vid.onended=()=>{ if(jingle){ try{jingle.pause();}catch(e){} } done(); };
+    skip.onclick=()=>{ Audio8.click(); vid.pause(); if(jingle){ try{jingle.pause();}catch(e){} } done(); };
+    return;
+  }
+  // vestavěná intro-sekvence (než vložíš vlastní video): rozsvěcení neonu + řetězu světel
+  inner.innerHTML='<div class="marquee">'+esc(skinName())+'</div>'+
+    '<div class="subtitle">'+esc(SKINS[skin].town[lang])+'</div>'+
+    '<div class="splash-bulbs">'+Array.from({length:7}).map(()=>'<i></i>').join("")+'</div>'+
+    '<div class="enter-hint">'+esc(T("enter"))+'</div>';
+  const bulbs=inner.querySelectorAll(".splash-bulbs i");
+  bulbs.forEach((b,i)=>setTimeout(()=>{ b.classList.add("on"); Audio8.key(); }, 230*i+300));
+  let ready=false; setTimeout(()=>{ ready=true; }, INTRO.holdMs);
+  const enter=()=>{ if(!ready) return; splash.removeEventListener("click",enter);
+    try{ if(jingle){ jingle.muted=!Audio8.get(); jingle.play().catch(()=>{}); } }catch(e){}
+    Audio8.click(); done(); };
+  splash.addEventListener("click", enter);
+}
+
+/* ---------- topbar wiring ---------- */
+function wireTopbar(){
+  const bl=$("btnLang"); if(bl) bl.onclick=()=>{ Audio8.click(); lang=(lang==="cs")?"en":"cs"; if(S) S.lang=lang; saveState(); render(); };
+  const bsd=$("btnSound"); if(bsd) bsd.onclick=()=>{ Audio8.set(!Audio8.get()); render(); };
+  const bfs=$("btnFS"); if(bfs) bfs.onclick=()=>{ try{
+    if(document.fullscreenElement||document.webkitFullscreenElement){
+      (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+    }else{
+      const el=document.documentElement;
+      (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+    }
+  }catch(e){} };
+  // Pozn.: NEukládáme phase="start", jinak by se přepsal uložený postup a "Pokračovat" by zmizelo.
+  const bm=$("btnMenu"); if(bm) bm.onclick=()=>{ Audio8.click(); if(S){ S.phase="start"; } render(); };
+  // skryté spuštění náhledu: 3× ťukni na logo (na mobilu netřeba editovat URL)
+  const brand=document.querySelector(".brand"); let taps=0, tt=0;
+  if(brand) brand.addEventListener("click", ()=>{ taps++; clearTimeout(tt); tt=setTimeout(()=>{ taps=0; },1200);
+    if(taps>=3){ taps=0; previewForced=!previewForced; Audio8.unlock(); render(); } });
+}
+
+/* ---------- ripple na tlačítkách ---------- */
+document.addEventListener("pointerdown", e=>{
+  const b=e.target.closest&&e.target.closest(".btn"); if(!b) return;
+  const r=b.getBoundingClientRect(); const ink=document.createElement("span"); ink.className="ink";
+  ink.style.left=(e.clientX-r.left)+"px"; ink.style.top=(e.clientY-r.top)+"px";
+  ink.style.width=ink.style.height=Math.max(r.width,r.height)+"px"; b.appendChild(ink);
+  setTimeout(()=>ink.remove(),600);
+}, {passive:true});
+
+/* ---------- boot + re-injekce z builderu ---------- */
+function boot(){
+  CONTENT=resolveContent();
+  if(!CONTENT || !CONTENT.rounds.length){ const s=$("screen"); if(s) s.innerHTML='<div class="card"><p class="errbox">'+esc(T("no_content"))+'</p></div>'; return; }
+  loadImages();
+  const ml=loc(CONTENT.meta.lang, lang)||CONTENT.meta.lang; if(ml==="en"||ml==="cs") lang=ml;
+  // SKIN řídí LUDUS (obsah). Pořadí: výchozí safe → meta z obsahu → uložený stav → ?skin= (pro testování).
+  skin="safe";
+  const ms=String((CONTENT.meta&&(CONTENT.meta.skin||CONTENT.meta.variant))||"").toLowerCase();
+  if(/orig|^st$|things/.test(ms)) skin="original"; else if(/safe/.test(ms)) skin="safe";
+  const saved=loadState();
+  if(saved){ S=saved; lang=saved.lang||lang; if(saved.skin) skin=saved.skin; if(saved.phase==="done"){ S.phase="start"; } }
+  try{ const us=new URLSearchParams(location.search).get("skin"); if(us){ if(/orig|st/.test(us.toLowerCase())) skin="original"; else if(/safe/.test(us.toLowerCase())) skin="safe"; } }catch(e){}
+  render();
+}
+window.LUDUS_LOAD=function(content){ window.LUDUS_CONTENT=content; clearState(); S=null;
+  const sp=$("splash"); if(sp){ sp.style.display="none"; } boot(); };
+
+document.addEventListener("DOMContentLoaded", ()=>{ try{ Particles.init(); }catch(e){} wireTopbar(); boot(); runSelfTests(); runIntro(); });
+
+/* ===========================================================================
+   Self-testy (konzole) — kultura LUDUS
+   =========================================================================== */
+function runSelfTests(){
+  let pass=0, fail=0; const log=[];
+  const ok=(name,cond)=>{ if(cond){pass++;} else {fail++; log.push("✗ "+name);} };
+  const m=normItem({type:"mc4",q:"x",options:["a","b","c","d"],answer:"c"});
+  ok("mc4 text→index", m.answer===2);
+  ok("yesno 'ano'→true", normItem({type:"yesno",q:"x",answer:"ano"}).answer===true);
+  const wb=normItem({kind:"wordbank",prompt:"a ___ b ___",words:["x","y"],solution:["x","y"]});
+  ok("wordbank aliasy", wb.type==="wordbank" && wb.answer.length===2 && wb.bank.length===2);
+  const cl=normItem({type:"classify",q:"x",categories:["A","B"],items:[{text:"k",cat:"B"}]});
+  ok("classify cat-string→index", cl.items[0].cat===1);
+  const c2=normContent({meta:{},stations:[{name:"R",questions:[{type:"mc2",q:"z",options:["a","b"],answer:1}]}]});
+  ok("rounds via 'stations'", c2 && c2.rounds.length===1 && c2.rounds[0].items[0].answer===1);
+  const c3=normContent({items:[{type:"mc4",q:"1"},{type:"mc4",q:"2"}]});
+  ok("flat items→rounds", c3 && c3.rounds.length>=1);
+  const it={q:"abc"}; ok("digit deterministický", digitFor(0,0,it)===digitFor(0,0,it));
+  ok("splitBlanks 2", splitBlanks("a ___ b ___ c",2).length===3);
+  ok("grade 92%→1", gradeFromPct(92)===1); ok("grade 50%→4", gradeFromPct(50)===4);
+  ok("sample normalizuje", normContent(SAMPLE).rounds.length===3);
+  // nové: délka kódu zámku = počet otázek v místnosti
+  const sc=normContent(SAMPLE); const code=sc.rounds[0].items.map((it,qi)=>String(digitFor(0,qi,it))).join("");
+  ok("kód zámku = #otázek", code.length===sc.rounds[0].items.length && /^[0-9]+$/.test(code));
+  ok("gradeColor existuje", typeof gradeColor(1)==="string" && gradeColor(1).startsWith("#"));
+  ok("oba skiny mají creature", !!SKINS.safe.creatureName && !!SKINS.original.creatureName);
+  ok("shufIdx je permutace", shufIdx(6).slice().sort().join("")==="012345");
+  ok("shuffleArr zachová prvky", shuffleArr(["a","b","c"]).slice().sort().join("")==="abc");
+
+  const total=pass+fail;
+  console.log("%cLUDUS escape self-tests: "+pass+"/"+total+" passed"+(fail?" — "+log.join(" | "):""),
+    "color:"+(fail?"#f43f5e":"#34d399")+";font-weight:bold");
+}
+</script>
+
+
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return Audio8.get(); }catch(e){ return true; } },
+  setSound: function(on){ try{ Audio8.set(!!on); var bs=document.getElementById("btnSound"); if(bs) bs.textContent=on?"♪":"⨯"; }catch(e){} },
+  getLang: function(){ try{ return lang; }catch(e){ return "cs"; } },
+  save: function(){ try{ if(!S || S.phase==="start") return false; saveState(); return true; }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{
+    var msg = (typeof lang!=="undefined"&&lang==="en") ? "Really start over? Progress will be erased." : "Opravdu začít znovu? Postup bude smazán.";
+    if(!confirm(msg)) return;
+    clearState(); S=freshState(S?S.name:""); S.phase="start"; render();
+  }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<audio id="ludus-soundtrack" loop preload="auto"></audio><!-- cine vynechán — hra má vlastní intro systém -->
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Únik z Javorové rokle" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
+</body>
+</html>

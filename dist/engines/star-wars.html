@@ -6,12 +6,25 @@
 <title>Star Wars</title>
 <!--
   ╔══════════════════════════════════════════════════════════════════╗
-  ║  STAR WARS — herní šablona (po vzoru Hogwarts enginu)             ║
+  ║  STAR WARS 2 — herní šablona (po vzoru Hogwarts enginu)           ║
   ║  • Jeden soubor, offline, bez CDN, systémové fonty, UTF-8.        ║
-  ║  • Fallback obsah je v STATIONS/BOSS; LUDUS vkládá LUDUS_CONTENT.   ║
-  ║  • Názvy a safe/official režim řeší THEME_VARIANTS + LABELS.       ║
-  ║    Veřejný export má používat safe brandMode.                     ║
+  ║  • Obsah je VÝPLŇOVÝ – přepiš pole STATIONS a BOSS níže.          ║
+  ║  • Dvojí skin: original (Star Wars) / safe („Hvězdní rytíři").    ║
+  ║    Přepnutí: učitelský panel nebo ?skin=safe v URL.               ║
   ║  • MÉDIA (úvodní video + hudba) = prázdné sloty, viz blok MEDIA.  ║
+  ║    Bez souborů hrají syntetické WebAudio zvuky (oscilátory).      ║
+  ║                                                                    ║
+  ║  NOVÉ VE VERZI 2:                                                  ║
+  ║  • Učitelský panel: 3× ťuknutí na logo LUDUS nebo ?teacher=1      ║
+  ║    „učitel"/„teacher"/„Daniel Baláž" → rychlé skoky, přeskočení   ║
+  ║    úlohy, přepínač skinu, správce obrázků.                        ║
+  ║  • Sloty na fotky (učitel nahraje z galerie): pozadí světů        ║
+  ║    s Ken Burns animací + pozadí bosse; localStorage; SVG fallback.║
+  ║  • Kinematické intro: „Před dávnými časy…" → crawl.               ║
+  ║  • Hyperprostorové pruhy při warpu, souboj světelných mečů        ║
+  ║    v aréně bosse, zlatý déšť při vítězství.                       ║
+  ║  • Opravy: známka 4 od 45 % (sjednoceno s LUDUS), únik SVG bosse  ║
+  ║    při restartu duelu, dvojité escapování jména, pády v jsdom.    ║
   ╚══════════════════════════════════════════════════════════════════╝
 -->
 <style>
@@ -181,7 +194,12 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
   color:var(--dim);background:rgba(8,12,28,.7);border:1px solid var(--line2);border-radius:20px;
   padding:7px 14px;cursor:pointer;text-transform:uppercase}
 .skiplink:hover{color:var(--star);border-color:var(--line)}
-#fsBtn{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));z-index:61;width:38px;height:38px;display:grid;place-items:center;
+#ludusBadge{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));z-index:61;
+  cursor:pointer;user-select:none;-webkit-user-select:none;font-family:Georgia,serif;font-weight:700;font-size:12px;
+  letter-spacing:.22em;color:var(--dim);background:rgba(8,12,28,.72);border:1px solid var(--line2);border-radius:10px;
+  padding:9px 12px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#ludusBadge:active{transform:scale(.95)}
+#fsBtn{position:fixed;top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right));z-index:61;width:38px;height:38px;display:grid;place-items:center;
   background:rgba(8,12,28,.72);border:1px solid var(--line2);border-radius:50%;color:var(--dim);cursor:pointer;
   -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:.18s;padding:0}
 #fsBtn:hover{color:var(--star);border-color:var(--line)}
@@ -329,11 +347,11 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 
 .bossStage{position:relative;width:100%;height:240px;border-radius:16px;overflow:hidden;
   border:1px solid var(--line);margin-bottom:14px;background:radial-gradient(60% 80% at 50% 40%,#1a0a12,#060409 70%)}
-.bossStage svg{position:absolute;left:50%;top:50%;height:88%;transform:translate(-50%,-46%);
+.bossStage > svg{position:absolute;left:50%;top:50%;height:88%;transform:translate(-50%,-46%);
   transform-origin:50% 32%;animation:bossIdle 5.6s ease-in-out infinite}
 @keyframes bossIdle{0%,100%{transform:translate(-50%,-46%) rotate(-1.1deg)}50%{transform:translate(-50%,-48%) rotate(1.1deg)}}
-#screen-boss.phase2 .bossStage svg{animation-duration:4s}
-#screen-boss.phase3 .bossStage svg{animation-duration:2.7s}
+#screen-boss.phase2 .bossStage > svg{animation-duration:4s}
+#screen-boss.phase3 .bossStage > svg{animation-duration:2.7s}
 #screen-boss.phase3 .bossStage{background:radial-gradient(60% 80% at 50% 40%,#280a10,#070409 70%)}
 .bossStage.shake{animation:shake .5s ease}
 @keyframes shake{0%,100%{transform:translate(0,0)}15%{transform:translate(-7px,4px)}
@@ -351,7 +369,7 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 #flash.go.strong{animation:flashStrong .7s ease-out}
 @keyframes flashGo{0%{opacity:0}12%{opacity:.5}100%{opacity:0}}
 @keyframes flashStrong{0%{opacity:0}10%{opacity:.85}100%{opacity:0}}
-@media (prefers-reduced-motion: reduce){ .bossStage svg{animation:none!important} #flash.go{animation:none!important} }
+@media (prefers-reduced-motion: reduce){ .bossStage > svg{animation:none!important} #flash.go{animation:none!important} }
 .bossLine{position:absolute;left:0;right:0;bottom:0;z-index:6;text-align:center;padding:10px 14px;
   background:linear-gradient(0deg,rgba(3,5,12,.95),transparent);color:var(--redL);font-weight:700;font-size:14px;min-height:20px}
 
@@ -419,6 +437,90 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 .anim-pulse{transform-box:fill-box;transform-origin:center;animation:pul 3s ease-in-out infinite}
 @keyframes pul{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
 
+/* ===== V2: PRE-CRAWL („Před dávnými časy…") ===== */
+#preCrawl{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;background:#000;padding:24px}
+#preCrawl.on{display:flex;animation:preIn 3.2s ease forwards}
+#preCrawl p{color:#4bd5ee;font-size:clamp(18px,5.2vw,28px);max-width:22ch;text-align:center;line-height:1.55;margin:0;font-weight:600}
+@keyframes preIn{0%{opacity:0}14%{opacity:1}80%{opacity:1}100%{opacity:0}}
+
+/* ===== V2: HYPERPROSTOR (pruhy hvězd při warpu) ===== */
+#hyper{position:fixed;inset:0;z-index:46;pointer-events:none;display:none;overflow:hidden}
+#hyper.run{display:block}
+.hstreak{position:absolute;left:50%;top:50%;width:2px;height:60px;border-radius:2px;opacity:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0),#cfe4ff 60%,#fff);transform-origin:center top;will-change:transform,opacity}
+
+/* ===== V2: OBRÁZKOVÉ SLOTY (fotky učitele; Ken Burns; SVG zůstává jako fallback) ===== */
+.stageImgWrap{position:absolute;inset:0;overflow:hidden;z-index:1}
+.stageImgWrap::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,5,12,.72),transparent 46%)}
+.stageImg{width:100%;height:100%;object-fit:cover;animation:kenburns 18s ease-in-out infinite alternate}
+@keyframes kenburns{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.14) translate(2.5%,-2%)}}
+.bossImgWrap{position:absolute;inset:0;overflow:hidden}
+.bossImgWrap::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 90% at 50% 40%,transparent 40%,rgba(4,3,8,.8) 100%)}
+.bossImg{width:100%;height:100%;object-fit:cover;filter:brightness(.82) saturate(1.05);animation:bossBreatheImg 5.4s ease-in-out infinite}
+@keyframes bossBreatheImg{0%,100%{transform:scale(1.02)}50%{transform:scale(1.07)}}
+#screen-boss.phase3 .bossImg{animation-duration:2.6s;filter:brightness(.9) saturate(1.3)}
+@media (prefers-reduced-motion: reduce){ .stageImg,.bossImg{animation:none!important} }
+
+/* ===== V2: SOUBOJ MEČŮ v aréně bosse ===== */
+.duel{position:absolute;left:50%;bottom:4px;width:0;height:0;z-index:4;pointer-events:none}
+.sab{position:absolute;bottom:10px;left:-3px;width:6px;height:88px;border-radius:6px;transform-origin:bottom center}
+.sab::after{content:"";position:absolute;left:-1px;bottom:-11px;width:8px;height:12px;border-radius:2px;background:#39435c}
+.sab.blue{background:#eaf4ff;box-shadow:0 0 8px 2px #5ab6ff,0 0 22px 8px rgba(90,182,255,.55);
+  transform:translateX(-26px) rotate(-24deg);animation:sabSwayB 3.6s ease-in-out infinite}
+.sab.red{background:#ffecec;box-shadow:0 0 8px 2px #ff5a5a,0 0 22px 8px rgba(255,90,90,.5);
+  transform:translateX(26px) rotate(26deg);animation:sabSwayR 3.2s ease-in-out infinite}
+@keyframes sabSwayB{0%,100%{transform:translateX(-26px) rotate(-24deg)}50%{transform:translateX(-26px) rotate(-13deg)}}
+@keyframes sabSwayR{0%,100%{transform:translateX(26px) rotate(26deg)}50%{transform:translateX(26px) rotate(14deg)}}
+#screen-boss.phase3 .sab{animation-duration:1.7s}
+.sab.blue.hit{animation:sabHitB .55s cubic-bezier(.2,.85,.3,1)}
+.sab.red.hit{animation:sabHitR .55s cubic-bezier(.2,.85,.3,1)}
+@keyframes sabHitB{0%{transform:translateX(-26px) rotate(-24deg)}45%{transform:translateX(-4px) rotate(38deg)}100%{transform:translateX(-26px) rotate(-24deg)}}
+@keyframes sabHitR{0%{transform:translateX(26px) rotate(26deg)}45%{transform:translateX(4px) rotate(-40deg)}100%{transform:translateX(26px) rotate(26deg)}}
+@media (prefers-reduced-motion: reduce){ .sab{animation:none!important} }
+
+/* ===== V2: ZLATÝ DÉŠŤ (vítězství) ===== */
+.goldSpark{position:absolute;top:0;width:7px;height:11px;border-radius:2px;pointer-events:none;opacity:0;z-index:5;
+  background:linear-gradient(180deg,#ffe9a8,#f4c133);box-shadow:0 0 6px rgba(255,210,74,.6)}
+
+/* ===== V2: TLAČÍTKO ZVUKU (pod fullscreen) ===== */
+#muteBtn{position:fixed;top:calc(14px + env(safe-area-inset-top));right:calc(60px + env(safe-area-inset-right));z-index:61;width:38px;height:38px;display:grid;place-items:center;
+  background:rgba(8,12,28,.72);border:1px solid var(--line2);border-radius:50%;color:var(--dim);cursor:pointer;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:.18s;padding:0}
+#muteBtn:hover{color:var(--star);border-color:var(--line)}
+#muteBtn:active{transform:scale(.94)}
+#muteBtn.off{color:var(--bad)}
+
+/* ===== V2: UČITELSKÝ PANEL ===== */
+#tpBtn{position:fixed;right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));z-index:64;
+  width:44px;height:44px;display:none;place-items:center;font-size:19px;
+  background:rgba(12,18,42,.9);border:1px solid var(--gold);border-radius:50%;color:var(--goldL);cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+body.teacher #tpBtn{display:grid}
+#tpBtn:active{transform:scale(.94)}
+#tpPanel{position:fixed;top:0;right:0;bottom:0;z-index:65;width:min(330px,88vw);overflow:auto;
+  background:rgba(6,9,22,.97);border-left:1px solid var(--line);box-shadow:-20px 0 50px rgba(0,0,0,.55);
+  transform:translateX(105%);transition:transform .28s cubic-bezier(.2,.8,.3,1);
+  padding:calc(16px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom))}
+#tpPanel.open{transform:none}
+#tpPanel h3{margin:0 0 4px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldL)}
+#tpPanel .tpNote{font-size:12px;color:var(--dim);margin:0 0 14px;line-height:1.5}
+.tpSec{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accentL);margin:16px 0 8px;
+  padding-top:12px;border-top:1px solid var(--line2)}
+.tpGrid{display:flex;flex-wrap:wrap;gap:7px}
+.tpB{padding:9px 12px;background:#0c1230;border:1px solid var(--line);border-radius:9px;color:var(--star);
+  font-size:13px;font-weight:600;cursor:pointer;transition:.15s;text-align:left}
+.tpB:hover{border-color:var(--accent)}
+.tpB.warn{border-color:rgba(255,210,74,.5);color:var(--goldL)}
+.tpB.full{width:100%}
+.tpRow{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:13px;color:var(--star)}
+.tpRow .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpRow .st{font-size:11px;color:var(--dim2)}
+.tpRow .st.has{color:var(--ok)}
+.tpX{background:transparent;border:1px solid var(--line2);color:var(--dim);border-radius:7px;padding:6px 9px;cursor:pointer;font-size:12px}
+.tpX:hover{color:var(--bad);border-color:var(--bad)}
+#tpClose{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;background:transparent;border:0;color:var(--dim);font-size:22px;cursor:pointer;line-height:1;padding:6px}
+#tpClose:hover{color:var(--star)}
+
 @media (max-width:420px){
   .stage{height:170px} .bossStage{height:210px}
   .qtext{font-size:17px}
@@ -435,6 +537,9 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
   .crawl{animation:none;top:14%;transform:rotateX(0)}
 }
 </style>
+<style>
+#fsBtn,#muteBtn{display:none!important} /* nahrazeno jednotným LUDUS ovládáním vpravo nahoře */
+</style>
 </head>
 <body>
 
@@ -445,11 +550,23 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 <div id="warp"><div class="orb"></div></div>
 <div id="holo"><div class="scan"></div><div class="vig"></div><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
 <div id="wipe"><div class="sheet"><div class="blade l"></div><div class="blade r"></div></div></div>
+<div id="hyper"></div>
 <div id="flash"></div>
 <div id="reward"></div>
+<div id="ludusBadge" title="LUDUS">LUDUS</div>
 <button id="fsBtn" aria-label="Celá obrazovka" title="Celá obrazovka">
   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
+<button id="muteBtn" aria-label="Zvuk" title="Zvuk zap/vyp">
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path id="mutePath" d="M4 9v6h4l5 4V5L8 9H4z M16 9c1.2 1 1.2 5 0 6 M18.5 7c2.4 2.2 2.4 7.8 0 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<button id="tpBtn" aria-label="Učitelský panel" title="Učitelský panel">🛠</button>
+<div id="tpPanel" aria-label="Učitelský panel">
+  <button id="tpClose" aria-label="Zavřít">✕</button>
+  <h3>Učitelský náhled</h3>
+  <p class="tpNote">Správné odpovědi vidíš přímo v úlohách (zlaté zvýraznění / předvyplněné). Panel je studentům skrytý.</p>
+  <div id="tpBody"></div>
+</div>
 
 <!-- ============ START ============ -->
 <section class="screen" id="screen-start">
@@ -479,6 +596,7 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 <section class="screen" id="screen-intro" style="padding:0">
   <div id="introVideoBox"><video id="introVideo" playsinline muted></video></div>
   <div id="crawlStage">
+    <div id="preCrawl"><p>Před dávnými časy, v předaleké galaxii&hellip;</p></div>
     <div class="crawl" id="crawlText"></div>
   </div>
   <div class="skiplink" id="skipIntro">Přeskočit ⟶</div>
@@ -539,6 +657,7 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
     <div class="bossStage" id="bossStage">
       <div class="clash" id="clash"></div>
       <div class="bolt" id="bolt"></div>
+      <div class="duel"><i class="sab blue" id="sabBlue"></i><i class="sab red" id="sabRed"></i></div>
       <div class="bossLine" id="bossLine"></div>
     </div>
 
@@ -590,599 +709,25 @@ const LABELS = {
   heroRank:    "Rytíř",
   energy:      "Síla",
   weapon:      "světelný meč",
-  bossName:    "Darth Vader",     // ← oficiální jméno; pro školu přepiš (např. "Temný lord")
+  bossName:    "Darth Vader",
   bossTitle:   "The Shadow of the Sith",
   faction:     "Impérium"
 };
 
-
-/* ════════════════════════════════════════════════════════════════════
-   LUDUS INTEGRATION — manifest, jazyky, brand varianty a typy úloh
-   • Hra zůstává jedním offline HTML souborem.
-   • LUDUS vkládá window.LUDUS_CONTENT v2; starší window.GAME_CONTENT zůstává podporováno.
-   ════════════════════════════════════════════════════════════════════ */
-const LUDUS_GAME_MANIFEST = {
-  schemaVersion: "ludus-game-manifest-v1",
-  gameId: "starwars",
-  engineId: "starwars-academy",
-  gameIdAliases: ["knights", "star-knights"],
-  mechanicId: "academy",
-  engineVersion: "1.2.0-ludus-interop",
-  title: {
-    cs: "Star Wars Academy",
-    en: "Star Wars Academy",
-    safeCs: "Hvězdní rytíři",
-    safeEn: "Star Knights"
-  },
-  engineKind: "single-html",
-  flowModel: "mapStationsFinalChallenge",
-  supportedMechanics: ["academy"],
-  supportedExerciseTypes: ["mcq", "trueFalse", "classify", "wordBank"],
-  legacyInternalExerciseTypes: ["choice", "type", "order", "match", "listen"],
-  uiLanguages: ["cs", "en"],
-  contentLanguages: ["cs", "en", "es"],
-  brandModes: ["official", "safe"],
-  minStations: 3,
-  recommendedStations: 5,
-  minTasksPerStation: 3,
-  boss: { supported: true, minTasks: 3, recommendedTasks: 5 },
-  accepts: { contentSchema: "ludus-content-v2" },
-  capabilities: {
-    hasIntro: true,
-    hasMap: true,
-    hasStations: true,
-    hasBoss: true,
-    hasFinalChallenge: true,
-    hasInventory: false,
-    hasClues: false,
-    hasLeaderboard: false,
-    supportsTeams: false,
-    offline: true,
-    singleHtml: true,
-    savesProgress: true,
-    saveLoadResumeApi: "ludus-progress-api-v1"
-  },
-  requiredContentBlocks: ["stations"],
-  optionalContentBlocks: ["intro", "finalChallenge", "boss", "rewards"],
-  exportNotes: [
-    "Hotový export nesmí obsahovat API key.",
-    "Veřejný export má používat brandMode=safe.",
-    "Obsah se vkládá jako window.LUDUS_CONTENT před spuštěním enginu."
-  ]
-};
-
-const I18N = {
-  cs: {
-    start: "Zahájit výcvik",
-    playerName: "Jméno kadeta",
-    difficulty: "Stupeň výcviku",
-    resume: "Pokračovat ve výcviku",
-    forget: "zapomenout",
-    mapTitle: "Galaktická mapa",
-    done: "Splněno",
-    open: "Dostupné",
-    locked: "Zamčeno",
-    correct: "Správně — Síla je s tebou.",
-    wrong: "Tentokrát ne.",
-    correctAnswer: "Správně",
-    why: "Proč",
-    continue: "Pokračovat →",
-    forceHint: "✨ Nápověda Síly",
-    verify: "Ověřit",
-    typePlaceholder: "Napiš odpověď…",
-    listen: "🔊 Přehrát zvuk",
-    audioUnavailable: "Zvuk nedostupný",
-    matchHint: "Spoj dvojice: klepni vlevo, pak vpravo.",
-    adaptiveHint: "✨ Síla ti napovídá (po sérii chyb).",
-    newTraining: "↻  Nový výcvik",
-    result: "Výsledek",
-    missionRecord: "◇ Záznam mise"
-  },
-  en: {
-    start: "Begin training",
-    playerName: "Cadet name",
-    difficulty: "Training level",
-    resume: "Resume training",
-    forget: "forget",
-    mapTitle: "Galactic map",
-    done: "Done",
-    open: "Available",
-    locked: "Locked",
-    correct: "Correct — the Force is with you.",
-    wrong: "Not this time.",
-    correctAnswer: "Correct",
-    why: "Why",
-    continue: "Continue →",
-    forceHint: "✨ Force hint",
-    verify: "Check",
-    typePlaceholder: "Write your answer…",
-    listen: "🔊 Play audio",
-    audioUnavailable: "Audio unavailable",
-    matchHint: "Match the pairs: tap left, then right.",
-    adaptiveHint: "✨ The Force gives you a hint after several misses.",
-    newTraining: "↻  New training",
-    result: "Result",
-    missionRecord: "◇ Mission record"
-  }
-};
-let CURRENT_UI_LANG = "cs";
-function t(key){ return (I18N[CURRENT_UI_LANG] && I18N[CURRENT_UI_LANG][key]) || I18N.cs[key] || key; }
-
-const THEME_VARIANTS = {
-  official: {
-    mode: "official",
-    title: "Star Wars",
-    game: "STAR",
-    game2: "WARS",
-    subtitle: "výcvik mladého rytíře",
-    order: "Řád Jedi",
-    heroRank: "Rytíř",
-    energy: "Síla",
-    weapon: "světelný meč",
-    bossName: "Darth Vader",
-    bossTitle: "The Shadow of the Sith",
-    bossScene: "death-star",
-    faction: "Impérium",
-    resultTitle: "Galaxie zachráněna",
-    crawl: {
-      episode: "Kapitola I",
-      heading: "Probuzení rytíře",
-      paragraphs: [
-        "Galaxií se šíří stín. Stará znalost, kdysi střežená Řádem Jedi, se vytrácí a temnota sílí.",
-        "Mladý kadet skládá první zkoušky. Putuje od světa ke světu, aby ovládl Sílu a stal se právoplatným rytířem.",
-        "Na konci cesty čeká nejtěžší zkouška — souboj s Darthem Vaderem. Jen ten, kdo obstojí, vrátí galaxii naději…"
-      ]
-    }
-  },
+/* ── V2: DVOJÍ SKIN — safe (výchozí, veřejný) / original (gated, interní).
+      Přepnutí: učitelský panel · ?skin=safe · uloženo v localStorage.       ── */
+const SKINS = {
+  original: Object.assign({}, LABELS),
   safe: {
-    mode: "safe",
-    title: "Hvězdní rytíři",
-    game: "HVĚZDNÍ",
-    game2: "RYTÍŘI",
-    subtitle: "výcvik mladého ochránce",
-    order: "Řád světla",
-    heroRank: "Ochránce",
-    energy: "galaktická energie",
-    weapon: "světelná čepel",
-    bossName: "Temný lord",
-    bossTitle: "Stínová zkouška",
-    bossScene: "shadow-fortress",
-    faction: "Stínová flotila",
-    resultTitle: "Galaxie ochráněna",
-    crawl: {
-      episode: "Kapitola I",
-      heading: "Probuzení ochránce",
-      paragraphs: [
-        "Galaxií se šíří stín. Staré vědění Řádu světla slábne a mladí ochránci musí znovu najít odvahu.",
-        "Kadet putuje od světa ke světu, řeší zkoušky a učí se ovládat galaktickou energii bez strachu a zmatku.",
-        "Na konci výcviku čeká Temný lord ve Stínové pevnosti. Jen soustředěný ochránce vrátí galaxii naději…"
-      ]
-    }
+    game:"HVĚZDNÍ", game2:"RYTÍŘI", subtitle:"výcvik mladého rytíře",
+    order:"Řád strážců", heroRank:"Rytíř", energy:"Síla", weapon:"světelná čepel",
+    bossName:"Temný lord", bossTitle:"Stín temné strany", faction:"Temné impérium"
   }
 };
-
-const EXERCISE_SUPPORT = {
-  mcq: {
-    label: "Multiple choice",
-    internalType: "choice",
-    requiredFields: ["prompt", "options", "answerIndex|answer"],
-    autoCheck: true
-  },
-  trueFalse: {
-    label: "True / false",
-    internalType: "choice",
-    requiredFields: ["prompt", "answer|answerIndex"],
-    autoCheck: true
-  },
-  classify: {
-    label: "Classify / category choice",
-    internalType: "choice|match",
-    requiredFields: ["prompt", "options|pairs|items", "answerIndex|answer|pairs"],
-    autoCheck: true
-  },
-  wordBank: {
-    label: "Word bank",
-    internalType: "choice|type",
-    requiredFields: ["prompt", "bank|options", "answer"],
-    autoCheck: true
-  }
-};
-const SUPPORTED_SCENES = ["desert", "ice", "station", "forest", "lava"];
-
-function localized(value, lang, fallback){
-  if(value == null || value === "") return fallback || "";
-  if(typeof value === "string") return value;
-  if(typeof value === "number" || typeof value === "boolean") return String(value);
-  if(typeof value === "object") return value[lang] || value.cs || value.en || value.safe || value.official || fallback || "";
-  return fallback || "";
-}
-function asArray(v){ return Array.isArray(v) ? v : []; }
-function cleanId(v, fallback){ return String(v || fallback || "item").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || fallback || "item"; }
-function resolveThemeVariant(mode){ return THEME_VARIANTS[mode] || THEME_VARIANTS.safe; }
-function applyThemeVariant(mode){
-  const variant = resolveThemeVariant(mode || "safe");
-  Object.assign(LABELS, {
-    game: variant.game,
-    game2: variant.game2,
-    subtitle: variant.subtitle,
-    order: variant.order,
-    heroRank: variant.heroRank,
-    energy: variant.energy,
-    weapon: variant.weapon,
-    bossName: variant.bossName,
-    bossTitle: variant.bossTitle,
-    faction: variant.faction
-  });
-  if(variant.crawl){
-    CRAWL.episode = variant.crawl.episode || CRAWL.episode;
-    CRAWL.heading = variant.crawl.heading || CRAWL.heading;
-    CRAWL.paragraphs = asArray(variant.crawl.paragraphs).length ? variant.crawl.paragraphs.slice() : CRAWL.paragraphs;
-  }
-  try{ document.title = variant.title || document.title; }catch(e){}
-  return variant;
-}
-function resolveTaskAnswer(task){
-  if(task.answer != null) return localized(task.answer, CURRENT_UI_LANG, String(task.answer));
-  if(typeof task.answerIndex === "number" && Array.isArray(task.options)) return task.options[task.answerIndex];
-  if(typeof task.correctIndex === "number" && Array.isArray(task.options)) return task.options[task.correctIndex];
-  if(Array.isArray(task.answers) && task.answers.length) return task.answers[0];
-  return "";
-}
-function legacyQuestion(q){
-  const copy = Object.assign({}, q);
-  if(copy.prompt && !copy.q) copy.q = localized(copy.prompt, CURRENT_UI_LANG);
-  if(copy.explanation && !copy.why) copy.why = localized(copy.explanation, CURRENT_UI_LANG);
-  return copy;
-}
-function adaptTask(task, idx){
-  if(!task || typeof task !== "object") throw new Error("Task #"+(idx+1)+" není objekt.");
-  const type = task.type || "mcq";
-  if(["choice", "type", "order", "match", "listen"].includes(type)) return legacyQuestion(task);
-  const prompt = localized(task.prompt || task.q, CURRENT_UI_LANG, "Úloha");
-  const explanation = localized(task.explanation || task.why, CURRENT_UI_LANG, "");
-  if(type === "mcq"){
-    const options = asArray(task.options).map(x=>localized(x, CURRENT_UI_LANG, String(x)));
-    const answer = localized(resolveTaskAnswer(task), CURRENT_UI_LANG);
-    return { type:"choice", q:prompt, options, answer, why:explanation };
-  }
-  if(type === "trueFalse"){
-    let options = asArray(task.options).map(x=>localized(x, CURRENT_UI_LANG, String(x)));
-    if(options.length < 2) options = CURRENT_UI_LANG === "cs" ? ["Pravda", "Nepravda"] : ["True", "False"];
-    let answer = task.answer;
-    if(typeof answer === "boolean") answer = answer ? options[0] : options[1];
-    else if(typeof task.answerIndex === "number") answer = options[task.answerIndex];
-    else answer = localized(answer, CURRENT_UI_LANG, options[0]);
-    return { type:"choice", q:prompt, options, answer, why:explanation };
-  }
-  if(type === "classify"){
-    if(Array.isArray(task.pairs)){
-      return { type:"match", q:prompt, pairs:task.pairs.map(p=>[localized(p[0], CURRENT_UI_LANG), localized(p[1], CURRENT_UI_LANG)]), why:explanation };
-    }
-    if(Array.isArray(task.items)){
-      const pairs = task.items.map(it=>[localized(it.label || it.item || it.term, CURRENT_UI_LANG), localized(it.category || it.group || it.answer, CURRENT_UI_LANG)]).filter(p=>p[0] && p[1]);
-      if(pairs.length) return { type:"match", q:prompt, pairs, why:explanation };
-    }
-    const options = asArray(task.options).map(x=>localized(x, CURRENT_UI_LANG, String(x)));
-    const answer = localized(resolveTaskAnswer(task), CURRENT_UI_LANG);
-    return { type:"choice", q:prompt, options, answer, why:explanation };
-  }
-  if(type === "wordBank"){
-    const bank = asArray(task.bank && task.bank.length ? task.bank : task.options).map(x=>localized(x, CURRENT_UI_LANG, String(x)));
-    const answer = localized(resolveTaskAnswer(task), CURRENT_UI_LANG);
-    if(bank.length >= 2) return { type:"choice", q:prompt, options:bank, answer, why:explanation };
-    return { type:"type", q:prompt, answers:[answer], hint:localized(task.hint, CURRENT_UI_LANG, ""), why:explanation };
-  }
-  throw new Error("Nepodporovaný typ úlohy: "+type);
-}
-function validateTask(task, path){
-  if(!task || typeof task !== "object") throw new Error(path+": úloha není objekt.");
-  const type = task.type || "mcq";
-  const legacy = ["choice", "type", "order", "match", "listen"].includes(type);
-  if(!legacy && !EXERCISE_SUPPORT[type]) throw new Error(path+": nepodporovaný task.type '"+type+"'.");
-  if(!task.prompt && !task.q) throw new Error(path+": chybí prompt/q.");
-  if(type === "mcq" || type === "choice"){
-    if(!Array.isArray(task.options) || task.options.length < 2) throw new Error(path+": mcq/choice vyžaduje alespoň 2 možnosti.");
-    if(task.answer == null && typeof task.answerIndex !== "number" && typeof task.correctIndex !== "number") throw new Error(path+": chybí answer nebo answerIndex.");
-  }
-  if(type === "trueFalse" && task.answer == null && typeof task.answerIndex !== "number") throw new Error(path+": trueFalse vyžaduje answer nebo answerIndex.");
-  if(type === "classify"){
-    const okShape = Array.isArray(task.pairs) || Array.isArray(task.items) || (Array.isArray(task.options) && (task.answer != null || typeof task.answerIndex === "number"));
-    if(!okShape) throw new Error(path+": classify vyžaduje pairs/items nebo options + answer.");
-  }
-  if(type === "wordBank"){
-    const hasBank = Array.isArray(task.bank) || Array.isArray(task.options);
-    if(!hasBank || task.answer == null) throw new Error(path+": wordBank vyžaduje bank/options a answer.");
-  }
-  if(type === "order" && !Array.isArray(task.words)) throw new Error(path+": order vyžaduje words.");
-  if(type === "match" && !Array.isArray(task.pairs)) throw new Error(path+": match vyžaduje pairs.");
-}
-function normalizeLudusContent(content){
-  const flow = (content && content.flow) || {};
-  return {
-    schemaVersion: content && content.schemaVersion,
-    gameId: content && content.gameId,
-    mechanicId: content && content.mechanicId,
-    flowModel: content && (content.flowModel || flow.flowModel),
-    uiLang: (content && content.uiLang) || "cs",
-    contentLang: (content && content.contentLang) || "en",
-    supportLang: (content && content.supportLang) || "cs",
-    brandMode: (content && content.brandMode) || "safe",
-    subject: content && content.subject,
-    topic: content && content.topic,
-    meta: (content && content.meta) || {},
-    labels: content && (content.labels || content.themeLabels),
-    intro: (content && content.intro) || flow.intro,
-    stations: asArray((content && content.stations) || flow.stations),
-    boss: (content && (content.boss || content.finalChallenge)) || flow.finalChallenge || flow.boss || null
-  };
-}
-/* ──────────────────────────────────────────────────────────────────────
-   LUDUS interop: builder (LUDUS_CONTENT v2 / starší GAME_CONTENT v1) posílá
-   stanice jako jedno cvičení s polem qs a typy mc4/mc2/yesno/wordbank/classify;
-   metadata má zanořená pod game/lang/theme/flow. Tahle vrstva to převede do
-   tvaru dle manuálu 02 (stanice = title + tasks[], typy mcq/trueFalse/classify/
-   wordBank, metadata na top-levelu), který už zbytek enginu umí.
-   Pokud obsah už je v manuálovém tvaru, projde beze změny.
-   ────────────────────────────────────────────────────────────────────── */
-function __ludusCoerceV2(raw){
-  if(!raw || typeof raw !== "object") return raw;
-  const stationsRaw = asArray(raw.stations).length ? asArray(raw.stations)
-    : (raw.flow && raw.flow.blocks ? asArray(raw.flow.blocks.stations) : asArray(raw.flow && raw.flow.stations));
-  const hasExerciseShape = stationsRaw.some(function(s){ return s && (s.exercise || s.ex); });
-  const hasNestedMeta = !!(raw.game || raw.lang || raw.theme || (raw.flow && raw.flow.model));
-  if(!hasExerciseShape && !hasNestedMeta) return raw; // už je to manuálový v2 / v1 bez cvičení
-
-  const g = raw.game || {};
-  const lang = raw.lang || (raw.meta && raw.meta.lang) || {};
-  const theme = raw.theme || (raw.meta && raw.meta.theme) || {};
-  const flow = raw.flow || {};
-  const meta = raw.meta || {};
-  const TYPE_MAP = { mc4:"mcq", mc2:"mcq", yesno:"trueFalse", wordbank:"wordBank", classify:"classify",
-                     mcq:"mcq", trueFalse:"trueFalse", wordBank:"wordBank", choice:"mcq" };
-
-  function num(v){ return (typeof v === "number" && isFinite(v)) ? v : null; }
-  function coerceQuestion(ex, q, qi){
-    const exType = ex && ex.type;
-    const t = TYPE_MAP[exType] || "mcq";
-    const exOpts = asArray(ex && ex.opts);                 // yesno/classify: volby na úrovni cvičení
-    const exInst = (ex && ex.inst) || "";
-    const qText = (q && (q.t || q.q || q.prompt)) || exInst || "Úloha";
-    const exp = (q && (q.exp || q.explanation || q.why)) || "";
-    const base = { id: "q" + (qi + 1), explanation: exp };
-    if(t === "trueFalse"){
-      const opts = asArray(q && (q.opts || q.options)).length ? asArray(q.opts || q.options) : exOpts;
-      const ai = num(q && (q.a != null ? q.a : q.answerIndex));
-      return Object.assign(base, { type:"trueFalse", prompt:qText, options:opts,
-        answerIndex: ai != null ? ai : 0, answer: (ai != null && opts[ai] != null) ? opts[ai] : (q && q.answer) });
-    }
-    if(t === "wordBank"){
-      const bank = asArray(q && (q.bank || q.opts || q.options));
-      let ans = (q && q.answer != null) ? q.answer : (q && q.a);
-      if(typeof ans === "number" && bank[ans] != null) ans = bank[ans]; // kdyby přišel index
-      return Object.assign(base, { type:"wordBank", prompt:qText, bank:bank, answer:ans });
-    }
-    if(t === "classify"){
-      // builder classify = zařaď položku (q.t) do jedné z kategorií (ex.opts) -> jednovýběr
-      const opts = exOpts.length ? exOpts : asArray(q && (q.opts || q.options));
-      const ai = num(q && (q.a != null ? q.a : q.answerIndex));
-      const prompt = exInst ? (exInst + " — " + qText) : qText;
-      return Object.assign(base, { type:"mcq", prompt:prompt, options:opts,
-        answerIndex: ai != null ? ai : 0, answer: (ai != null && opts[ai] != null) ? opts[ai] : (q && q.answer) });
-    }
-    // mcq (mc4 = volby na otázce, mc2 = společný pokyn v ex.inst)
-    const opts = asArray(q && (q.opts || q.options)).length ? asArray(q.opts || q.options) : exOpts;
-    const ai = num(q && (q.a != null ? q.a : q.answerIndex));
-    return Object.assign(base, { type:"mcq", prompt:qText, options:opts,
-      answerIndex: ai != null ? ai : 0, answer: (ai != null && opts[ai] != null) ? opts[ai] : (q && q.answer) });
-  }
-  function coerceTasksFrom(node){
-    const ex = node && (node.exercise || node.ex);
-    if(ex && asArray(ex.qs).length) return ex.qs.map(function(q, qi){ return coerceQuestion(ex, q, qi); });
-    const direct = asArray(node && (node.tasks || node.questions));
-    return direct; // už hotové úlohy
-  }
-  function coerceStation(s, i){
-    if(s && (s.exercise || s.ex)){
-      return {
-        id: "station-" + (i + 1),
-        title: (s.title != null ? s.title : s.name) || ("Stanice " + (i + 1)),
-        subtitle: s.subtitle || s.topic || "",
-        scene: s.scene,
-        accent: s.accent,
-        intro: s.intro || s.atmo || "",
-        reward: s.reward || null,
-        pick: s.pick,
-        tasks: coerceTasksFrom(s)
-      };
-    }
-    return s; // stanice už je v manuálovém tvaru
-  }
-
-  const stations = stationsRaw.map(coerceStation);
-
-  // boss / finální výzva (volitelné) — když najdeme cvičení s qs, rozbalíme na úlohy
-  const bossNode = raw.finalChallenge || raw.boss || (raw.flow && raw.flow.blocks && raw.flow.blocks.finalChallenge) || (flow && flow.finalChallenge) || null;
-  let boss = null;
-  if(bossNode && typeof bossNode === "object"){
-    const bTasks = coerceTasksFrom(bossNode);
-    boss = (bTasks && bTasks.length)
-      ? { enabled:true, title:(bossNode.title || bossNode.name), place:bossNode.place || bossNode.subtitle,
-          intro:bossNode.intro, bossName:bossNode.bossName, tasks:bTasks }
-      : (asArray(bossNode.tasks || bossNode.questions).length ? bossNode : null);
-  }
-
-  const brandMode = theme.variant || raw.brandMode || (meta.skinSafe === false ? "official" : "safe");
-  return {
-    schemaVersion: raw.schemaVersion || "ludus-content-v2",
-    gameId: g.gameId || raw.gameId || (meta.game && meta.game.gameId),
-    mechanicId: g.mechanicId || raw.mechanicId || (meta.game && meta.game.mechanicId),
-    flowModel: flow.model || raw.flowModel || (g.flowModel),
-    uiLang: lang.ui || raw.uiLang || "cs",
-    contentLang: lang.content || raw.contentLang || "en",
-    supportLang: lang.support || raw.supportLang || "cs",
-    brandMode: brandMode,
-    subject: meta.subject || raw.subject,
-    topic: meta.topic || raw.topic,
-    meta: meta,
-    labels: raw.labels || raw.themeLabels || null,
-    intro: raw.intro || flow.intro || null,
-    stations: stations,
-    boss: boss
-  };
-}
-function validateLudusContent(content){
-  if(!content || typeof content !== "object") throw new Error("LUDUS_CONTENT musí být objekt.");
-  const c = normalizeLudusContent(content);
-  if(c.schemaVersion && c.schemaVersion !== LUDUS_GAME_MANIFEST.accepts.contentSchema) throw new Error("Nepodporované schemaVersion: "+c.schemaVersion);
-  var allowedGameIds = [LUDUS_GAME_MANIFEST.gameId].concat(LUDUS_GAME_MANIFEST.gameIdAliases || []);
-  if(c.gameId && allowedGameIds.indexOf(c.gameId) < 0) throw new Error("Obsah je pro gameId='"+c.gameId+"', ale engine je '"+LUDUS_GAME_MANIFEST.gameId+"'.");
-  if(c.mechanicId && !LUDUS_GAME_MANIFEST.supportedMechanics.includes(c.mechanicId)) throw new Error("Nepodporovaná mechanicId: "+c.mechanicId);
-  if(c.flowModel && c.flowModel !== LUDUS_GAME_MANIFEST.flowModel) throw new Error("Nepodporovaný flowModel: "+c.flowModel);
-  if(!LUDUS_GAME_MANIFEST.brandModes.includes(c.brandMode)) throw new Error("Nepodporovaný brandMode: "+c.brandMode);
-  if(!LUDUS_GAME_MANIFEST.uiLanguages.includes(c.uiLang)) throw new Error("Nepodporovaný uiLang: "+c.uiLang);
-  if(!LUDUS_GAME_MANIFEST.contentLanguages.includes(c.contentLang)) throw new Error("Nepodporovaný contentLang: "+c.contentLang);
-  if(c.stations.length){
-    if(c.stations.length < LUDUS_GAME_MANIFEST.minStations) console.warn("[LUDUS] Doporučené minimum stanic je "+LUDUS_GAME_MANIFEST.minStations+", obsah má "+c.stations.length+". Hra se přesto spustí.");
-    c.stations.forEach((st, i)=>{
-      if(!st || typeof st !== "object") throw new Error("stations["+i+"] není objekt.");
-      if(!st.id) throw new Error("stations["+i+"]: chybí id.");
-      if(!st.title) throw new Error("stations["+i+"]: chybí title.");
-      const tasks = asArray(st.tasks || st.questions);
-      if(tasks.length < LUDUS_GAME_MANIFEST.minTasksPerStation) console.warn("[LUDUS] stations["+i+"]: doporučené minimum úloh je "+LUDUS_GAME_MANIFEST.minTasksPerStation+", má "+tasks.length+".");
-      tasks.forEach((task,j)=>validateTask(task, "stations["+i+"].tasks["+j+"]"));
-    });
-  }
-  const bossTasks = c.boss && asArray(c.boss.tasks || c.boss.questions);
-  const bossEnabled = c.boss && c.boss.enabled !== false;
-  if(bossEnabled && bossTasks && bossTasks.length){
-    if(bossTasks.length < LUDUS_GAME_MANIFEST.boss.minTasks) console.warn("[LUDUS] Boss má méně úloh ("+bossTasks.length+") než doporučené minimum "+LUDUS_GAME_MANIFEST.boss.minTasks+".");
-    bossTasks.forEach((task,j)=>validateTask(task, "boss.tasks["+j+"]"));
-  }
-  return true;
-}
-function adaptStation(st, i, uiLang){
-  const fallbackScene = SUPPORTED_SCENES[i % SUPPORTED_SCENES.length];
-  const scene = SUPPORTED_SCENES.includes(st.scene) ? st.scene : fallbackScene;
-  const accent = st.accent || ["#ff9d3d", "#34d0c8", "#5fbf57", "#5cc8ff", "#ff5a2a"][i % 5];
-  const tasks = asArray(st.tasks || st.questions).map(adaptTask);
-  return {
-    id: cleanId(st.id, "station-"+(i+1)),
-    title: localized(st.title, uiLang, "Stanice "+(i+1)),
-    place: localized(st.subtitle || st.place || st.title, uiLang, "Stanice "+(i+1)),
-    scene,
-    accent,
-    accentL: st.accentL || st.accentLight || accent,
-    intro: localized(st.intro, uiLang, ""),
-    reward: st.reward || null,
-    pick: st.pick,
-    questions: tasks
-  };
-}
-function adaptBoss(boss, uiLang, brandMode){
-  if(!boss || boss.enabled === false) return null;
-  const variant = resolveThemeVariant(brandMode);
-  const title = localized(boss.title, uiLang, variant.mode === "safe" ? "Finální zkouška" : "The Final Star Battle");
-  const bossName = localized(boss.bossName, brandMode, variant.bossName);
-  const tasks = asArray(boss.tasks || boss.questions).map(adaptTask);
-  return {
-    title,
-    place: localized(boss.place || boss.subtitle, uiLang, variant.mode === "safe" ? "Stínová pevnost" : "Death Star"),
-    intro: localized(boss.intro, uiLang, title+" — "+bossName+" tě očekává. Tvůj výcvik končí."),
-    questions: tasks.length ? tasks : BOSS.questions
-  };
-}
-function adaptLudusContentToStarWars(content){
-  validateLudusContent(content);
-  const c = normalizeLudusContent(content);
-  CURRENT_UI_LANG = c.uiLang || "cs";
-  const variant = resolveThemeVariant(c.brandMode);
-  const stations = c.stations.length ? c.stations.map((st,i)=>adaptStation(st,i,CURRENT_UI_LANG)) : null;
-  const boss = adaptBoss(c.boss, CURRENT_UI_LANG, c.brandMode);
-  const crawl = c.intro ? {
-    episode: localized(c.intro.episode, CURRENT_UI_LANG, variant.crawl.episode),
-    heading: localized(c.intro.heading || c.intro.title, CURRENT_UI_LANG, variant.crawl.heading),
-    paragraphs: asArray(c.intro.paragraphs).map(p=>localized(p, CURRENT_UI_LANG)).filter(Boolean)
-  } : variant.crawl;
-  return {
-    settings: { uiLang: CURRENT_UI_LANG, contentLang: c.contentLang, supportLang: c.supportLang, brandMode: c.brandMode },
-    labels: Object.assign({}, variant, c.labels || {}),
-    crawl,
-    stations,
-    boss,
-    meta: c.meta,
-    topic: c.topic,
-    subject: c.subject
-  };
-}
-function applyGameContent(adapted){
-  if(!adapted || typeof adapted !== "object") return;
-  if(adapted.settings && adapted.settings.uiLang) CURRENT_UI_LANG = adapted.settings.uiLang;
-  const mode = (adapted.settings && adapted.settings.brandMode) || (adapted.labels && adapted.labels.mode) || "safe";
-  const variant = applyThemeVariant(mode);
-  if(adapted.labels) Object.assign(LABELS, {
-    game: adapted.labels.game || LABELS.game,
-    game2: adapted.labels.game2 || LABELS.game2,
-    subtitle: adapted.labels.subtitle || LABELS.subtitle,
-    order: adapted.labels.order || LABELS.order,
-    heroRank: adapted.labels.heroRank || LABELS.heroRank,
-    energy: adapted.labels.energy || LABELS.energy,
-    weapon: adapted.labels.weapon || LABELS.weapon,
-    bossName: adapted.labels.bossName || LABELS.bossName,
-    bossTitle: adapted.labels.bossTitle || LABELS.bossTitle,
-    faction: adapted.labels.faction || LABELS.faction
-  });
-  if(adapted.crawl){
-    CRAWL.episode = adapted.crawl.episode || CRAWL.episode;
-    CRAWL.heading = adapted.crawl.heading || CRAWL.heading;
-    if(Array.isArray(adapted.crawl.paragraphs) && adapted.crawl.paragraphs.length) CRAWL.paragraphs = adapted.crawl.paragraphs.slice();
-  }
-  if(Array.isArray(adapted.stations) && adapted.stations.length) STATIONS.splice(0, STATIONS.length, ...adapted.stations);
-  if(adapted.boss) Object.assign(BOSS, adapted.boss);
-  if(!BOSS.intro || (adapted.boss && !adapted.boss.intro)) BOSS.intro = BOSS.title+" — "+LABELS.bossName+" tě očekává. Tvůj výcvik končí.";
-  try{ document.documentElement.lang = CURRENT_UI_LANG; document.title = (variant.title || LABELS.game+" "+LABELS.game2); }catch(e){}
-}
-function selfTestGame(){
-  const tests = [
-    { name:"manifest.gameId", ok: LUDUS_GAME_MANIFEST.gameId === "starwars" },
-    { name:"manifest.flowModel", ok: !!LUDUS_GAME_MANIFEST.flowModel && !!LUDUS_GAME_MANIFEST.capabilities },
-    { name:"supportedExerciseTypes", ok: LUDUS_GAME_MANIFEST.supportedExerciseTypes.every(t=>!!EXERCISE_SUPPORT[t]) },
-    { name:"themeVariants", ok: !!THEME_VARIANTS.safe && !!THEME_VARIANTS.official },
-    { name:"i18n", ok: !!I18N.cs && !!I18N.en },
-    { name:"adapter", ok: typeof adaptLudusContentToStarWars === "function" },
-    { name:"validator", ok: typeof validateLudusContent === "function" },
-    { name:"coerce.builderV2", ok:(function(){ try{
-        var demo={schema:2,game:{gameId:"starwars",mechanicId:"academy",flowModel:"mapStationsFinalChallenge"},lang:{ui:"cs",content:"en",support:"cs"},theme:{variant:"safe"},
-          stations:[{name:"S1",exercise:{type:"mc4",qs:[{t:"q",opts:["a","b","c","d"],a:0,exp:""}]}},
-                    {name:"S2",exercise:{type:"yesno",opts:["ANO","NE"],inst:"i",qs:[{t:"t",a:0,exp:""}]}},
-                    {name:"S3",exercise:{type:"wordbank",inst:"i",qs:[{t:"___",bank:["x","y"],a:"x",exp:""}]}}]};
-        var c=__ludusCoerceV2(demo);
-        if(!(c.stations&&c.stations.length===3&&c.stations[0].title&&Array.isArray(c.stations[0].tasks)&&c.stations[0].tasks[0].type==="mcq"&&c.stations[1].tasks[0].type==="trueFalse"&&c.stations[2].tasks[0].type==="wordBank")) return false;
-        validateLudusContent(c); return true;
-      }catch(_e){ return false; } })() },
-    { name:"fallbackContent", ok: Array.isArray(STATIONS) && STATIONS.length>0 && !!BOSS && Array.isArray(BOSS.questions) },
-    { name:"progressApi", ok: typeof window.LUDUS_PROGRESS === "object" || typeof saveProgress === "function" },
-    { name:"offline", ok: !/AIza[0-9A-Za-z_\-]{20,}/.test(document.documentElement.outerHTML) }
-  ];
-  return { ok: tests.every(x=>x.ok), tests };
-}
-try{
-  window.LUDUS_GAME_MANIFEST = LUDUS_GAME_MANIFEST;
-  window.LUDUS_ENGINE_API = {
-    manifest: LUDUS_GAME_MANIFEST,
-    exerciseSupport: EXERCISE_SUPPORT,
-    validateLudusContent,
-    adaptLudusContentToStarWars,
-    applyGameContent,
-    selfTestGame,
-    progress: null,
-    saveProgress: null,
-    loadProgress: null,
-    resumeProgress: null,
-    clearProgress: null,
-    getProgressSummary: null
-  };
-  window.selfTestGame = selfTestGame;
-}catch(e){}
+let SKIN = "safe"; /* bezpečný default; originál gated v učitelském panelu / ?skin=original */
+function skinSafe(){ return SKIN==="safe"; }
+function placeOf(st){ return (skinSafe() && st.safePlace) ? st.safePlace : st.place; }
+function titleOf(st){ return (skinSafe() && st.safeTitle) ? st.safeTitle : st.title; }
 
 /* ════════════════════════════════════════════════════════════════════
    2) MÉDIA — PRÁZDNÉ SLOTY  (sem vlož své video a hudbu — base64 nebo URL)
@@ -1217,6 +762,17 @@ const CRAWL = {
     "Na konci cesty čeká nejtěžší zkouška — souboj s Darthem Vaderem. Jen ten, kdo obstojí, vrátí galaxii naději…"
   ]
 };
+// safe varianta crawlu (jména ve správných pádech, bez chráněných názvů)
+const CRAWL_SAFE = {
+  episode: "Kapitola I",
+  heading: "Probuzení rytíře",
+  paragraphs: [
+    "Galaxií se šíří stín. Stará znalost, kdysi střežená Řádem strážců, se vytrácí a temnota sílí.",
+    "Mladý kadet skládá první zkoušky. Putuje od světa ke světu, aby ovládl Sílu a stal se právoplatným rytířem.",
+    "Na konci cesty čeká nejtěžší zkouška — souboj s Temným lordem. Jen ten, kdo obstojí, vrátí galaxii naději…"
+  ]
+};
+function crawlNow(){ return skinSafe() ? CRAWL_SAFE : CRAWL; }
 
 /* ════════════════════════════════════════════════════════════════════
    4) OBTÍŽNOST
@@ -1258,7 +814,7 @@ const DIFFICULTIES = [
                  (options:[…],answer)  NEBO  (answer|answers)  , why? }               // poslech (TTS) → výběr nebo psaní
    ──────────────────────────────────────────────────────────────────── */
 const STATIONS = [
-  { id:"tatooine", title:"The Desert of Tatooine", place:"Tatooine", scene:"desert", accent:"#ff9d3d", accentL:"#ffc680",
+  { id:"tatooine", title:"The Desert of Tatooine", place:"Tatooine", safeTitle:"The Desert Trial", safePlace:"Pouštní svět", scene:"desert", accent:"#ff9d3d", accentL:"#ffc680",
     intro:"Pod dvojicí sluncí na vyprahlé Tatooine za\u010d\u00edn\u00e1 tv\u00e1 cesta ryt\u00ed\u0159e.",
     questions:[
       { type:"choice", q:"She is the knight ___ saved the village.", options:["who","which","whose","what"], answer:"who",
@@ -1268,7 +824,7 @@ const STATIONS = [
       { type:"order", q:"Slo\u017e v\u011btu se vzta\u017enou v\u011btou:", words:["The","hero","who","saved","us","is","here"],
         why:"Vzta\u017en\u00e1 v\u011bta \u201ewho saved us\u201c stoj\u00ed hned za podstatn\u00fdm jm\u00e9nem, kter\u00e9 rozv\u00edj\u00ed." }
     ]},
-  { id:"dock", title:"The Smuggler's Dock", place:"Smuggler's Dock", scene:"station", accent:"#34d0c8", accentL:"#8af0e6",
+  { id:"dock", title:"The Smuggler's Dock", place:"Smuggler's Dock", safeTitle:"The Orbital Dock", safePlace:"Orbitální dok", scene:"station", accent:"#34d0c8", accentL:"#8af0e6",
     intro:"Na orbit\u00e1ln\u00edm doku pa\u0161er\u00e1k\u016f se obchoduje se v\u0161\u00edm \u2014 i s tajemstv\u00edmi.",
     questions:[
       { type:"match", q:"Spoj anglick\u00e1 slova s p\u0159ekladem:", pairs:[["smuggler","pa\u0161er\u00e1k"],["cargo","n\u00e1klad"],["bounty","odm\u011bna"],["ship","lo\u010f"]],
@@ -1278,7 +834,7 @@ const STATIONS = [
       { type:"choice", q:"Choose the correct word: a person who flies a ship is a ___.", options:["pilot","driver","rider","sailor"], answer:"pilot",
         why:"Lo\u010f \u010di stroj \u0159\u00edd\u00ed \u201epilot\u201c; \u201edriver\u201c \u0159\u00edd\u00ed auto." }
     ]},
-  { id:"dagobah", title:"The Dagobah Trial", place:"Dagobah", scene:"forest", accent:"#5fbf57", accentL:"#a6e89a",
+  { id:"dagobah", title:"The Dagobah Trial", place:"Dagobah", safeTitle:"The Swamp of Patience", safePlace:"Bažinný svět", scene:"forest", accent:"#5fbf57", accentL:"#a6e89a",
     intro:"V mlžn\u00fdch ba\u017ein\u00e1ch Dagobahu prov\u011b\u0159\u00ed star\u00fd mistr tvou trp\u011blivost.",
     pick:3,   // banka: z 5 otázek se náhodně vyberou 3 (jiné při každém hraní)
     questions:[
@@ -1293,7 +849,7 @@ const STATIONS = [
       { type:"listen", q:"Poslechni a napi\u0161 sloveso:", say:"learn", answers:["learn"], lang:"en-US",
         hint:"u\u010dit se", why:"\u201elearn\u201c = u\u010dit se; pravideln\u00e9: learn \u2013 learned." }
     ]},
-  { id:"hoth", title:"The Frozen Base of Hoth", place:"Hoth", scene:"ice", accent:"#5cc8ff", accentL:"#aee4ff",
+  { id:"hoth", title:"The Frozen Base of Hoth", place:"Hoth", safeTitle:"The Frozen Base", safePlace:"Ledový svět", scene:"ice", accent:"#5cc8ff", accentL:"#aee4ff",
     intro:"Zmrzl\u00e1 rebelsk\u00e1 z\u00e1kladna na Hothu nep\u0159eje t\u011bm, kdo zav\u00e1haj\u00ed.",
     questions:[
       { type:"choice", q:"Comparative of \u201ecold\u201c:", options:["colder","more cold","coldest","most cold"], answer:"colder",
@@ -1303,14 +859,14 @@ const STATIONS = [
       { type:"type", q:"Dopl\u0148 \u010dlen: I saw ___ AT-AT walker. (a/an)", answers:["an"],
         hint:"AT-AT se \u010dte \u201eej-ti-ej-ti\u201c", why:"\u010clen \u201ean\u201c je p\u0159ed samohl\u00e1skov\u00fdm zvukem \u2014 \u201eAT-AT\u201c za\u010d\u00edn\u00e1 zvukem [ej]." }
     ]},
-  { id:"mustafar", title:"The Shadow of Mustafar", place:"Mustafar", scene:"lava", accent:"#ff5a2a", accentL:"#ff9a6a",
+  { id:"mustafar", title:"The Shadow of Mustafar", place:"Mustafar", safeTitle:"The Fire Mountain", safePlace:"Ohnivý svět", scene:"lava", accent:"#ff5a2a", accentL:"#ff9a6a",
     intro:"St\u00edn Mustafaru t\u011b varuje: Temn\u00fd lord je bl\u00edzko.",
     questions:[
       { type:"order", q:"Slo\u017e v\u011btu (p\u0159\u00edtomn\u00fd pr\u016fb\u011bhov\u00fd):", words:["The","lava","is","rising","fast"],
         why:"P\u0159\u00edtomn\u00fd pr\u016fb\u011bhov\u00fd \u010das: to be (is) + sloveso s -ing (rising)." },
       { type:"listen", q:"Poslechni a vyber, co sly\u0161\u00ed\u0161:", say:"danger", options:["danger","ranger","dancer","dagger"], answer:"danger", lang:"en-US",
         why:"\u201edanger\u201c [dejnd\u017er] = nebezpe\u010d\u00ed; li\u0161\u00ed se od podobn\u011b zn\u011bj\u00edc\u00edch slov." },
-      { type:"choice", q:"Choose: You ___ not pass!", options:["shall","will","would","might"], answer:"shall",
+      { type:"choice", q:"Choose: You ___ not escape!", options:["shall","will","would","might"], answer:"shall",
         why:"\u201eshall\u201c zde nese d\u016fraz/rozhodnost ve v\u00fdznamu z\u00e1kazu." }
     ]}
 ];
@@ -1318,7 +874,9 @@ const STATIONS = [
 const BOSS = {
   title: "The Final Star Battle",     // úroveň 10 (Death Star)
   place: "Death Star",
-  intro: "The Final Star Battle \u2014 "+LABELS.bossName+" t\u011b o\u010dek\u00e1v\u00e1 na palub\u011b Hv\u011bzdy smrti. \u201ETv\u016fj v\u00fdcvik skon\u010dil.\u201C",
+  // {boss} se doplní za běhu → intro reaguje na skin i výměnu LABELS (dřív se jméno „zapeklo" při načtení)
+  intro: "The Final Star Battle \u2014 {boss} t\u011b o\u010dek\u00e1v\u00e1 na palub\u011b Hv\u011bzdy smrti. \u201ETv\u016fj v\u00fdcvik skon\u010dil.\u201C",
+  introSafe: "Posledn\u00ed souboj \u2014 {boss} t\u011b o\u010dek\u00e1v\u00e1 na palub\u011b temn\u00e9 pevnosti. \u201ETv\u016fj v\u00fdcvik skon\u010dil.\u201C",
   // každá správná odpověď ubere lordovi život; špatná tě stojí život
   questions:[
     { type:"choice", q:"Choose the correct past form: I ___ the Force.", options:["felt","feeled","feel","fell"], answer:"felt",
@@ -1334,33 +892,15 @@ const BOSS = {
   ]
 };
 
-/* LUDUS content hook: builder vloží window.LUDUS_CONTENT v2.
-   Zpětně podporujeme i starší window.GAME_CONTENT. */
-/* LUDUS content hook: builder vkládá window.LUDUS_CONTENT v2 (případně starší
-   window.GAME_CONTENT v1). __ludusCoerceV2 převede oba tvary na formát dle
-   manuálu 02; při neúspěchu zkusíme druhý zdroj a teprve pak ukázkový obsah. */
-(function(){
-  function tryApply(src){
-    if(!src || typeof src !== "object") return false;
-    applyGameContent(adaptLudusContentToStarWars(__ludusCoerceV2(src)));
-    return true;
+/* (volitelné napojení na Ludus: pokud builder vstříkne window.GAME_CONTENT,
+    přepíše výplňový obsah.)  */
+try{
+  if (window.GAME_CONTENT && typeof window.GAME_CONTENT==="object"){
+    if (Array.isArray(window.GAME_CONTENT.stations)) STATIONS.splice(0,STATIONS.length,...window.GAME_CONTENT.stations);
+    if (window.GAME_CONTENT.boss) Object.assign(BOSS, window.GAME_CONTENT.boss);
+    if (window.GAME_CONTENT.labels) Object.assign(LABELS, window.GAME_CONTENT.labels);
   }
-  const primary = window.LUDUS_CONTENT || window.GAME_CONTENT;
-  const secondary = (primary === window.LUDUS_CONTENT) ? window.GAME_CONTENT : null;
-  try{
-    if(!tryApply(primary)) applyThemeVariant("official");
-  }catch(e){
-    window.LUDUS_CONTENT_ERROR = e;
-    console.warn("LUDUS obsah (primární) odmítnut, zkouším záložní zdroj:", e);
-    try{
-      if(!tryApply(secondary)) applyThemeVariant("official");
-    }catch(e2){
-      window.LUDUS_CONTENT_ERROR2 = e2;
-      console.warn("LUDUS obsah nelze použít, spouštím ukázku:", e2);
-      try{ applyThemeVariant("official"); }catch(_e){}
-    }
-  }
-})();
+}catch(e){ console.warn("GAME_CONTENT ignorováno:",e); }
 
 /* ════════════════════════════════════════════════════════════════════
    6) STAV
@@ -1382,21 +922,21 @@ function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;","
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function makeId(){let s="HR-";for(let i=0;i<6;i++)s+="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random()*32)];return s;}
 function normName(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim(); }
+/* Aktivace učitele jménem zrušena (unifikace LUDUS) — pouze 3× ťuk na logo LUDUS nebo ?teacher=1. */
 
 /* ── ukládání postupu (localStorage; bez něj tiše degraduje – funguje na nasazené stránce) ── */
 const STORE_KEY="hvezdni_rytiri_save_v1";
-const LUDUS_PROGRESS_API_VERSION="ludus-progress-api-v1";
 function safeGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
 function safeSet(k,v){ try{ window.localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 function safeDel(k){ try{ window.localStorage.removeItem(k); }catch(e){} }
 function doneCount(d){ return d?Object.keys(d).filter(k=>d[k]).length:0; }
 function saveProgress(){
-  try{ safeSet(STORE_KEY, JSON.stringify({ v:1, apiVersion:LUDUS_PROGRESS_API_VERSION, engineId:LUDUS_GAME_MANIFEST.engineId, gameId:LUDUS_GAME_MANIFEST.gameId, mechanicId:LUDUS_GAME_MANIFEST.mechanicId, name:S.name, diffName:S.diff&&S.diff.name,
+  try{ safeSet(STORE_KEY, JSON.stringify({ v:1, name:S.name, diffName:S.diff&&S.diff.name,
     done:S.done, results:S.results, bossWon:S.bossWon, ts:Date.now() })); }catch(e){}
 }
 function loadProgress(){
   const raw=safeGet(STORE_KEY); if(!raw) return null;
-  try{ const d=JSON.parse(raw); if(d&&d.v===1 && (d.name || doneCount(d.done)>0 || d.bossWon)) return d; }catch(e){}
+  try{ const d=JSON.parse(raw); if(d&&d.v===1 && (doneCount(d.done)>0 || d.bossWon)) return d; }catch(e){}
   return null;
 }
 function resumeProgress(d){
@@ -1404,24 +944,80 @@ function resumeProgress(d){
   const diff = DIFFICULTIES.find(x=>x.name===d.diffName) || DIFFICULTIES[1];
   S.diff=diff; S.heroMax=S.heroLives=diff.lives;
   S.done = d.done || {}; S.results = d.results || {};
-  S.bossWon = !!d.bossWon; S.teacher = normName(S.name)==="daniel balaz";
+  S.bossWon = !!d.bossWon;
   S.stationIdx=0; S.qIdx=0; S.bsIdx=0; S.bossHp=100; S.justCompleted=null;
   S.id=makeId(); S.date=new Date().toLocaleString("cs-CZ");
   renderMap(); setAccent("#2e8fff","#8fc0ff"); show("screen-map"); bg("map",true);
 }
 
+/* ── V2: ZVUK — sloty AUDIO mají přednost; prázdný slot = syntetický zvuk
+      (WebAudio oscilátory, žádné soubory). Tlačítko ztlumení vlevo nahoře. ── */
+const MUTE_KEY="hvezdni_rytiri_mute_v1";
+let _muted = safeGet(MUTE_KEY)==="1";
+let _ac=null;
+function ac(){
+  try{
+    const C=window.AudioContext||window.webkitAudioContext; if(!C) return null;
+    if(!_ac) _ac=new C();
+    if(_ac.state==="suspended") _ac.resume().catch(()=>{});
+    return _ac;
+  }catch(e){ return null; }
+}
+function tone(o){ // {f, f2?, t?, d?, type?, v?}
+  const A=ac(); if(!A) return;
+  try{
+    const t0=A.currentTime+(o.t||0), d=o.d||.2;
+    const osc=A.createOscillator(), g=A.createGain();
+    osc.type=o.type||"sine";
+    osc.frequency.setValueAtTime(Math.max(1,o.f), t0);
+    if(o.f2) osc.frequency.exponentialRampToValueAtTime(Math.max(1,o.f2), t0+d);
+    g.gain.setValueAtTime(.0001, t0);
+    g.gain.exponentialRampToValueAtTime(o.v||.16, t0+.012);
+    g.gain.exponentialRampToValueAtTime(.0001, t0+d);
+    osc.connect(g); g.connect(A.destination);
+    osc.start(t0); osc.stop(t0+d+.06);
+  }catch(e){}
+}
+function synth(key){
+  switch(key){
+    case "click":   tone({f:1250,d:.05,type:"triangle",v:.08}); break;
+    case "correct": tone({f:659,d:.12,type:"sine",v:.15}); tone({f:988,t:.09,d:.2,type:"sine",v:.15}); break;
+    case "wrong":   tone({f:196,f2:110,d:.32,type:"sawtooth",v:.12}); break;
+    case "saber":   tone({f:90,f2:430,d:.16,type:"sawtooth",v:.06}); tone({f:520,f2:120,t:.1,d:.22,type:"triangle",v:.06}); break;
+    case "hit":     tone({f:300,f2:80,d:.18,type:"square",v:.08}); break;
+    case "reward":  [523,659,784,1047].forEach((f,i)=>tone({f,t:i*.09,d:.22,type:"triangle",v:.12})); break;
+    case "victory": [392,523,659,784,1047].forEach((f,i)=>tone({f,t:i*.13,d:i===4?.55:.16,type:"triangle",v:.14})); break;
+    case "defeat":  [330,262,208,156].forEach((f,i)=>tone({f,t:i*.16,d:.24,type:"sine",v:.12})); break;
+  }
+}
+function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 const _audio={};
 function sfx(key){
-  const src=AUDIO[key]; if(!src) return;
-  try{ let a=_audio[key]; if(!a){a=_audio[key]=new Audio(src);} a.currentTime=0; a.play().catch(()=>{}); }catch(e){}
+  if(_muted) return;
+  const src=AUDIO[key];
+  if(src){
+    try{ let a=_audio[key]; if(!a){a=_audio[key]=new Audio(src);} a.currentTime=0; a.play().catch(()=>{}); }catch(e){}
+    return;
+  }
+  synth(key);
 }
 let _bg=null;
 function bg(key,loop){
   const src=AUDIO[key];
   if(_bg){ _bg.pause(); _bg=null; }
-  if(!src) return;
+  if(!src || _muted) return;
   try{ _bg=new Audio(src); _bg.loop=!!loop; _bg.volume=.55; _bg.play().catch(()=>{}); }catch(e){}
 }
+function setMuted(m){
+  _muted=!!m; safeSet(MUTE_KEY,_muted?"1":"0");
+  if(_muted && _bg){ _bg.pause(); _bg=null; }
+  const b=$("#muteBtn"); if(b){ b.classList.toggle("off",_muted); b.title=_muted?"Zvuk vypnut":"Zvuk zapnut"; }
+  const p=$("#mutePath");
+  if(p) p.setAttribute("d", _muted
+    ? "M4 9v6h4l5 4V5L8 9H4z M16 9l6 6 M22 9l-6 6"
+    : "M4 9v6h4l5 4V5L8 9H4z M16 9c1.2 1 1.2 5 0 6 M18.5 7c2.4 2.2 2.4 7.8 0 10");
+}
+function initMute(){ const b=$("#muteBtn"); if(!b) return; b.onclick=()=>setMuted(!_muted); setMuted(_muted); }
 
 /* aktuální barva světa (mění UI i barvu světelného švihu) */
 function setAccent(a, aL){
@@ -1605,18 +1201,19 @@ function sceneParticles(scene, host){
   if(scene==="lava"){ for(let i=0;i<22;i++) ember(host); }
   if(scene==="forest"){ for(let i=0;i<14;i++) firefly(host); }
 }
+function canAnim(el){ return typeof el.animate==="function"; }   // jsdom nemá WAAPI → chráníme (dřív pád ve forest/ice/lava scénách)
 function flake(host){const d=document.createElement("div");const s=(Math.random()*3+1.5);
   d.className="scene-particle";d.style.cssText=`width:${s}px;height:${s}px;background:#fff;left:${Math.random()*100}%;top:-6px;opacity:${(Math.random()*.6+.4)}`;
   host.appendChild(d);const H=host.clientHeight||190;const dur=Math.random()*4+4,drift=(Math.random()*40-20);
-  d.animate([{transform:"translate(0,0)"},{transform:`translate(${drift}px,${H+12}px)`}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"linear"});}
+  if(canAnim(d)) try{ d.animate([{transform:"translate(0,0)"},{transform:`translate(${drift}px,${H+12}px)`}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"linear"}); }catch(e){}}
 function ember(host){const d=document.createElement("div");const s=(Math.random()*2.5+1.5);
   d.className="scene-particle";d.style.cssText=`width:${s}px;height:${s}px;background:#ff9d3d;box-shadow:0 0 5px #ff7a2c;left:${Math.random()*100}%;bottom:-6px`;
   host.appendChild(d);const H=host.clientHeight||190;const dur=Math.random()*3+2.5,drift=(Math.random()*30-15);
-  d.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${drift}px,-${H+14}px)`,opacity:0}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"ease-out"});}
+  if(canAnim(d)) try{ d.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${drift}px,-${H+14}px)`,opacity:0}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"ease-out"}); }catch(e){}}
 function firefly(host){const d=document.createElement("div");
   d.className="scene-particle";d.style.cssText=`width:3px;height:3px;background:#cfff7a;box-shadow:0 0 6px #8aff6a;left:${Math.random()*100}%;top:${Math.random()*80+10}%`;
   host.appendChild(d);const dur=Math.random()*4+3;
-  d.animate([{transform:"translate(0,0)",opacity:.2},{transform:`translate(${Math.random()*30-15}px,${Math.random()*20-10}px)`,opacity:1},{transform:"translate(0,0)",opacity:.2}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"ease-in-out"});}
+  if(canAnim(d)) try{ d.animate([{transform:"translate(0,0)",opacity:.2},{transform:`translate(${Math.random()*30-15}px,${Math.random()*20-10}px)`,opacity:1},{transform:"translate(0,0)",opacity:.2}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"ease-in-out"}); }catch(e){}}
 
 // — Temný lord (boss): vlastní stylizovaná helma
 function vaderArt(){return `<svg viewBox="0 0 200 240" aria-hidden="true">
@@ -1729,14 +1326,11 @@ function initStart(){
   $("#startBtn").onclick=()=>{
     const n=$("#pname").value.trim();
     S.name = n || "Rytíř";
-    // Učitelský náhled se zapne zadáním jména „Daniel Baláž" (bez ohledu na velikost písmen a diakritiku).
-    S.teacher = normName(n) === "daniel balaz";
     S.heroMax = S.heroLives = S.diff.lives;
     S.stationIdx=0; S.qIdx=0; S.done={}; S.results={}; S.justCompleted=null;
     S.total=0; S.correct=0; S.bossWon=false; S.bossHp=100; S.bsIdx=0;
     S.bossTotal=0; S.bossCorrect=0; S.streakWrong=0;
     S.id=makeId(); S.date=new Date().toLocaleString("cs-CZ");
-    saveProgress();
     startIntro();
   };
   $("#pname").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#startBtn").click(); });
@@ -1745,17 +1339,14 @@ function initStart(){
   $("#resumeBtn").onclick=()=>{ const d=loadProgress(); if(d) resumeProgress(d); };
   $("#forgetBtn").onclick=(e)=>{ e.preventDefault(); clearProgress(); refreshResume(); };
 }
-function clearProgress(){ safeDel(STORE_KEY); return true; }
-function getProgressSummary(d){d=d||loadProgress();if(!d)return {apiVersion:LUDUS_PROGRESS_API_VERSION,engineId:LUDUS_GAME_MANIFEST.engineId,storeKey:STORE_KEY,exists:false};const total=STATIONS.length,c=doneCount(d.done);return {apiVersion:LUDUS_PROGRESS_API_VERSION,engineId:LUDUS_GAME_MANIFEST.engineId,gameId:LUDUS_GAME_MANIFEST.gameId,storeKey:STORE_KEY,exists:true,name:d.name||'',stage:d.bossWon?'finished':(c>0?'map':'intro'),done:c,total:total,finished:!!d.bossWon,updatedAt:d.ts||null};}
-function hasProgress(){return !!loadProgress();}
-function installLudusProgressApi(){const api={version:LUDUS_PROGRESS_API_VERSION,storage:'localStorage',key:STORE_KEY,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary,hasProgress:hasProgress};window.LUDUS_PROGRESS=api;window.LUDUS_ENGINE_API=Object.assign({},window.LUDUS_ENGINE_API||{}, {progress:api,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary});}
-installLudusProgressApi();
+function clearProgress(){ safeDel(STORE_KEY); }
 function refreshResume(){
   const d=loadProgress();
   const btn=$("#resumeBtn"), note=$("#resumeNote");
   if(d){
     const c=doneCount(d.done), total=STATIONS.length;
-    $("#resumeInfo").textContent = (d.name?esc(d.name)+" · ":"") + (d.bossWon ? "dohráno" : (c+"/"+total+" světů"));
+    // oprava: textContent NEescapovat (esc() tu zdvojovalo entity, např. „&" → „&amp;")
+    $("#resumeInfo").textContent = (d.name?d.name+" · ":"") + (d.bossWon ? "dohráno" : (c+"/"+total+" světů"));
     btn.style.display=""; note.style.display="";
     if(d.name) $("#pname").value=d.name;
   } else { btn.style.display="none"; note.style.display="none"; }
@@ -1765,9 +1356,9 @@ function refreshResume(){
    11) INTRO (video slot NEBO crawl)
    ════════════════════════════════════════════════════════════════════ */
 function buildCrawl(){
-  const c=$("#crawlText");
-  c.innerHTML = `<div class="ep">${esc(CRAWL.episode)}</div><h2>${esc(CRAWL.heading)}</h2>`+
-    CRAWL.paragraphs.map(p=>`<p>${esc(p.replace("{name}",S.name))}</p>`).join("");
+  const c=$("#crawlText"), C=crawlNow();
+  c.innerHTML = `<div class="ep">${esc(C.episode)}</div><h2>${esc(C.heading)}</h2>`+
+    C.paragraphs.map(p=>`<p>${esc(p.replace("{name}",S.name))}</p>`).join("");
 }
 // Přechod na mapu po intru — jen pokud jsme stále na intru (chrání před opožděnou událostí po skipu).
 function introDone(){ if(cur==="screen-intro") goMap(); }
@@ -1785,16 +1376,26 @@ function startIntro(){
   } else {
     box.style.display="none"; crawl.style.display="flex";
     buildCrawl();
-    const t=$("#crawlText"); t.style.animation="none"; void t.offsetWidth; t.style.animation="";
-    // Hlavní spuštění je 'animationend' (viz initStart). Tohle je jen pojistka —
-    // hlavně pro režim „omezený pohyb", kde animace neběží a animationend se nespustí.
-    const dur = parseFloat(getComputedStyle(t).animationDuration) || 0;
-    introTimer=setTimeout(introDone, Math.max(dur, 8)*1000 + 1500);
+    const t=$("#crawlText"), pre=$("#preCrawl");
+    t.style.animation="none";                       // crawl čeká, dokud nedoběhne pre-crawl
+    let preMs=3100;
+    try{ if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) preMs=400; }catch(e){}
+    if(pre){ pre.classList.remove("on"); void pre.offsetWidth; pre.classList.add("on"); }
+    introTimer=setTimeout(()=>{
+      if(cur!=="screen-intro") return;
+      if(pre) pre.classList.remove("on");
+      void t.offsetWidth; t.style.animation="";     // teď teprve odstartuj crawl
+      // Hlavní spuštění je 'animationend' (viz initStart). Tohle je jen pojistka —
+      // hlavně pro režim „omezený pohyb", kde animace neběží a animationend se nespustí.
+      const dur = parseFloat(getComputedStyle(t).animationDuration) || 0;
+      introTimer=setTimeout(introDone, Math.max(dur, 8)*1000 + 1500);
+    }, preMs);
   }
 }
 function goMap(){
   if(cur==="screen-map") return;
   clearTimeout(introTimer);
+  const pre=$("#preCrawl"); if(pre) pre.classList.remove("on");
   const vid=$("#introVideo"); try{vid.pause();}catch(e){}
   setAccent("#2e8fff","#8fc0ff");        // mapa = výchozí (modrá/zlatá)
   renderMap();
@@ -1859,7 +1460,7 @@ function planetNode(st,x,y,stt,i){
   if(open) s += `<circle cx="${x}" cy="${y}" r="${R+4}" fill="none" stroke="${st.accentL}" stroke-width="2" opacity=".85" class="anim-pulse" style="transform-box:fill-box;transform-origin:center"/>`;
   if(done) s += `<g transform="translate(${(x+R*0.75).toFixed(1)},${(y-R*0.75).toFixed(1)})"><circle r="7" fill="var(--ok)" stroke="#04130a" stroke-width="1.5"/><path d="M-3,0 l2,2.4 l4,-5.2" stroke="#04130a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
   if(locked) s += `<rect x="${x-5}" y="${y-2}" width="10" height="9" rx="2" fill="none" stroke="var(--dim2)" stroke-width="1.5"/><path d="M${x-3},${y-2} v-3 a3,3 0 0,1 6,0 v3" stroke="var(--dim2)" stroke-width="1.5" fill="none"/>`;
-  s += `<text class="nodelabel ${locked?'dim':''}" x="${x}" y="${y+34}">${esc(st.place)}</text>`;
+  s += `<text class="nodelabel ${locked?'dim':''}" x="${x}" y="${y+34}">${esc(placeOf(st))}</text>`;
   return { defs, node:`<g class="node ${locked?'locked':''}" data-i="${i}">${s}</g>` };
 }
 function bossNode(bx,by,unlocked){
@@ -1928,6 +1529,27 @@ function flyShip(fromIdx){
    SDÍLENÝ PŘECHOD planeta → svět (planeta se roztáhne ve scénu a zpět)
    V prohlížeči animace; bez layoutu (testy) → fallback na běžný švih.
    ════════════════════════════════════════════════════════════════════ */
+/* V2: pruhy hvězd letící od středu ven — dojem skoku hyperprostorem */
+function hyperFx(dur){
+  const h=$("#hyper"); if(!h) return;
+  if(typeof document.createElement("i").animate!=="function") return;
+  try{ if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
+  h.classList.add("run"); h.innerHTML="";
+  const vw=window.innerWidth||520, vh=window.innerHeight||800, R=Math.hypot(vw,vh)/2;
+  const D=dur||640;
+  for(let i=0;i<42;i++){
+    const a=(Math.random()*360).toFixed(1), len=(40+Math.random()*90).toFixed(0);
+    const el=document.createElement("i"); el.className="hstreak"; el.style.height=len+"px";
+    h.appendChild(el);
+    const d0=(30+Math.random()*90).toFixed(0);
+    try{ el.animate(
+      [{transform:`rotate(${a}deg) translateY(${d0}px) scaleY(.3)`,opacity:0},
+       {opacity:.95,offset:.25},
+       {transform:`rotate(${a}deg) translateY(${(R+120).toFixed(0)}px) scaleY(2.4)`,opacity:0}],
+      {duration:D,easing:"cubic-bezier(.5,0,.85,.4)",delay:Math.random()*140,fill:"forwards"}); }catch(e){}
+  }
+  setTimeout(()=>{ h.classList.remove("run"); h.innerHTML=""; }, D+300);
+}
 function warpTo(targetId, nodeEl, accent, accentL){
   if(transit){ pendingShow={id:targetId}; return; }
   const rect = nodeEl ? nodeEl.getBoundingClientRect() : {width:0};
@@ -1941,6 +1563,7 @@ function warpTo(targetId, nodeEl, accent, accentL){
   orb.style.background=`radial-gradient(circle at 38% 32%, ${accentL}, ${accent} 52%, #070a12 100%)`;
   orb.style.opacity="1"; orb.style.transform="scale(1)";
   wrap.classList.add("run"); transit=true;
+  hyperFx(680);                                  // V2: pruhy hyperprostoru během warpu
   const prev=cur?$("#"+cur):null;
   let grow; try{ grow=orb.animate([{transform:"scale(1)"},{transform:`scale(${k})`}],{duration:460,easing:"cubic-bezier(.5,0,.5,1)",fill:"forwards"}); }catch(e){}
   const afterGrow=()=>{
@@ -1963,6 +1586,7 @@ function warpOut(targetId, nodeIndex, accent, accentL){
   orb.style.background=`radial-gradient(circle at 38% 32%, ${accentL}, ${accent} 52%, #070a12 100%)`;
   orb.style.transform=`scale(${kC})`; orb.style.opacity="0";
   wrap.classList.add("run"); transit=true;
+  hyperFx(640);                                  // V2: pruhy hyperprostoru i při návratu na mapu
   const prev=cur?$("#"+cur):null;
   let cover; try{ cover=orb.animate([{opacity:0},{opacity:1}],{duration:230,easing:"ease-in",fill:"forwards"}); }catch(e){}
   const afterCover=()=>{
@@ -2053,11 +1677,18 @@ function enterStation(i){
   setAccent(st.accent, st.accentL);       // UI + švih převezmou barvu světa
   const stage=$("#stStage");
   stage.innerHTML = SCENES[st.scene] ? SCENES[st.scene]() : "";
+  // V2: fotka učitele (localStorage) překryje SVG scénu; SVG zůstává jako fallback pod ní
+  const idata=imgGet(st.id);
+  if(idata){
+    const w=document.createElement("div"); w.className="stageImgWrap";
+    const im=document.createElement("img"); im.className="stageImg"; im.alt=""; im.src=idata;
+    w.appendChild(im); stage.appendChild(w);
+  }
   // banner
   const b=document.createElement("div"); b.className="banner";
-  b.innerHTML=`<div class="planet">${esc(st.place)}</div><h3>${esc(st.title)}</h3>`;
+  b.innerHTML=`<div class="planet">${esc(placeOf(st))}</div><h3>${esc(titleOf(st))}</h3>`;
   stage.appendChild(b);
-  sceneParticles(st.scene, stage);
+  if(!idata) sceneParticles(st.scene, stage);
   const node=$(`#mapSvg .node[data-i="${i}"] .pbody`);
   if(node && cur==="screen-map"){ warpTo("screen-station", node, st.accent, st.accentL); }
   else { show("screen-station"); }
@@ -2106,7 +1737,7 @@ function renderQuestion(q, ui, ctx){
     if(ui.opts.dataset.done==="1") return; ui.opts.dataset.done="1";
     hintRow.style.display="none";
     if(fxTarget){ try{ ok ? slashFx(fxTarget) : shockFx(fxTarget); }catch(e){} }
-    sfx(ok?"correct":"wrong");
+    sfx(ok?"correct":"wrong"); buzz(ok?18:[40,50,40]);   // V2: haptika na mobilu
     let html=`<div class="verdict ${ok?'good':'miss'}">${ok?'Správně — Síla je s tebou.':'Tentokrát ne.'}</div>`;
     if(!ok && correctText) html+=`<div class="ans">Správně: <b>${esc(correctText)}</b></div>`;
     if(q.why) html+=`<div class="why"><span>Proč</span>${esc(q.why)}</div>`;
@@ -2188,7 +1819,7 @@ function renderQuestion(q, ui, ctx){
     };
     shuffle(correct.slice()).forEach(w=>{
       const t=document.createElement("button"); t.className="tile"; t.textContent=w;
-      t.onclick=()=>{ if(ui.opts.dataset.done==="1"||t.disabled)return; t.disabled=true; t.style.visibility="hidden"; placed.push({w,t}); draw(); };
+      t.onclick=()=>{ if(ui.opts.dataset.done==="1"||t.disabled)return; sfx("click"); t.disabled=true; t.style.visibility="hidden"; placed.push({w,t}); draw(); };
       bank.appendChild(t);
     });
     const submit=()=>{ if(ui.opts.dataset.done==="1")return; const ok=normTxt(placed.map(p=>p.w).join(" "))===normTxt(correct.join(" "));
@@ -2214,7 +1845,7 @@ function renderQuestion(q, ui, ctx){
     const colL=document.createElement("div"); colL.className="matchCol";
     const colR=document.createElement("div"); colR.className="matchCol";
     const lB={}, rB={}; let sel=null, matched=0;
-    const selectL=(b,l)=>{ if(b.dataset.done==="1")return; if(sel&&sel.b)sel.b.classList.remove("sel"); sel={b,l}; b.classList.add("sel"); };
+    const selectL=(b,l)=>{ if(b.dataset.done==="1")return; sfx("click"); if(sel&&sel.b)sel.b.classList.remove("sel"); sel={b,l}; b.classList.add("sel"); };
     const chooseR=(b,r)=>{
       if(b.dataset.done==="1"||!sel) return;
       const want=(pairs.find(p=>p[0]===sel.l)||[])[1];
@@ -2255,7 +1886,7 @@ function renderQuestion(q, ui, ctx){
 function renderQ(){
   const st=STATIONS[S.stationIdx];
   const entry=S.activeQ[S.qIdx], r=S.results[st.id];
-  $("#stName").textContent=st.place;
+  $("#stName").textContent=placeOf(st);
   $("#stCounter").textContent = entry.review ? "Opakování chyby" : `Otázka ${Math.min(r.answered+1, r.total)}/${r.total}`;
   $("#stBar").style.width=(r.answered/r.total*100)+"%";
   renderQuestion(entry.q, {q:$("#stQ"), opts:$("#stOpts"), fb:$("#stFb")}, {
@@ -2276,7 +1907,7 @@ function finishStation(st){
   S.justCompleted=S.stationIdx;
   saveProgress();
   const wa=st.accent, waL=st.accentL, idx=S.stationIdx;
-  reward(`${st.place} zvládnuto`, `Získáváš odznak Řádu`, ()=>{
+  reward(`${placeOf(st)} zvládnuto`, `Získáváš odznak Řádu`, ()=>{
     const back=()=>{ renderMap(); setAccent("#2e8fff","#8fc0ff"); warpOut("screen-map", idx, wa, waL); bg("map",true); };
     if(allDone()){ reward(`Výcvik dokončen`, `${LABELS.bossName} tě vyzývá k souboji`, back, true); }
     else { back(); }
@@ -2288,7 +1919,7 @@ function finishStation(st){
    ════════════════════════════════════════════════════════════════════ */
 function reward(big,sm,then,fanfare){
   const r=$("#reward"); r.innerHTML=sigilArt(130)+`<div class="rewardTxt"><div class="big">${esc(big)}</div><div class="sm">${esc(sm)}</div></div>`;
-  r.classList.add("live"); sfx(fanfare?"victory":"saber");
+  r.classList.add("live"); sfx(fanfare?"victory":"reward");
   setTimeout(()=>{ r.classList.remove("live"); then&&then(); }, fanfare?1900:1500);
 }
 
@@ -2303,11 +1934,20 @@ function startBoss(){
   $("#heroAv").innerHTML=heroArt();
   $("#foeAv").innerHTML=vaderArt();
   $("#heroName").textContent=LABELS.heroRank+" "+S.name;
-  $("#bossStage").querySelector("svg")?.remove();
   const stage=$("#bossStage");
-  const v=document.createElement("div"); v.innerHTML=vaderArt(); stage.insertBefore(v.querySelector("svg"),$("#bossLine"));
+  // oprava: querySelector("svg") dřív trefil SVG blesku v #bolt → staré helmy se při restartu hromadily
+  stage.querySelector(":scope > svg")?.remove();
+  stage.querySelector(":scope > .bossImgWrap")?.remove();
+  const bimg=imgGet("boss");
+  if(bimg){   // V2: fotka bosse (dýchá, ztmavené okraje); bez ní vlastní SVG helma
+    const w=document.createElement("div"); w.className="bossImgWrap";
+    const im=document.createElement("img"); im.className="bossImg"; im.alt=""; im.src=bimg;
+    w.appendChild(im); stage.insertBefore(w, stage.firstChild);
+  } else {
+    const v=document.createElement("div"); v.innerHTML=vaderArt(); stage.insertBefore(v.querySelector("svg"),$("#bossLine"));
+  }
   updateHud();
-  $("#bossLine").textContent=BOSS.intro;
+  $("#bossLine").textContent=(skinSafe()&&BOSS.introSafe?BOSS.introSafe:BOSS.intro).replace("{boss}",LABELS.bossName);
   show("screen-boss"); bg("boss",true);
   setTimeout(()=>renderBossQ(),700);
 }
@@ -2344,13 +1984,16 @@ function renderBossQ(){
     }
   });
 }
+function sabHit(id){ const el=$(id); if(!el) return; el.classList.remove("hit"); void el.offsetWidth; el.classList.add("hit"); }
 function heroStrike(){
+  sabHit("#sabBlue");
   const c=$("#clash"); c.classList.remove("go"); void c.offsetWidth; c.classList.add("go");
   const s=$("#bossStage"); s.classList.remove("shake"); void s.offsetWidth; s.classList.add("shake");
   sparkBurst(s, s.clientWidth/2, s.clientHeight*0.42, "#aee0ff", 16);
   flashScreen("#cfe6ff", false);
 }
 function foeStrike(){
+  sabHit("#sabRed");
   const b=$("#bolt");
   b.innerHTML=`<svg viewBox="0 0 600 240" style="position:absolute;inset:0;width:100%;height:100%">
     <path d="M300,40 L280,110 L320,120 L290,200" stroke="#ff5a5a" stroke-width="3" fill="none"/>
@@ -2386,7 +2029,7 @@ function flashScreen(color, strong){
 function finalBlow(then){
   const s=$("#bossStage"); flashScreen("#ffffff", true);
   if(s){ sparkBurst(s, s.clientWidth/2, s.clientHeight*0.42, "#ffffff", 24);
-    const v=s.querySelector("svg");
+    const v=s.querySelector(":scope > svg") || s.querySelector(".bossImg");
     if(v){ try{ v.animate([{opacity:1,filter:"brightness(1)"},{filter:"brightness(2.6)",offset:.28},{opacity:0,filter:"brightness(3)"}],{duration:880,easing:"ease-in",fill:"forwards"}); }catch(e){} }
   }
   setTimeout(()=>{ flashScreen("#ffd24a", true); then&&then(); }, 940);
@@ -2411,7 +2054,7 @@ function bossLose(){
    ════════════════════════════════════════════════════════════════════ */
 function gradeOf(p){
   if(p>=90)return{g:"1",w:"výborný"}; if(p>=75)return{g:"2",w:"chvalitebný"};
-  if(p>=60)return{g:"3",w:"dobrý"};   if(p>=40)return{g:"4",w:"dostatečný"};
+  if(p>=60)return{g:"3",w:"dobrý"};   if(p>=45)return{g:"4",w:"dostatečný"};
   return{g:"5",w:"nedostatečný"};
 }
 function finishGame(){
@@ -2437,7 +2080,7 @@ function finishGame(){
     const r=S.results[st.id]||{correct:0,total:st.questions.length};
     const p=r.total?Math.round(r.correct/r.total*100):0;
     const cls=p>=75?"hi":p>=50?"mid":"lo";
-    h+=`<div class="brow"><span>${esc(st.title)} <span style="color:var(--dim2)">· ${esc(st.place)}</span></span>
+    h+=`<div class="brow"><span>${esc(titleOf(st))} <span style="color:var(--dim2)">· ${esc(placeOf(st))}</span></span>
         <span class="pct ${cls}">${r.correct}/${r.total}</span></div>`;
   });
   if(S.bossWon!==undefined){
@@ -2449,6 +2092,25 @@ function finishGame(){
   show("screen-result"); bg("victory",false);
   const _p=pct,_c=cor,_t=tot;
   setTimeout(()=>{ countUp($("#resPct"),_p,v=>v+" %",950); countUp($("#resScore"),_c,v=>v+"/"+_t,950); }, 700);
+  if(S.bossWon) setTimeout(victoryFx, 500);   // V2: zlatý déšť při vítězství
+}
+/* V2: zlaté částice padající přes výsledkovou obrazovku (jen při výhře) */
+function victoryFx(){
+  const scr=$("#screen-result");
+  if(!scr || typeof document.createElement("i").animate!=="function") return;
+  try{ if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
+  const vh=window.innerHeight||800;
+  for(let i=0;i<26;i++){
+    const p=document.createElement("i"); p.className="goldSpark";
+    p.style.left=(Math.random()*100)+"%";
+    scr.appendChild(p);
+    const dur=2600+Math.random()*1800, rot=(Math.random()>.5?1:-1)*(360+Math.random()*360);
+    try{ p.animate(
+      [{transform:"translateY(-24px) rotate(0deg)",opacity:0},{opacity:1,offset:.1},
+       {transform:`translateY(${vh+40}px) rotate(${rot.toFixed(0)}deg)`,opacity:0}],
+      {duration:dur,delay:Math.random()*900,easing:"linear"}); }catch(e){}
+    setTimeout(()=>{try{p.remove();}catch(e){}},dur+1100);
+  }
 }
 $("#againBtn").onclick=()=>{ setAccent("#2e8fff","#8fc0ff"); show("screen-start"); bg("",false); };
 
@@ -2489,10 +2151,163 @@ function initFs(){
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   V2-A) OBRÁZKOVÉ SLOTY — fotky učitele v localStorage (SVG = fallback)
+   Fotky se před uložením zmenší na max 1280 px (JPEG ~0.82), aby se
+   vešly do kvóty localStorage. Klíč: prefix + id světa / "boss".
+   ════════════════════════════════════════════════════════════════════ */
+const IMG_PREFIX="hvezdni_rytiri_img_v1_";
+function imgGet(id){ return safeGet(IMG_PREFIX+id); }
+function imgDel(id){ safeDel(IMG_PREFIX+id); }
+function imgSet(id,data){ return safeSet(IMG_PREFIX+id,data); }
+function loadScaled(file, cb){
+  try{
+    const rd=new FileReader();
+    rd.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        try{
+          const M=1280, k=Math.min(1, M/Math.max(img.width||1,img.height||1));
+          const c=document.createElement("canvas");
+          c.width=Math.max(1,Math.round((img.width||1)*k)); c.height=Math.max(1,Math.round((img.height||1)*k));
+          c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+          cb(c.toDataURL("image/jpeg",.82));
+        }catch(e){ cb(rd.result); }        // canvas selhal → ulož originál
+      };
+      img.onerror=()=>cb(null);
+      img.src=rd.result;
+    };
+    rd.onerror=()=>cb(null);
+    rd.readAsDataURL(file);
+  }catch(e){ cb(null); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   V2-B) SKIN — přepnutí original/safe za běhu (LABELS se přepíšou,
+   UI se překreslí; volba se pamatuje v localStorage a přes ?skin=)
+   ════════════════════════════════════════════════════════════════════ */
+const SKIN_KEY="hvezdni_rytiri_skin_v1";
+function applySkin(sk){
+  SKIN = SKINS[sk] ? sk : "original";
+  safeSet(SKIN_KEY, SKIN);
+  Object.assign(LABELS, SKINS[SKIN]);
+  applyLabels();
+  if(cur==="screen-map") renderMap();
+  const seg=$("#tpSkinSeg");
+  if(seg) [...seg.children].forEach(b=>b.classList.toggle("warn", b.dataset.skin===SKIN));
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   V2-C) UČITELSKÝ PANEL — aktivace: 3× ťuknutí na logo · ?teacher=1 ·
+   jméno „učitel"/„teacher"/„Daniel Baláž". Obsah: rychlé skoky na
+   libovolnou obrazovku/svět, přeskočení úlohy, skin, správce obrázků.
+   ════════════════════════════════════════════════════════════════════ */
+function enableTeacher(){
+  S.teacher=true;
+  try{ document.body.classList.add("teacher"); }catch(e){}
+  buildTeacherPanel();
+}
+function tpToggle(open){
+  const p=$("#tpPanel"); if(!p) return;
+  p.classList.toggle("open", open===undefined ? !p.classList.contains("open") : !!open);
+}
+function tpSkip(){
+  // Přeskočí aktuální úlohu: „zodpoví" ji správně a rovnou pokračuje.
+  if(cur!=="screen-station" && cur!=="screen-boss") return;
+  if(S._auto){ try{ S._auto.correct(); }catch(e){} }
+  setTimeout(()=>{ if(S._continueFn){ try{ S._continueFn(); }catch(e){} } }, 60);
+  tpToggle(false);
+}
+function tpEnsureRun(){
+  // Skok do světa/bosse bez projití startu → doplň rozumné výchozí hodnoty.
+  if(!S.id){ S.id=makeId(); S.date=new Date().toLocaleString("cs-CZ"); }
+  if(!S.heroMax){ S.heroMax=S.heroLives=S.diff.lives; }
+}
+function buildTeacherPanel(){
+  const body=$("#tpBody"); if(!body) return;
+  body.innerHTML="";
+  const sec=t=>{ const d=document.createElement("div"); d.className="tpSec"; d.textContent=t; body.appendChild(d); return d; };
+  const grid=()=>{ const d=document.createElement("div"); d.className="tpGrid"; body.appendChild(d); return d; };
+  const btn=(parent,label,fn,cls)=>{ const b=document.createElement("button"); b.className="tpB"+(cls?" "+cls:"");
+    b.textContent=label; b.onclick=fn; parent.appendChild(b); return b; };
+
+  sec("Navigace");
+  let g=grid();
+  /* skoky panel nezavírají — sekce se ukáže hned vedle panelu a dá se proklikávat */
+  btn(g,"Start",()=>{ show("screen-start"); });
+  btn(g,"Intro",()=>{ tpEnsureRun(); startIntro(); });
+  btn(g,"Mapa",()=>{ tpEnsureRun(); renderMap(); setAccent("#2e8fff","#8fc0ff"); show("screen-map"); });
+  STATIONS.forEach((st,i)=>btn(g, (i+1)+". "+placeOf(st), ()=>{ tpEnsureRun(); enterStation(i); }));
+  btn(g,"⚔ Souboj",()=>{ tpEnsureRun(); startBoss(); });
+  btn(g,"Výsledek",()=>{ tpEnsureRun(); finishGame(); });
+
+  sec("Aktuální úloha");
+  g=grid();
+  btn(g,"⏭ Přeskočit úlohu",tpSkip,"full warn");
+
+  sec("Vzhled (skin)");
+  g=grid(); g.id="tpSkinSeg";
+  const bO=btn(g,"Star Wars",()=>applySkin("original")); bO.dataset.skin="original";
+  const bS=btn(g,"Bezpečná verze",()=>applySkin("safe")); bS.dataset.skin="safe";
+  [...g.children].forEach(b=>b.classList.toggle("warn", b.dataset.skin===SKIN));
+
+  sec("Obrázky (fotky z galerie)");
+  const note=document.createElement("p"); note.className="tpNote";
+  note.textContent="Fotka nahradí SVG scénu světa (Ken Burns) / pozadí souboje. Ukládá se jen do tohoto zařízení (localStorage), zmenšeno na 1280 px.";
+  body.appendChild(note);
+  const rows=[...STATIONS.map((st,i)=>({id:st.id,label:(i+1)+". "+placeOf(st)})), {id:"boss",label:"⚔ Souboj (pozadí)"}];
+  rows.forEach(r=>{
+    const row=document.createElement("div"); row.className="tpRow";
+    const lbl=document.createElement("span"); lbl.className="lbl"; lbl.textContent=r.label;
+    const st=document.createElement("span"); st.className="st";
+    const refresh=()=>{ const has=!!imgGet(r.id); st.textContent=has?"✓ fotka":"SVG"; st.classList.toggle("has",has); };
+    refresh();
+    const inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; inp.style.display="none";
+    const up=document.createElement("button"); up.className="tpX"; up.textContent="📷";
+    up.title="Nahrát fotku"; up.onclick=()=>inp.click();
+    inp.onchange=()=>{
+      const f=inp.files && inp.files[0]; inp.value=""; if(!f) return;
+      st.textContent="…";
+      loadScaled(f,(data)=>{
+        if(!data){ st.textContent="chyba čtení"; return; }
+        if(!imgSet(r.id,data)){ st.textContent="plná paměť"; return; }
+        refresh();
+        if(r.id!=="boss" && cur==="screen-station" && STATIONS[S.stationIdx] && STATIONS[S.stationIdx].id===r.id) enterStation(S.stationIdx);
+      });
+    };
+    const del=document.createElement("button"); del.className="tpX"; del.textContent="✕";
+    del.title="Smazat fotku (vrátí SVG)"; del.onclick=()=>{ imgDel(r.id); refresh(); };
+    row.appendChild(lbl); row.appendChild(st); row.appendChild(up); row.appendChild(del); row.appendChild(inp);
+    body.appendChild(row);
+  });
+}
+function initTeacherUi(){
+  const b=$("#tpBtn"); if(b) b.onclick=()=>tpToggle();
+  const c=$("#tpClose"); if(c) c.onclick=()=>tpToggle(false);
+  // 3× ťuknutí na logo do 1,2 s → učitelský režim (standard LUDUS)
+  const wireTaps=(el)=>{
+    if(!el) return; let taps=[];
+    el.addEventListener("click",()=>{
+      const now=Date.now(); taps=taps.filter(t=>now-t<1200); taps.push(now);
+      if(taps.length>=3){ taps=[]; enableTeacher(); tpToggle(true); }
+    });
+  };
+  wireTaps($("#gameTitle"));
+  wireTaps($("#ludusBadge"));
+}
+
+/* ════════════════════════════════════════════════════════════════════
    18) BOOT
    ════════════════════════════════════════════════════════════════════ */
 function boot(){
-  buildStars(); initParallax(); initStart(); initFs();
+  buildStars(); initParallax(); initStart(); initFs(); initMute(); initTeacherUi();
+  // V2: URL parametry a uložené preference — ?teacher=1, ?skin=safe|original
+  let sk = safeGet(SKIN_KEY) || "original";
+  try{
+    const u=new URLSearchParams(window.location.search||"");
+    if(u.get("teacher")==="1") enableTeacher();
+    const us=u.get("skin"); if(us && SKINS[us]) sk=us;
+  }catch(e){}
+  applySkin(sk);
   show("screen-start", false);
 }
 /* testovací háček (jen pro jsdom testy; v prohlížeči neškodí) */
@@ -2505,6 +2320,193 @@ try{ window.__qtest = {
 boot();
 </script>
 
-<!-- Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka | © 2026 Daniel Baláž. Všechna práva vyhrazena. -->
+<!-- ═══ LUDUS UNIFIED: owner footer ═══ -->
+<style>
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+</style>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<!-- ═══ /LUDUS UNIFIED ═══ -->
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return !_muted; }catch(e){ return true; } },
+  setSound: function(on){ try{ setMuted(!on); }catch(e){} },
+  getLang: function(){ return "cs"; },
+  save: function(){ try{ if(!S || !S.name) return false; saveProgress(); return true; }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{
+    if(!confirm("Opravdu začít znovu? Postup bude smazán.")) return;
+    clearProgress(); location.reload();
+  }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<audio id="ludus-soundtrack" loop preload="auto"></audio><!-- cine vynechán — hra má vlastní intro systém -->
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hvězdní rytíři" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
 </body>
 </html>

@@ -36,7 +36,7 @@ html,body{min-height:100vh;background:var(--h-bg);font-family:'Crimson Text',Geo
 #confetti-canvas{z-index:9999;display:none}
 
 /* ═══ TEACHER BANNER ═══ */
-.t-banner{position:fixed;top:10px;left:10px;z-index:200;
+.t-banner{position:fixed;top:52px;left:10px;z-index:200; /* pod LUDUS badge */
   background:rgba(201,148,26,.88);
   padding:4px 10px;border-radius:14px;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:1.5px;
   color:#1a0e00;font-weight:600;display:none;
@@ -455,6 +455,9 @@ button:focus-visible,.opt-btn:focus-visible,.mc2-btn:focus-visible,.stn-go:focus
 @media (max-width:420px){.ludus-owner-footer{font-size:7.5px;bottom:3px}.ludus-owner-footer span{white-space:normal}}
 
 </style>
+<style>
+#mute-btn,#fs-btn{display:none!important} /* nahrazeno jednotným LUDUS ovládáním vpravo nahoře */
+</style>
 </head>
 <body>
 
@@ -563,7 +566,32 @@ button:focus-visible,.opt-btn:focus-visible,.mc2-btn:focus-visible,.stn-go:focus
 <canvas id="fx-canvas"></canvas>
 <canvas id="trans-canvas"></canvas>
 <canvas id="confetti-canvas"></canvas>
-<div class="t-banner" id="t-banner">📋 Teacher Mode</div>
+<div class="t-banner" id="t-banner" onclick="hgPanelToggle()" style="cursor:pointer" title="Teacher panel">📋 Teacher Mode ▾</div>
+<div id="ludus-badge" title="LUDUS">LUDUS</div>
+<div id="hg-tpanel">
+  <h4 id="hg-tp-h">Náhled učitele — skoky</h4>
+  <div id="hg-tp-jumps"></div>
+  <div class="hg-tp-row">
+    <button type="button" onclick="hgToggleLang()" id="hg-lang-btn">Jazyk: EN</button>
+    <button type="button" onclick="hgPanelToggle()" id="hg-close-btn">✕ Zavřít</button>
+  </div>
+</div>
+<style>
+#ludus-badge{position:fixed;top:10px;left:10px;z-index:230;cursor:pointer;user-select:none;-webkit-user-select:none;
+  font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:rgba(230,200,120,.8);
+  background:rgba(10,8,2,.6);border:1px solid rgba(201,148,26,.45);border-radius:8px;padding:7px 11px;backdrop-filter:blur(2px)}
+#ludus-badge:active{transform:scale(.95)}
+#hg-tpanel{position:fixed;left:10px;top:86px;z-index:220;display:none;background:rgba(12,9,2,.97);
+  border:1px dashed rgba(201,148,26,.6);border-radius:12px;padding:11px;max-width:260px;max-height:70vh;overflow:auto;
+  box-shadow:0 10px 30px rgba(0,0,0,.6)}
+#hg-tpanel.on{display:block}
+#hg-tpanel h4{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(230,200,120,.7);margin:0 0 8px}
+#hg-tp-jumps{display:flex;flex-wrap:wrap;gap:6px}
+#hg-tp-jumps button,.hg-tp-row button{background:rgba(201,148,26,.14);border:1px solid rgba(201,148,26,.4);
+  color:#e8d9a8;border-radius:8px;padding:6px 9px;font-size:11px;cursor:pointer;font-family:inherit}
+#hg-tp-jumps button:hover,.hg-tp-row button:hover{background:rgba(201,148,26,.3)}
+.hg-tp-row{display:flex;gap:6px;margin-top:10px}
+</style>
 <button class="fs-btn" id="fs-btn" onclick="toggleFS()" title="Fullscreen">
   <svg id="fs-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
     <path d="M1,5 L1,1 L5,1M11,1 L15,1 L15,5M15,11 L15,15 L11,15M5,15 L1,15 L1,11"/>
@@ -1213,7 +1241,7 @@ const UI_STRINGS={
 cs:{btn_enter:'✦ &nbsp;Vstoupit do Bradavic&nbsp; ✦',btn_skip_intro:'Přeskočit ⏭',tip_music:'Přepnout hudbu',tip_fullscreen:'Celá obrazovka',teacher_mode:'📋 Režim učitele',name_label:'Představ se, kouzelníku:',name_ph:'Zadej své celé jméno…',btn_begin:'✦ &nbsp;Začni svou cestu&nbsp; ✦',save_note:'Tvůj postup hradem si pamatují portréty.',btn_new_game:'Začít znovu (smaže postup)',choose_house:'Vyber si svou kolej',house_sub:'Tvé barvy utvářejí tvou cestu',castle_hdr:'🏰 &nbsp;Bradavický hrad',btn_start_over:'↺ &nbsp;Začít znovu',btn_back_castle:'← Hrad',btn_skip_all:'Přeskočit vše →',boss_you:'Ty',btn_continue:'Pokračovat →',btn_complete:'Dokončit →',btn_draw_wand:'⚔ Vytas hůlku',btn_try_again:'↺ Zkusit znovu',btn_claim_cert:'⚡ Získej svůj certifikát',btn_return_castle:'Zpět na hrad →',rew_title:'Komnata dobyta!',rew_title_full:'⚡ Komnata dobyta! ⚡',rew_earned:'Získal jsi: ',btn_enter_station:'Vstoupit →',div_bonus:'— 🇨🇿 Bonusové kolo —',div_final:'— Finální zkouška —',coll_empty:'Dokonči každou komnatu a získej odměny.',coll_label:'Sebráno',q_no:'Otázka {n} z {t}',review_count:'🔁 Opakování {n} / {t}',review_round:'🔁 Opakovací kolo — kouzel k zopakování: {n}',rev_correct:'Správně: ',rev_correct_answer:'Správná odpověď: ',rev_correct_word:'Správné slovo: ',rev_correct_order:'Správné pořadí: ',rev_error_in:'Chyba v: ',rev_should_be:' → správně: ',ver_a:'Verze A',ver_b:'Verze B',cert_completed:'Dokončeno: ',cert_awarded:'Tento certifikát se uděluje',cert_grade_txt:'který dosáhl známky',cert_spell_lbl:'Tvé registrované podpisové kouzlo:',name_required:'Zadej prosím své jméno!',modal_reset_title:'Smazat postup?',modal_reset_body:'Tímto smažeš veškerý uložený postup v této hře na tomto zařízení.',modal_cancel:'Zrušit',modal_confirm:'Smazat'},
 en:{btn_enter:'✦ &nbsp;Enter Hogwarts&nbsp; ✦',btn_skip_intro:'Skip ⏭',tip_music:'Toggle music',tip_fullscreen:'Fullscreen',teacher_mode:'📋 Teacher Mode',name_label:'Identify yourself, wizard:',name_ph:'Enter your full name...',btn_begin:'✦ &nbsp;Begin Your Journey&nbsp; ✦',save_note:'Your progress through the castle is remembered by the portraits.',btn_new_game:'Start a new journey (clears progress)',choose_house:'Choose Your House',house_sub:'Your colours will shape your journey',castle_hdr:'🏰 &nbsp;Hogwarts Castle',btn_start_over:'↺ &nbsp;Start over',btn_back_castle:'← Castle',btn_skip_all:'Skip All →',boss_you:'You',btn_continue:'Continue →',btn_complete:'Complete →',btn_draw_wand:'⚔ Draw Your Wand',btn_try_again:'↺ Try Again',btn_claim_cert:'⚡ Claim Your Certificate',btn_return_castle:'Return to the Castle →',rew_title:'Chamber Conquered!',rew_title_full:'⚡ Chamber Conquered! ⚡',rew_earned:'You have earned: ',btn_enter_station:'Enter →',div_bonus:'— 🇨🇿 Bonus Round —',div_final:'— Final Trial —',coll_empty:'Complete each chamber to collect rewards.',coll_label:'Collected',q_no:'Question {n} of {t}',review_count:'🔁 Review {n} / {t}',review_round:'🔁 Review Round — spells to revisit: {n}',rev_correct:'Correct: ',rev_correct_answer:'Correct answer: ',rev_correct_word:'Correct word: ',rev_correct_order:'Correct order: ',rev_error_in:'Error in: ',rev_should_be:' → should be: ',ver_a:'Version A',ver_b:'Version B',cert_completed:'Completed: ',cert_awarded:'This certificate is awarded to',cert_grade_txt:'who has achieved the grade of',cert_spell_lbl:'Your Registered Signature Spell:',name_required:'Please enter your name!',modal_reset_title:'Reset progress?',modal_reset_body:'This will erase all saved progress for this game on this device.',modal_cancel:'Cancel',modal_confirm:'Reset'}
 };
-const UI_LANG=(function(){const meta=GAME_CONTENT.meta||{},lg=(meta.lang&&meta.lang.ui)||'';return (lg==='cs'||lg==='en')?lg:'cs';})();
+let UI_LANG=(function(){const meta=GAME_CONTENT.meta||{},lg=(meta.lang&&meta.lang.ui)||'';return (lg==='cs'||lg==='en')?lg:'cs';})();
 function t(k,v){var s=(UI_STRINGS[UI_LANG]&&UI_STRINGS[UI_LANG][k]);if(s==null)s=UI_STRINGS.cs[k];if(s==null)s=UI_STRINGS.en[k];if(s==null)s=k;if(v){for(var p in v)s=s.split('{'+p+'}').join(v[p]);}return s;}
 
 function selfTestGame(){
@@ -1247,7 +1275,7 @@ const I18N_DOM=[['#cine-go','btn_enter'],['#cine-skip','btn_skip_intro'],['#mute
 function applyI18n(){for(var i=0;i<I18N_DOM.length;i++){var sel=I18N_DOM[i][0],key=I18N_DOM[i][1],attr=I18N_DOM[i][2];var el=document.querySelector(sel);if(!el)continue;if(attr)el.setAttribute(attr,t(key));else el.innerHTML=t(key);}}
 const HOUSES=GAME_CONTENT.houses;
 const STATIONS=GAME_CONTENT.stations;
-const TEACHER=(GAME_CONTENT.meta&&GAME_CONTENT.meta.teacher)||'';
+/* (aktivace učitele jménem odstraněna při unifikaci LUDUS) */
 const SAVE_KEY=(GAME_CONTENT.meta&&GAME_CONTENT.meta.saveKey)||'hga_v2';
 function applyMeta(){
   const m=GAME_CONTENT.meta||{};
@@ -1260,6 +1288,46 @@ function applyMeta(){
 }
 applyMeta();
 applyThemeVariant();
+/* ═══ LUDUS unifikace: učitel přes 3× ťuk na LUDUS / ?teacher=1 + panel se skoky ═══ */
+function hgEnableTeacher(on){
+  G.teacher=(on===undefined)?true:!!on;
+  const tb=document.getElementById('t-banner');if(tb)tb.style.display=G.teacher?'block':'none';
+  const sk=document.getElementById('skip-btn');if(sk)sk.style.display=G.teacher?'block':'none';
+  if(!G.teacher){const p=document.getElementById('hg-tpanel');if(p)p.classList.remove('on');}
+}
+function hgPanelToggle(){
+  if(!G.teacher)return;
+  const p=document.getElementById('hg-tpanel');
+  if(!p.classList.contains('on')) hgBuildJumps();
+  p.classList.toggle('on');
+}
+function hgBuildJumps(){
+  const box=document.getElementById('hg-tp-jumps'); if(!box)return; box.innerHTML='';
+  const add=(label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=label;
+    b.onclick=()=>{try{fn();}catch(e){}};box.appendChild(b);}; /* skoky panel nezavírají */
+  add(UI_LANG==='en'?'Intro':'Úvod',()=>show('intro',true));
+  add(UI_LANG==='en'?'Houses':'Koleje',()=>show('house',true));
+  add(UI_LANG==='en'?'Castle':'Hrad',()=>{renderMap();show('map',true);});
+  (STATIONS||[]).forEach((st,i)=>add((i+1)+'. '+(st.short||st.name||('#'+(i+1))),()=>openStation(i)));
+  add(UI_LANG==='en'?'Certificate':'Certifikát',()=>showCert());
+}
+function hgToggleLang(){
+  UI_LANG=(UI_LANG==='cs')?'en':'cs';
+  document.documentElement.lang=UI_LANG;
+  applyI18n(); hgBuildJumps();
+  const lb=document.getElementById('hg-lang-btn'); if(lb)lb.textContent='Jazyk: '+(UI_LANG==='cs'?'EN':'CS');
+  const hh=document.getElementById('hg-tp-h'); if(hh)hh.textContent=(UI_LANG==='en'?'Teacher preview — jumps':'Náhled učitele — skoky');
+  const cb=document.getElementById('hg-close-btn'); if(cb)cb.textContent=(UI_LANG==='en'?'✕ Close':'✕ Zavřít');
+  try{ if(document.getElementById('map').classList.contains('on')) renderMap(); }catch(e){}
+  if(window.__ludusLayerLang)window.__ludusLayerLang();
+}
+(function(){ /* 3× ťuk na LUDUS badge + ?teacher=1 */
+  let taps=0,tm=0;
+  const el=document.getElementById('ludus-badge');
+  if(el)el.addEventListener('click',()=>{const now=Date.now();if(now-tm>900)taps=0;tm=now;
+    if(++taps>=3){taps=0;hgEnableTeacher(!G.teacher);}});
+  try{ if(/[?&]teacher=1\b/.test(location.search)) setTimeout(()=>hgEnableTeacher(true),0); }catch(e){}
+})();
 applyI18n();
 let G={name:'',teacher:false,house:'',done:Array(STATIONS.length).fill(false),finished:false,finDate:'',cur:null,qIdx:0,answered:false,wbFill:'',wrongQs:[],reviewMode:false,reviewQueue:[],reviewPos:0};
 function progressPayload(){return {v:1,apiVersion:'ludus-progress-api-v1',engineId:LUDUS_GAME_MANIFEST.engineId,gameId:LUDUS_GAME_MANIFEST.gameId,mechanicId:LUDUS_GAME_MANIFEST.mechanicId,ts:Date.now(),name:G.name,house:G.house,done:G.done,finished:G.finished,finDate:G.finDate};}
@@ -1554,8 +1622,7 @@ function typeWriter(el,text,done){
 function beginJourney(){
   const inp=document.getElementById('name-in');const n=inp.value.trim();
   if(!n){inp.classList.add('shake');inp.style.borderColor='rgba(196,68,68,.7)';inp.placeholder=t('name_required');setTimeout(()=>{inp.classList.remove('shake');inp.style.borderColor='';inp.placeholder=t('name_ph');},600);return;}
-  G.name=n;G.teacher=(n===TEACHER);
-  if(G.teacher){document.getElementById('t-banner').style.display='block';document.getElementById('skip-btn').style.display='block';}
+  G.name=n; /* Aktivace učitele jménem zrušena (unifikace LUDUS) — 3× ťuk na logo LUDUS nebo ?teacher=1. */
   show('house');
 }
 let _resetRequested=false;
@@ -5188,5 +5255,184 @@ function patronusSvg(house){
   }
 })();
 </script>
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return !_muted; }catch(e){ return true; } },
+  setSound: function(on){ try{ if(!!on === !_muted) return; toggleMute(); }catch(e){} },
+  getLang: function(){ try{ return UI_LANG; }catch(e){ return "cs"; } },
+  save: function(){ try{ if(!G || !G.name) return false; save(); return true; }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{
+    var msg=(typeof UI_LANG!=="undefined"&&UI_LANG==="en")?"Really start over? Progress will be erased.":"Opravdu začít znovu? Postup bude smazán.";
+    if(!confirm(msg)) return; resetGameState();
+  }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<!-- footer vynechán — hra už vlastní footer má -->
+<audio id="ludus-soundtrack" loop preload="auto"></audio><!-- cine vynechán — hra má vlastní intro systém -->
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academy" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
 </body>
 </html>

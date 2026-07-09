@@ -1,7 +1,7 @@
 {
   "schemaVersion": "ludus-engines-manifest-v2",
-  "updatedAt": "2026-06-25",
-  "note": "Kanonický katalog enginů a plánovaných světů. Ready/draft/planned se promítá do LUDUSu z manifestu; index obsahuje jen fallback pro offline/file:// režim.",
+  "updatedAt": "2026-07-04",
+  "note": "Kanonický katalog enginů a plánovaných světů. Statusy: ready (hotová) — jen Hogwarts; draft (rozpracovaná) — všechny ostatní enginy se souborem; planned (plánovaná) — světy bez enginu. Statusy se promítají do LUDUSu z tohoto manifestu.",
   "statusLabels": {
     "ready": {
       "cs": "Hotová",
@@ -136,7 +136,7 @@
       "url": "engines/star-wars.html",
       "contentTopicId": "template",
       "addedVersion": "1.3.0",
-      "status": "ready",
+      "status": "draft",
       "flowModel": "mapStationsFinalChallenge",
       "engineKind": "single-html",
       "supportedMechanics": [
@@ -227,7 +227,7 @@
       "contentTopicId": "template",
       "flowModel": "mapStationsFinalChallenge",
       "addedVersion": "1.0.0-ludus.1",
-      "status": "ready",
+      "status": "draft",
       "supportedMechanics": [
         "quest"
       ],
@@ -305,6 +305,324 @@
           "hasProgress"
         ]
       }
+    },
+    {
+      "id": "chronos-timeline",
+      "gameKey": "timepatrol:timeline",
+      "skinId": "timepatrol",
+      "gameId": "chronos",
+      "gameIdAliases": [
+        "timepatrol",
+        "chronos-timeline"
+      ],
+      "mechanicId": "timeline",
+      "name": "Časová hlídka",
+      "title": {
+        "cs": "Časová hlídka",
+        "en": "Time Patrol",
+        "officialCs": "Návrat do budoucnosti / Doctor Who",
+        "officialEn": "Back to the Future / Doctor Who"
+      },
+      "file": "chronos.html",
+      "url": "engines/chronos.html",
+      "contentTopicId": "template",
+      "flowModel": "timelineRestore",
+      "supportedMechanics": [
+        "timeline"
+      ],
+      "supports": [
+        "ordering"
+      ],
+      "supportedExerciseTypes": [
+        "sequence",
+        "mcq",
+        "trueFalse",
+        "wordBank",
+        "classify"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en",
+        "es"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "frostline-detective",
+      "gameKey": "frostline:detective",
+      "skinId": "frostline",
+      "gameId": "frostline",
+      "gameIdAliases": [
+        "orient-express",
+        "frostline-detective"
+      ],
+      "mechanicId": "detective",
+      "name": "Vražda v Zimním expresu",
+      "title": {
+        "cs": "Vražda v Zimním expresu",
+        "en": "The Frostline Express",
+        "officialCs": "Vražda v Orient expresu",
+        "officialEn": "Murder on the Orient Express"
+      },
+      "file": "orient-express.html",
+      "url": "engines/orient-express.html",
+      "contentTopicId": "template",
+      "flowModel": "roomsCluesAccusation",
+      "supportedMechanics": [
+        "detective",
+        "deduction"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "yesno",
+        "wordbank",
+        "classify"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank",
+        "classify"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "illusion-detective",
+      "gameKey": "illusion:detective",
+      "skinId": "illusion",
+      "gameId": "simulakrum",
+      "gameIdAliases": [
+        "matrix",
+        "illusion-detective"
+      ],
+      "mechanicId": "detective",
+      "name": "Případ Simulakrum",
+      "title": {
+        "cs": "Případ Simulakrum",
+        "en": "The Simulacrum Case",
+        "officialCs": "Matrix: Anomálie",
+        "officialEn": "Matrix: Anomaly"
+      },
+      "file": "matrix.html",
+      "url": "engines/matrix.html",
+      "contentTopicId": "template",
+      "flowModel": "scenesEvidenceAccusation",
+      "supportedMechanics": [
+        "detective"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "yesno",
+        "wordbank"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "maple-escape",
+      "gameKey": "maple:escape",
+      "skinId": "maple",
+      "gameId": "maple",
+      "gameIdAliases": [
+        "stranger-things",
+        "maple-escape"
+      ],
+      "mechanicId": "escape",
+      "name": "Únik z Javorové rokle",
+      "title": {
+        "cs": "Únik z Javorové rokle",
+        "en": "Maple Falls Escape",
+        "officialCs": "Stranger Things",
+        "officialEn": "Stranger Things"
+      },
+      "file": "stranger-things.html",
+      "url": "engines/stranger-things.html",
+      "contentTopicId": "template",
+      "flowModel": "roomsCodesFinalLock",
+      "supportedMechanics": [
+        "escape"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "yesno",
+        "wordbank"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "laughworks-lab",
+      "gameKey": "laughworks:lab",
+      "skinId": "laughworks",
+      "gameId": "laughworks",
+      "gameIdAliases": [
+        "laughworks-lab"
+      ],
+      "mechanicId": "lab",
+      "name": "Továrna na smích",
+      "title": {
+        "cs": "Továrna na smích",
+        "en": "Laughworks Factory",
+        "officialCs": "Příšerky s.r.o.",
+        "officialEn": "Monsters, Inc."
+      },
+      "file": "laughworks.html",
+      "url": "engines/laughworks.html",
+      "contentTopicId": "template",
+      "flowModel": "stationsSynthesis",
+      "supportedMechanics": [
+        "lab"
+      ],
+      "supports": [
+        "mc4",
+        "wordbank",
+        "classify"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "wordBank",
+        "classify",
+        "sequence"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "wild-arena",
+      "gameKey": "wild:arena",
+      "skinId": "wild",
+      "gameId": "jumanji",
+      "gameIdAliases": [
+        "jumanji",
+        "wild-arena"
+      ],
+      "mechanicId": "arena",
+      "name": "Zakletá aréna",
+      "title": {
+        "cs": "Zakletá aréna",
+        "en": "The Wild Arena",
+        "officialCs": "Jumanji · Aréna",
+        "officialEn": "Jumanji · Arena"
+      },
+      "file": "jumanji.html",
+      "url": "engines/jumanji.html",
+      "contentTopicId": "template",
+      "flowModel": "arenaRoundsBoss",
+      "supportedMechanics": [
+        "arena"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "yesno",
+        "wordbank"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "addedVersion": "1.11.0",
+      "status": "draft",
+      "engineKind": "single-html",
+      "brandModes": [
+        "official",
+        "safe"
+      ]
+    },
+    {
+      "id": "lotr-grammar-quest-en",
+      "variantOf": "lotr-grammar-quest",
+      "name": "Middle-earth: A Grammar Quest (EN varianta, prázdný hudební slot)",
+      "file": "middle-earth-en.html",
+      "url": "engines/middle-earth-en.html",
+      "status": "draft",
+      "engineKind": "single-html",
+      "note": "Anglická varianta enginu sundered:quest. Bez gameKey — v katalogu UI se nezobrazuje, kanonický engine je lotr.html."
     },
     {
       "id": "minions-collection-planned",
@@ -397,9 +715,9 @@
         "monsters-inc"
       ],
       "mechanicId": "roleSim",
-      "name": "Továrna na smích",
+      "name": "Příšerky: Na směně (role-play)",
       "title": {
-        "cs": "Továrna na smích",
+        "cs": "Příšerky: Na směně",
         "en": "Laughworks Factory",
         "officialCs": "Příšerky s.r.o.",
         "officialEn": "Monsters, Inc."

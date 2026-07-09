@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Detektivka · LUDUS</title>
+<!--
+  LUDUS ENGINE — typ: DETEKTIVKA (vyšetřování → důkazy → obvinění)
+  Skin: Matrix (interní "originál") ↔ Simulakrum / The Simulacrum Case (bezpečná, default)
+  Kontrakt: čte window.LUDUS_CONTENT (v2, schema 2); fallback window.GAME_CONTENT (v1); fallback vestavěný SAMPLE.
+  Typy úloh (klíče se NIKDY nepřejmenovávají): mc4, mc2, yesno, wordbank, classify
+  Obrázky: window.LUDUS_IMAGES {hero, creature, roomBg} — interop s ostatními enginy.
+  Standalone, offline, bez závislostí, systémové fonty, UTF-8.
+  Re-injekce z builderu: window.LUDUS_LOAD(content) přepíše obsah a restartuje.
+  Učitel: trojklik na logo LUDUS nebo ?teacher=1.
+  Revize 07/2026: oprava ztráty uloženého postupu při bootu (setSound → saveState),
+  escapování dešifrovací animace, opravená breathe animace odhalení, razítko na výsledkové
+  kartě, barevná známka, vyhodnocení wordbank/classify po položkách, boot řádky intra,
+  funkční holdMs, pulz počítadla důkazů, aria-live, dynamický titulek.
+-->
+<style>
+/* =========================================================================
+   PROMĚNNÉ / SKINY
+   ========================================================================= */
+:root{
+  --bg:#0b1020; --bg2:#141b30; --panel:#161d33; --ink:#e7ecff; --muted:#8b93b8;
+  --acc:#ffb454; --acc2:#38e0d8; --danger:#ff5d73; --ok:#4be08b;
+  --line:#243049; --glow:rgba(56,224,216,.32); --tab:#1d2742;
+  --rain:rgba(56,224,216,.0); /* v bezpečné verzi déšť skoro neviditelný */
+  --string:#ff5d73;
+  --mono:ui-monospace,"SFMono-Regular","Cascadia Code","JetBrains Mono",Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+body[data-skin="orig"]{
+  --bg:#000400; --bg2:#04110a; --panel:#05130b; --ink:#c9ffd8; --muted:#3f9c5e;
+  --acc:#00ff66; --acc2:#1cffa0; --danger:#ff2d4a; --ok:#00ff66;
+  --line:#0c3a21; --glow:rgba(0,255,102,.40); --tab:#062a17;
+  --rain:rgba(0,255,102,.85);
+  --string:#00ff66;
+}
+
+/* =========================================================================
+   RESET / ZÁKLAD
+   ========================================================================= */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden; line-height:1.5; transition:background .5s ease, color .5s ease;
+}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--acc2); outline-offset:2px; border-radius:6px}
+::selection{background:var(--acc); color:#000}
+
+/* =========================================================================
+   ATMOSFÉRICKÉ VRSTVY
+   ========================================================================= */
+#fx{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+#rain{position:absolute; inset:0; width:100%; height:100%; opacity:.0; transition:opacity .8s ease}
+body[data-skin="orig"] #rain{opacity:.9}
+body[data-skin="safe"] #rain{opacity:.35}
+.scan{position:absolute; inset:0; background:repeating-linear-gradient(0deg,
+  rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.22) 3px, rgba(0,0,0,0) 4px);
+  mix-blend-mode:multiply; opacity:.5; animation:scanmove 8s linear infinite}
+.grain{position:absolute; inset:-50%; opacity:.05; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation:grain 1.2s steps(4) infinite}
+.vignette{position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 35%,
+  rgba(0,0,0,0) 40%, rgba(0,0,0,.62) 100%)}
+.glowtop{position:absolute; top:-20%; left:50%; transform:translateX(-50%);
+  width:80vw; height:50vh; background:radial-gradient(closest-side, var(--glow), transparent 70%);
+  filter:blur(20px); opacity:.7}
+@keyframes scanmove{to{background-position:0 8px}}
+@keyframes grain{0%{transform:translate(0,0)}100%{transform:translate(-6%,4%)}}
+
+/* =========================================================================
+   TOPBAR
+   ========================================================================= */
+.topbar{position:fixed; top:0; left:0; right:0; height:48px; z-index:30;
+  display:flex; align-items:center; gap:8px; padding:0 12px;
+  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.0));
+  backdrop-filter:blur(6px)}
+.brand{display:flex; align-items:center; gap:9px; font-family:var(--mono);
+  font-size:13px; letter-spacing:.14em; color:var(--ink); cursor:pointer;
+  user-select:none; padding:6px 4px; text-transform:uppercase}
+.brand .dot{width:10px; height:10px; border-radius:50%; background:var(--acc2);
+  box-shadow:0 0 10px var(--acc2); animation:pulse 2.2s ease-in-out infinite}
+.brand b{color:var(--acc); font-weight:700}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.spacer{flex:1}
+.iconbtn{height:34px; min-width:34px; padding:0 9px; border:1px solid var(--line);
+  background:rgba(255,255,255,.03); color:var(--ink); border-radius:9px;
+  font-family:var(--mono); font-size:12px; letter-spacing:.06em; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  transition:border-color .2s, background .2s}
+.iconbtn:hover{border-color:var(--acc2); background:rgba(255,255,255,.06)}
+.iconbtn.live{border-color:var(--acc); color:var(--acc)}
+#btnBoard{display:none}
+#btnBoard.show{display:inline-flex}
+#btnBoard .ct{display:inline-block; min-width:18px; padding:0 5px; border-radius:20px;
+  background:var(--acc); color:#000; font-weight:700; font-size:11px}
+#btnBoard .ct.pop{animation:ctpop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes ctpop{0%{transform:scale(1)}45%{transform:scale(1.55)}100%{transform:scale(1)}}
+
+/* =========================================================================
+   UČITELSKÝ PRUH (skrytý před studenty)
+   ========================================================================= */
+#teacherBar{position:fixed; top:48px; left:0; right:0; z-index:29; display:none;
+  flex-wrap:wrap; align-items:center; gap:8px; padding:8px 12px;
+  background:linear-gradient(180deg, rgba(120,30,40,.30), rgba(120,30,40,.06));
+  border-bottom:1px solid var(--line); backdrop-filter:blur(6px)}
+#teacherBar.show{display:flex}
+#teacherBar .tlabel{font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--danger)}
+#teacherBar select,#teacherBar .tbtn{height:30px; border:1px solid var(--line);
+  background:var(--bg2); color:var(--ink); border-radius:7px; font-family:var(--mono);
+  font-size:12px; padding:0 8px; cursor:pointer}
+#teacherBar .tbtn:hover{border-color:var(--danger)}
+
+/* =========================================================================
+   HERNÍ PLOCHA
+   ========================================================================= */
+#screen{position:relative; z-index:10; max-width:760px; margin:0 auto;
+  padding:74px 16px 40px; min-height:100vh; display:flex; flex-direction:column}
+.fade{animation:fade .45s ease both}
+@keyframes fade{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+
+/* karta / panel ve stylu spisu */
+.panel{position:relative; background:linear-gradient(180deg, var(--panel), var(--bg2));
+  border:1px solid var(--line); border-radius:14px; padding:20px 18px 18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.panel.tabbed{margin-top:18px}
+.filetab{position:absolute; top:-15px; left:16px; height:26px; padding:0 12px;
+  display:inline-flex; align-items:center; gap:8px; background:var(--tab);
+  border:1px solid var(--line); border-bottom:none; border-radius:8px 8px 0 0;
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--acc)}
+.filetab::before{content:""; width:7px; height:7px; border-radius:2px; background:var(--acc);
+  box-shadow:0 0 8px var(--acc)}
+
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--acc2); margin:0 0 6px}
+h1.title{font-size:clamp(26px,7vw,44px); line-height:1.04; margin:0 0 6px; font-weight:800;
+  letter-spacing:-.01em}
+h2.scene{font-size:clamp(19px,5vw,26px); margin:2px 0 4px; font-weight:800}
+.lead{color:var(--muted); margin:6px 0 0; font-size:15px}
+.mono{font-family:var(--mono)}
+
+/* =========================================================================
+   HRDINSKÁ SCÉNA (úvod)
+   ========================================================================= */
+.hero{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line);
+  aspect-ratio:16/10; background:#000; margin-top:8px}
+.hero .art,.hero .photo{position:absolute; inset:0; width:100%; height:100%}
+.hero .photo{object-fit:cover; display:none; transform:scale(1.06); animation:kenburns 18s ease-in-out infinite alternate}
+.hero.has-photo .photo{display:block}
+.hero.has-photo .art{display:none}
+.hero .grad{position:absolute; inset:0; background:linear-gradient(180deg,
+  rgba(0,0,0,.05), rgba(0,0,0,.15) 55%, rgba(0,0,0,.85)); z-index:2}
+.hero .cap{position:absolute; left:16px; right:16px; bottom:14px; z-index:3}
+@keyframes kenburns{from{transform:scale(1.04) translate(0,0)}to{transform:scale(1.14) translate(-2%,-2%)}}
+
+.namewrap{margin-top:16px}
+.lbl{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--muted); margin:0 0 6px}
+.field{width:100%; height:48px; padding:0 14px; background:var(--bg); color:var(--ink);
+  border:1px solid var(--line); border-radius:11px; font-size:16px; font-family:var(--sans)}
+.field:focus{border-color:var(--acc2)}
+
+/* =========================================================================
+   TLAČÍTKA
+   ========================================================================= */
+.btn{appearance:none; border:1px solid var(--acc); background:transparent; color:var(--acc);
+  font-family:var(--mono); font-size:14px; letter-spacing:.06em; padding:13px 18px;
+  border-radius:11px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;
+  transition:transform .12s, box-shadow .25s, background .2s; text-transform:uppercase}
+.btn::before{content:"▸"; color:var(--acc); transition:transform .2s}
+.btn:hover{background:color-mix(in srgb, var(--acc) 12%, transparent); box-shadow:0 0 22px var(--glow)}
+.btn:hover::before{transform:translateX(3px)}
+.btn:active{transform:translateY(1px)}
+.btn.solid{background:var(--acc); color:#000; font-weight:700}
+.btn.solid::before{color:#000}
+.btn.ghost{border-color:var(--line); color:var(--ink)}
+.btn.ghost::before{content:none}
+.btn.block{width:100%; justify-content:center; padding:15px}
+.btn.lg{font-size:15px; padding:16px 22px}
+.btn[disabled]{opacity:.4; cursor:not-allowed; box-shadow:none}
+.btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+
+/* =========================================================================
+   PRŮBĚH / KROKY
+   ========================================================================= */
+.prog{display:flex; align-items:center; gap:10px; margin:2px 0 0}
+.prog .bar{flex:1; height:6px; background:var(--line); border-radius:20px; overflow:hidden}
+.prog .bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--acc2),var(--acc));
+  border-radius:20px; transition:width .5s ease; box-shadow:0 0 10px var(--glow)}
+.prog .pct{font-family:var(--mono); font-size:12px; color:var(--muted); min-width:64px; text-align:right}
+
+/* =========================================================================
+   ÚLOHY
+   ========================================================================= */
+.qhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:4px}
+.qnum{font-family:var(--mono); font-size:12px; letter-spacing:.1em; color:var(--acc2)}
+.qtext{font-size:clamp(17px,4.4vw,21px); font-weight:700; margin:8px 0 16px; line-height:1.35}
+.opts{display:grid; gap:10px}
+.opt{display:flex; align-items:center; gap:12px; padding:14px 14px; border:1px solid var(--line);
+  background:var(--bg2); border-radius:12px; cursor:pointer; font-size:16px; text-align:left;
+  transition:border-color .15s, background .15s, transform .1s; color:var(--ink)}
+.opt:hover{border-color:var(--acc2); background:rgba(255,255,255,.03)}
+.opt:active{transform:scale(.995)}
+.opt .key{flex:none; width:28px; height:28px; border-radius:7px; display:grid; place-items:center;
+  font-family:var(--mono); font-size:13px; background:var(--bg); border:1px solid var(--line); color:var(--muted)}
+.opt.correct{border-color:var(--ok); background:color-mix(in srgb,var(--ok) 14%, transparent)}
+.opt.correct .key{background:var(--ok); color:#000; border-color:var(--ok)}
+.opt.wrong{border-color:var(--danger); background:color-mix(in srgb,var(--danger) 14%, transparent)}
+.opt.wrong .key{background:var(--danger); color:#000; border-color:var(--danger)}
+.opt.lock{pointer-events:none; opacity:.85}
+
+/* wordbank */
+.assemble{min-height:54px; border:1px dashed var(--line); border-radius:12px; padding:10px;
+  display:flex; flex-wrap:wrap; gap:8px; background:var(--bg); margin-bottom:12px}
+.assemble:empty::before{content:attr(data-ph); color:var(--muted); font-size:14px; font-family:var(--mono)}
+.bank{display:flex; flex-wrap:wrap; gap:8px}
+.tile{padding:9px 13px; border:1px solid var(--line); background:var(--bg2); border-radius:9px;
+  cursor:pointer; font-size:15px; transition:transform .1s, border-color .15s; color:var(--ink)}
+.tile:hover{border-color:var(--acc2)}
+.tile:active{transform:scale(.96)}
+.tile.used{opacity:.25; pointer-events:none}
+.assemble .tile{border-color:var(--acc2)}
+.assemble .tile.good{border-color:var(--ok); color:var(--ok); opacity:1}
+.assemble .tile.bad{border-color:var(--danger); color:var(--danger); opacity:1}
+
+/* classify */
+.cols{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.col{border:1px solid var(--line); border-radius:12px; background:var(--bg); padding:10px; min-height:90px}
+.col h4{margin:0 0 8px; font-family:var(--mono); font-size:12px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--acc2); text-align:center}
+.col .drop{display:flex; flex-direction:column; gap:7px; min-height:50px}
+.pool{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.chip{padding:9px 12px; border:1px solid var(--line); background:var(--bg2); border-radius:9px;
+  cursor:pointer; font-size:14px; color:var(--ink); transition:border-color .15s, transform .1s}
+.chip:hover{border-color:var(--acc2)} .chip:active{transform:scale(.96)}
+.chip.placed{width:100%; text-align:center}
+.chip.good{border-color:var(--ok); color:var(--ok)}
+.chip.bad{border-color:var(--danger); color:var(--danger)}
+
+/* feedback */
+.fb{margin-top:14px; padding:12px 14px; border-radius:11px; font-size:14px; display:none;
+  border:1px solid var(--line); background:var(--bg)}
+.fb.show{display:block; animation:fade .3s both}
+.fb.good{border-color:var(--ok); color:var(--ok)}
+.fb.bad{border-color:var(--danger); color:var(--danger)}
+.fb b{font-family:var(--mono)}
+
+/* =========================================================================
+   DŮKAZ — odhalení (PODPISOVÝ PRVEK: dešifrování / psací stroj)
+   ========================================================================= */
+.cluepop{margin-top:16px; border:1px solid var(--acc2); border-radius:12px; overflow:hidden;
+  background:linear-gradient(180deg, color-mix(in srgb,var(--acc2) 8%, var(--bg2)), var(--bg2));
+  display:none}
+.cluepop.show{display:block; animation:cluein .5s both}
+@keyframes cluein{from{opacity:0; transform:translateY(8px) scale(.98)}to{opacity:1; transform:none}}
+.cluepop .ch{display:flex; align-items:center; gap:9px; padding:9px 12px;
+  border-bottom:1px solid var(--line); font-family:var(--mono); font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--acc2)}
+.cluepop .ch .pin{width:9px; height:9px; border-radius:50%; background:var(--string);
+  box-shadow:0 0 9px var(--string)}
+.cluepop .cb{padding:13px 14px; font-size:15px; min-height:24px}
+.cluepop .cb .cur{color:var(--acc2)}
+
+/* =========================================================================
+   DŮKAZNÍ TABULE (modal)
+   ========================================================================= */
+.modal{position:fixed; inset:0; z-index:60; display:none; align-items:flex-end; justify-content:center;
+  background:rgba(0,0,0,.6); backdrop-filter:blur(4px)}
+.modal.show{display:flex; animation:fade .25s both}
+.sheet{width:100%; max-width:760px; max-height:86vh; overflow:auto; background:var(--bg2);
+  border:1px solid var(--line); border-radius:18px 18px 0 0; padding:18px 16px 26px}
+.sheet .sh{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px}
+.sheet h3{margin:0; font-size:18px; font-family:var(--mono); letter-spacing:.08em; text-transform:uppercase}
+.board{position:relative; margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.note{position:relative; border:1px solid var(--line); border-radius:10px; padding:12px;
+  background:linear-gradient(180deg,var(--panel),var(--bg)); box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.note::before{content:""; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+  width:11px; height:11px; border-radius:50%; background:var(--string); box-shadow:0 0 10px var(--string)}
+.note .nlabel{font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--acc2);
+  text-transform:uppercase; margin-bottom:5px}
+.note p{margin:0; font-size:14px}
+.board .empty{grid-column:1/-1; text-align:center; color:var(--muted); font-family:var(--mono);
+  font-size:13px; padding:24px 0}
+
+/* =========================================================================
+   OBVINĚNÍ (finále = "zámek")
+   ========================================================================= */
+.suspects{display:grid; gap:12px; margin-top:14px}
+@media(min-width:560px){.suspects{grid-template-columns:1fr 1fr}}
+.suspect{display:flex; gap:12px; align-items:center; padding:13px; border:1px solid var(--line);
+  border-radius:13px; background:var(--bg2); cursor:pointer; transition:border-color .15s, transform .1s}
+.suspect:hover{border-color:var(--acc)} .suspect:active{transform:scale(.99)}
+.suspect.sel{border-color:var(--acc); box-shadow:0 0 18px var(--glow)}
+.suspect .av{flex:none; width:46px; height:46px; border-radius:10px; background:var(--bg);
+  border:1px solid var(--line); display:grid; place-items:center; overflow:hidden}
+.suspect .av svg{width:100%; height:100%}
+.suspect .nm{font-weight:700; font-size:16px}
+.suspect .ds{font-size:13px; color:var(--muted)}
+
+/* odhalení pachatele / antagonista */
+.reveal{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line);
+  aspect-ratio:16/11; background:#000; margin-top:6px}
+.reveal .art,.reveal .photo{position:absolute; inset:0; width:100%; height:100%}
+.reveal .photo{object-fit:cover; display:none}
+.reveal.has-photo .photo{display:block; will-change:filter,transform,clip-path;
+  animation:emerge 2.3s cubic-bezier(.2,.7,.2,1) both, breathe 5s ease-in-out 2.3s infinite}
+.reveal.has-photo .art{display:none}
+.reveal.win{border-color:color-mix(in srgb,var(--ok) 55%, var(--line));
+  box-shadow:0 0 34px color-mix(in srgb,var(--ok) 30%, transparent)}
+.reveal.lose{border-color:color-mix(in srgb,var(--danger) 55%, var(--line));
+  box-shadow:0 0 34px color-mix(in srgb,var(--danger) 28%, transparent)}
+/* fotka pachatele se zhmotní z dat: řezy + chromatická aberace, která se zaostří */
+@keyframes emerge{
+  0%{ clip-path:inset(46% 0 46% 0); transform:scale(1.22);
+      filter:brightness(.08) contrast(2.2) blur(9px) drop-shadow(4px 0 0 #ff00d4) drop-shadow(-4px 0 0 #00fff2); }
+  14%{ clip-path:inset(2% 0 70% 0); transform:scale(1.18) translateX(-1.5%);
+      filter:brightness(1.7) contrast(1.5) blur(3px) drop-shadow(5px 0 0 #ff00d4) drop-shadow(-5px 0 0 #00fff2); }
+  30%{ clip-path:inset(62% 0 8% 0); transform:scale(1.14) translateX(2%); filter:brightness(.9) contrast(1.4) blur(2px); }
+  46%{ clip-path:inset(24% 0 30% 0); transform:scale(1.12) translateX(-1%);
+      filter:brightness(1.15) contrast(1.25) blur(1.5px) drop-shadow(2px 0 0 #ff00d4) drop-shadow(-2px 0 0 #00fff2); }
+  64%{ clip-path:inset(0 0 0 0); transform:scale(1.08); filter:brightness(1.05) contrast(1.1) blur(.5px); }
+  100%{ clip-path:inset(0 0 0 0); transform:scale(1.04); filter:none; }
+}
+/* SVG fallback antagonista – také dramatický nástup */
+.reveal .art{animation:artin 1.5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes artin{0%{opacity:0; transform:scale(1.12); filter:blur(12px) brightness(2.2)}
+  60%{opacity:1; filter:blur(1px) brightness(1.2)} 100%{opacity:1; transform:scale(1); filter:none}}
+.reveal .grad{position:absolute; inset:0; z-index:2;
+  background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.2) 60%,rgba(0,0,0,.9))}
+/* CRT sken přes odhalení + jeden dešifrovací průlet */
+.reveal::after{content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.16) 3px, rgba(0,0,0,0) 4px);
+  mix-blend-mode:overlay; opacity:.5}
+.reveal::before{content:""; position:absolute; left:0; right:0; height:32%; z-index:3; pointer-events:none;
+  background:linear-gradient(180deg, rgba(120,255,170,0), rgba(120,255,170,.28), rgba(120,255,170,0));
+  filter:blur(2px); animation:decryptsweep 2.3s ease-in-out both}
+@keyframes decryptsweep{0%{top:-32%; opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%; opacity:0}}
+.reveal .cap{position:absolute; left:16px; right:16px; bottom:14px; z-index:4}
+.glitch{animation:glitch .3s steps(2) 5}
+@keyframes glitch{0%{transform:translate(0,0)}25%{transform:translate(-2px,1px)}
+  50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,1px)}100%{transform:translate(0,0)}}
+@keyframes breathe{0%,100%{transform:scale(1.04)}50%{transform:scale(1.075)}}
+
+/* =========================================================================
+   VÝSLEDKOVÁ KARTA (kompaktní, ≤ ~700px)
+   ========================================================================= */
+.result{max-width:520px; margin:6px auto 0}
+.rcard{position:relative; border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  background:linear-gradient(180deg,var(--panel),var(--bg2)); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.rcard .rtop{padding:16px 18px; border-bottom:1px dashed var(--line); display:flex;
+  align-items:center; justify-content:space-between; gap:12px}
+.rcard .rtop .who{font-weight:800; font-size:19px}
+.rcard .rtop .meta{font-family:var(--mono); font-size:11px; color:var(--muted); text-align:right; line-height:1.5}
+.rgrade{display:flex; align-items:center; gap:16px; padding:18px}
+.gbadge{flex:none; width:84px; height:84px; border-radius:18px; display:grid; place-items:center;
+  font-size:42px; font-weight:800; border:2px solid var(--acc); color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 8%, transparent); box-shadow:0 0 30px var(--glow)}
+.gbadge.g1,.gbadge.g2{border-color:var(--ok); color:var(--ok);
+  background:color-mix(in srgb,var(--ok) 9%, transparent);
+  box-shadow:0 0 30px color-mix(in srgb,var(--ok) 40%, transparent)}
+.gbadge.g4,.gbadge.g5{border-color:var(--danger); color:var(--danger);
+  background:color-mix(in srgb,var(--danger) 9%, transparent);
+  box-shadow:0 0 30px color-mix(in srgb,var(--danger) 32%, transparent)}
+/* razítko na spisu — přibouchne se po vykreslení karty */
+.stamp{position:absolute; top:12px; right:12px; z-index:4; padding:6px 12px 5px;
+  border:3px solid var(--ok); border-radius:8px; color:var(--ok);
+  font-family:var(--mono); font-weight:800; font-size:13px; letter-spacing:.2em;
+  text-transform:uppercase; pointer-events:none; opacity:0; mix-blend-mode:screen;
+  text-shadow:0 0 12px currentColor; transform:rotate(-14deg) scale(2.6);
+  animation:stampin .5s cubic-bezier(.2,1.3,.35,1) .65s forwards}
+.stamp.no{border-color:var(--danger); color:var(--danger)}
+@keyframes stampin{0%{opacity:0; transform:rotate(-14deg) scale(2.6)}
+  60%{opacity:1; transform:rotate(-8deg) scale(.94)}
+  100%{opacity:1; transform:rotate(-8deg) scale(1)}}
+.gmeta{flex:1}
+.gmeta .pts{font-family:var(--mono); font-size:13px; color:var(--muted)}
+.gmeta .big{font-size:30px; font-weight:800; margin:2px 0}
+.solved{margin:0 18px 16px; padding:11px 13px; border-radius:11px; font-family:var(--mono);
+  font-size:13px; border:1px solid var(--line); display:flex; align-items:center; gap:9px}
+.solved.yes{border-color:var(--ok); color:var(--ok)}
+.solved.no{border-color:var(--danger); color:var(--danger)}
+.review{max-width:520px; margin:16px auto 0}
+.rev{border:1px solid var(--line); border-radius:11px; padding:11px 13px; margin-bottom:9px; background:var(--bg2)}
+.rev .rq{font-size:14px; margin-bottom:5px}
+.rev .ra{font-family:var(--mono); font-size:12.5px}
+.rev .ra .me{color:var(--danger)} .rev .ra .ok{color:var(--ok)}
+.rev.good{border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
+
+/* =========================================================================
+   SPLASH / INTRO
+   ========================================================================= */
+#splash{position:fixed; inset:0; z-index:80; display:flex;
+  align-items:center; justify-content:center; cursor:pointer; overflow:hidden;
+  background:radial-gradient(circle at 50% 42%, rgba(0,0,0,.35), rgba(0,0,0,.82) 75%)}
+#splash.gone{opacity:0; pointer-events:none; transition:opacity .7s ease}
+#splashVideo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000}
+.splash-inner{position:relative; z-index:2; text-align:center; padding:24px; animation:splashin 1s ease both}
+@keyframes splashin{from{opacity:0; transform:scale(.94); filter:blur(6px)} to{opacity:1; transform:none; filter:none}}
+.splash-inner .boot{font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  color:var(--acc2); opacity:.85; min-height:40px; margin-bottom:12px; line-height:1.7; white-space:pre-line}
+.splash-inner .big{font-family:var(--mono); font-size:clamp(30px,9vw,64px); font-weight:800;
+  letter-spacing:.04em; color:var(--acc); text-shadow:0 0 36px var(--glow), 0 0 6px var(--glow)}
+.splash-inner .sub{font-family:var(--mono); font-size:13px; letter-spacing:.3em; color:var(--ink);
+  text-transform:uppercase; margin-top:14px; opacity:.0; animation:blink 1.6s ease-in-out 1.2s infinite}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+.skip{position:absolute; right:16px; bottom:16px; z-index:3}
+
+/* =========================================================================
+   POMOCNÉ
+   ========================================================================= */
+.hidden{display:none!important}
+.center{text-align:center}
+.mt8{margin-top:8px} .mt16{margin-top:16px} .mt24{margin-top:24px}
+.muted{color:var(--muted)}
+.divider{height:1px; background:var(--line); margin:18px 0}
+.kbd{font-family:var(--mono); font-size:12px; padding:2px 6px; border:1px solid var(--line);
+  border-radius:5px; background:var(--bg)}
+
+/* responsivita */
+@media(max-width:560px){
+  .cols{grid-template-columns:1fr}
+  .board{grid-template-columns:1fr}
+  .rgrade{gap:12px} .gbadge{width:72px; height:72px; font-size:34px}
+}
+
+/* respekt k preferenci omezeného pohybu */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.08s!important}
+  .hero .photo{animation:none}
+}
+
+/* =========================================================================
+   POZADÍ SCÉNY (celoobrazovkové, mění se podle scény)
+   ========================================================================= */
+#sceneBackdrop{position:fixed; inset:0; z-index:5; pointer-events:none;
+  background-size:cover; background-position:center; opacity:0; transition:opacity .8s ease;
+  filter:saturate(.9)}
+#sceneBackdrop.on{opacity:.20}
+#sceneBackdrop::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.78))}
+
+/* portrét podezřelého v seznamu (přebije kreslený avatar) */
+.suspect .av .photo,.av .photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none}
+.av.has-photo .photo{display:block}
+.av.has-photo svg{display:none}
+.suspect .av{position:relative}
+
+/* =========================================================================
+   NAHRÁVAČ OBRÁZKŮ NA MÍRU (modal)
+   ========================================================================= */
+#imgWrap{margin-top:12px; display:flex; flex-direction:column; gap:10px}
+.imgrow{display:flex; align-items:center; gap:12px; padding:10px; border:1px solid var(--line);
+  border-radius:12px; background:var(--bg)}
+.ithumb{flex:none; width:64px; height:44px; border-radius:8px; border:1px solid var(--line);
+  background:#000 center/cover no-repeat; position:relative; overflow:hidden}
+.ithumb::after{content:"—"; position:absolute; inset:0; display:grid; place-items:center;
+  color:var(--muted); font-family:var(--mono); font-size:14px}
+.ithumb.on::after{display:none}
+.imeta{flex:1; min-width:0}
+.ilabel{font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.ihint{font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.04em}
+.iacts{flex:none; display:flex; gap:6px}
+.iacts .tbtn{height:30px; border:1px solid var(--line); background:var(--bg2); color:var(--ink);
+  border-radius:7px; font-family:var(--mono); font-size:12px; padding:0 10px; cursor:pointer}
+.iacts .tbtn:hover{border-color:var(--acc)}
+</style>
+<style>
+#btnSound,#btnFS,#btnMenu{display:none!important} /* nahrazeno jednotným LUDUS ovládáním vpravo nahoře */
+.topbar{padding-right:200px}
+@media (max-width:560px){.topbar{padding-right:170px}}
+</style>
+</head>
+<body data-skin="orig">
+
+<!-- atmosférické vrstvy -->
+<div id="fx" aria-hidden="true">
+  <canvas id="rain"></canvas>
+  <div class="glowtop"></div>
+  <div class="scan"></div>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+</div>
+
+<!-- pozadí scény (mění se podle scény; jemné, ztmavené kvůli čitelnosti) -->
+<div id="sceneBackdrop" aria-hidden="true"></div>
+
+<!-- topbar -->
+<header class="topbar">
+  <div class="brand" id="brand" title="LUDUS"><span class="dot"></span><span>LUDUS<b>·</b>case</span></div>
+  <div class="spacer"></div>
+  <button class="iconbtn" id="btnBoard" title="Důkazní tabule">⊞ <span id="boardCount" class="ct">0</span></button>
+  <button class="iconbtn" id="btnSound" title="Zvuk">♪</button>
+  <button class="iconbtn" id="btnFS" title="Celá obrazovka">⛶</button>
+  <button class="iconbtn" id="btnMenu" title="Menu">⟲</button>
+</header>
+
+<!-- učitelský pruh (skrytý před studenty) -->
+<div id="teacherBar">
+  <span class="tlabel">Učitel</span>
+  <select id="tbJump" title="Skok na scénu"></select>
+  <button class="tbtn" id="tbAccuse">→ obvinění</button>
+  <button class="tbtn" id="tbResult">→ výsledek</button>
+  <button class="tbtn" id="tbReset">restart</button>
+  <span class="tlabel" id="tbHint" style="opacity:.7"></span>
+</div>
+
+<!-- herní plocha -->
+<main id="screen"></main>
+
+<!-- důkazní tabule -->
+<div class="modal" id="boardModal">
+  <div class="sheet">
+    <div class="sh">
+      <h3 id="boardTitle">Důkazní tabule</h3>
+      <button class="iconbtn" id="boardClose">✕</button>
+    </div>
+    <div class="muted mono" id="boardSub" style="font-size:12px"></div>
+    <div class="board" id="boardWrap"></div>
+  </div>
+</div>
+
+<!-- nahrávač obrázků na míru (jen v učitelském náhledu) -->
+<div class="modal" id="imgModal">
+  <div class="sheet">
+    <div class="sh">
+      <h3>Obrázky na míru</h3>
+      <button class="iconbtn" id="imgClose">✕</button>
+    </div>
+    <div class="muted mono" style="font-size:12px">Každé místo a postava má vlastní slot. Nahraj foto z galerie — engine ho zmenší, uloží a sám rozhýbe. Prázdný slot = kreslený fallback.</div>
+    <div id="imgWrap"></div>
+  </div>
+</div>
+
+<!-- splash / intro -->
+<div id="splash">
+  <video id="splashVideo" muted playsinline style="display:none"></video>
+  <button class="btn ghost skip hidden" id="splashSkip">Přeskočit ⏭</button>
+  <div class="splash-inner" id="splashInner"></div>
+</div>
+
+<script>
+"use strict";
+/* ===========================================================================
+   ÚVODNÍ VIDEO + ZNĚLKA  (konvence: každá hra je má — base64 se vkládá SEM, NAKONEC)
+   ---------------------------------------------------------------------------
+   Vlož pouze data: URL (žádné externí soubory), aby hra zůstala offline:
+     • videoBase64 — celé intro video      → "data:video/mp4;base64,AAAA…"
+     • audioBase64 — znělka                → "data:audio/mpeg;base64,SUQz…"
+     • holdMs      — jak dlouho podržet vestavěné intro (jen když není video)
+   Chování:
+     – je-li VIDEO i ZNĚLKA: video hraje na celé ploše, znělka zní s ním,
+       „Přeskočit"/dotyk intro ukončí, jinak skončí samo na konci videa;
+     – je-li jen ZNĚLKA: zní pod vestavěným dešifrovacím intrem;
+     – nic z toho: naběhne vestavěné animované intro (déšť + dešifrovaný název).
+   Pozn.: pokud prohlížeč blokuje autoplay zvuku, znělka se spustí při 1. doteku.
+   =========================================================================== */
+const INTRO = {
+  videoBase64: "",   // ← sem vlož intro video (nakonec)
+  audioBase64: "",   // ← sem vlož znělku (nakonec)
+  holdMs: 2400
+};
+
+/* ===========================================================================
+   SKINY — mění JEN chrome, názvy a atmosféru; výukový obsah je z LUDUS_CONTENT.
+   safe  = bezpečná originální detektivka "Simulakrum" (default)
+   orig  = interní skin "Matrix"
+   =========================================================================== */
+const SKINS = {
+  safe:{
+    internalOnly:false,
+    code:"SIMULACRUM",
+    name:{cs:"Případ Simulakrum", en:"The Simulacrum Case"},
+    place:{cs:"Neonové město", en:"Neon City"},
+    rainGlyphs:"01·:+=*<>[]{}/\\|",
+    antagonist:{cs:"Dozorce", en:"the Overseer"},
+    bootLines:{cs:["> otevírám spis…","> stopy nalezeny — čekám na vyšetřovatele"],
+               en:["> opening the case file…","> clues found — awaiting the investigator"]},
+    flavor:{
+      brief:{
+        cs:"V Neonovém městě někdo přepisuje skutečnost. Svědci si protiřečí, záznamy nesedí. Jsi vyšetřovatel/ka — projdi místa činu, vytěž výpovědi a slož důkazy dřív, než stopy zmizí. Na konci řekneš, kdo za tím stojí.",
+        en:"In Neon City, someone is rewriting reality. Witnesses contradict each other; records don't add up. You're the investigator — work the scenes, press the testimonies and assemble the evidence before the trail goes cold. At the end, you name who's behind it."
+      },
+      accuse:{
+        cs:"Spis je úplný. Důkazy ukazují jedním směrem. Koho obviníš?",
+        en:"The file is complete. The evidence points one way. Who do you accuse?"
+      },
+      revealWin:{
+        cs:"Sedí. Stopy do sebe zapadly a Dozorce ztratil tvář, kterou si půjčil.",
+        en:"It fits. The pieces lock together and the Overseer loses the face it borrowed."
+      },
+      revealLose:{
+        cs:"Ne tak docela. Skutečný strůjce ti proklouzl — ale spis zůstává.",
+        en:"Not quite. The real architect slipped past you — but the file stands."
+      }
+    }
+  },
+  orig:{
+    internalOnly:false,
+    code:"MATRIX",
+    name:{cs:"Matrix: Anomálie", en:"Matrix: Anomaly"},
+    place:{cs:"Konstrukt", en:"the Construct"},
+    rainGlyphs:"日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘﾎﾉ01ﾈ",
+    antagonist:{cs:"Agent", en:"the Agent"},
+    bootLines:{cs:["> připojuji ke konstruktu…","> anomálie detekována — sleduj stopu"],
+               en:["> connecting to the construct…","> anomaly detected — follow the trace"]},
+    flavor:{
+      brief:{
+        cs:"Něco v systému nesedí — déjà vu, glitch, svědek, který nikdy neexistoval. Jsi vyšetřovatel/ka uvnitř simulace. Sleduj anomálii kódem, vytěž svědky a slož důkazy dřív, než tě zaměří. Na konci určíš zdroj.",
+        en:"Something in the system is off — a déjà vu, a glitch, a witness who never existed. You're an investigator inside the simulation. Trace the anomaly through the code, press the witnesses and assemble the evidence before you're flagged. At the end, you pinpoint the source."
+      },
+      accuse:{
+        cs:"Kód je rozluštěný. Anomálie má zdroj. Koho označíš?",
+        en:"The code is decrypted. The anomaly has a source. Who do you flag?"
+      },
+      revealWin:{
+        cs:"Shoda. Maska se rozpadla na zelený déšť — byl to Agent. Anomálie zacelena.",
+        en:"Match. The mask dissolves into green rain — it was the Agent. Anomaly sealed."
+      },
+      revealLose:{
+        cs:"Chyba shody. Agent se přepsal do jiné tváře a ty jsi zaměřen/a — ale data drží.",
+        en:"Match error. The Agent rewrote itself into another face and you're flagged — but the data holds."
+      }
+    }
+  }
+};
+
+/* ===========================================================================
+   i18n — texty chromu (ne obsah). Jazyk řídí LUDUS / učitel, default cs.
+   =========================================================================== */
+const I18N = {
+  cs:{
+    start:"Začít vyšetřování", namePh:"Tvé jméno", nameLbl:"Vyšetřovatel/ka",
+    needName:"Zadej jméno, ať máš spis na sebe.", begin:"Spustit", resume:"Pokračovat",
+    scene:"Místo", evidence:"Důkaz", clue:"Stopa zajištěna", next:"Pokračovat",
+    check:"Ověřit", board:"Důkazní tabule", boardEmpty:"Zatím žádné důkazy. Vyřeš úlohy a zajisti stopy.",
+    accuseTitle:"Obvinění", accuseBtn:"Obvinit", pick:"Vyber podezřelého",
+    grade:"Známka", points:"Body", solvedYes:"Případ vyřešen", solvedNo:"Pachatel unikl",
+    testId:"ID testu", again:"Hrát znovu", reviewTitle:"Rozbor odpovědí",
+    yourAns:"Tvá odpověď", correctAns:"Správně", assemblePh:"Klepni na slova ve správném pořadí",
+    yes:"Ano", no:"Ne", teacher:"Učitelský náhled", skip:"Přeskočit úlohu",
+    enter:"Klepnutím vstoupíš", caseFile:"SPIS", investigator:"VYŠETŘOVATEL",
+    stampYes:"Vyřešeno", stampNo:"Nevyřešeno"
+  },
+  en:{
+    start:"Start investigation", namePh:"Your name", nameLbl:"Investigator",
+    needName:"Enter a name so the file is yours.", begin:"Begin", resume:"Resume",
+    scene:"Scene", evidence:"Evidence", clue:"Clue secured", next:"Continue",
+    check:"Check", board:"Evidence board", boardEmpty:"No evidence yet. Solve the tasks to secure clues.",
+    accuseTitle:"Accusation", accuseBtn:"Accuse", pick:"Pick a suspect",
+    grade:"Grade", points:"Points", solvedYes:"Case solved", solvedNo:"Culprit escaped",
+    testId:"Test ID", again:"Play again", reviewTitle:"Answer review",
+    yourAns:"Your answer", correctAns:"Correct", assemblePh:"Tap the words in the right order",
+    yes:"Yes", no:"No", teacher:"Teacher preview", skip:"Skip task",
+    enter:"Tap to enter", caseFile:"FILE", investigator:"INVESTIGATOR",
+    stampYes:"Solved", stampNo:"Unsolved"
+  }
+};
+
+/* ===========================================================================
+   VZOROVÝ OBSAH (fallback) — plně hratelný mini-případ.
+   Skutečný obsah dodá builder přes window.LUDUS_CONTENT (schema 2).
+   Téma: English — modals of deduction (must/might/could/can't + have + pp)
+   =========================================================================== */
+const SAMPLE = {
+  schema:2,
+  meta:{ skin:"safe", lang:"cs", subject:"English · modals of deduction",
+         title:{cs:"Případ Simulakrum", en:"The Simulacrum Case"} },
+  rooms:[
+    {
+      id:"scene1", name:{cs:"Místo činu — laboratoř", en:"Crime scene — the lab"},
+      intro:{cs:"Prototyp zmizel z uzamčené laboratoře. Žádné rozbité dveře.",
+             en:"The prototype vanished from a locked lab. No broken door."},
+      exercises:[
+        { type:"mc4",
+          q:"The lock isn't broken and the alarm never went off. The thief ___ a key.",
+          opts:["must have had","might want","can't have had","should have"], answer:0 },
+        { type:"yesno",
+          q:"Evidence so far: a stranger broke in from outside. — Is that statement supported?",
+          answer:false,
+          clue:{cs:"Dveře nebyly vypáčené → pachatel měl přístup zevnitř.",
+                en:"The door wasn't forced → the culprit had inside access."} }
+      ]
+    },
+    {
+      id:"scene2", name:{cs:"Výpověď — noční hlídač", en:"Testimony — the night guard"},
+      intro:{cs:"Hlídačka Mara viděla v noci jen jednu věc, která jí nesedí.",
+             en:"The guard, Mara, noticed only one thing that didn't add up."},
+      exercises:[
+        { type:"mc2",
+          q:"The lights flickered at exactly 2:14. It ___ a coincidence.",
+          opts:["can't be","must enjoy"], answer:0 },
+        { type:"wordbank",
+          q:"Reconstruct Mara's deduction:",
+          answer:["Someone","must","have","cut","the","power"],
+          extra:["could","door"],
+          clue:{cs:"Světla blikla ve 2:14 → někdo sahal do napájení/sítě.",
+                en:"Lights flickered at 2:14 → someone tampered with the power/network."} }
+      ]
+    },
+    {
+      id:"scene3", name:{cs:"Serverovna", en:"The server room"},
+      intro:{cs:"Z jednoho terminálu kdosi smazal záznamy. Ne každý to umí.",
+             en:"Someone wiped the logs from one terminal. Not everyone can do that."},
+      exercises:[
+        { type:"mc4",
+          q:"The logs were erased cleanly. An ordinary user ___ done this.",
+          opts:["couldn't have","must have wanted","might enjoy","can have"], answer:0 },
+        { type:"classify",
+          q:"Sort each deduction by how certain it is:",
+          cats:["Certain (must)","Impossible (can't)"],
+          items:[
+            {t:"The hacker had admin rights.", c:0},
+            {t:"A random visitor did this.", c:1},
+            {t:"The logs deleted themselves.", c:1},
+            {t:"It was done from inside the building.", c:0}
+          ],
+          clue:{cs:"Čistě smazané logy → přístup na úrovni správce sítě.",
+                en:"Cleanly wiped logs → network-admin level access."} }
+      ]
+    },
+    {
+      id:"scene4", name:{cs:"Výslechy", en:"Interrogations"},
+      intro:{cs:"Čtyři lidé měli tu noc co dělat v budově. Jen jeden sedí na všechny stopy.",
+             en:"Four people had reason to be in the building that night. Only one fits every clue."},
+      exercises:[
+        { type:"mc4",
+          q:"Master key + remote admin login at 2:14 + ability to wipe logs. This ___ Kovar.",
+          opts:["must have been","can't have been","might have liked","should be"], answer:0 },
+        { type:"yesno",
+          q:"Based on every clue, the intern Iris is the most likely culprit. — Agree?",
+          answer:false,
+          clue:{cs:"Hlavní klíč + vzdálené přihlášení správce ve 2:14 → ukazuje na Kovara.",
+                en:"Master key + remote admin login at 2:14 → points to Kovar."} }
+      ]
+    }
+  ],
+  suspects:[
+    {id:"mara",  name:{cs:"Mara — hlídačka", en:"Mara — night guard"},
+      desc:{cs:"Byla u vchodu, ale neměla přístup k serverům.", en:"At the entrance, but no server access."}, av:"guard"},
+    {id:"vale",  name:{cs:"Dr. Vale — vědkyně", en:"Dr. Vale — scientist"},
+      desc:{cs:"Znala prototyp, ne ale síť.", en:"Knew the prototype, not the network."}, av:"scientist"},
+    {id:"iris",  name:{cs:"Iris — stážistka", en:"Iris — intern"},
+      desc:{cs:"Nadšená, bez admin práv.", en:"Eager, but no admin rights."}, av:"intern"},
+    {id:"kovar", name:{cs:"Kovar — správce sítě", en:"Kovar — network admin"},
+      desc:{cs:"Hlavní klíč, vzdálený přístup, uměl smazat logy.", en:"Master key, remote access, could wipe logs."}, av:"admin"}
+  ],
+  solution:{ culprit:"kovar",
+    explain:{cs:"Jediný se shodoval se VŠEMI stopami: přístup zevnitř, zásah do sítě ve 2:14 a admin práva na smazání logů.",
+             en:"The only match for EVERY clue: inside access, the 2:14 network tamper, and admin rights to wipe the logs."} }
+};
+
+/* ===========================================================================
+   ROZLIŠENÍ OBSAHU — permisivní normalizér (akceptuje aliasy polí)
+   =========================================================================== */
+function L(v, lang){ // lokalizace hodnoty (string | {cs,en})
+  if(v==null) return "";
+  if(typeof v==="string") return v;
+  if(typeof v==="object") return v[lang] || v.cs || v.en || Object.values(v)[0] || "";
+  return String(v);
+}
+const TYPE_ALIAS={mc4:"mc4",multi4:"mc4",abcd:"mc4",choice4:"mc4",
+  mc2:"mc2",duo:"mc2",choice2:"mc2",either:"mc2",
+  yesno:"yesno",tf:"yesno",truefalse:"yesno",boolean:"yesno",bool:"yesno",
+  wordbank:"wordbank",order:"wordbank",assemble:"wordbank",reorder:"wordbank",sentence:"wordbank",
+  classify:"classify",sort:"classify",categorize:"classify",group:"classify",bucket:"classify"};
+
+function normalizeExercise(x){
+  const t=TYPE_ALIAS[(x.type||x.kind||"").toLowerCase()]||"mc4";
+  const e={type:t, q:(x.q||x.question||x.text||x.prompt||""), clue:(x.clue||x.evidence||x.note||null)};
+  if(t==="mc4"||t==="mc2"){
+    e.opts=(x.opts||x.options||x.choices||x.answers||[]).slice();
+    let a=(x.answer!=null?x.answer:(x.correct!=null?x.correct:x.a));
+    if(typeof a==="string"){ const i=e.opts.indexOf(a); e.answer=i>=0?i:0; }
+    else e.answer=(a|0)||0;
+    if(t==="mc2"&&e.opts.length<2) e.opts=["A","B"];
+    if(t==="mc4"&&e.opts.length<2) e.opts=["A","B","C","D"];
+  } else if(t==="yesno"){
+    let a=(x.answer!=null?x.answer:(x.correct!=null?x.correct:x.a));
+    if(typeof a==="string") a=/^(y|yes|ano|true|t|1)$/i.test(a.trim());
+    e.answer=!!a;
+  } else if(t==="wordbank"){
+    e.answer=(x.answer||x.solution||x.words||[]).slice();
+    e.extra=(x.extra||x.distractors||x.decoys||[]).slice();
+  } else if(t==="classify"){
+    e.cats=(x.cats||x.categories||x.groups||["A","B"]).slice();
+    let items=(x.items||x.cards||[]);
+    e.items=items.map(it=>({t:(it.t||it.text||it.label||""),
+      c:(typeof it.c==="number"?it.c:(typeof it.cat==="number"?it.cat:(e.cats.indexOf(it.cat)>=0?e.cats.indexOf(it.cat):0)))}));
+  }
+  return e;
+}
+function normalizeContent(raw){
+  const r=raw||{};
+  const meta=r.meta||{};
+  const roomsRaw=r.rooms||r.scenes||r.levels||r.stages||[];
+  const scenes=roomsRaw.map((s,i)=>({
+    id:s.id||("scene"+(i+1)),
+    name:(s.name||s.title||{cs:"Scéna "+(i+1),en:"Scene "+(i+1)}),
+    intro:(s.intro||s.brief||s.desc||null),
+    exercises:(s.exercises||s.tasks||s.questions||s.items||[]).map(normalizeExercise)
+  })).filter(s=>s.exercises.length);
+  const suspectsRaw=r.suspects||r.people||r.persons||[];
+  const suspects=suspectsRaw.map((p,i)=>({
+    id:p.id||("s"+i), name:(p.name||{cs:"Podezřelý "+(i+1),en:"Suspect "+(i+1)}),
+    desc:(p.desc||p.description||""), av:(p.av||p.avatar||["guard","scientist","intern","admin"][i%4])
+  }));
+  const sol=r.solution||r.answer||{};
+  const culprit=sol.culprit||sol.culpritId||sol.id||sol.answer||(suspects.length?suspects[suspects.length-1].id:null);
+  return {meta, scenes, suspects, solution:{culprit, explain:(sol.explain||sol.reason||null)}};
+}
+let CONTENT = normalizeContent(window.LUDUS_CONTENT || window.GAME_CONTENT || SAMPLE);
+
+function totalExercises(){ return CONTENT.scenes.reduce((n,s)=>n+s.exercises.length,0); }
+
+/* ===========================================================================
+   STAV + ULOŽENÍ
+   =========================================================================== */
+const SAVE_KEY="ludus_case_save_v1";
+const S={ lang:"cs", skin:"safe", name:"", sceneIdx:0, exIdx:0, score:0, max:0,
+  answers:[], clues:[], accused:null, started:false, finished:false, sound:false };
+
+function sig(){ return (CONTENT.scenes.length)+"x"+totalExercises()+"·"+L(CONTENT.meta.subject||"","cs"); }
+function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
+  v:sig(), name:S.name, sceneIdx:S.sceneIdx, exIdx:S.exIdx, score:S.score, max:S.max,
+  answers:S.answers, clues:S.clues, accused:S.accused, started:S.started, finished:S.finished
+})); }catch(e){} }
+function loadState(){ try{ const r=localStorage.getItem(SAVE_KEY); if(!r) return null;
+  const d=JSON.parse(r); if(d.v!==sig()) return null; return d; }catch(e){ return null; } }
+function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+
+/* ===========================================================================
+   ZVUK — syntéza WebAudio (žádné soubory)
+   =========================================================================== */
+let AC=null;
+function ensureAudio(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if(AC&&AC.state==="suspended") AC.resume(); }
+function tone(f,t,dur,gain,type){ if(!S.sound||!AC) return;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type=type||"sine"; o.frequency.setValueAtTime(f, t);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain||.18, t+.012);
+  g.gain.exponentialRampToValueAtTime(.0001, t+dur);
+  o.connect(g).connect(AC.destination); o.start(t); o.stop(t+dur+.02); }
+function sfx(kind){ if(!S.sound) return; ensureAudio(); if(!AC) return; const n=AC.currentTime;
+  if(kind==="click"){ tone(420,n,.06,.10,"square"); }
+  else if(kind==="correct"){ [523,659,784].forEach((f,i)=>tone(f,n+i*.07,.18,.16,"triangle")); }
+  else if(kind==="wrong"){ tone(150,n,.22,.18,"sawtooth"); tone(110,n+.05,.26,.14,"sawtooth"); }
+  else if(kind==="clue"){ [880,1175,1568].forEach((f,i)=>tone(f,n+i*.05,.5,.07,"sine")); }
+  else if(kind==="reveal"){ tone(196,n,.9,.20,"sawtooth"); [392,494,587,784].forEach((f,i)=>tone(f,n+.12+i*.06,.7,.10,"triangle")); }
+  else if(kind==="accuse"){ tone(330,n,.3,.16,"square"); tone(247,n+.12,.4,.14,"square"); }
+}
+const SND_KEY="ludus_case_snd";
+function setSound(on){ S.sound=on; const b=document.getElementById("btnSound");
+  b.classList.toggle("live",on); b.title=on?"Zvuk: zapnuto":"Zvuk: vypnuto";
+  if(on){ ensureAudio(); }
+  try{ localStorage.setItem(SND_KEY, on?"1":"0"); }catch(e){} }
+function loadSoundPref(){ try{ return localStorage.getItem(SND_KEY)==="1"; }catch(e){ return false; } }
+
+/* ===========================================================================
+   OBRÁZKY — DYNAMICKÉ SLOTY NA MÍRU (odvozené z obsahu konkrétní hry)
+   ---------------------------------------------------------------------------
+   Žádné pevné hero/creature/roomBg. Sloty vyrostou z případu:
+     • "hero"               — úvodní scéna
+     • "scene:<id>"         — pozadí pro každou scénu (atmosféra za panelem)
+     • "portrait:<id>"      — portrét každého podezřelého
+                              (portrét pachatele zároveň slouží k odhalení)
+   Učitel je v panelu vidí pojmenované (popisky se berou z obsahu).
+   Ukládá se do window.LUDUS_IMAGES (stejný interop objekt, jen klíče na míru).
+   =========================================================================== */
+let IMAGES={};
+const IMG_KEY="ludus_case_imgs_v1";
+function loadImages(){ try{ const r=localStorage.getItem(IMG_KEY); if(r) IMAGES=JSON.parse(r)||{}; }catch(e){ IMAGES={}; }
+  if(window.LUDUS_IMAGES) Object.assign(IMAGES, window.LUDUS_IMAGES); }
+function saveImages(){ try{ localStorage.setItem(IMG_KEY, JSON.stringify(IMAGES)); }catch(e){}
+  window.LUDUS_IMAGES=IMAGES; }
+function imgFor(key){ return (key&&IMAGES[key])||""; }
+
+/* seznam slotů na míru aktuálnímu obsahu */
+function slots(){
+  const out=[{key:"hero", label:(L(skin().place,S.lang)||"Úvod"), hint:"úvodní scéna"}];
+  CONTENT.scenes.forEach(s=>out.push({key:"scene:"+s.id, label:L(s.name,S.lang), hint:"pozadí scény"}));
+  CONTENT.suspects.forEach(p=>{ const isC=(p.id===CONTENT.solution.culprit);
+    out.push({key:"portrait:"+p.id, label:L(p.name,S.lang), hint:isC?"podezřelý + odhalení pachatele":"podezřelý"}); });
+  return out;
+}
+
+function downscale(file, maxPx, cb){
+  const img=new Image(), url=URL.createObjectURL(file);
+  img.onload=()=>{ let {width:w,height:h}=img; const s=Math.min(1, maxPx/Math.max(w,h));
+    w=Math.round(w*s); h=Math.round(h*s); const c=document.createElement("canvas");
+    c.width=w; c.height=h; c.getContext("2d").drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url); cb(c.toDataURL("image/jpeg",0.82)); };
+  img.onerror=()=>{ URL.revokeObjectURL(url); cb(null); }; img.src=url;
+}
+function pickImage(key, after){
+  const inp=document.createElement("input"); inp.type="file"; inp.accept="image/*";
+  inp.onchange=()=>{ const f=inp.files&&inp.files[0]; if(!f) return;
+    downscale(f, 1280, data=>{ if(data){ IMAGES[key]=data; saveImages(); applyImages(); if(after) after(); } }); };
+  inp.click();
+}
+function removeImage(key, after){ delete IMAGES[key]; saveImages(); applyImages(); if(after) after(); }
+
+/* aplikace: img[data-key] dostane src; .scenebg[data-key] dostane background */
+function applyImages(root){
+  (root||document).querySelectorAll("[data-key]").forEach(node=>{
+    const data=imgFor(node.getAttribute("data-key"));
+    if(node.tagName==="IMG"){ const host=node.closest(".hero,.reveal,.av");
+      if(data){ node.src=data; host&&host.classList.add("has-photo"); }
+      else { node.removeAttribute("src"); host&&host.classList.remove("has-photo"); } }
+    else { if(data){ node.style.backgroundImage="url("+data+")"; node.classList.add("on"); }
+      else { node.style.backgroundImage=""; node.classList.remove("on"); } }
+  });
+}
+
+/* celoobrazovkové pozadí scény (mění se podle scény, jemné a ztmavené) */
+function setSceneBackdrop(key){
+  const b=$("sceneBackdrop"); if(!b) return; const data=imgFor(key);
+  if(data){ b.style.backgroundImage="url("+data+")"; b.classList.add("on"); }
+  else { b.style.backgroundImage=""; b.classList.remove("on"); }
+}
+
+/* ===========================================================================
+   UČITELSKÝ NAHRÁVAČ — pojmenované sloty na míru (modal)
+   =========================================================================== */
+function openImageManager(){
+  const wrap=$("imgWrap"); wrap.innerHTML="";
+  slots().forEach(sl=>{
+    const has=!!imgFor(sl.key);
+    const row=elFrom(`<div class="imgrow">
+      <div class="ithumb ${has?"on":""}" data-key="${esc(sl.key)}"></div>
+      <div class="imeta"><div class="ilabel">${esc(sl.label)}</div><div class="ihint">${esc(sl.hint)}</div></div>
+      <div class="iacts">
+        <button class="tbtn ipick">${has?"Změnit":"Nahrát"}</button>
+        ${has?'<button class="tbtn idel">Odebrat</button>':""}
+      </div></div>`);
+    row.querySelector(".ipick").addEventListener("click",()=>pickImage(sl.key,()=>{ openImageManager(); rerender(); }));
+    const del=row.querySelector(".idel"); if(del) del.addEventListener("click",()=>removeImage(sl.key,()=>{ openImageManager(); rerender(); }));
+    wrap.appendChild(row);
+  });
+  applyImages(wrap);
+  $("imgModal").classList.add("show");
+}
+function closeImageManager(){ $("imgModal").classList.remove("show"); }
+
+/* ===========================================================================
+   DÉŠŤ KÓDU (canvas) — prémiový "digital rain"
+   • DPR-aware, delta-time (plynulé na 60/90/120 Hz)
+   • per-sloupcové proudy: proměnná rychlost, hloubka, mutace glyfů
+   • zářící bílé hlavy (glow) + svítící zelené stopy s motion-blur
+   • bezpečná verze: jemný, řidší kyanový drift
+   • cached barvy/font (žádné čtení stylů ve smyčce)
+   • respektuje prefers-reduced-motion (statické pole)
+   =========================================================================== */
+const Rain=(function(){
+  let cv,ctx,raf,W=0,H=0,DPR=1,fs=16,cols=0,reduced=false;
+  let headY=[],speed=[],headCh=[],depth=[],lastT=0;
+  let glyphs="01",fontStr="16px monospace";
+  let colMain="0,255,102",colHead="#caffd6",glowCol="rgba(0,255,120,.9)",fadeA=0.085,baseSpeed=1.15,density=1,depthMin=0.55;
+  const rnd=()=>glyphs[(Math.random()*glyphs.length)|0];
+
+  function setup(){ cv=document.getElementById("rain"); if(!cv) return; ctx=cv.getContext("2d");
+    reduced=matchMedia("(prefers-reduced-motion:reduce)").matches; resize(); }
+  function resize(){ if(!cv||!ctx) return;
+    DPR=Math.min(2, window.devicePixelRatio||1); W=innerWidth; H=innerHeight;
+    cv.width=Math.floor(W*DPR); cv.height=Math.floor(H*DPR);
+    cv.style.width=W+"px"; cv.style.height=H+"px"; ctx.setTransform(DPR,0,0,DPR,0,0);
+    fs=Math.max(14, Math.round(W/54)); cols=Math.ceil(W/fs)+1; fontStr=fs+"px "+monoFont();
+    initStreams(); ctx.clearRect(0,0,W,H); ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
+    if(reduced) staticField(); }
+  function monoFont(){ const f=getComputedStyle(document.body).getPropertyValue("--mono"); return (f&&f.trim())||"ui-monospace,monospace"; }
+  function initStreams(){ headY=new Array(cols); speed=new Array(cols); headCh=new Array(cols); depth=new Array(cols);
+    for(let i=0;i<cols;i++){ headY[i]=Math.random()*-(H/fs)*1.5; speed[i]=baseSpeed*(0.55+Math.random()*0.95);
+      headCh[i]=rnd(); depth[i]=depthMin+Math.random()*(1-depthMin); } }
+
+  function glyphSet(){ // přepočet stylů podle skinu (volá se i při přepnutí skinu)
+    const sk=SKINS[S.skin]; glyphs=(sk&&sk.rainGlyphs)||"01";
+    if(S.skin==="orig"){ colMain="0,255,102"; colHead="#d6ffe0"; glowCol="rgba(80,255,140,.95)";
+      fadeA=0.085; baseSpeed=1.15; density=1; depthMin=0.5; }
+    else { colMain="120,220,255"; colHead="#e9f8ff"; glowCol="rgba(140,225,255,.7)";
+      fadeA=0.22; baseSpeed=0.5; density=0.5; depthMin=0.35; }
+    if(ctx){ fontStr=fs+"px "+monoFont();
+      for(let i=0;i<cols;i++){ speed[i]=baseSpeed*(0.55+Math.random()*0.95); depth[i]=depthMin+Math.random()*(1-depthMin); } }
+  }
+
+  function staticField(){ if(!ctx) return; ctx.clearRect(0,0,W,H); ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
+    ctx.font=fontStr; ctx.textBaseline="top";
+    for(let i=0;i<cols;i++){ if(density<1 && (i&1)) continue;
+      const n=2+((Math.random()*4)|0); for(let k=0;k<n;k++){ const y=(Math.random()*(H/fs))|0;
+        ctx.fillStyle="rgba("+colMain+","+(0.18+Math.random()*0.22)+")"; ctx.fillText(rnd(), i*fs, y*fs); } } }
+
+  function frame(t){ raf=requestAnimationFrame(frame);
+    if(!lastT) lastT=t; let dt=(t-lastT)/16.67; lastT=t; if(dt>3) dt=3; if(dt<0.2) dt=0.2;
+    // motion-blur stopa
+    ctx.globalCompositeOperation="source-over"; ctx.globalAlpha=1;
+    ctx.fillStyle="rgba(0,4,1,"+fadeA+")"; ctx.fillRect(0,0,W,H);
+    ctx.font=fontStr; ctx.textBaseline="top";
+    for(let i=0;i<cols;i++){ if(density<1 && (i&1)) continue;
+      if(Math.random()<0.45) headCh[i]=rnd();
+      const x=i*fs, y=headY[i]*fs, d=depth[i];
+      const sparkle=Math.random()<0.05;
+      ctx.globalAlpha=d;
+      if(sparkle){ ctx.fillStyle=colHead; ctx.shadowColor=glowCol; ctx.shadowBlur=fs*0.7;
+        ctx.fillText(headCh[i], x, y); ctx.shadowBlur=0; }
+      else { ctx.fillStyle="rgba("+colMain+","+(0.92*d)+")"; ctx.fillText(headCh[i], x, y); }
+      headY[i]+=speed[i]*dt;
+      if(y>H && Math.random()>0.965){ headY[i]=Math.random()*-18; speed[i]=baseSpeed*(0.55+Math.random()*0.95); depth[i]=depthMin+Math.random()*(1-depthMin); }
+    }
+    ctx.globalAlpha=1;
+  }
+  function start(){ if(!cv||!ctx) return; glyphSet(); cancelAnimationFrame(raf);
+    if(reduced){ staticField(); return; } lastT=0; raf=requestAnimationFrame(frame); }
+  return { setup, resize, start, glyphSet };
+})();
+
+/* ===========================================================================
+   PODPISOVÁ ANIMACE — dešifrování (Matrix) / psací stroj (bezpečná verze)
+   =========================================================================== */
+function revealText(el, text, done){
+  const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(reduced || !text){ el.textContent=text; done&&done(); return; }
+  if(S.skin==="orig"){ // scramble → resolve
+    const glyphs="ｱｲｳ01<>/\\|=+*ﾊﾐﾋ", N=text.length; let frame=0;
+    clearInterval(el._iv);
+    el._iv=setInterval(()=>{ let out="";
+      for(let i=0;i<N;i++){ if(i<frame/2) out+=esc(text[i]);
+        else if(text[i]===" ") out+=" ";
+        else out+="<span class='cur'>"+esc(glyphs[(Math.random()*glyphs.length)|0])+"</span>"; }
+      el.innerHTML=out; frame++; if(frame/2>=N){ clearInterval(el._iv); el.textContent=text; done&&done(); }
+    }, 24);
+  } else { // typewriter
+    let i=0; el.textContent=""; clearInterval(el._iv);
+    el._iv=setInterval(()=>{ el.textContent=text.slice(0,++i)+(i<text.length?"▍":"");
+      if(i>=text.length){ clearInterval(el._iv); el.textContent=text; done&&done(); } }, 18);
+  }
+}
+
+/* ===========================================================================
+   PŮVODNÍ SVG KRESBY (fallback, když nejsou nahrané fotky)
+   =========================================================================== */
+function svgHero(){
+  return `<svg class="art" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs><radialGradient id="hg" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="var(--acc2)" stop-opacity=".22"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+    <rect width="800" height="500" fill="#02040a"/><rect width="800" height="500" fill="url(#hg)"/>
+    <g opacity=".5" fill="var(--line)">
+      <rect x="40" y="300" width="46" height="180"/><rect x="100" y="250" width="60" height="230"/>
+      <rect x="176" y="320" width="40" height="160"/><rect x="620" y="270" width="56" height="210"/>
+      <rect x="690" y="230" width="64" height="250"/><rect x="560" y="330" width="44" height="150"/></g>
+    <g fill="var(--acc)" opacity=".85">
+      <rect x="116" y="270" width="8" height="8"/><rect x="132" y="300" width="8" height="8"/>
+      <rect x="704" y="260" width="8" height="8"/><rect x="724" y="300" width="8" height="8"/><rect x="636" y="300" width="8" height="8"/></g>
+    <g transform="translate(400,225)">
+      <circle r="118" fill="none" stroke="var(--acc2)" stroke-width="3" opacity=".9"/>
+      <circle r="118" fill="var(--acc2)" opacity=".05"/>
+      <circle r="78" fill="none" stroke="var(--acc2)" stroke-width="1.5" opacity=".5"/>
+      <circle r="30" fill="var(--acc)" opacity=".9"/><circle r="14" fill="#02040a"/>
+      <line x1="-150" y1="0" x2="-122" y2="0" stroke="var(--acc2)" stroke-width="2"/>
+      <line x1="122" y1="0" x2="150" y2="0" stroke="var(--acc2)" stroke-width="2"/>
+      <line x1="0" y1="-150" x2="0" y2="-122" stroke="var(--acc2)" stroke-width="2"/>
+      <line x1="0" y1="122" x2="0" y2="150" stroke="var(--acc2)" stroke-width="2"/>
+      <path d="M83 83 L150 150" stroke="var(--acc)" stroke-width="6" stroke-linecap="round"/></g>
+    <g opacity=".22" fill="var(--acc)" font-family="monospace" font-size="13">
+      <text x="60" y="120">01001</text><text x="700" y="160">1100</text><text x="120" y="180">0x2:14</text></g>
+  </svg>`;
+}
+function svgAntagonist(){
+  if(S.skin==="orig"){
+    return `<svg class="art" viewBox="0 0 800 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="800" height="560" fill="#010602"/>
+      <g transform="translate(400,250)">
+        <path d="M-150 300 C-150 150 -90 70 0 70 C90 70 150 150 150 300 Z" fill="#031c0f" stroke="var(--acc)" stroke-width="2"/>
+        <path d="M-22 70 L22 70 L14 130 L-14 130 Z" fill="#052613"/>
+        <ellipse cx="0" cy="-2" rx="74" ry="92" fill="#04210f" stroke="var(--acc)" stroke-width="2"/>
+        <rect x="-58" y="-26" width="116" height="30" rx="6" fill="#000" stroke="var(--acc)" stroke-width="2"/>
+        <rect x="-52" y="-22" width="44" height="22" rx="4" fill="var(--acc)" opacity=".25"/>
+        <rect x="8" y="-22" width="44" height="22" rx="4" fill="var(--acc)" opacity=".25"/>
+        <path d="M64 -10 q26 6 24 60" fill="none" stroke="var(--acc)" stroke-width="2" opacity=".7"/>
+        <circle cx="86" cy="60" r="5" fill="var(--acc)"/></g>
+      <g opacity=".3" fill="var(--acc)" font-family="monospace" font-size="14">
+        <text x="40" y="80">ANOMALY</text><text x="620" y="120">0xFF</text></g>
+    </svg>`;
+  }
+  return `<svg class="art" viewBox="0 0 800 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="800" height="560" fill="#05081a"/>
+    <g transform="translate(400,250)">
+      <path d="M-170 300 C-170 130 -100 50 0 50 C100 50 170 130 170 300 Z" fill="#0c1430" stroke="var(--acc)" stroke-width="2"/>
+      <path d="M0 -40 C-86 -40 -120 40 -120 120 L120 120 C120 40 86 -40 0 -40 Z" fill="#0a1128" stroke="var(--acc)" stroke-width="2"/>
+      <ellipse cx="0" cy="58" rx="92" ry="66" fill="#05081a"/>
+      <rect x="-66" y="40" width="132" height="26" rx="13" fill="#000" stroke="var(--acc2)" stroke-width="2"/>
+      <ellipse cx="0" cy="53" rx="40" ry="8" fill="var(--acc)"/>
+      <circle cx="0" cy="-150" r="60" fill="none" stroke="var(--acc2)" stroke-width="1.5" opacity=".4"/>
+      <circle cx="0" cy="-150" r="90" fill="none" stroke="var(--acc2)" stroke-width="1.5" opacity=".25"/></g>
+    <g opacity=".3" fill="var(--acc2)" font-family="monospace" font-size="14">
+      <text x="40" y="80">REC ●</text><text x="640" y="120">CAM 04</text></g>
+  </svg>`;
+}
+function svgAvatar(kind){
+  const c="var(--acc2)", l="var(--line)";
+  const head=`<circle cx="24" cy="20" r="11" fill="#0a1020" stroke="${c}" stroke-width="1.5"/>`;
+  const body=`<path d="M8 46 C8 34 16 30 24 30 C32 30 40 34 40 46 Z" fill="#0a1020" stroke="${l}" stroke-width="1.5"/>`;
+  let extra="";
+  if(kind==="guard") extra=`<path d="M13 14 h22 l-3 -5 h-16 Z" fill="${c}" opacity=".7"/>`;
+  else if(kind==="scientist") extra=`<rect x="15" y="18" width="7" height="5" rx="2" fill="none" stroke="${c}"/><rect x="26" y="18" width="7" height="5" rx="2" fill="none" stroke="${c}"/><line x1="22" y1="20" x2="26" y2="20" stroke="${c}"/>`;
+  else if(kind==="intern") extra=`<path d="M35 16 q6 4 4 12" fill="none" stroke="${c}" stroke-width="2"/><rect x="22" y="38" width="4" height="7" fill="${c}" opacity=".7"/>`;
+  else extra=`<path d="M13 20 a11 9 0 0 1 22 0" fill="none" stroke="${c}" stroke-width="2"/><rect x="11" y="20" width="4" height="7" rx="2" fill="${c}"/><rect x="33" y="20" width="4" height="7" rx="2" fill="${c}"/>`;
+  return `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">${body}${head}${extra}</svg>`;
+}
+
+/* ===========================================================================
+   DOM POMOCNÍCI
+   =========================================================================== */
+const $=id=>document.getElementById(id);
+function elFrom(html){ const t=document.createElement("template"); t.innerHTML=String(html).trim(); return t.content.firstElementChild; }
+function setScreen(node){ const s=$("screen"); s.innerHTML="";
+  const w=(typeof node==="string")?elFrom(node):node; w.classList.add("fade"); s.appendChild(w);
+  window.scrollTo(0,0); }
+function txt(k){ return (I18N[S.lang]&&I18N[S.lang][k])||I18N.cs[k]||k; }
+function skin(){ return SKINS[S.skin]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m])); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function positionIndex(){ let p=0; for(let i=0;i<S.sceneIdx;i++) p+=CONTENT.scenes[i].exercises.length; return p+S.exIdx; }
+function updateBoardBtn(){ const b=$("btnBoard"); b.classList.toggle("show", S.started&&!S.finished);
+  $("boardCount").textContent=S.clues.length; }
+
+/* ===========================================================================
+   ÚVODNÍ OBRAZOVKA / HRDINSKÁ SCÉNA
+   =========================================================================== */
+function showStart(){
+  setSceneBackdrop(null);
+  const sk=skin();
+  const node=elFrom(`<section>
+    <p class="eyebrow">${esc(L(CONTENT.meta.subject||"LUDUS · detektivka", S.lang))}</p>
+    <h1 class="title">${esc(L(sk.name,S.lang))}</h1>
+    <div class="hero" id="heroBox">
+      <img class="photo" data-key="hero" alt="">
+      ${svgHero()}
+      <div class="grad"></div>
+      <div class="cap"><span class="mono" style="color:var(--acc2);font-size:12px;letter-spacing:.18em">${esc(txt("caseFile"))} · ${esc(L(sk.place,S.lang))}</span></div>
+    </div>
+    <p class="lead">${esc(L(sk.flavor.brief, S.lang))}</p>
+    <div class="namewrap">
+      <label class="lbl" for="nm">${esc(txt("investigator"))}</label>
+      <input class="field" id="nm" maxlength="40" placeholder="${esc(txt("namePh"))}" autocomplete="off" value="${esc(S.name)}">
+      <div class="fb bad" id="nmErr">${esc(txt("needName"))}</div>
+    </div>
+    <div class="btnrow">
+      <button class="btn solid lg block" id="goBtn">${esc(txt("start"))}</button>
+    </div>
+  </section>`);
+  setScreen(node); applyImages();
+  const nm=$("nm"), go=$("goBtn"), err=$("nmErr");
+  nm.addEventListener("keydown",e=>{ if(e.key==="Enter") go.click(); });
+  go.addEventListener("click",()=>{ const v=nm.value.trim();
+    /* Aktivace učitele jménem zrušena — pouze trojklik na LUDUS nebo ?teacher=1. */
+    if(!v){ err.className="fb bad show"; err.textContent=txt("needName"); nm.focus(); return; }
+    sfx("click"); S.name=v; beginGame(); });
+}
+
+/* učitelský vstup: trojklik na LUDUS vlevo nahoře, případně ?teacher=1 */
+function deburr(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(); }
+/* (aktivace jménem odstraněna při unifikaci LUDUS) */
+
+function beginGame(){ S.started=true; S.finished=false; S.sceneIdx=0; S.exIdx=0; S.score=0;
+  S.max=totalExercises(); S.answers=[]; S.clues=[]; S.accused=null; saveState(); updateBoardBtn(); renderScene(); }
+
+/* ===========================================================================
+   SCÉNA + ÚLOHA
+   =========================================================================== */
+function renderScene(){
+  updateBoardBtn();
+  const scene=CONTENT.scenes[S.sceneIdx]; if(!scene){ renderAccusation(); return; }
+  const ex=scene.exercises[S.exIdx]; if(!ex){ S.sceneIdx++; S.exIdx=0; saveState(); return renderScene(); }
+  const pos=positionIndex()+1, total=S.max, pct=Math.round((positionIndex())/total*100);
+  const sceneName=L(scene.name,S.lang);
+  const node=elFrom(`<section>
+    <div class="prog"><span class="qnum">${esc(txt("scene"))} ${S.sceneIdx+1}/${CONTENT.scenes.length}</span>
+      <span class="bar"><i id="pbar"></i></span><span class="pct">${pos}/${total}</span></div>
+    <div class="panel tabbed" style="margin-top:22px">
+      <span class="filetab">${esc(txt("caseFile"))} · ${String(S.sceneIdx+1).padStart(2,"0")}</span>
+      <h2 class="scene" id="sceneName"></h2>
+      ${S.exIdx===0&&scene.intro?`<p class="lead" style="margin-top:2px">${esc(L(scene.intro,S.lang))}</p>`:""}
+      <div class="divider"></div>
+      <div id="exHost"></div>
+      <div class="cluepop" id="cluePop" role="status" aria-live="polite"><div class="ch"><span class="pin"></span><span>${esc(txt("clue"))}</span></div><div class="cb" id="clueBody"></div></div>
+      <div class="fb" id="fb" role="status" aria-live="polite"></div>
+      <div class="btnrow" id="afterRow" style="display:none">
+        <button class="btn solid" id="nextBtn">${esc(txt("next"))}</button>
+      </div>
+    </div>
+  </section>`);
+  setScreen(node); applyImages();
+  setSceneBackdrop("scene:"+scene.id);
+  requestAnimationFrame(()=>{ $("pbar").style.width=pct+"%"; revealText($("sceneName"), sceneName); });
+  renderExercise(ex, scene);
+}
+
+function lockAndAdvance(correct, your, right, ex){
+  S.answers.push({scene:S.sceneIdx, ex:S.exIdx, type:ex.type, q:L(ex.q,S.lang),
+    correct:!!correct, your:your, right:right});
+  const fb=$("fb"); fb.className="fb show "+(correct?"good":"bad");
+  fb.innerHTML = correct ? `✓ <b>${esc(txt("correctAns"))}.</b>` : `✕ <b>${esc(txt("correctAns"))}:</b> ${esc(right)}`;
+  sfx(correct?"correct":"wrong");
+  if(correct && ex.clue){ secureClue(ex.clue); }
+  $("afterRow").style.display="flex"; $("pbar").style.width=Math.round((positionIndex()+1)/S.max*100)+"%";
+  $("nextBtn").onclick=()=>{ sfx("click"); advance(); };
+  saveState(); updateBoardBtn();
+}
+function secureClue(clue){
+  const label=`${L(skin().place,S.lang)} · ${String(S.clues.length+1).padStart(2,"0")}`;
+  const text=L(clue,S.lang);
+  S.clues.push({label, text});
+  const pop=$("cluePop"); pop.classList.add("show"); sfx("clue");
+  revealText($("clueBody"), text);
+  const ct=$("boardCount"); ct.textContent=S.clues.length;
+  ct.classList.remove("pop"); void ct.offsetWidth; ct.classList.add("pop");
+}
+function advance(){
+  const scene=CONTENT.scenes[S.sceneIdx];
+  S.exIdx++;
+  if(S.exIdx>=scene.exercises.length){ S.sceneIdx++; S.exIdx=0; }
+  saveState();
+  if(S.sceneIdx>=CONTENT.scenes.length) renderAccusation();
+  else renderScene();
+}
+
+/* -------- dispatch + renderery jednotlivých typů -------- */
+function renderExercise(ex, scene){
+  const host=$("exHost");
+  host.innerHTML=`<div class="qhead"><span class="qnum">${esc(txt("evidence"))} ${positionIndex()+1}</span></div>
+    <div class="qtext">${esc(L(ex.q,S.lang))}</div><div id="ui"></div>`;
+  const ui=$("ui"); const T=ex.type;
+  if(T==="mc4"||T==="mc2") renderMC(ui, ex);
+  else if(T==="yesno") renderYesNo(ui, ex);
+  else if(T==="wordbank") renderWordbank(ui, ex);
+  else if(T==="classify") renderClassify(ui, ex);
+  if(window.__TEACHER) injectSkip(ex);
+}
+function renderMC(ui, ex){
+  const keys="ABCD"; ui.className="opts";
+  ex.opts.forEach((o,i)=>{
+    const b=elFrom(`<button class="opt"><span class="key">${keys[i]||i+1}</span><span>${esc(L(o,S.lang))}</span></button>`);
+    b.addEventListener("click",()=>{
+      ui.querySelectorAll(".opt").forEach(x=>x.classList.add("lock"));
+      const correct=(i===ex.answer);
+      b.classList.add(correct?"correct":"wrong");
+      if(!correct){ const cb=ui.querySelectorAll(".opt")[ex.answer]; cb&&cb.classList.add("correct"); }
+      lockAndAdvance(correct, L(ex.opts[i],S.lang), L(ex.opts[ex.answer],S.lang), ex);
+    });
+    ui.appendChild(b);
+  });
+}
+function renderYesNo(ui, ex){
+  ui.className="opts";
+  const labels=[{v:true,t:txt("yes")},{v:false,t:txt("no")}];
+  labels.forEach((o,i)=>{
+    const b=elFrom(`<button class="opt"><span class="key">${o.v?"✓":"✕"}</span><span>${esc(o.t)}</span></button>`);
+    b.addEventListener("click",()=>{
+      ui.querySelectorAll(".opt").forEach(x=>x.classList.add("lock"));
+      const correct=(o.v===ex.answer);
+      b.classList.add(correct?"correct":"wrong");
+      if(!correct){ const ci=labels.findIndex(L0=>L0.v===ex.answer); const cb=ui.querySelectorAll(".opt")[ci]; cb&&cb.classList.add("correct"); }
+      lockAndAdvance(correct, o.t, (ex.answer?txt("yes"):txt("no")), ex);
+    });
+    ui.appendChild(b);
+  });
+}
+function renderWordbank(ui, ex){
+  ui.innerHTML=`<div class="assemble" id="asm" data-ph="${esc(txt("assemblePh"))}"></div>
+    <div class="bank" id="bank"></div>
+    <div class="btnrow"><button class="btn" id="wbCheck" disabled>${esc(txt("check"))}</button></div>`;
+  const asm=$("asm"), bank=$("bank"), chk=$("wbCheck");
+  const words=ex.answer.slice(), pool=shuffle(words.concat(ex.extra||[]));
+  const chosen=[]; // {w, idx}
+  pool.forEach((w,idx)=>{ const t=elFrom(`<button class="tile" data-idx="${idx}">${esc(w)}</button>`);
+    t.addEventListener("click",()=>{ if(t.classList.contains("used")) return; t.classList.add("used");
+      chosen.push({w, idx}); paint(); }); bank.appendChild(t); });
+  function paint(){ asm.innerHTML=""; chosen.forEach((c,ci)=>{ const tt=elFrom(`<button class="tile">${esc(c.w)}</button>`);
+      tt.addEventListener("click",()=>{ chosen.splice(ci,1); const src=bank.querySelector(`[data-idx="${c.idx}"]`); src&&src.classList.remove("used"); paint(); });
+      asm.appendChild(tt); });
+    chk.disabled = chosen.length!==words.length; }
+  chk.addEventListener("click",()=>{ const got=chosen.map(c=>c.w);
+    const correct=got.length===words.length && got.every((w,i)=>w===words[i]);
+    bank.querySelectorAll(".tile").forEach(x=>x.classList.add("used")); chk.disabled=true; chk.style.display="none";
+    asm.style.pointerEvents="none";
+    asm.querySelectorAll(".tile").forEach((t,i)=>t.classList.add(got[i]===words[i]?"good":"bad"));
+    lockAndAdvance(correct, got.join(" "), words.join(" "), ex); });
+}
+function renderClassify(ui, ex){
+  const cats=ex.cats;
+  ui.innerHTML=`<div class="cols">${cats.map((c,ci)=>`<div class="col" data-cat="${ci}"><h4>${esc(L(c,S.lang))}</h4><div class="drop" data-cat="${ci}"></div></div>`).join("")}</div>
+    <div class="pool" id="pool"></div>
+    <div class="btnrow"><button class="btn" id="clCheck" disabled>${esc(txt("check"))}</button></div>`;
+  const pool=$("pool"), chk=$("clCheck"); let sel=null; const placed={}; // itemIdx -> catIdx
+  ex.items.forEach((it,i)=>{ const c=elFrom(`<button class="chip" data-i="${i}">${esc(L(it.t,S.lang))}</button>`);
+    c.addEventListener("click",()=>selectChip(c)); pool.appendChild(c); });
+  function selectChip(c){ if(c.classList.contains("placed")){ // vrátit do poolu
+      const i=c.getAttribute("data-i"); delete placed[i]; c.classList.remove("placed"); pool.appendChild(c); refresh(); return; }
+    if(sel===c){ sel.classList.remove("sel"); sel=null; return; }
+    if(sel) sel.classList.remove("sel"); sel=c; c.classList.add("sel"); }
+  ui.querySelectorAll(".drop").forEach(d=>{ d.addEventListener("click",()=>{ if(!sel) return;
+      const ci=+d.getAttribute("data-cat"), i=sel.getAttribute("data-i");
+      placed[i]=ci; sel.classList.remove("sel"); sel.classList.add("placed"); d.appendChild(sel); sel=null; refresh(); }); });
+  function refresh(){ chk.disabled = Object.keys(placed).length!==ex.items.length; }
+  chk.addEventListener("click",()=>{ let ok=true; const detail=[];
+    ex.items.forEach((it,i)=>{ const got=placed[i]; if(got!==it.c) ok=false;
+      const chip=ui.querySelector(`.chip[data-i="${i}"]`); chip&&chip.classList.add(got===it.c?"good":"bad");
+      detail.push(`${L(it.t,S.lang)} → ${L(cats[it.c],S.lang)}`); });
+    ui.querySelectorAll(".chip").forEach(x=>x.style.pointerEvents="none"); chk.disabled=true; chk.style.display="none";
+    lockAndAdvance(ok, ok?"✓":"—", detail.join("; "), ex); });
+}
+
+/* ===========================================================================
+   DŮKAZNÍ TABULE (modal)
+   =========================================================================== */
+function renderBoard(){
+  const wrap=$("boardWrap"); wrap.innerHTML="";
+  $("boardTitle").textContent=txt("board");
+  $("boardSub").textContent=`${L(skin().place,S.lang)} · ${S.clues.length}`;
+  if(!S.clues.length){ wrap.innerHTML=`<div class="empty">${esc(txt("boardEmpty"))}</div>`; return; }
+  S.clues.forEach(c=>{ wrap.appendChild(elFrom(
+    `<div class="note"><div class="nlabel">${esc(c.label)}</div><p>${esc(c.text)}</p></div>`)); });
+}
+function openBoard(){ renderBoard(); $("boardModal").classList.add("show"); }
+function closeBoard(){ $("boardModal").classList.remove("show"); }
+
+/* ===========================================================================
+   OBVINĚNÍ (finále = "zámek")
+   =========================================================================== */
+function renderAccusation(){
+  setSceneBackdrop(null);
+  updateBoardBtn();
+  const sk=skin();
+  const node=elFrom(`<section>
+    <p class="eyebrow">${esc(txt("accuseTitle"))}</p>
+    <div class="panel tabbed" style="margin-top:20px">
+      <span class="filetab">${esc(txt("caseFile"))} · ${esc(txt("accuseTitle"))}</span>
+      <h2 class="scene">${esc(L(sk.flavor.accuse,S.lang))}</h2>
+      <p class="lead">${esc(txt("pick"))} — ${S.clues.length} ${esc(txt("evidence").toLowerCase())}.</p>
+      <div class="suspects" id="suspects"></div>
+      <div class="btnrow"><button class="btn solid lg block" id="accuseBtn" disabled>${esc(txt("accuseBtn"))}</button></div>
+    </div>
+  </section>`);
+  setScreen(node);
+  const host=$("suspects"), btn=$("accuseBtn"); let sel=null;
+  CONTENT.suspects.forEach(p=>{ const c=elFrom(
+    `<button class="suspect" data-id="${esc(p.id)}"><span class="av"><img class="photo" data-key="portrait:${esc(p.id)}" alt="">${svgAvatar(p.av)}</span>
+      <span><span class="nm">${esc(L(p.name,S.lang))}</span><br><span class="ds">${esc(L(p.desc,S.lang))}</span></span></button>`);
+    c.addEventListener("click",()=>{ host.querySelectorAll(".suspect").forEach(x=>x.classList.remove("sel"));
+      c.classList.add("sel"); sel=p.id; btn.disabled=false; sfx("click"); });
+    host.appendChild(c); });
+  applyImages(host);
+  btn.addEventListener("click",()=>{ if(!sel) return; S.accused=sel; sfx("accuse"); saveState(); revealCulprit(); });
+}
+
+/* ===========================================================================
+   ODHALENÍ PACHATELE / ANTAGONISTA
+   =========================================================================== */
+function revealCulprit(){
+  setSceneBackdrop(null);
+  const sk=skin(); const correct=(S.accused===CONTENT.solution.culprit);
+  const culpritId=CONTENT.solution.culprit;
+  const verdict = correct ? L(sk.flavor.revealWin,S.lang) : L(sk.flavor.revealLose,S.lang);
+  const explain = CONTENT.solution.explain ? L(CONTENT.solution.explain,S.lang) : "";
+  const node=elFrom(`<section>
+    <div class="reveal ${correct?"win":"lose"} ${S.skin==="orig"?"glitch":""}" id="revealBox">
+      <img class="photo" data-key="portrait:${esc(culpritId)}" alt="">
+      ${svgAntagonist()}
+      <div class="grad"></div>
+      <div class="cap"><span class="mono" style="color:var(--danger);font-size:12px;letter-spacing:.2em">${esc(L(sk.antagonist,S.lang)).toUpperCase()}</span></div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <p class="qtext" style="margin:0 0 8px">${esc(verdict)}</p>
+      ${explain?`<p class="lead">${esc(explain)}</p>`:""}
+      <div class="btnrow"><button class="btn solid lg block" id="toResult">${esc(txt("grade"))} →</button></div>
+    </div>
+  </section>`);
+  setScreen(node); applyImages(); sfx("reveal");
+  $("toResult").addEventListener("click",()=>{ sfx("click"); renderResult(); });
+}
+
+/* ===========================================================================
+   VÝSLEDKOVÁ KARTA (kompaktní) + ROZBOR
+   =========================================================================== */
+function gradeFor(pct){ return pct>=90?1:pct>=75?2:pct>=60?3:pct>=45?4:5; }
+function correctCount(){ return S.answers.filter(a=>a.correct).length; }
+function ensureTestId(){ if(!S.testId){ S.testId=(skin().code.slice(0,3).toUpperCase())+"-"+Math.random().toString(36).slice(2,7).toUpperCase(); } return S.testId; }
+
+function renderResult(){
+  setSceneBackdrop(null);
+  S.finished=true; updateBoardBtn(); $("btnBoard").classList.remove("show");
+  const total=S.max||1, ok=correctCount(), pct=Math.round(ok/total*100), g=gradeFor(pct);
+  const solved=(S.accused===CONTENT.solution.culprit);
+  const id=ensureTestId(), when=new Date().toLocaleString(S.lang==="cs"?"cs-CZ":"en-GB");
+  saveState();
+  const node=elFrom(`<section>
+    <div class="result">
+      <div class="rcard">
+        <span class="stamp ${solved?"":"no"}">${solved?esc(txt("stampYes")):esc(txt("stampNo"))}</span>
+        <div class="rtop"><span class="who">${esc(S.name||"—")}</span>
+          <span class="meta">${esc(txt("testId"))}: ${esc(id)}<br>${esc(when)}</span></div>
+        <div class="rgrade">
+          <div class="gbadge g${g}">${g}</div>
+          <div class="gmeta"><div class="pts">${esc(txt("points"))}</div>
+            <div class="big">${ok}/${total}</div><div class="pts">${pct}%</div></div>
+        </div>
+        <div class="solved ${solved?"yes":"no"}">${solved?"✓ "+esc(txt("solvedYes")):"✕ "+esc(txt("solvedNo"))}</div>
+      </div>
+    </div>
+    <div class="review" id="review"></div>
+    <div class="btnrow" style="max-width:520px;margin:16px auto 0">
+      <button class="btn ghost block" id="againBtn">${esc(txt("again"))}</button>
+    </div>
+  </section>`);
+  setScreen(node);
+  setTimeout(()=>sfx(solved?"correct":"accuse"), 680);
+  const rv=$("review"); rv.innerHTML=`<p class="eyebrow" style="margin:0 0 8px">${esc(txt("reviewTitle"))}</p>`;
+  S.answers.forEach((a,i)=>{ rv.appendChild(elFrom(
+    `<div class="rev ${a.correct?"good":""}"><div class="rq">${i+1}. ${esc(a.q)}</div>
+      <div class="ra">${a.correct
+        ? `<span class="ok">✓ ${esc(a.your)}</span>`
+        : `<span class="me">✕ ${esc(a.your)}</span> · <span class="ok">${esc(txt("correctAns"))}: ${esc(a.right)}</span>`}</div></div>`)); });
+  $("againBtn").addEventListener("click",()=>{ sfx("click"); clearSave(); S.testId=null; showStart(); });
+}
+
+/* ===========================================================================
+   UČITELSKÝ NÁHLED — trojklik na logo nebo ?teacher=1
+   =========================================================================== */
+function buildJump(){
+  const sel=$("tbJump"); sel.innerHTML="";
+  const st=document.createElement("option"); st.value="start"; st.textContent="▸ Intro / start"; sel.appendChild(st);
+  CONTENT.scenes.forEach((s,i)=>{ const o=document.createElement("option");
+    o.value="s"+i; o.textContent=`${i+1}. ${L(s.name,S.lang)}`; sel.appendChild(o); });
+  const a=document.createElement("option"); a.value="accuse"; a.textContent="▸ "+txt("accuseTitle"); sel.appendChild(a);
+}
+function setTeacher(on){
+  window.__TEACHER=on; $("teacherBar").classList.toggle("show", on);
+  if(on){ buildJump();
+    if(!$("tbSkin")){ const sk=document.createElement("button"); sk.className="tbtn"; sk.id="tbSkin";
+      sk.onclick=toggleSkin; $("teacherBar").insertBefore(sk, $("tbReset")); }
+    if(!$("tbLang")){ const lg=document.createElement("button"); lg.className="tbtn"; lg.id="tbLang";
+      lg.onclick=toggleLang; $("teacherBar").insertBefore(lg, $("tbReset")); }
+    if(!$("tbImg")){ const im=document.createElement("button"); im.className="tbtn"; im.id="tbImg"; im.textContent="🖼 obrázky";
+      im.onclick=openImageManager; $("teacherBar").insertBefore(im, $("tbReset")); }
+    refreshTeacherLabels(); $("tbHint").textContent="trojklik = skrýt";
+  }
+}
+function refreshTeacherLabels(){
+  if($("tbSkin")) $("tbSkin").textContent = S.skin==="safe" ? "skin: Bezpečná verze" : "skin: originál";
+  if($("tbLang")) $("tbLang").textContent = "jazyk: "+(S.lang==="cs"?"CZ":"EN");
+}
+function toggleSkin(){ S.skin = S.skin==="safe"?"orig":"safe"; applySkin(); refreshTeacherLabels(); rerender(); }
+function toggleLang(){ S.lang = S.lang==="cs"?"en":"cs"; document.documentElement.lang=S.lang;
+  document.title = L(skin().name,S.lang)+" · LUDUS";
+  buildJump(); refreshTeacherLabels(); rerender(); }
+function injectSkip(ex){
+  const host=$("exHost"); if(host.querySelector(".tskip")) return;
+  const b=elFrom(`<button class="btn ghost tskip" style="margin-top:12px;font-size:12px">${esc(txt("skip"))} ⏭</button>`);
+  b.addEventListener("click",()=>{ S.answers.push({scene:S.sceneIdx,ex:S.exIdx,type:ex.type,
+    q:L(ex.q,S.lang),correct:false,your:"(přeskočeno)",right:"—"}); advance(); });
+  host.appendChild(b);
+}
+/* znovuvykreslení aktuální obrazovky (po změně skinu/jazyka) */
+function rerender(){
+  if(S.finished) return renderResult();
+  if(!S.started) return showStart();
+  if(S.sceneIdx>=CONTENT.scenes.length) return renderAccusation();
+  return renderScene();
+}
+function applySkin(){ document.body.setAttribute("data-skin", S.skin);
+  document.title = L(skin().name,S.lang)+" · LUDUS";
+  try{ Rain.glyphSet(); Rain.start(); }catch(e){} }
+
+function toggleFS(){
+  try{
+    if(document.fullscreenElement||document.webkitFullscreenElement){
+      (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+    }else{
+      const el=document.documentElement;
+      (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+    }
+  }catch(e){}
+}
+function wireTeacherTriple(){
+  let n=0,t=0; $("brand").addEventListener("click",()=>{ const now=Date.now();
+    if(now-t>600) n=0; t=now; n++; if(n>=3){ n=0; setTeacher(!window.__TEACHER); } });
+  $("tbJump").addEventListener("change",e=>{ const v=e.target.value;
+    if(v==="start"){ S.started=false; showStart(); return; }
+    if(v==="accuse"){ S.started=true; renderAccusation(); return; }
+    const i=+v.slice(1); S.started=true; S.finished=false; S.sceneIdx=i; S.exIdx=0;
+    if(!S.max) S.max=totalExercises(); rerender(); });
+  $("btnFS").addEventListener("click",toggleFS);
+  $("tbAccuse").addEventListener("click",()=>{ S.started=true; renderAccusation(); });
+  $("tbResult").addEventListener("click",()=>{ S.started=true; if(!S.max) S.max=totalExercises(); renderResult(); });
+  $("tbReset").addEventListener("click",()=>{ clearSave(); S.testId=null; S.started=false; S.finished=false;
+    S.sceneIdx=0; S.exIdx=0; S.answers=[]; S.clues=[]; S.accused=null; showStart(); });
+}
+
+/* ===========================================================================
+   RE-INJEKCE OBSAHU Z BUILDERU
+   =========================================================================== */
+window.LUDUS_LOAD=function(content){
+  try{ CONTENT=normalizeContent(content); }catch(e){ return; }
+  if(CONTENT.meta && CONTENT.meta.skin && SKINS[CONTENT.meta.skin]) S.skin=CONTENT.meta.skin;
+  if(CONTENT.meta && CONTENT.meta.lang && I18N[CONTENT.meta.lang]) S.lang=CONTENT.meta.lang;
+  clearSave(); S.testId=null; S.started=false; S.finished=false; S.sceneIdx=0; S.exIdx=0;
+  S.score=0; S.max=totalExercises(); S.answers=[]; S.clues=[]; S.accused=null;
+  document.documentElement.lang=S.lang; applySkin();
+  if(window.__TEACHER){ buildJump(); refreshTeacherLabels(); }
+  showStart();
+};
+
+/* ===========================================================================
+   BOOT
+   =========================================================================== */
+function boot(){
+  loadImages();
+  try{ Rain.setup(); }catch(e){} addEventListener("resize",()=>{ try{ Rain.resize(); }catch(e){} });
+  // skin + jazyk z metadat obsahu
+  if(CONTENT.meta && CONTENT.meta.skin && SKINS[CONTENT.meta.skin]) S.skin=CONTENT.meta.skin;
+  if(CONTENT.meta && CONTENT.meta.lang && I18N[CONTENT.meta.lang]) S.lang=CONTENT.meta.lang;
+  document.documentElement.lang=S.lang; applySkin();
+  S.max=totalExercises();
+
+  // topbar
+  $("btnSound").addEventListener("click",()=>setSound(!S.sound));
+  setSound(loadSoundPref());
+  $("btnBoard").addEventListener("click",()=>{ openBoard(); });
+  $("boardClose").addEventListener("click",closeBoard);
+  $("boardModal").addEventListener("click",e=>{ if(e.target===$("boardModal")) closeBoard(); });
+  $("imgClose").addEventListener("click",closeImageManager);
+  $("imgModal").addEventListener("click",e=>{ if(e.target===$("imgModal")) closeImageManager(); });
+  $("btnMenu").addEventListener("click",()=>{ if(S.started&&!S.finished){
+      if(confirm("Restartovat na úvod? Postup se ztratí.")){ clearSave(); S.started=false; S.finished=false;
+        S.sceneIdx=0; S.exIdx=0; S.answers=[]; S.clues=[]; S.accused=null; S.testId=null; showStart(); }
+    } else showStart(); });
+  wireTeacherTriple();
+  if(/[?&]teacher=1/.test(location.search)) setTeacher(true);
+
+  // splash / intro  (intro video + znělka — base64 se vkládá do bloku INTRO nakonec)
+  const sp=$("splash"), inner=$("splashInner"), vid=$("splashVideo"), skip=$("splashSkip");
+  let jingle=null;
+  if(INTRO.audioBase64){ try{ jingle=new Audio(INTRO.audioBase64); jingle.preload="auto"; }catch(e){} }
+  function playJingle(){ if(!jingle) return; jingle.play().catch(()=>{}); }
+  function stopJingle(){ if(!jingle) return; try{ jingle.pause(); jingle.currentTime=0; }catch(e){} }
+  // pokud prohlížeč blokuje autoplay zvuku, spustí se při prvním doteku/kliknutí
+  function gestureAudio(){ playJingle(); document.removeEventListener("pointerdown",gestureAudio); }
+  document.addEventListener("pointerdown",gestureAudio,{once:true});
+
+  function dismiss(){ if(sp.classList.contains("gone")) return; sp.classList.add("gone");
+    try{ vid.pause(); }catch(e){} stopJingle(); setTimeout(()=>{ try{ sp.remove(); }catch(e){} },750); afterSplash(); }
+
+  if(INTRO.videoBase64){ vid.src=INTRO.videoBase64; vid.style.display="block"; skip.classList.remove("hidden");
+    vid.play().catch(()=>{}); vid.addEventListener("ended",dismiss); skip.addEventListener("click",dismiss);
+    playJingle();
+  } else {
+    inner.innerHTML=`<div class="boot" id="spBoot"></div><div class="big" id="spName"></div><div class="sub">${esc(txt("enter"))}</div>`;
+    playJingle();
+    sp.addEventListener("click",dismiss);
+    const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+    const lines=(skin().bootLines && skin().bootLines[S.lang]) || [];
+    const bootEl=$("spBoot"), nameEl=$("spName");
+    function showName(){ revealText(nameEl, L(skin().name,S.lang), ()=>{
+      if(INTRO.holdMs>0) setTimeout(dismiss, INTRO.holdMs); }); }
+    if(reduced || !lines.length){ bootEl.textContent=lines.join("\n"); showName(); }
+    else { // řádky se "napíšou" jako v terminálu, pak se dešifruje název
+      let li=0, ci=0, buf="";
+      const iv=setInterval(()=>{
+        if(li>=lines.length){ clearInterval(iv); showName(); return; }
+        ci++; bootEl.textContent=buf+lines[li].slice(0,ci)+(ci<lines[li].length?"▍":"");
+        if(ci>=lines[li].length){ buf+=lines[li]+"\n"; li++; ci=0; }
+      }, 22);
+      sp.addEventListener("click",()=>clearInterval(iv),{once:true});
+    }
+  }
+
+  // obnova rozehrané hry
+  function afterSplash(){
+    const sv=loadState();
+    if(sv && sv.started){
+      S.name=sv.name||""; S.sceneIdx=sv.sceneIdx||0; S.exIdx=sv.exIdx||0; S.score=sv.score||0;
+      S.max=sv.max||totalExercises(); S.answers=sv.answers||[]; S.clues=sv.clues||[];
+      S.accused=sv.accused||null; S.finished=!!sv.finished; S.started=true;
+      updateBoardBtn();
+      if(S.finished) renderResult();
+      else if(S.sceneIdx>=CONTENT.scenes.length) renderAccusation();
+      else renderScene();
+    } else { showStart(); }
+  }
+  try{ Rain.start(); }catch(e){}
+}
+document.addEventListener("DOMContentLoaded", boot);
+</script>
+
+
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return !!S.sound; }catch(e){ return true; } },
+  setSound: function(on){ try{ setSound(!!on); }catch(e){} },
+  getLang: function(){ try{ return S.lang; }catch(e){ return "cs"; } },
+  save: function(){ try{ if(!S.started) return false; saveState(); return true; }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{
+    var msg = (S.lang==="en") ? "Really start over? Progress will be erased." : "Opravdu začít znovu? Postup bude smazán.";
+    if(!confirm(msg)) return;
+    clearSave(); S.started=false; S.finished=false; S.sceneIdx=0; S.exIdx=0;
+    S.answers=[]; S.clues=[]; S.accused=null; S.testId=null; showStart();
+  }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<audio id="ludus-soundtrack" loop preload="auto"></audio><!-- cine vynechán — hra má vlastní intro systém -->
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Případ Simulakrum" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
+</body>
+</html>

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#150b2e">
+<title>Továrna na smích — LUDUS</title>
+<style>
+:root{
+  --bg:#150b2e; --bg2:#1d1142; --panel:#241652; --panel2:#190f3c;
+  --ink:#f4eeff; --muted:#b8a8de; --faint:#7e6cac;
+  --lime:#aef84a; --cyan:#3fe0ff; --pink:#ff79c6; --amber:#ffb33c; --purple:#9b6bff;
+  --scare:#ff4d6d; --ok:#9bf06a;
+  --glass:rgba(180,200,255,.07); --edge:rgba(185,210,255,.26); --line:rgba(165,150,225,.16);
+  --sans:'Segoe UI',Roboto,-apple-system,system-ui,'Helvetica Neue',Arial,sans-serif;
+  --mono:'SFMono-Regular',ui-monospace,'DejaVu Sans Mono','Roboto Mono',Consolas,monospace;
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--sans); color:var(--ink); min-height:100%;
+  background:
+    radial-gradient(1000px 620px at 82% -12%, rgba(63,224,255,.13), transparent 60%),
+    radial-gradient(880px 600px at 8% 112%, rgba(155,107,255,.18), transparent 60%),
+    radial-gradient(700px 500px at 50% 50%, rgba(174,248,74,.04), transparent 70%),
+    linear-gradient(180deg,#150b2e 0%,#1c1040 52%,#120a28 100%);
+  overflow-x:hidden;
+}
+.wrap{max-width:680px;margin:0 auto;padding:12px 14px 44px;position:relative;z-index:3}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;gap:10px;padding:4px 2px 8px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;flex:1;min-width:0}
+.logo .mark{width:36px;height:36px;flex:none;border-radius:11px;position:relative;
+  background:linear-gradient(140deg,var(--lime),var(--cyan));
+  display:grid;place-items:center;box-shadow:0 0 18px rgba(174,248,74,.4)}
+.logo .mark svg{width:23px;height:23px}
+.logo .meta{min-width:0}
+.logo .ku{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:var(--faint);text-transform:uppercase}
+.logo .wn{font-weight:800;font-size:14.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctrls{display:flex;gap:8px;flex:none;align-items:center}
+.tflag{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#1a0f3e;
+  background:var(--amber);padding:4px 9px;border-radius:20px;font-weight:800;display:none}
+.tflag.on{display:inline-block}
+.ctrl{width:40px;height:40px;flex:none;border:1px solid var(--line);border-radius:12px;cursor:pointer;
+  background:var(--glass);color:var(--muted);display:grid;place-items:center;transition:.14s;backdrop-filter:blur(4px)}
+.ctrl:hover{color:var(--ink);border-color:var(--edge);background:rgba(174,248,74,.10)}
+.ctrl:active{transform:scale(.93)}
+.ctrl svg{width:20px;height:20px}
+.ctrl.off{color:var(--faint)}
+
+/* ---------- canister rack strip ---------- */
+.rackstrip{display:flex;align-items:center;gap:10px;margin:2px 2px 14px;
+  padding:9px 13px;border:1px solid var(--line);border-radius:14px;
+  background:linear-gradient(180deg,rgba(36,22,82,.6),rgba(25,15,60,.5))}
+.rackstrip .rl{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;flex:none}
+.rack{display:flex;gap:8px;align-items:flex-end;flex:1;min-width:0;overflow:hidden}
+.can{width:20px;height:34px;flex:none}.can svg{display:block;width:100%;height:100%}
+.rackstrip .rn{font-family:var(--mono);font-size:11px;color:var(--lime);flex:none;font-weight:600}
+
+/* ---------- panel ---------- */
+.panel{background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);border-radius:var(--r);padding:18px;position:relative;overflow:hidden;
+  box-shadow:0 22px 60px rgba(8,2,24,.55), inset 0 1px 0 rgba(255,255,255,.05)}
+.panel::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--lime),var(--cyan),transparent);opacity:.55}
+
+/* ---------- hero ---------- */
+.stage{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--edge);
+  background:#0c0722;aspect-ratio:16/10;margin-bottom:16px;box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
+.stage .imgslot{position:absolute;inset:0}
+.stage .imgslot img{width:100%;height:100%;object-fit:cover;animation:kb 28s ease-in-out infinite alternate}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+.stage .vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(130% 100% at 50% 18%,transparent 42%,rgba(10,4,28,.72) 100%)}
+@keyframes kb{from{transform:scale(1.03)}to{transform:scale(1.15) translate(-2%,-2%)}}
+
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--lime);
+  text-transform:uppercase;margin:0 0 8px}
+h1.title{margin:0 0 7px;font-size:31px;line-height:1.02;letter-spacing:-.015em;font-weight:800}
+.lede{color:var(--muted);font-size:14.5px;line-height:1.58;margin:0 0 18px}
+.internal{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.12em;color:var(--scare);border:1px solid rgba(255,77,109,.4);
+  background:rgba(255,77,109,.08);padding:4px 9px;border-radius:20px;margin-bottom:12px}
+
+.field label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  color:var(--faint);text-transform:uppercase;margin:0 0 7px}
+.input{width:100%;background:#120a2e;border:1px solid var(--line);border-radius:13px;
+  color:var(--ink);font-size:16px;padding:14px;font-family:var(--sans);outline:none;transition:.15s}
+.input:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(174,248,74,.16)}
+
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--sans);font-weight:800;
+  border-radius:14px;padding:15px 18px;font-size:15.5px;width:100%;transition:transform .08s, filter .15s;
+  background:linear-gradient(135deg,var(--lime),var(--cyan));color:#0d1804;letter-spacing:.01em;
+  box-shadow:0 12px 30px rgba(174,248,74,.26)}
+.btn:active{transform:translateY(1px) scale(.995)}
+.btn:disabled{filter:grayscale(.6) brightness(.7);cursor:not-allowed;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none;font-weight:700}
+.btn.ghost:hover{color:var(--ink);border-color:var(--edge)}
+.btnrow{display:flex;gap:10px;margin-top:15px}
+
+/* ---------- experiment header ---------- */
+.exphead{display:flex;align-items:center;gap:13px;margin-bottom:15px}
+.exphead .canbig{width:78px;flex:none;filter:drop-shadow(0 6px 16px rgba(0,0,0,.4))}
+.exphead .meta{min-width:0;flex:1}
+.exphead .step{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.exphead h2{margin:4px 0 0;font-size:19px;line-height:1.14;font-weight:800;display:flex;align-items:center;gap:8px}
+.exphead h2 .dchip{width:14px;height:18px;border-radius:3px;flex:none;box-shadow:0 0 10px currentColor}
+.progline{height:7px;border-radius:6px;background:rgba(160,150,225,.16);overflow:hidden;margin-top:10px;position:relative}
+.progline i{display:block;height:100%;width:0;border-radius:6px;transition:width .55s cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- question ---------- */
+.qcard{animation:rise .42s cubic-bezier(.2,.85,.25,1)}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.qtype{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--faint);text-transform:uppercase;margin-bottom:10px}
+.prompt{font-size:20px;line-height:1.42;font-weight:600;margin:0 0 16px}
+.prompt .gap{display:inline-block;min-width:74px;border-bottom:2px dashed var(--cyan);margin:0 4px;color:var(--cyan);text-align:center;font-weight:800}
+.opts{display:grid;gap:10px}.opts.two,.opts.cats{grid-template-columns:1fr 1fr}
+.opt{appearance:none;text-align:left;cursor:pointer;border-radius:14px;padding:15px;font-size:16px;
+  color:var(--ink);background:#170d3a;border:1px solid var(--line);transition:.13s;font-family:var(--sans);
+  display:flex;align-items:center;gap:12px;line-height:1.35}
+.opt:hover{border-color:var(--edge);background:#1d1148;transform:translateY(-1px)}
+.opt .dot{width:10px;height:10px;border-radius:50%;background:var(--faint);flex:none;transition:.13s}
+.opt:hover .dot{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.opt.correct{border-color:var(--ok);background:rgba(155,240,106,.13);color:#e8ffd6}
+.opt.correct .dot{background:var(--ok);box-shadow:0 0 12px var(--ok)}
+.opt.wrong{border-color:var(--scare);background:rgba(255,77,109,.13);color:#ffd6de;animation:shake .36s}
+.opt.wrong .dot{background:var(--scare)}
+.opt.lock{pointer-events:none;opacity:.55}
+@keyframes shake{0%,100%{transform:translateX(0)}18%{transform:translateX(-8px)}38%{transform:translateX(7px)}58%{transform:translateX(-5px)}78%{transform:translateX(3px)}}
+
+.bank{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+.chip{cursor:pointer;border-radius:12px;padding:12px 16px;font-size:15.5px;font-weight:700;
+  background:#1a0f44;border:1px solid var(--edge);color:var(--ink);transition:.13s;font-family:var(--sans)}
+.chip:hover{background:#23145a;transform:translateY(-2px)}
+.chip.correct{border-color:var(--ok);background:rgba(155,240,106,.16);color:#e8ffd6}
+.chip.wrong{border-color:var(--scare);background:rgba(255,77,109,.16);animation:shake .36s}
+.chip.lock{opacity:.45;pointer-events:none}
+
+.fb{margin-top:15px;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.5;display:none;animation:rise .3s}
+.fb.show{display:block}
+.fb.good{background:rgba(155,240,106,.10);border:1px solid rgba(155,240,106,.36);color:#d4f7bf}
+.fb.bad{background:rgba(255,77,109,.10);border:1px solid rgba(255,77,109,.36);color:#ffcfd8}
+.fb .h{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:7px;margin-bottom:5px;opacity:.9}
+
+/* classify: the sorted word as a big centered chip */
+.prompt.word{text-align:center;font-size:27px;font-weight:800;letter-spacing:.01em;
+  padding:16px 12px;border:1px dashed var(--edge);border-radius:16px;background:rgba(180,200,255,.05)}
+
+/* laugh burst particles on correct answer */
+.burst{position:fixed;z-index:70;pointer-events:none;font-size:18px;will-change:transform,opacity;
+  animation:burst .85s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes burst{from{transform:translate(0,0) scale(1);opacity:1}
+  to{transform:translate(var(--dx),var(--dy)) scale(.5) rotate(var(--rot));opacity:0}}
+
+/* rack: current station canister pulses */
+.can.cur svg{animation:curp 1.5s ease-in-out infinite;transform-origin:center bottom}
+@keyframes curp{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* canister completion pop */
+.canpop{animation:cpop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes cpop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+.exphead{animation:rise .4s cubic-bezier(.2,.85,.25,1)}
+
+/* ---------- synthesis ---------- */
+.synthwrap{text-align:center}
+.synthstage{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--edge);
+  background:#0c0722;aspect-ratio:1/1;max-width:320px;margin:0 auto 16px;box-shadow:inset 0 0 60px rgba(0,0,0,.55)}
+.synthstage .imgslot{position:absolute;inset:0}
+.synthstage .imgslot img{width:100%;height:100%;object-fit:cover;animation:breathe 6s ease-in-out infinite}
+.synthstage svg{position:absolute;inset:0;width:100%;height:100%}
+@keyframes breathe{0%,100%{transform:scale(1.02);filter:brightness(.92)}50%{transform:scale(1.07);filter:brightness(1.14)}}
+
+/* ---------- result ---------- */
+.card{max-width:530px;margin:0 auto;border-radius:22px;overflow:hidden;border:1px solid var(--edge);
+  background:linear-gradient(180deg,#26165a,#170d38);box-shadow:0 26px 66px rgba(6,1,20,.6)}
+.card .top{padding:19px 20px 17px;display:flex;align-items:center;gap:15px;
+  background:linear-gradient(135deg,rgba(174,248,74,.16),rgba(63,224,255,.12),rgba(155,107,255,.10));
+  border-bottom:1px solid var(--line)}
+.card .gradebadge{width:80px;height:80px;flex:none;border-radius:20px;display:grid;place-items:center;
+  font-size:42px;font-weight:800;color:#0d1804;font-family:var(--mono);
+  background:linear-gradient(135deg,var(--lime),var(--cyan));box-shadow:0 8px 24px rgba(174,248,74,.4)}
+.card .gradebadge.g3{background:linear-gradient(135deg,var(--amber),#ff9a3c);color:#241405}
+.card .gradebadge.g4{background:linear-gradient(135deg,#ff9a4c,var(--scare));color:#2a0a12}
+.card .gradebadge.g5{background:linear-gradient(135deg,var(--scare),#d63a58);color:#fff}
+.card .who .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--faint);text-transform:uppercase}
+.card .who h3{margin:3px 0 6px;font-size:22px;font-weight:800}
+.card .who .pct{font-family:var(--mono);font-size:13px;color:var(--lime)}
+.card .rows{padding:15px 20px 19px}
+.card .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;
+  border-bottom:1px solid rgba(160,150,225,.10);font-size:13.5px}
+.card .row:last-child{border-bottom:0}
+.card .row .k{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.card .row .v{font-weight:700;font-family:var(--mono)}
+.review{margin:18px auto 0;max-width:530px}
+.review h4{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--faint);text-transform:uppercase;margin:0 0 11px;text-align:center}
+.revrow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:13px;
+  background:#170d3a;border:1px solid var(--line);margin-bottom:8px}
+.revrow .ic{width:12px;height:16px;border-radius:3px;flex:none;box-shadow:0 0 8px currentColor}
+.revrow .nm{flex:1;font-size:14px;font-weight:600}
+.revrow .sc{font-family:var(--mono);font-size:13px;color:var(--muted)}
+
+/* ---------- teacher panel ---------- */
+.scrim{position:fixed;inset:0;background:rgba(6,2,18,.68);backdrop-filter:blur(3px);z-index:40;display:none}
+.scrim.on{display:block}
+.tpanel{position:fixed;right:0;top:0;height:100%;width:min(390px,92vw);z-index:50;
+  background:linear-gradient(180deg,#24155a,#150c34);border-left:1px solid var(--edge);
+  transform:translateX(102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  overflow-y:auto;padding:20px 18px 44px;box-shadow:-22px 0 64px rgba(0,0,0,.55)}
+.tpanel.on{transform:none}
+.tpanel h3{margin:0 0 4px;font-size:17px;display:flex;align-items:center;gap:8px}
+.tpanel .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--amber);text-transform:uppercase;margin:0 0 18px}
+.tsec{margin-bottom:20px}
+.tsec>.lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--faint);text-transform:uppercase;margin:0 0 9px;display:block}
+.jumpgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tbtn{cursor:pointer;border:1px solid var(--line);background:#1a0f44;color:var(--ink);border-radius:11px;
+  padding:11px 12px;font-size:13px;font-family:var(--sans);text-align:left;transition:.12s;display:flex;align-items:center;gap:8px}
+.tbtn:hover{border-color:var(--edge);background:#22145a}
+.tbtn.live{border-color:var(--lime);color:var(--lime)}
+.tbtn .dc{width:10px;height:13px;border-radius:2px;flex:none}
+.toggle{display:flex;gap:7px;background:#120a2e;border:1px solid var(--line);border-radius:12px;padding:4px}
+.toggle button{flex:1;cursor:pointer;border:0;background:transparent;color:var(--muted);padding:10px;border-radius:9px;
+  font-size:13px;font-family:var(--sans);font-weight:700;transition:.12s}
+.toggle button.on{background:linear-gradient(135deg,var(--lime),var(--cyan));color:#0d1804}
+.toggle button.on.danger{background:linear-gradient(135deg,var(--scare),#d63a58);color:#fff}
+.slot{border:1px solid var(--line);border-radius:13px;padding:11px;margin-bottom:9px;background:rgba(26,15,68,.55)}
+.slot .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.slot .sh b{font-size:13px}.slot .sh .st{font-family:var(--mono);font-size:10px;color:var(--faint)}
+.slot .prev{height:66px;border-radius:10px;background:#0c0722;border:1px dashed var(--line);overflow:hidden;display:grid;place-items:center;margin-bottom:9px}
+.slot .prev img{width:100%;height:100%;object-fit:cover}
+.slot .prev span{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.1em}
+.slot .sbtns{display:flex;gap:7px}
+.upbtn{flex:1;position:relative;overflow:hidden;cursor:pointer;text-align:center;border:1px solid var(--edge);
+  background:#1a0f44;color:var(--ink);border-radius:10px;padding:9px;font-size:12px;font-weight:700}
+.upbtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.clr{cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--faint);border-radius:10px;padding:9px 12px;font-size:12px}
+.clr:hover{color:var(--scare);border-color:var(--scare)}
+.skipbtn{margin-top:9px;width:100%;cursor:pointer;border:1px dashed var(--amber);background:rgba(255,179,60,.08);
+  color:var(--amber);border-radius:11px;padding:11px;font-size:13px;font-weight:800;font-family:var(--sans)}
+.note{font-size:11.5px;color:var(--faint);line-height:1.55;margin-top:6px}
+
+/* ---------- ambient: floating eyes + spores ---------- */
+.amb{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.amb .sp{position:absolute;bottom:-14px;border-radius:50%;filter:blur(.4px);animation:float linear infinite;opacity:0}
+@keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}12%{opacity:.5}88%{opacity:.4}100%{transform:translateY(-106vh) translateX(20px);opacity:0}}
+.amb .eye{position:absolute;animation:blinkpos 9s ease-in-out infinite;opacity:.0}
+@keyframes blinkpos{0%,100%{opacity:0}10%,90%{opacity:.32}}
+.blink{transform-origin:center;animation:bk 4.5s ease-in-out infinite}
+@keyframes bk{0%,46%,52%,100%{transform:scaleY(1)}49%{transform:scaleY(.1)}}
+
+@media (max-width:430px){
+  h1.title{font-size:26px}.prompt{font-size:18px}
+  .opts.two,.opts.cats{grid-template-columns:1fr}
+  .exphead .canbig{width:64px}
+  .logo .wn{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.05ms!important}}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+</style>
+<style>
+#sound,#fs{display:none!important} /* nahrazeno jednotným LUDUS ovládáním vpravo nahoře */
+.topbar{padding-right:200px}
+@media (max-width:560px){.topbar{padding-right:170px}}
+</style>
+</head>
+<body>
+<div class="amb" id="amb" aria-hidden="true"></div>
+<div class="wrap">
+  <div class="topbar">
+    <div class="logo" id="logo" title="LUDUS">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11a8 8 0 0 1 16 0v3.5a3.5 3.5 0 0 1-3.5 3.5H16M4 11v3.5A3.5 3.5 0 0 0 7.5 18H8" stroke="#0d1804" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="11" r="1.6" fill="#0d1804"/><circle cx="15" cy="11" r="1.6" fill="#0d1804"/><path d="M9 15.5q3 2 6 0" stroke="#0d1804" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="meta"><div class="ku">LUDUS · hra</div><div class="wn" id="worldname">Továrna na smích</div></div>
+    </div>
+    <span class="tflag" id="tflag">UČITEL</span>
+    <div class="ctrls">
+      <button class="ctrl" id="sound" aria-label="Zvuk" title="Zvuk"></button>
+      <button class="ctrl" id="fs" aria-label="Celá obrazovka" title="Celá obrazovka"></button>
+    </div>
+  </div>
+  <div class="rackstrip">
+    <span class="rl">kanystry</span>
+    <div class="rack" id="rack" aria-hidden="true"></div>
+    <span class="rn" id="racknum">0/0</span>
+  </div>
+  <div id="screen"></div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="tpanel" id="tpanel" aria-label="Učitelský panel"></aside>
+
+<script>
+"use strict";
+/* ====================================================================
+   LUDUS ENGINE · PŘÍŠERKY S.R.O. / TOVÁRNA NA SMÍCH
+   codename: laughworks:factory  ·  mechanic: laboratory (doors+canisters)
+   single-file · offline · Dialect A · dual-skin · CZ grading
+   ==================================================================== */
+
+/* ---------- DEFAULT CONTENT (LUDUS_CONTENT v2, Dialect A) ---------- */
+const LUDUS_CONTENT = {
+  meta:{
+    subject:"Angličtina · gramatika",
+    skin:"bezpečná",
+    colors:["#3fe0ff","#ff79c6","#aef84a","#ffb33c","#9b6bff"]
+  },
+  stations:[
+    { name:"Modré dveře — přítomné časy",
+      exercise:{ type:"mc4", qs:[
+        { q:"She ___ to school every morning.", opts:["goes","go","going","gone"], a:0, why:"Přítomný čas prostý, 3. osoba j.č. přidává -es." },
+        { q:"Look! It ___ outside right now.", opts:["is raining","rains","rain","rained"], a:0, why:"Děj právě probíhá → přítomný čas průběhový." },
+        { q:"Water ___ at 100 °C.", opts:["boils","boil","is boiling","boiled"], a:0, why:"Vědecký fakt → přítomný čas prostý." },
+        { q:"The monsters ___ a new door at the moment.", opts:["are testing","test","tests","tested"], a:0, why:"„at the moment“ → průběhový čas." }
+      ]}},
+    { name:"Růžové dveře — členy a množství",
+      exercise:{ type:"mc2", qs:[
+        { q:"I need ___ apple for the snack.", opts:["an","a"], a:0, why:"Před samohláskou používáme „an“." },
+        { q:"She is ___ brilliant comedian.", opts:["a","an"], a:0, why:"Před souhláskovým zvukem „a“." },
+        { q:"Can I have ___ water, please?", opts:["some","a"], a:0, why:"Nepočitatelná podstatná jména → „some“." },
+        { q:"He found ___ new door.", opts:["a","an"], a:0, why:"„new“ začíná souhláskou → „a“." }
+      ]}},
+    { name:"Zelené dveře — pravda / nepravda",
+      exercise:{ type:"yesno", qs:[
+        { q:"Minulý čas slovesa „go“ je „goed“.", a:false, why:"Správně je „went“ — nepravidelné sloveso." },
+        { q:"Množné číslo od „mouse“ je „mice“.", a:true, why:"Nepravidelné množné číslo." },
+        { q:"Druhý stupeň od „good“ je „more good“.", a:false, why:"Správně je „better“." },
+        { q:"„Energy“ je nepočitatelné podstatné jméno.", a:true, why:"Neříkáme „an energy / energies“." }
+      ]}},
+    { name:"Oranžové dveře — doplň z banku",
+      exercise:{ type:"wordbank",
+        bank:["scary","carefully","collected","quickly"],
+        qs:[
+          { q:"The big door was very ___.", a:"scary", why:"Po „very“ následuje přídavné jméno." },
+          { q:"She always works ___ on the factory floor.", a:"carefully", why:"Příslovce způsobu ke slovesu „works“." },
+          { q:"We ___ a lot of laughs yesterday.", a:"collected", why:"Minulý čas — „yesterday“." },
+          { q:"The canister filled up ___.", a:"quickly", why:"Příslovce popisuje, jak děj proběhl." }
+        ]}},
+    { name:"Fialové dveře — roztřiď",
+      exercise:{ type:"classify",
+        cats:["Countable","Uncountable"],
+        qs:[
+          { q:"door", a:0, why:"„a door, two doors“ — počitatelné." },
+          { q:"energy", a:1, why:"„some energy“ — nepočitatelné." },
+          { q:"canister", a:0, why:"„a canister, canisters“." },
+          { q:"laughter", a:1, why:"Neříkáme „a laughter / laughters“." },
+          { q:"monster", a:0, why:"„a monster, monsters“." },
+          { q:"fun", a:1, why:"Nepočitatelné — bez množného čísla." }
+        ]}}
+  ],
+  finale:{
+    name:"Hlavní generátor — napájení města",
+    exercise:{ type:"mc4", qs:[
+      { q:"If I ___ more time, I would open every door.", opts:["had","have","will have","having"], a:0, why:"2. kondicionál: if + minulý čas, would + infinitiv." },
+      { q:"This is the ___ door we have ever found.", opts:["scariest","scaryest","most scary","more scary"], a:0, why:"3. stupeň krátkého přídavného jména: scary → scariest." },
+      { q:"All the canisters ___ filled by the team.", opts:["were","was","is","be"], a:0, why:"Trpný rod, množné číslo, minulost → „were“." },
+      { q:"By midnight, the factory ___ the whole city.", opts:["will have powered","powered","powers","is powering"], a:0, why:"Předbudoucí čas: „by midnight“ → will have + příčestí." }
+    ]}
+  }
+};
+
+/* ---------- DIALECT COERCION (__ludusCoerceV2) ---------- */
+function __ludusCoerceV2(raw){
+  raw=raw||{};
+  const meta=raw.meta||{};
+  const colors=(meta.colors&&meta.colors.length)?meta.colors:["#3fe0ff","#ff79c6","#aef84a","#ffb33c","#9b6bff"];
+  let srcStations=raw.stations||raw.rooms||raw.levels||raw.doors||[];
+  function coerceStation(st,i){
+    st=st||{};
+    const name=st.name||st.title||st.label||("Dveře "+(i+1));
+    let ex=st.exercise||st.ex||{};
+    if(!ex.qs&&Array.isArray(st.questions)) ex={type:st.type||"mc4",qs:st.questions};
+    let type=(ex.type||"mc4").toLowerCase();
+    const tm={choice:"mc4",multichoice:"mc4",truefalse:"yesno",tf:"yesno",gapfill:"wordbank",fill:"wordbank",sort:"classify",match:"classify"};
+    type=tm[type]||type; if(!["mc4","mc2","yesno","wordbank","classify"].includes(type)) type="mc4";
+    let qs=Array.isArray(ex.qs)?ex.qs:(Array.isArray(ex.questions)?ex.questions:[]);
+    qs=qs.map(q=>{ q=q||{};
+      const out={q:(q.q||q.prompt||q.text||"").toString(),why:(q.why||q.explain||q.exp||"").toString()};
+      let opts=q.opts||q.options||q.choices; if(Array.isArray(opts)) out.opts=opts.map(String);
+      let a=(q.a!==undefined)?q.a:(q.correct!==undefined?q.correct:q.answer);
+      if(typeof a==="string"&&out.opts){const idx=out.opts.indexOf(a);if(idx>=0)a=idx;}
+      out.a=a; return out; });
+    return {name,exercise:{type,qs,bank:(ex.bank||[]).map(String),cats:(ex.cats||ex.categories||[]).map(String)}};
+  }
+  const stations=srcStations.map(coerceStation);
+  let finale=raw.finale||raw.boss||null; if(finale) finale=coerceStation(finale,stations.length);
+  return { meta:{ subject:meta.subject||raw.subject||"", skin:meta.skin||"bezpečná", colors }, stations, finale };
+}
+
+/* ---------- SKINS (safe default / gated original) ---------- */
+const SKINS={
+  safe:{ key:"safe", world:"Továrna na smích", tag:"Laughworks Factory", internal:false,
+    intro:"Vítej v Továrně na smích. Za každými dveřmi je dětský pokoj — rozesměj děti správnými odpověďmi, naplň kanystry smíškovou energií a spusť velký výboj, který rozsvítí celé město.",
+    energy:"smíšková energie", finaleCity:"města" },
+  original:{ key:"original", world:"Příšerky s.r.o.", tag:"Monsters at work", internal:true,
+    intro:"Vítej v Příšerkách s.r.o. Za každými dveřmi čeká dětský pokoj — rozesměj děti, naplň kanystry energií a spusť velký výboj přes celé Monstropolis.",
+    energy:"energie smíchu", finaleCity:"Monstropolis" }
+};
+
+/* ---------- I18N (CZ default / EN teacher toggle) ---------- */
+const I18N={
+  cs:{ name:"Tvé jméno", begin:"Otevřít první dveře", cont:"Pokračovat",
+    goodH:"Smích!", badH:"Leknutí!", why:"Vysvětlení", canDone:"Kanystr naplněn",
+    door:"Dveře", of:"z", synth:"Velký výboj", finish:"Spustit generátor",
+    resultH:"Výplatní páska", student:"Příšerka", testid:"ID směny", date:"Datum",
+    grade:"Známka", score:"Energie", review:"Přehled dveří", restart:"Nová směna",
+    retry:"Zkus to znovu", true_:"Pravda", false_:"Nepravda", teacher:"Učitelský panel",
+    jump:"Rychlý přechod", intro:"Úvod", result:"Výsledek", images:"Obrázky (sloty)",
+    lang:"Jazyk rozhraní", skin:"Vzhled", skinSafe:"bezpečná", skinOrig:"originál",
+    skip:"Přeskočit dveře", close:"Zavřít", upload:"Nahrát", empty:"prázdné",
+    filled:"nahráno", clear:"Smazat", preview:"Náhled učitele · plný průchod",
+    slotPoster:"Plakát / továrna", slotDiscovery:"Generátor (finále)", slotBench:"Pozadí haly",
+    internalOnly:"jen interně — vnitřní výuka", synthLede:"Všechny kanystry jsou plné. Spusť hlavní generátor a rozsviť" },
+  en:{ name:"Your name", begin:"Open the first door", cont:"Continue",
+    goodH:"A laugh!", badH:"A scare!", why:"Explanation", canDone:"Canister filled",
+    door:"Door", of:"of", synth:"The big surge", finish:"Start the generator",
+    resultH:"Pay slip", student:"Monster", testid:"Shift ID", date:"Date",
+    grade:"Grade", score:"Energy", review:"Door overview", restart:"New shift",
+    retry:"Try again", true_:"True", false_:"False", teacher:"Teacher panel",
+    jump:"Quick jump", intro:"Intro", result:"Result", images:"Images (slots)",
+    lang:"Interface language", skin:"Skin", skinSafe:"safe", skinOrig:"original",
+    skip:"Skip door", close:"Close", upload:"Upload", empty:"empty",
+    filled:"uploaded", clear:"Clear", preview:"Teacher preview · full playthrough",
+    slotPoster:"Poster / factory", slotDiscovery:"Generator (finale)", slotBench:"Hall background",
+    internalOnly:"internal only — in-class use", synthLede:"Every canister is full. Start the main generator and light up" }
+};
+
+/* ---------- STATE ---------- */
+const SK="ludus.laughworks.";
+const SLOT_KEYS={poster:"img.poster",discovery:"img.discovery",bench:"img.bench"};
+let DATA=__ludusCoerceV2(LUDUS_CONTENT);
+const state={
+  screen:"intro", name:"", lang:"cs", skin:"safe", teacher:false, muted:false,
+  seq:[], idx:0, steps:[], queue:[], solved:new Set(), seen:new Set(),
+  correct:0, total:0, perStation:[], testId:"", startedAt:null, picked:false, synthStarted:false
+};
+function T(k){ return (I18N[state.lang]||I18N.cs)[k]||k; }
+/* ── uložení / obnova hry (jednotná LUDUS konvence) ── */
+const GAME_SAVE_KEY="laughworks_save_v1";
+function saveGame(){ try{
+  if(state.screen==="intro") return false;
+  const snap=Object.assign({},state,{solved:Array.from(state.solved),seen:Array.from(state.seen),
+    startedAt:state.startedAt?state.startedAt.toISOString():null});
+  localStorage.setItem(GAME_SAVE_KEY,JSON.stringify(snap)); return true;
+}catch(e){ return false; } }
+function loadGame(){ try{
+  const r=localStorage.getItem(GAME_SAVE_KEY); if(!r) return null;
+  const sv=JSON.parse(r); if(!sv||!sv.screen||sv.screen==="intro") return null; return sv;
+}catch(e){ return null; } }
+function clearGame(){ try{ localStorage.removeItem(GAME_SAVE_KEY); }catch(e){} }
+function resumeGame(){ const sv=loadGame(); if(!sv) return false;
+  Object.assign(state,sv,{solved:new Set(sv.solved||[]),seen:new Set(sv.seen||[]),
+    startedAt:sv.startedAt?new Date(sv.startedAt):null});
+  state.seq=DATA.stations.slice(); if(DATA.finale) state.seq.push(Object.assign({__finale:true},DATA.finale));
+  if(state.screen==="experiment"||state.screen==="synthesis") enterStation(Math.min(state.idx,state.seq.length-1));
+  else render();
+  return true; }
+function SKIN(){ return SKINS[state.skin]||SKINS.safe; }
+
+/* ---------- STORAGE ---------- */
+function lsGet(k){ try{return localStorage.getItem(SK+k);}catch(e){return null;} }
+function lsSet(k,v){ try{localStorage.setItem(SK+k,v);}catch(e){} }
+function lsDel(k){ try{localStorage.removeItem(SK+k);}catch(e){} }
+
+/* ---------- AUDIO ---------- */
+const AudioFX=(()=>{
+  let ctx=null;
+  function ac(){ try{ ctx=ctx||new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==="suspended")ctx.resume(); }catch(e){ctx=null;} return ctx; }
+  function tone(f,dur,type,g,when){ if(AudioFX.muted)return; const c=ac(); if(!c)return; const t=c.currentTime+(when||0);
+    const o=c.createOscillator(),v=c.createGain(); o.type=type||"sine"; o.frequency.setValueAtTime(f,t);
+    v.gain.setValueAtTime(0,t); v.gain.linearRampToValueAtTime(g||.13,t+.012); v.gain.exponentialRampToValueAtTime(.0008,t+dur);
+    o.connect(v); v.connect(c.destination); o.start(t); o.stop(t+dur+.02); }
+  function slide(f1,f2,dur,type,g){ if(AudioFX.muted)return; const c=ac(); if(!c)return; const t=c.currentTime;
+    const o=c.createOscillator(),v=c.createGain(); o.type=type||"sine"; o.frequency.setValueAtTime(f1,t); o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    v.gain.setValueAtTime(g||.12,t); v.gain.exponentialRampToValueAtTime(.0008,t+dur); o.connect(v); v.connect(c.destination); o.start(t); o.stop(t+dur+.02); }
+  return { muted:false,
+    tap(){ tone(480,.05,"sine",.05); },
+    correct(){ tone(587,.10,"triangle",.12); tone(880,.13,"triangle",.10,.07); tone(1175,.16,"sine",.07,.14); }, // bright laugh
+    wrong(){ tone(196,.18,"sawtooth",.10); tone(140,.24,"sawtooth",.08,.06); },                                 // scare
+    complete(){ [523,659,784,1046,1318].forEach((f,i)=>tone(f,.26,"triangle",.10,i*.08)); },
+    door(){ slide(140,90,.5,"sine",.08); tone(220,.2,"triangle",.05,.12); },
+    surge(){ slide(160,840,1.2,"sawtooth",.10); tone(1046,.6,"triangle",.08,1.0); },
+    win(){ [392,523,659,784,1046,1318].forEach((f,i)=>tone(f,.42,"triangle",.12,i*.11)); } };
+})();
+
+/* ---------- IMAGE SLOTS ---------- */
+function getImg(slot){ return lsGet(SLOT_KEYS[slot]); }
+function setImgFromFile(slot,file,cb){
+  const fr=new FileReader();
+  fr.onload=()=>{ const img=new Image(); img.onload=()=>{
+    const max=1280; let w=img.width,h=img.height; if(w>max){ h=Math.round(h*max/w); w=max; }
+    const cv=document.createElement("canvas"); cv.width=w; cv.height=h; cv.getContext("2d").drawImage(img,0,0,w,h);
+    let data; try{ data=cv.toDataURL("image/jpeg",.82);}catch(e){ data=fr.result; }
+    lsSet(SLOT_KEYS[slot],data); cb&&cb(); };
+    img.onerror=()=>{ lsSet(SLOT_KEYS[slot],fr.result); cb&&cb(); }; img.src=fr.result; };
+  fr.readAsDataURL(file);
+}
+function clearImg(slot){ lsDel(SLOT_KEYS[slot]); }
+
+/* ---------- GRADING (Czech scale) ---------- */
+function computeGrade(pct){ if(pct>=90)return 1; if(pct>=75)return 2; if(pct>=60)return 3; if(pct>=45)return 4; return 5; }
+
+/* ---------- HELPERS ---------- */
+const $=s=>document.querySelector(s);
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function stationColor(i){ const c=DATA.meta.colors; return c[i%c.length]; }
+function shuffled(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+/* Aktivace učitele jménem zrušena (unifikace LUDUS) — pouze 3× ťuk na logo LUDUS nebo ?teacher=1. */
+function buildSteps(station){
+  const ex=station.exercise||{}; const type=ex.type; const out=[];
+  (ex.qs||[]).forEach(q=>{
+    if(type==="mc4"||type==="mc2") out.push({type,prompt:esc(q.q),why:q.why,options:shuffled((q.opts||[]).map((o,i)=>({label:esc(o),id:i}))),correctId:q.a});
+    else if(type==="yesno") out.push({type,prompt:esc(q.q),why:q.why,options:[{label:T("true_"),id:0},{label:T("false_"),id:1}],correctId:(q.a===true||q.a===0||q.a==="true")?0:1});
+    else if(type==="wordbank") out.push({type,prompt:esc(q.q).replace("___",'<span class="gap">?</span>'),why:q.why,bank:(ex.bank||[]),correctWord:q.a});
+    else if(type==="classify") out.push({type,prompt:esc(q.q),why:q.why,classify:true,options:(ex.cats||[]).map((c,i)=>({label:esc(c),id:i})),correctId:q.a});
+  });
+  return out;
+}
+
+/* ============================ SVG ART ============================ */
+/* iconic laugh-energy canister filling by ratio */
+function canisterSVG(ratio,color){
+  ratio=Math.max(0,Math.min(1,ratio));
+  const top=44, bot=150, span=bot-top, level=bot-span*ratio;
+  const id=color.replace("#","");
+  return `<svg viewBox="0 0 100 170">
+    <defs>
+      <linearGradient id="en${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".25" stop-color="${color}"/><stop offset="1" stop-color="${color}" stop-opacity=".55"/></linearGradient>
+      <clipPath id="cc${id}"><rect x="24" y="40" width="52" height="114" rx="20"/></clipPath>
+    </defs>
+    <!-- glass body -->
+    <rect x="24" y="40" width="52" height="114" rx="20" fill="#0e0a26" stroke="${color}" stroke-width="2" stroke-opacity=".8"/>
+    <g clip-path="url(#cc${id})">
+      <rect x="20" y="${level}" width="60" height="${bot-level+10}" fill="url(#en${id})"/>
+      <ellipse cx="50" cy="${level}" rx="26" ry="4" fill="#ffffff" opacity=".85"/>
+      ${ratio>0?`<g class="enbub" style="--c:${color}">${[36,50,62].map((x,i)=>`<circle cx="${x}" cy="${bot-10}" r="${2.6-i*0.4}" fill="#fff" opacity=".8" style="animation-delay:${i*0.45}s"/>`).join("")}</g>`:""}
+      <!-- energy crackle -->
+      ${ratio>0.05?`<path d="M44 ${level+10} L50 ${level+22} L46 ${level+22} L52 ${level+36}" stroke="#fff" stroke-width="1.4" fill="none" opacity=".5" class="crackle"/>`:""}
+    </g>
+    <!-- rings -->
+    <rect x="24" y="74" width="52" height="3" fill="${color}" opacity=".25"/>
+    <rect x="24" y="110" width="52" height="3" fill="${color}" opacity=".25"/>
+    <!-- cap / valve -->
+    <rect x="30" y="22" width="40" height="22" rx="6" fill="#2a1c52" stroke="${color}" stroke-width="1.5" stroke-opacity=".6"/>
+    <rect x="42" y="10" width="16" height="14" rx="4" fill="#1c1240" stroke="${color}" stroke-width="1.4" stroke-opacity=".5"/>
+    <circle cx="50" cy="33" r="3.4" fill="${color}" class="valveglow"/>
+    <!-- base -->
+    <rect x="28" y="150" width="44" height="9" rx="4" fill="#2a1c52" stroke="${color}" stroke-width="1.4" stroke-opacity=".5"/>
+    <style>.enbub circle{animation:enb 1.9s ease-in infinite}@keyframes enb{0%{transform:translateY(0);opacity:0}25%{opacity:.85}100%{transform:translateY(-70px);opacity:0}}
+    .crackle{animation:cr .8s steps(2) infinite}@keyframes cr{50%{opacity:.15}}
+    .valveglow{animation:vg 2.2s ease-in-out infinite}@keyframes vg{0%,100%{opacity:.5}50%{opacity:1}}</style>
+  </svg>`;
+}
+/* mini canister — inner <g> shape usable INSIDE another SVG (26×44 local units) */
+function canMiniShape(filled,color){
+  return `<g>
+    <rect x="6" y="10" width="14" height="30" rx="6" fill="#0e0a26" fill-opacity=".5" stroke="${filled?color:'#3a2c66'}" stroke-width="1.6"/>
+    ${filled?`<rect x="8" y="18" width="10" height="20" rx="4" fill="${color}" opacity=".9"/><ellipse cx="13" cy="18" rx="5" ry="1.6" fill="#fff" opacity=".8"/>`:`<rect x="8" y="32" width="10" height="6" rx="3" fill="#2a1c52" opacity=".5"/>`}
+    <rect x="9" y="4" width="8" height="7" rx="2" fill="${filled?'#2a1c52':'#1a1240'}"/>
+    ${filled?`<circle cx="13" cy="7.5" r="1.4" fill="${color}"/>`:""}
+  </g>`;
+}
+/* mini canister for rack/review (HTML contexts) */
+function canMiniSVG(filled,color){
+  return `<svg viewBox="0 0 26 44">${canMiniShape(filled,color)}</svg>`;
+}
+/* door tile (hero + transitions) */
+function doorShape(x,y,w,h,color,lit){
+  return `<g transform="translate(${x},${y})">
+    ${lit?`<rect x="-3" y="-3" width="${w+6}" height="${h+6}" rx="6" fill="${color}" opacity=".18"/>`:""}
+    <rect x="0" y="0" width="${w}" height="${h}" rx="4" fill="#1a1138" stroke="${color}" stroke-width="2" stroke-opacity="${lit?'.95':'.55'}"/>
+    <rect x="${w*.16}" y="${h*.10}" width="${w*.68}" height="${h*.34}" rx="2" fill="none" stroke="${color}" stroke-width="1.2" stroke-opacity=".4"/>
+    <rect x="${w*.16}" y="${h*.52}" width="${w*.68}" height="${h*.34}" rx="2" fill="none" stroke="${color}" stroke-width="1.2" stroke-opacity=".4"/>
+    <circle cx="${w*.80}" cy="${h*.50}" r="2.4" fill="${color}"/>
+    ${lit?`<rect x="0" y="0" width="${w}" height="2" fill="#fff" opacity=".5"/>`:""}
+  </g>`;
+}
+/* eyes (blinking) */
+function eyesShape(x,y,s,iris,delay){
+  return `<g transform="translate(${x},${y}) scale(${s})"><g class="blink" style="animation-delay:${delay}s">
+    <ellipse cx="-7" cy="0" rx="6" ry="6.6" fill="#fff"/><ellipse cx="7" cy="0" rx="6" ry="6.6" fill="#fff"/>
+    <circle cx="-6" cy="1" r="2.6" fill="${iris}"/><circle cx="8" cy="1" r="2.6" fill="${iris}"/>
+    <circle cx="-6" cy="1" r="1.1" fill="#0a0620"/><circle cx="8" cy="1" r="1.1" fill="#0a0620"/>
+  </g></g>`;
+}
+/* skyline with windows lit by progress (0..1) */
+const WINDOWS=[];
+(function(){ for(let b=0;b<9;b++){ for(let r=0;r<4;r++){ for(let c=0;c<2;c++){ WINDOWS.push({b,r,c}); } } } })();
+function skyline(width,progress,baseY){
+  const blds=[[6,30,46],[40,24,34],[68,38,58],[110,26,40],[140,34,50],[180,22,32],[210,40,60],[252,28,42],[282,30,48]];
+  const lit=Math.floor(progress*WINDOWS.length);
+  let s=""; let wi=0;
+  blds.forEach((b,bi)=>{ const[bx,bw,bh]=b; const by=baseY-bh;
+    s+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="2" fill="#0f0a28"/>`;
+    for(let r=0;r<4;r++)for(let c=0;c<2;c++){ const on=wi<lit; wi++;
+      const wx=bx+5+c*(bw-12), wy=by+6+r*((bh-10)/4);
+      if(wy<baseY-4) s+=`<rect x="${wx}" y="${wy}" width="4" height="4" rx="1" fill="${on?'#ffd76a':'#241a44'}" ${on?'class="winlit"':''}/>`;
+    }});
+  return `<g>${s}<style>.winlit{animation:wl 2.6s ease-in-out infinite}@keyframes wl{0%,100%{opacity:.85}50%{opacity:1}}</style></g>`;
+}
+
+/* hero: factory floor */
+function heroSVG(){
+  const cols=DATA.meta.colors;
+  let shelfL="",shelfR="";
+  for(let i=0;i<3;i++){ shelfL+=`<g transform="translate(${10+i*22},154)">${canMiniShape(true,cols[i%cols.length])}</g>`; }
+  for(let i=0;i<3;i++){ shelfR+=`<g transform="translate(${318+i*22},154)">${canMiniShape(true,cols[(i+2)%cols.length])}</g>`; }
+  shelfL+=`<rect x="8" y="195" width="70" height="3" rx="1.5" fill="#2a1c52"/><rect x="8" y="195" width="70" height="1" fill="#9b6bff" opacity=".4"/>`;
+  shelfR+=`<rect x="316" y="195" width="70" height="3" rx="1.5" fill="#2a1c52"/><rect x="316" y="195" width="70" height="1" fill="#9b6bff" opacity=".4"/>`;
+  return `<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1146"/><stop offset="1" stop-color="#0c0722"/></linearGradient>
+      <radialGradient id="hcore" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#aef84a" stop-opacity=".9"/><stop offset=".5" stop-color="#3fe0ff" stop-opacity=".5"/><stop offset="1" stop-color="#3fe0ff" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="400" height="250" fill="url(#hsky)"/>
+    <!-- skyline -->
+    <g transform="translate(52,0)">${skyline(300,.4,212)}</g>
+    <!-- floor -->
+    <rect x="0" y="210" width="400" height="40" fill="#120c30"/>
+    <rect x="0" y="210" width="400" height="2" fill="#3fe0ff" opacity=".3"/>
+    <!-- overhead rail -->
+    <rect x="20" y="40" width="360" height="5" rx="2" fill="#2a1c52"/>
+    <rect x="20" y="40" width="360" height="2" fill="#9b6bff" opacity=".5"/>
+    <!-- doors on rail -->
+    <g><rect x="106" y="40" width="3" height="10" fill="#3a2c66"/>${doorShape(86,50,44,72,cols[0],false)}</g>
+    <g class="doorsway"><rect x="218" y="40" width="3" height="10" fill="#3a2c66"/>${doorShape(196,50,52,80,cols[1],true)}</g>
+    <g><rect x="312" y="40" width="3" height="10" fill="#3a2c66"/>${doorShape(292,50,44,72,cols[2],false)}</g>
+    <!-- shelves -->
+    ${shelfL}${shelfR}
+    <!-- energy pipes to core -->
+    <g class="pipes">
+      <path d="M222 130 Q222 170 200 178" fill="none" stroke="${cols[1]}" stroke-width="2" stroke-opacity=".5" stroke-dasharray="4 6"/>
+      <path d="M108 122 Q150 160 196 178" fill="none" stroke="${cols[0]}" stroke-width="1.6" stroke-opacity=".4" stroke-dasharray="4 6"/>
+      <path d="M314 122 Q270 160 204 178" fill="none" stroke="${cols[2]}" stroke-width="1.6" stroke-opacity=".4" stroke-dasharray="4 6"/>
+    </g>
+    <!-- central extractor core -->
+    <g transform="translate(200,182)">
+      <circle r="40" fill="url(#hcore)" class="corepulse"/>
+      <circle r="20" fill="#150e36" stroke="#aef84a" stroke-width="2"/>
+      <circle r="11" fill="#aef84a" opacity=".85" class="corepulse"/>
+    </g>
+    <!-- monster silhouette peeking (original) -->
+    <g transform="translate(352,176)" opacity=".9">
+      <path d="M0 40 Q-18 40 -18 18 Q-18 -6 0 -8 Q18 -6 18 18 Q18 40 0 40 Z" fill="#241552"/>
+      <path d="M-9 -7 L-13 -18 L-5 -10 Z M9 -7 L13 -18 L5 -10 Z" fill="#241552"/>
+      ${eyesShape(0,12,.7,cols[2],1.2)}
+      <path d="M-6 26 q6 5 12 0" stroke="#aef84a" stroke-width="1.4" fill="none" opacity=".7"/>
+    </g>
+    <!-- ambient eyes in the dark -->
+    ${eyesShape(40,120,.55,cols[0],0)}
+    ${eyesShape(360,96,.5,cols[1],2.4)}
+    <style>
+      .corepulse{transform-origin:center;animation:cpz 3s ease-in-out infinite}@keyframes cpz{0%,100%{opacity:.5;transform:scale(.94)}50%{opacity:1;transform:scale(1.07)}}
+      .doorsway{transform-origin:218px 40px;animation:dsw 5s ease-in-out infinite}@keyframes dsw{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+      .pipes path{animation:pf 1.4s linear infinite}@keyframes pf{to{stroke-dashoffset:-20}}
+    </style>
+  </svg>`;
+}
+
+/* synthesis power surge, progress 0..1 */
+function synthSVG(progress){
+  progress=Math.max(0,Math.min(1,progress));
+  const cols=DATA.meta.colors; const glow=.3+progress*.7;
+  const feeds=cols.slice(0,5).map((c,i)=>{ const a=(-160+i*55)*Math.PI/180; const x=150+Math.cos(a)*116, y=110+Math.sin(a)*70;
+    return `<line x1="${x.toFixed(0)}" y1="${(y+14).toFixed(0)}" x2="150" y2="150" stroke="${c}" stroke-width="1.6" stroke-opacity="${(.15+progress*.55).toFixed(2)}" stroke-dasharray="4 5" class="fl"/>
+      <g transform="translate(${(x-10).toFixed(0)},${(y-18).toFixed(0)}) scale(.8)">${canMiniShape(true,c)}</g>`; }).join("");
+  return `<svg viewBox="0 0 300 300">
+    <defs><radialGradient id="sc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity="${glow}"/><stop offset=".35" stop-color="#aef84a" stop-opacity="${(glow*.85).toFixed(2)}"/><stop offset=".7" stop-color="#3fe0ff" stop-opacity="${(glow*.4).toFixed(2)}"/><stop offset="1" stop-color="#9b6bff" stop-opacity="0"/></radialGradient></defs>
+    <rect width="300" height="300" fill="#0c0722"/>
+    <g transform="translate(0,40)">${skyline(300,progress,300)}</g>
+    ${feeds}
+    <circle cx="150" cy="150" r="${50+progress*24}" fill="url(#sc)" class="scp"/>
+    <circle cx="150" cy="150" r="38" fill="#150e36" stroke="#aef84a" stroke-width="2.5"/>
+    <circle cx="150" cy="150" r="${16+progress*16}" fill="#aef84a" opacity="${(.5+progress*.5).toFixed(2)}" class="scp"/>
+    <circle cx="150" cy="150" r="38" fill="none" stroke="#3fe0ff" stroke-width="3" stroke-dasharray="${(progress*239).toFixed(0)} 239" transform="rotate(-90 150 150)" stroke-linecap="round"/>
+    <style>.scp{transform-origin:150px 150px;animation:scz 2.4s ease-in-out infinite}@keyframes scz{0%,100%{transform:scale(.97)}50%{transform:scale(1.05)}}.fl{animation:flz 1.1s linear infinite}@keyframes flz{to{stroke-dashoffset:-18}}.winlit{}</style>
+  </svg>`;
+}
+
+/* ---------- RACK ---------- */
+function renderRack(){
+  const rack=$("#rack"); if(!rack) return;
+  const n=DATA.stations.length; let h=""; let done=0;
+  const active=(state.screen==="experiment"||state.screen==="synthesis");
+  for(let i=0;i<n;i++){ const f=state.solved.has("st"+i); if(f)done++;
+    h+=`<div class="can${active&&state.idx===i?' cur':''}">${canMiniSVG(f,stationColor(i))}</div>`; }
+  rack.innerHTML=h;
+  const rn=$("#racknum"); if(rn) rn.textContent=done+"/"+n;
+}
+
+/* ---------- RENDER ---------- */
+function render(){
+  $("#tflag").classList.toggle("on",state.teacher);
+  $("#worldname").textContent=SKIN().world;
+  renderRack();
+  const s=state.screen;
+  if(s==="intro")return screenIntro();
+  if(s==="experiment")return screenExperiment();
+  if(s==="synthesis")return screenSynthesis();
+  if(s==="result")return screenResult();
+}
+
+/* ---------- INTRO ---------- */
+function screenIntro(){
+  const poster=getImg("poster"); const sk=SKIN();
+  $("#screen").innerHTML=`
+  <div class="panel">
+    <div class="stage">
+      <div class="imgslot">${poster?`<img src="${poster}" alt="">`:heroSVG()}</div>
+      <div class="vig"></div>
+    </div>
+    ${sk.internal?`<div class="internal">⚠ ${T("internalOnly")}</div><br>`:""}
+    <p class="eyebrow">${esc(DATA.meta.subject||"")}</p>
+    <h1 class="title">${esc(sk.world)}</h1>
+    <p class="lede">${esc(sk.intro)}</p>
+    <div class="field"><label>${T("name")}</label>
+      <input class="input" id="nm" value="${esc(state.name)}" placeholder="${T("name")}" autocomplete="off" maxlength="40"></div>
+    <div class="btnrow"><button class="btn" id="go">${T("begin")}</button>
+      ${loadGame()?`<button class="btn ghost" id="cont">${T("cont")}</button>`:""}</div>
+  </div>`;
+  const cont=$("#cont"); if(cont) cont.addEventListener("click",()=>{ AudioFX.tap(); resumeGame(); });
+  const nm=$("#nm");
+  nm.addEventListener("input",e=>state.name=e.target.value);
+  function tryStart(){
+    state.name=(nm.value||"").trim();
+    startGame();
+  }
+  $("#go").addEventListener("click",()=>{ AudioFX.tap(); tryStart(); });
+  nm.addEventListener("keydown",e=>{ if(e.key==="Enter") tryStart(); });
+}
+
+/* ---------- GAME FLOW ---------- */
+function startGame(){
+  state.seq=DATA.stations.slice(); if(DATA.finale) state.seq.push(Object.assign({__finale:true},DATA.finale));
+  state.total=state.seq.reduce((n,st)=>n+buildSteps(st).length,0);
+  state.correct=0; state.seen=new Set(); state.solved=new Set(); state.perStation=[]; state.idx=0; state.synthStarted=false;
+  state.testId=(SKIN().key==="original"?"PSR":"TNS")+"-"+Date.now().toString(36).slice(-4).toUpperCase()+"-"+Math.floor(Math.random()*900+100);
+  state.startedAt=new Date();
+  enterStation(0);
+}
+function enterStation(i){ setTimeout(()=>{ try{ if(state.screen!=="intro") saveGame(); }catch(e){} },0);
+  state.idx=i; const st=state.seq[i];
+  state.steps=buildSteps(st); state.queue=state.steps.map((_,k)=>k);
+  state.perStation[i]={name:st.name,correct:0,total:state.steps.length,finale:!!st.__finale};
+  state.picked=false; state.synthStarted=false;
+  state.screen=st.__finale?"synthesis":"experiment";
+  if(!st.__finale) AudioFX.door();
+  render();
+}
+function curStep(){ return state.steps[state.queue[0]]; }
+function solvedInStation(){ let n=0; state.steps.forEach((_,k)=>{ if(state.solved.has("s"+state.idx+"-"+k))n++; }); return n; }
+
+/* ---------- EXPERIMENT (a door) ---------- */
+function screenExperiment(){
+  const st=state.seq[state.idx]; const color=stationColor(state.idx);
+  const fill=solvedInStation()/(state.steps.length||1); const step=curStep();
+  $("#screen").innerHTML=`
+  <div class="panel">
+    <div class="exphead">
+      <div class="canbig">${canisterSVG(fill,color)}</div>
+      <div class="meta">
+        <div class="step" style="color:${color}">${T("door")} ${state.idx+1} ${T("of")} ${state.seq.length}</div>
+        <h2><span class="dchip" style="background:${color};color:${color}"></span>${esc(st.name)}</h2>
+        <div class="progline"><i style="width:${(fill*100).toFixed(0)}%;background:linear-gradient(90deg,${color},#fff)"></i></div>
+      </div>
+    </div>
+    <div id="qhost"></div>
+  </div>`;
+  renderStep(step,color);
+}
+function typeLabel(t){ return ({mc4:"výběr ze 4",mc2:"volba",yesno:"pravda / nepravda",wordbank:"doplň z banku",classify:"roztřiď"})[t]||t; }
+
+function renderStep(step,color){
+  const host=$("#qhost"); if(!host||!step)return; let body="";
+  if(step.type==="wordbank"){
+    body=`<div class="bank" id="bank">${shuffled(step.bank).map(w=>`<button class="chip" data-w="${esc(w)}">${esc(w)}</button>`).join("")}</div>`;
+  }else{
+    const two=step.options.length===2; const cls=step.classify?"opts cats":(two?"opts two":"opts");
+    body=`<div class="${cls}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${o.label}</span></button>`).join("")}</div>`;
+  }
+  host.innerHTML=`<div class="qcard"><div class="qtype">${typeLabel(step.type)}</div>
+    <p class="prompt${step.classify?' word':''}">${step.prompt}</p>${body}
+    <div class="fb" id="fb"></div>
+    <div class="btnrow" id="controw" style="display:none"><button class="btn" id="cont">${T("cont")}</button></div></div>`;
+  if(step.type==="wordbank"){
+    host.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{ if(state.picked)return; judge(step,c.dataset.w===step.correctWord,c,color); }));
+  }else{
+    host.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{ if(state.picked)return; judge(step,parseInt(b.dataset.id,10)===step.correctId,b,color); }));
+  }
+}
+function judge(step,ok,el,color){
+  state.picked=true; const key="s"+state.idx+"-"+state.queue[0];
+  if(!state.seen.has(key)){ state.seen.add(key); if(ok){ state.correct++; state.perStation[state.idx].correct++; } }
+  const host=$("#qhost"); host.querySelectorAll(".opt,.chip").forEach(n=>n.classList.add("lock"));
+  if(step.type==="wordbank"){ host.querySelectorAll(".chip").forEach(c=>{ if(c.dataset.w===step.correctWord)c.classList.add("correct"); }); }
+  else{ host.querySelectorAll(".opt").forEach(o=>{ if(parseInt(o.dataset.id,10)===step.correctId)o.classList.add("correct"); }); }
+  if(!ok&&el)el.classList.add("wrong");
+  const fb=$("#fb"); fb.className="fb show "+(ok?"good":"bad");
+  fb.innerHTML=`<span class="h">${ok?"😄 "+T("goodH"):"😱 "+T("badH")}</span>${step.why?esc(step.why):(ok?"✓":"✗")}`;
+  if(ok){ AudioFX.correct(); state.solved.add(key); state.queue.shift(); laughBurst(el); }
+  else{ AudioFX.wrong(); flashScare(); const q=state.queue.shift(); state.queue.push(q); }
+  const fillEl=document.querySelector(".progline i"); const fl=solvedInStation()/(state.steps.length||1);
+  if(fillEl) fillEl.style.width=(fl*100).toFixed(0)+"%";
+  // live-update canister
+  const cb=document.querySelector(".canbig"); if(cb) cb.innerHTML=canisterSVG(fl,color);
+  renderRack();
+  $("#controw").style.display="flex"; const cont=$("#cont"); cont.textContent=ok?T("cont"):T("retry"); cont.focus();
+  cont.addEventListener("click",()=>{ AudioFX.tap(); afterStep(color); });
+}
+function afterStep(color){
+  state.picked=false;
+  if(state.queue.length===0){
+    state.solved.add("st"+state.idx); renderRack(); AudioFX.complete();
+    canisterIsolated(()=>{ if(state.idx+1<state.seq.length) enterStation(state.idx+1); else finishGame(); });
+  }else screenExperiment();
+}
+function canisterIsolated(next){
+  const color=stationColor(state.idx);
+  let rackh=""; for(let i=0;i<DATA.stations.length;i++) rackh+=`<div class="can" style="width:24px;height:40px">${canMiniSVG(state.solved.has("st"+i),stationColor(i))}</div>`;
+  $("#screen").innerHTML=`<div class="panel" style="text-align:center">
+    <div class="canpop" style="width:96px;margin:6px auto 8px">${canisterSVG(1,color)}</div>
+    <p class="eyebrow" style="color:${color}">${T("canDone")}</p>
+    <h1 class="title" style="font-size:23px">${esc(state.seq[state.idx].name)}</h1>
+    <div class="rack" style="justify-content:center;gap:9px;margin:16px 0 18px;overflow:visible">${rackh}</div>
+    <button class="btn" id="nx">${T("cont")}</button></div>`;
+  $("#nx").addEventListener("click",()=>{ AudioFX.tap(); next(); });
+}
+function flashScare(){ const p=document.querySelector(".panel"); if(p&&p.animate) p.animate([{boxShadow:"0 0 0 0 rgba(255,77,109,0)"},{boxShadow:"0 0 0 3px rgba(255,77,109,.55)"},{boxShadow:"0 0 0 0 rgba(255,77,109,0)"}],{duration:420}); }
+function laughBurst(el){
+  try{
+    if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if(!el||!el.getBoundingClientRect) return;
+    const r=el.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const glyphs=["✨","😄","⚡","✦","😆"];
+    for(let i=0;i<6;i++){
+      const s=document.createElement("span"); s.className="burst"; s.textContent=glyphs[i%glyphs.length];
+      const ang=(-90+(Math.random()*140-70))*Math.PI/180, dist=46+Math.random()*44;
+      s.style.left=cx+"px"; s.style.top=cy+"px";
+      s.style.setProperty("--dx",(Math.cos(ang)*dist).toFixed(0)+"px");
+      s.style.setProperty("--dy",(Math.sin(ang)*dist).toFixed(0)+"px");
+      s.style.setProperty("--rot",(Math.random()*80-40).toFixed(0)+"deg");
+      document.body.appendChild(s); setTimeout(()=>s.remove(),900);
+    }
+  }catch(e){}
+}
+
+/* ---------- SYNTHESIS (finale generator) ---------- */
+function screenSynthesis(){
+  const st=state.seq[state.idx]; const disc=getImg("discovery"); const prog=solvedInStation()/(state.steps.length||1);
+  $("#screen").innerHTML=`<div class="panel synthwrap">
+    <div class="synthstage"><div class="imgslot">${disc?`<img src="${disc}" alt="">`:""}</div>${synthSVG(prog)}</div>
+    <p class="eyebrow" style="color:var(--purple)">${T("synth")}</p>
+    <h1 class="title" style="font-size:23px">${esc(st.name)}</h1>
+    <p class="lede" id="slede">${state.synthStarted?"":T("synthLede")+" "+esc(SKIN().finaleCity)+"."}</p>
+    <div id="qhost"></div>
+    ${state.synthStarted?"":`<div class="btnrow"><button class="btn" id="begin">${T("finish")}</button></div>`}</div>`;
+  if(!state.synthStarted){ $("#begin").addEventListener("click",()=>{ AudioFX.surge(); state.synthStarted=true; screenSynthesis(); }); }
+  else{ $("#slede").style.display="none"; renderStepSynth(curStep()); }
+}
+function renderStepSynth(step){
+  const host=$("#qhost"); if(!host||!step)return; const two=step.options&&step.options.length===2;
+  host.innerHTML=`<div class="qcard"><div class="qtype">${typeLabel(step.type)}</div>
+    <p class="prompt" style="font-size:18px">${step.prompt}</p>
+    <div class="opts ${two?'two':''}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${o.label}</span></button>`).join("")}</div>
+    <div class="fb" id="fb"></div>
+    <div class="btnrow" id="controw" style="display:none"><button class="btn" id="cont">${T("cont")}</button></div></div>`;
+  host.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{ if(state.picked)return; judgeSynth(step,parseInt(b.dataset.id,10)===step.correctId,b); }));
+}
+function judgeSynth(step,ok,el){
+  state.picked=true; const key="s"+state.idx+"-"+state.queue[0];
+  if(!state.seen.has(key)){ state.seen.add(key); if(ok){ state.correct++; state.perStation[state.idx].correct++; } }
+  const host=$("#qhost"); host.querySelectorAll(".opt").forEach(o=>{ o.classList.add("lock"); if(parseInt(o.dataset.id,10)===step.correctId)o.classList.add("correct"); });
+  if(!ok&&el)el.classList.add("wrong");
+  const fb=$("#fb"); fb.className="fb show "+(ok?"good":"bad"); fb.innerHTML=`<span class="h">${ok?"😄 "+T("goodH"):"😱 "+T("badH")}</span>${step.why?esc(step.why):""}`;
+  if(ok){ AudioFX.correct(); state.solved.add(key); state.queue.shift(); } else{ AudioFX.wrong(); const q=state.queue.shift(); state.queue.push(q); }
+  const stage=document.querySelector(".synthstage"); if(stage){ const p=solvedInStation()/(state.steps.length||1);
+    stage.innerHTML=`<div class="imgslot">${getImg("discovery")?`<img src="${getImg("discovery")}" alt="">`:""}</div>${synthSVG(p)}`; }
+  $("#controw").style.display="flex"; const cont=$("#cont"); cont.textContent=ok?T("cont"):T("retry"); cont.focus();
+  cont.addEventListener("click",()=>{ AudioFX.tap(); state.picked=false;
+    if(state.queue.length===0){ AudioFX.win(); finishGame(); } else screenSynthesis(); });
+}
+
+/* ---------- RESULT (pay slip) ---------- */
+function finishGame(){ state.synthStarted=false; state.screen="result"; render(); }
+function screenResult(){
+  const pct=state.total?Math.round(state.correct/state.total*100):0; const grade=computeGrade(pct);
+  const dt=(state.startedAt||new Date());
+  const ds=dt.toLocaleDateString("cs-CZ")+" "+dt.toLocaleTimeString("cs-CZ",{hour:"2-digit",minute:"2-digit"});
+  const gc=grade>=5?"g5":grade>=4?"g4":grade>=3?"g3":"";
+  const review=state.perStation.map(p=>{ const ok=p.total?p.correct/p.total:0;
+    const col=ok>=.9?"var(--ok)":ok>=.6?"var(--amber)":"var(--scare)";
+    return `<div class="revrow"><span class="ic" style="background:${col};color:${col}"></span><span class="nm">${esc(p.name)}</span><span class="sc">${p.correct}/${p.total}</span></div>`; }).join("");
+  $("#screen").innerHTML=`<div class="card">
+    <div class="top"><div class="gradebadge ${gc}">${grade}</div>
+      <div class="who"><div class="l">${T("student")}</div><h3>${esc(state.name||"—")}</h3><div class="pct">${state.correct}/${state.total} · ${pct}%</div></div></div>
+    <div class="rows">
+      <div class="row"><span class="k">${T("testid")}</span><span class="v">${state.testId}</span></div>
+      <div class="row"><span class="k">${T("date")}</span><span class="v">${ds}</span></div>
+      <div class="row"><span class="k">${T("grade")}</span><span class="v">${grade}</span></div>
+      <div class="row"><span class="k">${T("score")}</span><span class="v">${pct}%</span></div></div></div>
+  <div class="review"><h4>${T("review")}</h4>${review}
+    <div class="btnrow" style="margin-top:16px"><button class="btn ghost" id="again">${T("restart")}</button></div></div>`;
+  $("#again").addEventListener("click",()=>{ AudioFX.tap(); state.screen="intro"; state.synthStarted=false; render(); });
+}
+
+/* ====================== TEACHER PANEL ====================== */
+function openTeacher(){ state.teacher=true; $("#tflag").classList.add("on"); buildTeacherPanel(); $("#tpanel").classList.add("on"); }
+function closeTeacher(){ $("#scrim").classList.remove("on"); $("#tpanel").classList.remove("on"); }
+function buildTeacherPanel(){
+  const slots=[["poster","slotPoster"],["discovery","slotDiscovery"],["bench","slotBench"]];
+  const jumps=[]; jumps.push(`<button class="tbtn ${state.screen==='intro'?'live':''}" data-jump="intro">${T("intro")}</button>`);
+  DATA.stations.forEach((st,i)=>{ jumps.push(`<button class="tbtn ${state.screen==='experiment'&&state.idx===i?'live':''}" data-jump="st${i}"><span class="dc" style="background:${stationColor(i)}"></span>${esc(st.name.split("—")[0].trim())}</button>`); });
+  if(DATA.finale) jumps.push(`<button class="tbtn ${state.screen==='synthesis'?'live':''}" data-jump="fin">${T("synth")}</button>`);
+  jumps.push(`<button class="tbtn ${state.screen==='result'?'live':''}" data-jump="res">${T("result")}</button>`);
+  $("#tpanel").innerHTML=`
+    <h3>👁 ${T("teacher")}</h3><p class="sub">${T("preview")}</p>
+    <div class="tsec"><span class="lab">${T("lang")}</span>
+      <div class="toggle"><button data-lang="cs" class="${state.lang==='cs'?'on':''}">Čeština</button><button data-lang="en" class="${state.lang==='en'?'on':''}">English</button></div></div>
+    <div class="tsec"><span class="lab">${T("skin")}</span>
+      <div class="toggle"><button data-skin="safe" class="${state.skin==='safe'?'on':''}">${T("skinSafe")}</button><button data-skin="original" class="${state.skin==='original'?'on danger':''}">${T("skinOrig")}</button></div>
+      <p class="note">Bezpečná verze (Továrna na smích) je veřejná. Originál (Příšerky s.r.o.) je <b>jen pro vnitřní výuku</b> a zobrazuje nahrané obrázky.</p></div>
+    <div class="tsec"><span class="lab">${T("jump")}</span>
+      <div class="jumpgrid">${jumps.join("")}</div>
+      ${(state.screen==='experiment'||state.screen==='synthesis')?`<button class="skipbtn" id="skip">⏭ ${T("skip")}</button>`:""}</div>
+    <div class="tsec"><span class="lab">${T("images")}</span>
+      ${slots.map(([k,lab])=>{ const img=getImg(k); return `<div class="slot">
+        <div class="sh"><b>${T(lab)}</b><span class="st">${img?T("filled"):T("empty")}</span></div>
+        <div class="prev">${img?`<img src="${img}" alt="">`:`<span>SVG fallback</span>`}</div>
+        <div class="sbtns"><label class="upbtn">${T("upload")}<input type="file" accept="image/*" data-slot="${k}"></label>${img?`<button class="clr" data-clear="${k}">${T("clear")}</button>`:""}</div></div>`; }).join("")}
+      <p class="note">Nahráváš z galerie telefonu. Obrázek se zmenší a uloží do prohlížeče; engine ho animuje (Ken Burns / dýchání). SVG zůstává jako záloha.</p></div>
+    <button class="btn ghost" id="tclose">${T("close")}</button>`;
+  $("#tpanel").querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{ state.lang=b.dataset.lang; DATA=__ludusCoerceV2(LUDUS_CONTENT); buildTeacherPanel(); render(); }));
+  $("#tpanel").querySelectorAll("[data-skin]").forEach(b=>b.addEventListener("click",()=>{ state.skin=b.dataset.skin; buildTeacherPanel(); render(); }));
+  $("#tpanel").querySelectorAll("[data-slot]").forEach(inp=>inp.addEventListener("change",e=>{ const f=e.target.files&&e.target.files[0]; if(!f)return; setImgFromFile(inp.dataset.slot,f,()=>{ buildTeacherPanel(); render(); }); }));
+  $("#tpanel").querySelectorAll("[data-clear]").forEach(b=>b.addEventListener("click",()=>{ clearImg(b.dataset.clear); buildTeacherPanel(); render(); }));
+  $("#tpanel").querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>teacherJump(b.dataset.jump)));
+  const sk=$("#skip"); if(sk) sk.addEventListener("click",teacherSkip);
+  $("#tclose").addEventListener("click",closeTeacher);
+}
+function teacherJump(to){
+  if(state.seq.length===0){ state.seq=DATA.stations.slice(); if(DATA.finale) state.seq.push(Object.assign({__finale:true},DATA.finale));
+    state.total=state.seq.reduce((n,st)=>n+buildSteps(st).length,0); state.testId=state.testId||"PREVIEW"; state.startedAt=state.startedAt||new Date(); }
+  if(to==="intro"){ state.screen="intro"; render(); }
+  else if(to==="res"){ state.screen="result"; render(); }
+  else if(to==="fin"){ state.synthStarted=false; enterStation(state.seq.length-1); }
+  else if(to.startsWith("st")){ enterStation(parseInt(to.slice(2),10)); }
+  buildTeacherPanel(); /* skok panel nezavírá — sekce se ukáže hned vedle */
+}
+function teacherSkip(){
+  state.steps.forEach((_,k)=>state.solved.add("s"+state.idx+"-"+k)); state.solved.add("st"+state.idx);
+  state.queue=[]; state.picked=false; state.synthStarted=false;
+  if(state.idx+1<state.seq.length) enterStation(state.idx+1); else finishGame(); buildTeacherPanel();
+}
+
+/* ---------- KEYBOARD (1–9 = volba, Enter = pokračovat) ---------- */
+document.addEventListener("keydown",e=>{
+  if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;
+  if(state.screen!=="experiment"&&state.screen!=="synthesis")return;
+  if(e.key==="Enter"){ const row=$("#controw"); const c=$("#cont");
+    if(row&&c&&row.style.display!=="none"&&document.activeElement!==c){ c.click(); e.preventDefault(); } return; }
+  const n=parseInt(e.key,10);
+  if(!n||state.picked)return;
+  const btns=document.querySelectorAll("#qhost .opt, #qhost .chip");
+  if(btns[n-1]) btns[n-1].click();
+});
+
+/* triple-tap logo */
+(function(){ let taps=0,timer=null; const logo=$("#logo");
+  logo.addEventListener("click",()=>{ taps++; clearTimeout(timer); timer=setTimeout(()=>taps=0,600); if(taps>=3){ taps=0; openTeacher(); } }); })();
+$("#scrim").addEventListener("click",closeTeacher);
+
+/* ---------- SOUND + FULLSCREEN CONTROLS ---------- */
+const ICON={
+  soundOn:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a4 4 0 0 1 0 7M18.5 6a7 7 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  soundOff:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M22 9l-5 6M17 9l5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  fsOpen:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  fsClose:`<svg viewBox="0 0 24 24" fill="none"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+};
+function updateSoundIcon(){ const b=$("#sound"); b.innerHTML=state.muted?ICON.soundOff:ICON.soundOn; b.classList.toggle("off",state.muted); b.title=state.muted?"Zapnout zvuk":"Vypnout zvuk"; }
+function toggleSound(){ state.muted=!state.muted; AudioFX.muted=state.muted; lsSet("muted",state.muted?"1":"0"); updateSoundIcon(); if(!state.muted) AudioFX.tap();
+  try{ if(window.__ludusSoundtrack){ state.muted?window.__ludusSoundtrack.stop():window.__ludusSoundtrack.play(); } }catch(e){} }
+function fsEl(){ return document.fullscreenElement||document.webkitFullscreenElement||null; }
+function updateFSIcon(){ const b=$("#fs"); b.innerHTML=fsEl()?ICON.fsClose:ICON.fsOpen; b.title=fsEl()?"Ukončit celou obrazovku":"Celá obrazovka"; }
+function toggleFS(){ try{ if(fsEl()){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); }
+  else{ const e=document.documentElement; (e.requestFullscreen||e.webkitRequestFullscreen||function(){}).call(e); } }catch(err){} }
+$("#sound").addEventListener("click",toggleSound);
+$("#fs").addEventListener("click",toggleFS);
+document.addEventListener("fullscreenchange",updateFSIcon);
+document.addEventListener("webkitfullscreenchange",updateFSIcon);
+
+/* ---------- AMBIENT ---------- */
+(function(){ const amb=$("#amb"); const cols=["174,248,74","63,224,255","155,107,255","255,179,60"]; let h="";
+  for(let i=0;i<16;i++){ const l=Math.random()*100,d=8+Math.random()*10,dl=Math.random()*12,sz=3+Math.random()*5,c=cols[i%cols.length];
+    h+=`<b class="sp" style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${d}s;animation-delay:${dl}s;background:rgba(${c},.5)"></b>`; }
+  /* pairs of blinking eyes hiding in the dark */
+  const eyeCols=["#3fe0ff","#ff79c6","#ffb33c"];
+  const spots=[[6,22],[90,14],[82,78]];
+  spots.forEach((sp,i)=>{
+    h+=`<span class="eye" style="left:${sp[0]}%;top:${sp[1]}%;animation-delay:${i*3.1}s">
+      <svg width="30" height="16" viewBox="-16 -8 32 16">
+        <g class="blink" style="animation-delay:${i*1.7}s">
+          <ellipse cx="-7" cy="0" rx="6" ry="6.4" fill="#fff"/><ellipse cx="7" cy="0" rx="6" ry="6.4" fill="#fff"/>
+          <circle cx="-6" cy="1" r="2.5" fill="${eyeCols[i%3]}"/><circle cx="8" cy="1" r="2.5" fill="${eyeCols[i%3]}"/>
+          <circle cx="-6" cy="1" r="1" fill="#0a0620"/><circle cx="8" cy="1" r="1" fill="#0a0620"/>
+        </g>
+      </svg></span>`;
+  });
+  amb.innerHTML=h; })();
+
+/* ---------- BOOT ---------- */
+function boot(){
+  state.muted=lsGet("muted")==="1"; AudioFX.muted=state.muted; updateSoundIcon(); updateFSIcon();
+  const q=new URLSearchParams(location.search);
+  if(q.get("teacher")==="1"){ state.teacher=true; setTimeout(openTeacher,200); }
+  if(q.get("lang")==="en") state.lang="en";
+  if(q.get("skin")==="original"&&state.teacher){ state.skin="original"; } // originál je gated — jen s ?teacher=1
+  render();
+}
+boot();
+
+/* ---------- DEBUG HOOK (smoke tests) ---------- */
+window.__LUDUS__={ computeGrade, coerce:__ludusCoerceV2, buildSteps, shuffled, canMiniShape, DATA, state, T, SKIN, openTeacher, toggleSound, toggleFS, version:"1.2.0-laughworks" };
+</script>
+
+
+
+
+<script>
+/* per-game napojení unifikované vrstvy */
+window.LUDUS_UNIFY = {
+  getSound: function(){ try{ return !window.__LUDUS__.state.muted; }catch(e){ return true; } },
+  setSound: function(on){ try{ if(!!on === !window.__LUDUS__.state.muted) return; window.__LUDUS__.toggleSound(); }catch(e){} },
+  getLang: function(){ try{ return window.__LUDUS__.state.lang; }catch(e){ return "cs"; } },
+  save: function(){ try{ return saveGame(); }catch(e){ return false; } },
+  resetConfirms: true,
+  reset: function(){ try{
+    var st=window.__LUDUS__.state;
+    var msg=(st.lang==="en")?"Really start over? Progress will be erased.":"Opravdu začít znovu? Postup bude smazán.";
+    if(!confirm(msg)) return;
+    clearGame(); st.screen="intro"; st.name=""; st.idx=0; st.correct=0; st.perStation=[]; st.testId="";
+    st.solved=new Set(); st.seen=new Set(); st.picked=false; st.synthStarted=false;
+    window.__LUDUS__.state.teacher=st.teacher; render();
+  }catch(e){} }
+};
+</script>
+<!-- ═══════════════ LUDUS UNIFIED LAYER v2 ═══════════════
+     Jednotné prvky všech her LUDUS:
+     • ovládání vpravo nahoře: 💾 uložit · 🔊 zvuk · ↺ reset · ⛶ fullscreen
+     • kinematické intro (video) + soundtrack — sloty LUDUS_MEDIA
+     • vlastnický footer · toast zpětná vazba · i18n cs/en
+     Aktivace učitele: 3× ťuk na logo LUDUS (vlevo nahoře) nebo ?teacher=1. -->
+<style>
+.ludus-ctrl{position:fixed;top:10px;right:10px;z-index:9500;display:flex;gap:8px}
+.ludus-ctrl button{width:38px;height:38px;border-radius:50%;cursor:pointer;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  transition:background .2s,transform .1s}
+.ludus-ctrl button:hover{background:rgba(255,255,255,.14)}
+.ludus-ctrl button:active{transform:scale(.92)}
+@media (max-width:560px){.ludus-ctrl{gap:6px}.ludus-ctrl button{width:34px;height:34px;font-size:13px}}
+#ludus-toast{position:fixed;top:58px;right:10px;z-index:9510;background:rgba(0,0,0,.78);color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12.5px;letter-spacing:.03em;
+  border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;opacity:0;pointer-events:none;
+  transform:translateY(-6px);transition:opacity .25s,transform .25s}
+#ludus-toast.on{opacity:1;transform:none}
+.ludus-owner-footer{position:fixed;left:0;right:0;bottom:0;z-index:9400;pointer-events:none;text-align:center;
+  padding:3px 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.4);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+@media (max-width:420px){.ludus-owner-footer{font-size:7.5px}}
+#ludus-cine{position:fixed;inset:0;z-index:9990;background:#000;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;opacity:1;transition:opacity .9s ease}
+#ludus-cine[hidden]{display:none}
+#ludus-cine video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+@media (orientation:landscape){#ludus-cine video{object-fit:cover}}
+#ludus-cine-grad{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.8) 100%)}
+#ludus-cine-enter{position:relative;z-index:2;text-align:center;padding:24px;display:flex;
+  flex-direction:column;align-items:center;gap:22px;text-shadow:0 2px 24px rgba(0,0,0,.9)}
+#ludus-cine-title{font-family:Georgia,serif;color:#fff;font-size:clamp(24px,6vw,46px);
+  font-weight:700;letter-spacing:.05em;line-height:1.1;margin:0}
+#ludus-cine-go{font-family:Georgia,serif;font-size:clamp(14px,2vw,18px);letter-spacing:.12em;color:#fff;
+  cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.55);border-radius:6px;
+  padding:14px 30px;backdrop-filter:blur(2px);animation:ludusCineBreathe 2.8s ease-in-out infinite}
+#ludus-cine-go:hover{background:rgba(255,255,255,.2)}
+@keyframes ludusCineBreathe{0%,100%{box-shadow:0 0 12px rgba(255,255,255,.15)}50%{box-shadow:0 0 30px rgba(255,255,255,.4)}}
+#ludus-cine-skip{display:none;position:absolute;top:14px;right:14px;z-index:3;font-size:13px;
+  letter-spacing:.08em;color:rgba(255,255,255,.75);cursor:pointer;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 16px}
+@media (prefers-reduced-motion:reduce){#ludus-cine-go{animation:none}}
+</style>
+<div class="ludus-ctrl" id="ludus-ctrl">
+  <button id="ludus-save" type="button">&#128190;</button>
+  <button id="ludus-snd" type="button">&#128266;</button>
+  <button id="ludus-reset" type="button">&#8634;</button>
+  <button id="ludus-fs" type="button">&#9974;</button>
+</div>
+<div id="ludus-toast" role="status"></div>
+<div class="ludus-owner-footer" aria-label="Vlastnické označení aplikace"><span>Vlastník aplikace: Daniel Baláž · Gymnázium, Ostrava-Hrabůvka · © 2026 Daniel Baláž. Všechna práva vyhrazena.</span></div>
+<div id="ludus-cine" hidden>
+  <video id="ludus-cine-vid" playsinline muted preload="auto"></video>
+  <div id="ludus-cine-grad"></div>
+  <div id="ludus-cine-enter">
+    <h1 id="ludus-cine-title"></h1>
+    <button id="ludus-cine-go" type="button"></button>
+  </div>
+  <button id="ludus-cine-skip" type="button"></button>
+</div>
+<audio id="ludus-soundtrack" loop preload="auto"></audio>
+<script>
+/* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
+   introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
+   soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Továrna na smích" };
+
+(function(){
+  var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
+  var STR = {
+    cs:{save:'Uložit hru',saved:'Uloženo ✓',noSave:'Zatím není co uložit',snd:'Zvuk zap/vyp',
+        reset:'Restart — nová hra',resetQ:'Opravdu začít znovu? Postup bude smazán.',fs:'Celá obrazovka',
+        enter:'✦\u00a0\u00a0Vstoupit\u00a0\u00a0✦',skip:'Přeskočit ⏭'},
+    en:{save:'Save game',saved:'Saved ✓',noSave:'Nothing to save yet',snd:'Sound on/off',
+        reset:'Restart — new game',resetQ:'Really start over? Progress will be erased.',fs:'Fullscreen',
+        enter:'✦\u00a0\u00a0Enter\u00a0\u00a0✦',skip:'Skip ⏭'}
+  };
+  function lang(){ try{ var l=cfg.getLang?cfg.getLang():'cs'; return STR[l]?l:'cs'; }catch(e){ return 'cs'; } }
+  function S(k){ return STR[lang()][k]; }
+  var toastTm=null;
+  function toast(msg){
+    var t=document.getElementById('ludus-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('on'); clearTimeout(toastTm);
+    toastTm=setTimeout(function(){ t.classList.remove('on'); },1800);
+  }
+  window.__ludusToast = toast;
+  function refreshLang(){
+    var m={ 'ludus-save':'save','ludus-snd':'snd','ludus-reset':'reset','ludus-fs':'fs' };
+    Object.keys(m).forEach(function(id){ var b=document.getElementById(id);
+      if(b){ b.title=S(m[id]); b.setAttribute('aria-label',S(m[id])); } });
+    var g=document.getElementById('ludus-cine-go'); if(g) g.textContent=S('enter');
+    var sk=document.getElementById('ludus-cine-skip'); if(sk) sk.textContent=S('skip');
+  }
+  window.__ludusLayerLang = refreshLang;
+
+  /* ---------- soundtrack ---------- */
+  var st = document.getElementById('ludus-soundtrack');
+  var stWanted = false;
+  if(LUDUS_MEDIA.soundtrack){ st.src = LUDUS_MEDIA.soundtrack; stWanted = true; }
+  function soundOn(){ try{ return cfg.getSound ? !!cfg.getSound() : !window.__ludusMuted; }catch(e){ return true; } }
+  function stPlay(){ if(stWanted && soundOn()){ st.volume=.55; st.play().catch(function(){}); } }
+  function stStop(){ try{ st.pause(); }catch(e){} }
+  window.__ludusSoundtrack = { play:stPlay, stop:stStop };
+
+  /* ---------- tlačítka ---------- */
+  function setSound(on){
+    try{ if(cfg.setSound) cfg.setSound(!!on); else window.__ludusMuted = !on; }catch(e){}
+    var b=document.getElementById('ludus-snd'); if(b) b.textContent = on ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+    if(on) stPlay(); else stStop();
+  }
+  var sndBtn=document.getElementById('ludus-snd');
+  if(sndBtn){
+    sndBtn.addEventListener('click', function(){ setSound(!soundOn()); });
+    sndBtn.textContent = soundOn() ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+  }
+  var saveBtn=document.getElementById('ludus-save');
+  if(saveBtn) saveBtn.addEventListener('click', function(){
+    var ok=false;
+    try{ ok = cfg.save ? cfg.save()!==false : false; }catch(e){ ok=false; }
+    toast(ok ? S('saved') : S('noSave'));
+  });
+  var rstBtn=document.getElementById('ludus-reset');
+  if(rstBtn) rstBtn.addEventListener('click', function(){
+    if(!cfg.reset) return;
+    try{
+      if(cfg.resetConfirms){ cfg.reset(); }           /* hra si potvrzení řeší sama */
+      else if(confirm(S('resetQ'))){ cfg.reset(); }
+    }catch(e){}
+  });
+  var fsBtn=document.getElementById('ludus-fs');
+  if(fsBtn) fsBtn.addEventListener('click', function(){
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+      }else{
+        var el=document.documentElement;
+        (el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+      }
+    }catch(e){}
+  });
+
+  /* ---------- kinematické intro ---------- */
+  var cine=document.getElementById('ludus-cine'), vid=document.getElementById('ludus-cine-vid');
+  function cineEnd(){
+    cine.style.opacity='0';
+    setTimeout(function(){ cine.hidden=true; try{vid.pause();}catch(e){} }, 900);
+    stPlay();
+    if(cfg.afterCine){ try{ cfg.afterCine(); }catch(e){} }
+  }
+  if(LUDUS_MEDIA.introVideo){
+    cine.hidden=false;
+    document.getElementById('ludus-cine-title').textContent = LUDUS_MEDIA.title||'';
+    vid.src=LUDUS_MEDIA.introVideo;
+    document.getElementById('ludus-cine-go').addEventListener('click', function(){
+      document.getElementById('ludus-cine-enter').style.display='none';
+      document.getElementById('ludus-cine-grad').style.display='none';
+      document.getElementById('ludus-cine-skip').style.display='block';
+      stPlay();
+      vid.play().catch(function(){ cineEnd(); });
+    });
+    vid.addEventListener('ended', cineEnd);
+    document.getElementById('ludus-cine-skip').addEventListener('click', cineEnd);
+  } else if(stWanted){
+    var once=function(){ stPlay(); document.removeEventListener('pointerdown', once); };
+    document.addEventListener('pointerdown', once);
+  }
+  refreshLang();
+})();
+</script>
+<!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
+
+</body>
+</html>
