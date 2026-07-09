@@ -1,7 +1,7 @@
 {
   "schemaVersion": "ludus-engines-manifest-v2",
-  "updatedAt": "2026-07-04",
-  "note": "Kanonický katalog enginů a plánovaných světů. Statusy: ready (hotová) — jen Hogwarts; draft (rozpracovaná) — všechny ostatní enginy se souborem; planned (plánovaná) — světy bez enginu. Statusy se promítají do LUDUSu z tohoto manifestu.",
+  "updatedAt": "2026-07-09",
+  "note": "Kanonický katalog enginů a plánovaných světů. Statusy: ready (hotová) — jen Hogwarts; draft (rozpracovaná) — všechny ostatní enginy se souborem; planned (plánovaná) — světy bez enginu. Nové rozpracované enginy 1.12.0: Lovci relikvií (indiana-jones.html) a Kostka osudu (dnd.html). Statusy se promítají do LUDUSu z tohoto manifestu.",
   "statusLabels": {
     "ready": {
       "cs": "Hotová",
@@ -784,6 +784,187 @@
         "flowModel": "návrh deklarovaný v manifestu",
         "capabilities": "návrh deklarovaný v manifestu",
         "progressApi": "čeká na build enginu"
+      }
+    },
+    {
+      "mechanicId": "quest",
+      "addedVersion": "1.12.0",
+      "status": "draft",
+      "flowModel": "mapStationsFinalChallenge",
+      "engineKind": "single-html",
+      "supportedMechanics": [
+        "quest"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "brandModes": [
+        "official",
+        "safe"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": true,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasSaveLoadResume": true
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "id": "relic-hunters-quest",
+      "gameKey": "relic:quest",
+      "skinId": "relic",
+      "gameId": "indiana-jones",
+      "gameIdAliases": [
+        "relic-hunters",
+        "lovci-relikvii"
+      ],
+      "name": "Lovci relikvií",
+      "title": {
+        "cs": "Lovci relikvií",
+        "en": "Relic Hunters",
+        "officialCs": "Indiana Jones — Lovci relikvií",
+        "officialEn": "Indiana Jones — Relic Hunters"
+      },
+      "file": "indiana-jones.html",
+      "url": "engines/indiana-jones.html",
+      "contentTopicId": "conditionals",
+      "supports": [
+        "choice",
+        "type",
+        "order",
+        "match",
+        "listen"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "typeAnswer",
+        "order",
+        "match",
+        "listen"
+      ],
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json",
+        "i18n": "vložené v HTML enginu",
+        "themeVariants": "official + safe vložené v HTML enginu",
+        "adapter": "CHYBÍ — obsah je zatím napevno v HTML, engine nepřijímá LUDUS_CONTENT v2 (doplnit při dokončování)",
+        "flowModel": "deklarováno v manifestu"
+      }
+    },
+    {
+      "mechanicId": "quest",
+      "addedVersion": "1.12.0",
+      "status": "draft",
+      "flowModel": "mapStationsFinalChallenge",
+      "engineKind": "single-html",
+      "supportedMechanics": [
+        "quest"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "brandModes": [
+        "official",
+        "safe"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": true,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasSaveLoadResume": true
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "id": "roll-and-quest",
+      "gameKey": "rollq:quest",
+      "skinId": "rollq",
+      "gameId": "dnd",
+      "gameIdAliases": [
+        "kostka-osudu",
+        "roll-quest",
+        "dnd-quest"
+      ],
+      "name": "Kostka osudu",
+      "title": {
+        "cs": "Kostka osudu",
+        "en": "Roll & Quest",
+        "officialCs": "Dungeons & Dragons — Kostka osudu",
+        "officialEn": "Dungeons & Dragons — Roll & Quest"
+      },
+      "file": "dnd.html",
+      "url": "engines/dnd.html",
+      "contentTopicId": "template",
+      "supports": [
+        "choice",
+        "type",
+        "order",
+        "match",
+        "listen",
+        "mcq"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "typeAnswer",
+        "order",
+        "match",
+        "listen"
+      ],
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json",
+        "i18n": "vložené v HTML enginu",
+        "themeVariants": "official + safe vložené v HTML enginu",
+        "adapter": "adaptér na LUDUS_CONTENT v2 vložený (__ludusCoerceV2)",
+        "contentV2": "LUDUS posílá v2 vedle GAME_CONTENT v1",
+        "flowModel": "deklarováno v manifestu"
       }
     }
   ]

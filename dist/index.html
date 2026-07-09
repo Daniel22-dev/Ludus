@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs">
-<!-- BUILD: 2026-07-05T11:01:48.657Z -->
+<!-- BUILD: 2026-07-09T19:26:06.137Z -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1315,7 +1315,15 @@ const GAME_ENGINES={
   'sundered:quest':{skinId:'sundered',gameId:'lotr',mechanicId:'quest',title:'LOTR: A Grammar Quest',engine:ENGINE_BASE+'lotr.html',engineKind:'single-html',status:'draft',uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ES_CONTENT_LANGS,supportLanguages:ES_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT,{manifest:'vložený v HTML enginu + zrcadlený v engines/manifest.json'})}
 };
 function gameKey(skinId,frame){return String(skinId)+':'+String(frame);}
-function getGameEngine(skinId,frame){return GAME_ENGINES[gameKey(skinId,frame)]||null;}
+function getGameEngine(skinId,frame){
+  const exact=GAME_ENGINES[gameKey(skinId,frame)];
+  if(exact)return exact;
+  // Unifikace 1.12: má-li svět existující engine v jiné mechanice, „svítí" všude — dlaždice nabídne tento engine.
+  let best=null;
+  for(const k in GAME_ENGINES){const e=GAME_ENGINES[k];
+    if(e&&e.engine&&e.skinId===skinId){ if(!best||e.status==='ready')best=e; }}
+  return best;
+}
 function selectedEngine(){try{return getGameEngine(state.skin,state.frame);}catch(_){return null;}}
 function normalizeEngineStatus(st){st=String(st||'planned').toLowerCase(); if(st==='wip'||st==='in-progress')return 'draft'; return ENGINE_STATUSES[st]?st:'planned';}
 function engineStatusFor(skinId,frame){const e=getGameEngine(skinId,frame);return e?normalizeEngineStatus(e.status):null;}

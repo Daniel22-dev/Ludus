@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Star Wars</title>
+<title>Indiana Jones — Lovci relikvií</title>
 <!--
   ╔══════════════════════════════════════════════════════════════════╗
-  ║  STAR WARS 2 — herní šablona (po vzoru Hogwarts enginu)           ║
+  ║  INDIANA JONES — LUDUS herní engine (mapa výpravy)                ║
   ║  • Jeden soubor, offline, bez CDN, systémové fonty, UTF-8.        ║
   ║  • Obsah je VÝPLŇOVÝ – přepiš pole STATIONS a BOSS níže.          ║
-  ║  • Dvojí skin: original (Star Wars) / safe („Hvězdní rytíři").    ║
+  ║  • Dvojí skin: original (Indiana Jones) / safe (Lovci relikvií).  ║
   ║    Přepnutí: učitelský panel nebo ?skin=safe v URL.               ║
   ║  • MÉDIA (úvodní video + hudba) = prázdné sloty, viz blok MEDIA.  ║
   ║    Bez souborů hrají syntetické WebAudio zvuky (oscilátory).      ║
@@ -29,16 +29,16 @@
 -->
 <style>
 :root{
-  --space:#05060d; --space2:#0a0d1c; --panel:#0c1124; --panel2:#11183a;
-  --line:rgba(122,162,255,.28); --line2:rgba(122,162,255,.14);
-  --blue:#2e8fff; --blueL:#8fc0ff; --blueGlow:rgba(46,143,255,.6);
+  --space:#0d0a06; --space2:#150f07; --panel:#1a120a; --panel2:#241809;
+  --line:rgba(201,162,75,.30); --line2:rgba(201,162,75,.15);
+  --blue:#d9a441; --blueL:#f2d488; --blueGlow:rgba(217,164,65,.55);
   --red:#e23636; --redL:#ff6b6b; --redGlow:rgba(226,54,54,.6);
   /* accent = aktuální barva světa (mění se podle planety); výchozí = modrá */
-  --accent:#2e8fff; --accentL:#8fc0ff;
+  --accent:#d9a441; --accentL:#f2d488;
   --gold:#ffd24a; --goldL:#ffe9a8;
-  --star:#e8eefc; --dim:#7e8bb8; --dim2:#566089;
+  --star:#f3e6c6; --dim:#a58e60; --dim2:#736039;
   --ok:#34d17a; --bad:#ff5a5a;
-  --card:rgba(10,16,40,.86);
+  --card:rgba(24,17,9,.88);
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
@@ -69,11 +69,11 @@ body{
 #nebula{filter:blur(14px);opacity:.5;z-index:0}
 .neb{position:absolute;border-radius:50%;mix-blend-mode:screen;will-change:transform}
 .neb.n1{width:78vw;height:78vw;left:-18vw;top:-8vw;animation:drift1 64s ease-in-out infinite;
-  background:radial-gradient(circle at 50% 50%, rgba(40,86,200,.5), rgba(40,86,200,0) 62%)}
+  background:radial-gradient(circle at 50% 50%, rgba(150,96,40,.45), rgba(150,96,40,0) 62%)}
 .neb.n2{width:70vw;height:70vw;right:-16vw;top:18vh;animation:drift2 82s ease-in-out infinite;
-  background:radial-gradient(circle at 50% 50%, rgba(124,52,168,.42), rgba(124,52,168,0) 62%)}
+  background:radial-gradient(circle at 50% 50%, rgba(120,72,30,.40), rgba(120,72,30,0) 62%)}
 .neb.n3{width:62vw;height:62vw;left:24vw;bottom:-18vh;animation:drift3 73s ease-in-out infinite;
-  background:radial-gradient(circle at 50% 50%, rgba(28,128,140,.38), rgba(28,128,140,0) 64%)}
+  background:radial-gradient(circle at 50% 50%, rgba(96,60,26,.36), rgba(96,60,26,0) 64%)}
 @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vh) scale(1.12)}}
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1.05)}50%{transform:translate(-5vw,-3vh) scale(1)}}
 @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4vw,-4vh) scale(1.1)}}
@@ -165,15 +165,15 @@ h1.title small{display:block;font-size:.32em;letter-spacing:.5em;color:var(--blu
   padding:18px;backdrop-filter:blur(4px);box-shadow:0 18px 50px rgba(0,0,0,.5)}
 
 label.fld{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
-input[type=text]{width:100%;padding:13px 14px;background:#070b1c;border:1px solid var(--line);
+input[type=text]{width:100%;padding:13px 14px;background:#0f0a04;border:1px solid var(--line);
   border-radius:10px;color:var(--star);font-size:16px;outline:none}
 input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
 
 .seg{display:flex;gap:8px;margin-top:6px}
-.seg button{flex:1;padding:11px 6px;background:#070b1c;border:1px solid var(--line);
+.seg button{flex:1;padding:11px 6px;background:#0f0a04;border:1px solid var(--line);
   border-radius:10px;color:var(--dim);font-size:13px;font-weight:700;cursor:pointer;transition:.18s;letter-spacing:.04em}
 .seg button .d{display:block;font-size:11px;font-weight:400;color:var(--dim2);margin-top:3px;letter-spacing:0}
-.seg button.on{border-color:var(--blue);color:var(--star);background:#0f1838;box-shadow:0 0 0 1px var(--blue) inset,0 0 18px rgba(46,143,255,.25)}
+.seg button.on{border-color:var(--blue);color:var(--star);background:#241708;box-shadow:0 0 0 1px var(--blue) inset,0 0 18px rgba(217,164,65,.30)}
 
 .check{display:flex;align-items:center;gap:10px;margin-top:16px;color:var(--dim);font-size:14px;cursor:pointer;user-select:none}
 .check input{width:18px;height:18px;accent-color:var(--blue)}
@@ -246,6 +246,15 @@ input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix
 
 /* ===== QUESTION CARD ===== */
 .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--dim);font-size:13px}
+.relicshelf{display:flex;gap:10px;justify-content:center;margin:2px 0 10px;flex-wrap:wrap}
+.relic{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:24px;border-radius:10px;
+  border:1px dashed rgba(217,164,65,.5);background:rgba(30,20,10,.5);filter:grayscale(1);opacity:.45;transition:.3s}
+.relic.got{filter:none;opacity:1;border-style:solid;box-shadow:0 0 14px rgba(217,164,65,.35);animation:relicPop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes relicPop{0%{transform:scale(.2) rotate(-20deg)}70%{transform:scale(1.15) rotate(6deg)}100%{transform:scale(1)}}
+.trapbar{display:none;margin:6px 0 2px;padding:7px 10px;border:1px solid #b5321f;border-radius:9px;background:rgba(120,20,10,.25);
+  color:#ffb3a0;font-weight:800;font-size:13px;letter-spacing:.04em}
+.trapbar.on{display:flex;align-items:center;gap:8px;animation:trapPulse 1s infinite}
+@keyframes trapPulse{50%{background:rgba(160,30,15,.4)}}
 .qbar{height:6px;border-radius:6px;background:#0a1024;overflow:hidden;margin-bottom:16px;border:1px solid var(--line2)}
 .qbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accentL));transition:width .4s ease}
 .qtext{font-size:18px;line-height:1.5;margin:0 0 16px;min-height:54px}
@@ -572,23 +581,23 @@ body.teacher #tpBtn{display:grid}
 <section class="screen" id="screen-start">
   <div class="wrap">
     <div style="text-align:center">
-      <div class="kicker" id="kStart">Galaktická akademie · výcvik rytíře</div>
-      <h1 class="title display" id="gameTitle">STAR<br>WARS<small id="gameSubtitle">výcvik mladého rytíře</small></h1>
+      <div class="kicker" id="kStart">Společnost objevitelů · výprava za relikviemi</div>
+      <h1 class="title display" id="gameTitle">INDIANA<br>JONES<small id="gameSubtitle">výprava za ztracenými relikviemi</small></h1>
     </div>
     <div class="panel" style="margin-top:26px">
-      <label class="fld" for="pname">Jméno kadeta</label>
+      <label class="fld" for="pname">Jméno objevitele</label>
       <input id="pname" type="text" maxlength="28" placeholder="Zadej své jméno" autocomplete="off">
 
-      <label class="fld">Stupeň výcviku</label>
+      <label class="fld">Náročnost výpravy</label>
       <div class="seg" id="diffSeg"></div>
 
-      <button class="btn" id="startBtn" style="margin-top:20px">✦&nbsp;&nbsp;Zahájit výcvik</button>
-      <button class="btn ghost" id="resumeBtn" style="margin-top:10px;width:100%;display:none">↻&nbsp;&nbsp;Pokračovat ve výcviku</button>
+      <button class="btn" id="startBtn" style="margin-top:20px">✦&nbsp;&nbsp;Zahájit výpravu</button>
+      <button class="btn ghost" id="resumeBtn" style="margin-top:10px;width:100%;display:none">↻&nbsp;&nbsp;Pokračovat ve výpravě</button>
       <div id="resumeNote" style="display:none;text-align:center;margin-top:8px;font-size:12px;color:var(--dim)">
         <span id="resumeInfo"></span> · <a href="#" id="forgetBtn" style="color:var(--dim2)">zapomenout</a>
       </div>
     </div>
-    <p class="sub" id="startSub">Projdi výcvikové světy, ovládni Sílu a postav se Temnému lordovi.</p>
+    <p class="sub" id="startSub">Projdi vykopávky, získej relikvie a postav se Strážci chrámu.</p>
   </div>
 </section>
 
@@ -596,7 +605,7 @@ body.teacher #tpBtn{display:grid}
 <section class="screen" id="screen-intro" style="padding:0">
   <div id="introVideoBox"><video id="introVideo" playsinline muted></video></div>
   <div id="crawlStage">
-    <div id="preCrawl"><p>Před dávnými časy, v předaleké galaxii&hellip;</p></div>
+    <div id="preCrawl"><p>Kdesi v neprobádané džungli, dávno zapomenuté&hellip;</p></div>
     <div class="crawl" id="crawlText"></div>
   </div>
   <div class="skiplink" id="skipIntro">Přeskočit ⟶</div>
@@ -606,10 +615,11 @@ body.teacher #tpBtn{display:grid}
 <section class="screen" id="screen-map">
   <div class="wrap">
     <div class="maphead">
-      <div class="greet" id="mapGreet">Rytíři</div>
-      <h2>Galaktická mapa</h2>
+      <div class="greet" id="mapGreet">Objeviteli</div>
+      <h2>Mapa výpravy</h2>
     </div>
-    <svg class="mapsvg" id="mapSvg" viewBox="0 0 520 360" role="img" aria-label="Mapa světů"></svg>
+    <div class="relicshelf" id="relicShelf" aria-label="Relikviář"></div>
+    <svg class="mapsvg" id="mapSvg" viewBox="0 0 520 360" role="img" aria-label="Mapa výpravy"></svg>
     <div class="maplegend">
       <span><i style="background:var(--ok)"></i>Splněno</span>
       <span><i style="background:var(--blue)"></i>Dostupné</span>
@@ -625,6 +635,7 @@ body.teacher #tpBtn{display:grid}
     <div class="panel">
       <div class="qmeta"><span id="stCounter">Otázka 1/3</span><span id="stName" class="mono"></span></div>
       <div class="qbar"><i id="stBar"></i></div>
+      <div class="trapbar" id="trapBar">⚠️ <span>PAST!</span> <span id="trapT">20</span> s na odpověď…</div>
       <p class="qtext" id="stQ"></p>
       <div class="opts" id="stOpts"></div>
       <div class="feedback" id="stFb"></div>
@@ -639,7 +650,7 @@ body.teacher #tpBtn{display:grid}
       <div class="fighter">
         <div class="av" id="heroAv"></div>
         <div style="flex:1">
-          <div class="nm" id="heroName">Rytíř</div>
+          <div class="nm" id="heroName">Objevitel</div>
           <div class="hpbar hp-blue"><i id="heroHp" style="width:100%"></i><span class="flash" id="heroFlash"></span></div>
           <div class="lives" id="heroLives"></div>
         </div>
@@ -662,7 +673,7 @@ body.teacher #tpBtn{display:grid}
     </div>
 
     <div class="panel">
-      <div class="qmeta"><span id="bsCounter">Útok 1</span><span class="mono">DUEL</span></div>
+      <div class="qmeta"><span id="bsCounter">Střet 1</span><span class="mono">CHRÁM</span></div>
       <p class="qtext" id="bsQ"></p>
       <div class="opts" id="bsOpts"></div>
       <div class="feedback" id="bsFb"></div>
@@ -675,9 +686,9 @@ body.teacher #tpBtn{display:grid}
   <div class="wrap">
     <div class="card" id="resultCard">
       <span class="hcnr tl"></span><span class="hcnr tr"></span><span class="hcnr bl"></span><span class="hcnr br"></span>
-      <div class="resKicker">◇ Záznam mise</div>
+      <div class="resKicker">◇ Záznam výpravy</div>
       <div class="crest" id="resCrest"></div>
-      <h2 id="resTitle">Galaxie zachráněna</h2>
+      <h2 id="resTitle">Relikvie získána</h2>
       <div class="who" id="resWho"></div>
       <div class="rankWrap">
         <div class="rankBadge"><span id="resGrade">1</span></div>
@@ -692,7 +703,7 @@ body.teacher #tpBtn{display:grid}
       <div class="statline"><span>Datum</span><b id="resDate">—</b></div>
     </div>
     <div class="breakdown" id="breakdown"></div>
-    <button class="btn" id="againBtn" style="margin-top:16px">↻&nbsp;&nbsp;Nový výcvik</button>
+    <button class="btn" id="againBtn" style="margin-top:16px">↻&nbsp;&nbsp;Nová výprava</button>
   </div>
 </section>
 
@@ -702,16 +713,16 @@ body.teacher #tpBtn{display:grid}
    1) LABELS — VÝMĚNNÉ NÁZVY  (sem sáhni pro „bezpečné"/interní varianty)
    ════════════════════════════════════════════════════════════════════ */
 const LABELS = {
-  game:        "STAR",
-  game2:       "WARS",
-  subtitle:    "výcvik mladého rytíře",
-  order:       "Řád Jedi",
-  heroRank:    "Rytíř",
-  energy:      "Síla",
-  weapon:      "světelný meč",
-  bossName:    "Darth Vader",
-  bossTitle:   "The Shadow of the Sith",
-  faction:     "Impérium"
+  game:        "INDIANA",
+  game2:       "JONES",
+  subtitle:    "výprava za ztracenými relikviemi",
+  order:       "Společnost objevitelů",
+  heroRank:    "Objevitel",
+  energy:      "Zdraví",
+  weapon:      "bič",
+  bossName:    "Strážce chrámu",
+  bossTitle:   "Stín ztraceného města",
+  faction:     "Soupeři"
 };
 
 /* ── V2: DVOJÍ SKIN — safe (výchozí, veřejný) / original (gated, interní).
@@ -719,9 +730,9 @@ const LABELS = {
 const SKINS = {
   original: Object.assign({}, LABELS),
   safe: {
-    game:"HVĚZDNÍ", game2:"RYTÍŘI", subtitle:"výcvik mladého rytíře",
-    order:"Řád strážců", heroRank:"Rytíř", energy:"Síla", weapon:"světelná čepel",
-    bossName:"Temný lord", bossTitle:"Stín temné strany", faction:"Temné impérium"
+    game:"LOVCI", game2:"RELIKVIÍ", subtitle:"výprava za ztracenými poklady",
+    order:"Společnost objevitelů", heroRank:"Objevitel", energy:"Zdraví", weapon:"lano",
+    bossName:"Strážce chrámu", bossTitle:"Stín ztraceného města", faction:"Soupeři"
   }
 };
 let SKIN = "safe"; /* bezpečný default; originál gated v učitelském panelu / ?skin=original */
@@ -753,23 +764,22 @@ const AUDIO = {     // ← zvuky (data:audio/…;base64,…  nebo URL).  Prázdn
    ════════════════════════════════════════════════════════════════════ */
 const CRAWL = {
   episode: "Kapitola I",
-  heading: "Probuzení rytíře",
-  // Crawl je volný text — názvy píšu rovnou ve správném pádu (proto je tu neberu
-  // z LABELS; vkládání v 1. pádu rozbíjelo skloňování: „ovládl Síla", „s Darth Vader").
+  heading: "Ztracená relikvie",
+  // Crawl je volný text — jména píšu rovnou ve správném pádu.
   paragraphs: [
-    "Galaxií se šíří stín. Stará znalost, kdysi střežená Řádem Jedi, se vytrácí a temnota sílí.",
-    "Mladý kadet skládá první zkoušky. Putuje od světa ke světu, aby ovládl Sílu a stal se právoplatným rytířem.",
-    "Na konci cesty čeká nejtěžší zkouška — souboj s Darthem Vaderem. Jen ten, kdo obstojí, vrátí galaxii naději…"
+    "Ve zpuchřelém deníku se skrývá mapa k chrámu, který zmizel před staletími. Ukrývá relikvii, po níž pátrá i tvůj největší soupeř.",
+    "Vydáváš se na výpravu. Od pralesa přes poušť až k horám prozkoumáš každou vykopávku a rozluštíš hádanky dávných stavitelů.",
+    "Na konci cesty čeká ztracený chrám a jeho Strážce. Jen ten, kdo obstojí, odnese poklad na světlo…"
   ]
 };
-// safe varianta crawlu (jména ve správných pádech, bez chráněných názvů)
+// safe varianta crawlu (bez chráněných názvů)
 const CRAWL_SAFE = {
   episode: "Kapitola I",
-  heading: "Probuzení rytíře",
+  heading: "Ztracená relikvie",
   paragraphs: [
-    "Galaxií se šíří stín. Stará znalost, kdysi střežená Řádem strážců, se vytrácí a temnota sílí.",
-    "Mladý kadet skládá první zkoušky. Putuje od světa ke světu, aby ovládl Sílu a stal se právoplatným rytířem.",
-    "Na konci cesty čeká nejtěžší zkouška — souboj s Temným lordem. Jen ten, kdo obstojí, vrátí galaxii naději…"
+    "Ve zpuchřelém deníku se skrývá mapa k chrámu, který zmizel před staletími. Ukrývá poklad, po němž pátrají i tví soupeři.",
+    "Vydáváš se na výpravu. Od pralesa přes poušť až k horám prozkoumáš každou vykopávku a rozluštíš hádanky dávných stavitelů.",
+    "Na konci cesty čeká ztracený chrám a jeho Strážce. Jen ten, kdo obstojí, odnese poklad na světlo…"
   ]
 };
 function crawlNow(){ return skinSafe() ? CRAWL_SAFE : CRAWL; }
@@ -778,9 +788,9 @@ function crawlNow(){ return skinSafe() ? CRAWL_SAFE : CRAWL; }
    4) OBTÍŽNOST
    ════════════════════════════════════════════════════════════════════ */
 const DIFFICULTIES = [
-  { id:"padawan", name:"Učeň",  d:"6 chyb v souboji", lives:6 },
-  { id:"knight",  name:"Rytíř", d:"4 chyby v souboji", lives:4 },
-  { id:"master",  name:"Mistr", d:"3 chyby v souboji", lives:3 }
+  { id:"padawan", name:"Nováček",   d:"6 chyb ve finále", lives:6 },
+  { id:"knight",  name:"Dobrodruh", d:"4 chyby ve finále", lives:4 },
+  { id:"master",  name:"Legenda",   d:"3 chyby ve finále", lives:3 }
 ];
 
 /* ════════════════════════════════════════════════════════════════════
@@ -813,82 +823,113 @@ const DIFFICULTIES = [
      listen : { type:"listen", q, say:"text k přečtení", lang?:"en-US",
                  (options:[…],answer)  NEBO  (answer|answers)  , why? }               // poslech (TTS) → výběr nebo psaní
    ──────────────────────────────────────────────────────────────────── */
+/* Relikvie za stanice — sbírají se do relikviáře na mapě (odvozeno z S.done, přežívá uložení). */
+const RELICS={ jungle:{ic:"🗿",cs:"Zlatá modla"}, desert:{ic:"🏺",cs:"Kanopa z pouště"}, catacombs:{ic:"⚱️",cs:"Relikviář z katakomb"}, monastery:{ic:"📜",cs:"Svitek z kláštera"}, volcano:{ic:"💎",cs:"Ohnivý drahokam"} };
+function renderRelics(){ const el=document.getElementById("relicShelf"); if(!el) return;
+  el.innerHTML = STATIONS.map(st=>{ const r=RELICS[st.id]||{ic:"❔",cs:""}; const got=!!(S.done&&S.done[st.id]);
+    return '<div class="relic'+(got?' got':'')+'" title="'+(got?r.cs:"Zatím neobjeveno")+'">'+(got?r.ic:"❔")+'</div>'; }).join(""); }
 const STATIONS = [
-  { id:"tatooine", title:"The Desert of Tatooine", place:"Tatooine", safeTitle:"The Desert Trial", safePlace:"Pouštní svět", scene:"desert", accent:"#ff9d3d", accentL:"#ffc680",
-    intro:"Pod dvojicí sluncí na vyprahlé Tatooine za\u010d\u00edn\u00e1 tv\u00e1 cesta ryt\u00ed\u0159e.",
+  { id:"jungle", title:"The Jungle Temple", place:"Chrám v pralese", safeTitle:"The Jungle Temple", safePlace:"Chrám v pralese", scene:"forest", accent:"#5fbf57", accentL:"#a6e89a",
+    intro:"Hluboko v pralese, obrostlý liánami, se ukrývá chrám se zlatou modlou. První zkouška: podmínkové věty.",
     questions:[
-      { type:"choice", q:"She is the knight ___ saved the village.", options:["who","which","whose","what"], answer:"who",
-        why:"O osob\u011b mluv\u00edme s \u201ewho\u201c. \u201eWhich\u201c se v\u00e1\u017ee k v\u011bcem a zv\u00ed\u0159at\u016fm, ne k lidem." },
-      { type:"type", q:"Dopl\u0148 vzta\u017en\u00e9 z\u00e1jmeno: The droid ___ we found is gold.", answers:["that","which"],
-        hint:"v\u011bc + p\u0159edm\u011bt v\u011bty", why:"U v\u011bc\u00ed lze \u201ethat\u201c i \u201ewhich\u201c; v p\u0159edm\u011btn\u00e9 v\u011bt\u011b se navíc d\u00e1 vynechat." },
-      { type:"order", q:"Slo\u017e v\u011btu se vzta\u017enou v\u011btou:", words:["The","hero","who","saved","us","is","here"],
-        why:"Vzta\u017en\u00e1 v\u011bta \u201ewho saved us\u201c stoj\u00ed hned za podstatn\u00fdm jm\u00e9nem, kter\u00e9 rozv\u00edj\u00ed." }
+      { type:"choice", q:"Zero conditional: If you touch the golden idol, the trap ___.", options:["triggers","will trigger","triggered","would trigger"], answer:"triggers",
+        why:"Nultý kondicionál (obecné pravidlo): if + přítomný čas, přítomný čas." },
+      { type:"choice", q:"First conditional: If we ___ the torch, we will see the path.", options:["light","will light","lit","would light"], answer:"light",
+        why:"1. kondicionál: v if-větě je přítomný čas (light), v hlavní will + infinitiv." },
+      { type:"type", q:"Doplň (1. kondicionál): If the bridge breaks, we ___ (fall).", answers:["will fall"], hint:"will + sloveso",
+        why:"Pravděpodobný budoucí následek: will fall." },
+      { type:"order", q:"Slož větu (1. kondicionál):", words:["If","you","open","the","door","the","temple","will","wake"],
+        why:"Podmínková věta (if + přítomný) + hlavní věta s will." },
+      { type:"match", q:"Spoj podmínku s následkem:", pairs:[["If it rains,","the path floods"],["If you run,","you escape"],["If you wait,","the guard sees you"],["If you climb,","you reach the top"]],
+        why:"Nultý / první kondicionál — logická dvojice podmínka → následek." },
+      { type:"listen", q:"Poslechni a napiš slovo:", say:"temple", answers:["temple"], lang:"en-US", hint:"chrám",
+        why:"„temple“ = chrám." }
     ]},
-  { id:"dock", title:"The Smuggler's Dock", place:"Smuggler's Dock", safeTitle:"The Orbital Dock", safePlace:"Orbitální dok", scene:"station", accent:"#34d0c8", accentL:"#8af0e6",
-    intro:"Na orbit\u00e1ln\u00edm doku pa\u0161er\u00e1k\u016f se obchoduje se v\u0161\u00edm \u2014 i s tajemstv\u00edmi.",
+  { id:"desert", title:"The Desert Tomb", place:"Poušť a hrobka", safeTitle:"The Desert Tomb", safePlace:"Poušť a hrobka", scene:"desert", accent:"#ff9d3d", accentL:"#ffc680",
+    intro:"Pod žhnoucím sluncem se v písku rýsuje vchod do dávné hrobky. Pokačuj v podmínkových větách.",
+    pick:5,
     questions:[
-      { type:"match", q:"Spoj anglick\u00e1 slova s p\u0159ekladem:", pairs:[["smuggler","pa\u0161er\u00e1k"],["cargo","n\u00e1klad"],["bounty","odm\u011bna"],["ship","lo\u010f"]],
-        why:"Slovn\u00ed z\u00e1soba se nejl\u00e9pe upevn\u00ed aktivn\u00edm spojov\u00e1n\u00edm v\u00fdznam\u016f." },
-      { type:"listen", q:"Poslechni a napi\u0161, co sly\u0161\u00ed\u0161:", say:"freedom", answers:["freedom"], lang:"en-US",
-        hint:"svoboda", why:"\u201efreedom\u201c = svoboda; pozor na dvojhl\u00e1sku ee a koncovku -dom." },
-      { type:"choice", q:"Choose the correct word: a person who flies a ship is a ___.", options:["pilot","driver","rider","sailor"], answer:"pilot",
-        why:"Lo\u010f \u010di stroj \u0159\u00edd\u00ed \u201epilot\u201c; \u201edriver\u201c \u0159\u00edd\u00ed auto." }
+      { type:"choice", q:"If vs When: ___ the sun rises, we always start digging.", options:["When","If","Unless","Would"], answer:"When",
+        why:"„when“ pro pravidelnou/jistou událost; „if“ pro nejistou podmínku." },
+      { type:"choice", q:"First conditional: Unless we find water, we ___ survive.", options:["won’t","will","would","don’t"], answer:"won’t",
+        why:"„unless“ = „if not“; hlavní věta je budoucí zápor → won’t survive." },
+      { type:"type", q:"Doplň (unless/if): We will be lost ___ we follow the map.", answers:["unless"], hint:"pokud ne",
+        why:"„unless“ = pokud ne — ztratíme se, pokud nebudeme sledovat mapu." },
+      { type:"choice", q:"If you ___ carefully, you’ll find the entrance.", options:["look","will look","looked","would look"], answer:"look",
+        why:"V if-větě 1. kondicionálu je přítomný čas, ne will." },
+      { type:"order", q:"Slož větu (1. kondicionál):", words:["If","the","sand","moves","the","tomb","will","open"],
+        why:"1. kondicionál: if + přítomný, will + infinitiv." },
+      { type:"listen", q:"Poslechni a napiš:", say:"desert", answers:["desert"], lang:"en-US", hint:"poušť",
+        why:"„desert“ = poušť." }
     ]},
-  { id:"dagobah", title:"The Dagobah Trial", place:"Dagobah", safeTitle:"The Swamp of Patience", safePlace:"Bažinný svět", scene:"forest", accent:"#5fbf57", accentL:"#a6e89a",
-    intro:"V mlžn\u00fdch ba\u017ein\u00e1ch Dagobahu prov\u011b\u0159\u00ed star\u00fd mistr tvou trp\u011blivost.",
-    pick:3,   // banka: z 5 otázek se náhodně vyberou 3 (jiné při každém hraní)
+  { id:"catacombs", title:"The Underground Catacombs", place:"Katakomby", safeTitle:"The Underground Catacombs", safePlace:"Katakomby", scene:"station", accent:"#c9a24b", accentL:"#f0d488",
+    intro:"Při světle pochodní sestupuješ do katakomb plných pák a hlídajících písemných soch. Otázky a zápory.",
     questions:[
-      { type:"type", q:"Minul\u00fd \u010das: Yoda ___ (teach) me well.", answers:["taught"],
-        hint:"nepravideln\u00e9 sloveso", why:"\u201eteach\u201c je nepravideln\u00e9: teach \u2013 taught \u2013 taught." },
-      { type:"choice", q:"Past tense of \u201ego\u201c:", options:["went","goed","gone","goes"], answer:"went",
-        why:"\u201ego\u201c je nepravideln\u00e9: go \u2013 went \u2013 gone. \u201egone\u201c je 3. tvar (p\u0159\u00ed\u010dest\u00ed)." },
-      { type:"order", q:"Slo\u017e ot\u00e1zku ve spr\u00e1vn\u00e9m po\u0159ad\u00ed:", words:["Where","did","you","learn","the","Force"],
-        why:"Ot\u00e1zka v minul\u00e9m \u010dase: tázac\u00ed slovo + did + podm\u011bt + z\u00e1kladn\u00ed tvar slovesa." },
-      { type:"match", q:"Spoj sloveso s minul\u00fdm tvarem:", pairs:[["see","saw"],["eat","ate"],["take","took"],["run","ran"]],
-        why:"Nepravideln\u00e1 slovesa se u\u010d\u00edme v p\u00e1rech p\u0159\u00edtomn\u00fd\u2013minul\u00fd tvar." },
-      { type:"listen", q:"Poslechni a napi\u0161 sloveso:", say:"learn", answers:["learn"], lang:"en-US",
-        hint:"u\u010dit se", why:"\u201elearn\u201c = u\u010dit se; pravideln\u00e9: learn \u2013 learned." }
+      { type:"choice", q:"Question: What ___ if we pull this lever?", options:["will happen","happens","would happen","happened"], answer:"will happen",
+        why:"Otázka 1. kondicionálu: what will happen if + přítomný čas." },
+      { type:"choice", q:"If the flame goes out, we ___ see anything.", options:["won’t","aren’t","don’t will","not"], answer:"won’t",
+        why:"Zápor budoucnosti: won’t (= will not) see." },
+      { type:"type", q:"Doplň (if/unless): The door opens ___ you say the password.", answers:["if"], hint:"jestliže",
+        why:"„if“ uvádí podmínku — dveře se otevřou, jestliže řekneš heslo." },
+      { type:"match", q:"Spoj poloviny vět:", pairs:[["If you step there,","you fall in"],["If we hurry,","we escape the tomb"],["If the rope holds,","we climb down"],["If you shout,","the bats attack"]],
+        why:"Podmínka → následek (nultý / první kondicionál)." },
+      { type:"order", q:"Slož otázku:", words:["What","will","you","do","if","the","light","fails","?"],
+        why:"Budoucí otázka + if-věta s přítomným časem." },
+      { type:"listen", q:"Poslechni a vyber, co slyšíš:", say:"danger", options:["danger","ranger","dancer","dagger"], answer:"danger", lang:"en-US",
+        why:"„danger“ [dejndžer] = nebezpečí; liší se od podobně znějících slov." }
     ]},
-  { id:"hoth", title:"The Frozen Base of Hoth", place:"Hoth", safeTitle:"The Frozen Base", safePlace:"Ledový svět", scene:"ice", accent:"#5cc8ff", accentL:"#aee4ff",
-    intro:"Zmrzl\u00e1 rebelsk\u00e1 z\u00e1kladna na Hothu nep\u0159eje t\u011bm, kdo zav\u00e1haj\u00ed.",
+  { id:"monastery", title:"The Mountain Monastery", place:"Horský klášter", safeTitle:"The Mountain Monastery", safePlace:"Horský klášter", scene:"ice", accent:"#5cc8ff", accentL:"#aee4ff",
+    intro:"Vysoko v horách, mezi modlitebními praporky, ti mniši položí hypotetickou hádanku — druhý kondicionál.",
     questions:[
-      { type:"choice", q:"Comparative of \u201ecold\u201c:", options:["colder","more cold","coldest","most cold"], answer:"colder",
-        why:"Kr\u00e1tk\u00e1 p\u0159\u00eddavn\u00e1 jm\u00e9na stup\u0148ujeme p\u0159\u00edponou -er: cold \u2013 colder \u2013 coldest." },
-      { type:"match", q:"Spoj protiklady (opposites):", pairs:[["hot","cold"],["up","down"],["fast","slow"],["light","dark"]],
-        why:"Znalost protiklad\u016f roz\u0161i\u0159uje slovn\u00ed z\u00e1sobu po dvojic\u00edch." },
-      { type:"type", q:"Dopl\u0148 \u010dlen: I saw ___ AT-AT walker. (a/an)", answers:["an"],
-        hint:"AT-AT se \u010dte \u201eej-ti-ej-ti\u201c", why:"\u010clen \u201ean\u201c je p\u0159ed samohl\u00e1skov\u00fdm zvukem \u2014 \u201eAT-AT\u201c za\u010d\u00edn\u00e1 zvukem [ej]." }
+      { type:"choice", q:"Second conditional: If I had the map, I ___ find the temple.", options:["would","will","would have","had"], answer:"would",
+        why:"2. kondicionál: if + past simple, would + infinitiv (nereálná situace)." },
+      { type:"choice", q:"If we ___ more time, we would explore the caves.", options:["had","have","would have","has"], answer:"had",
+        why:"V if-větě 2. kondicionálu je past simple (had)." },
+      { type:"type", q:"Doplň (2. kondicionál): If I were rich, I ___ (travel) the world.", answers:["would travel"], hint:"would + sloveso",
+        why:"2. kondicionál: would + infinitiv." },
+      { type:"match", q:"Spoj (2. kondicionál):", pairs:[["If I were you,","I would be careful"],["If we had wings,","we would fly"],["If it were warmer,","the snow would melt"],["If he knew the way,","he would lead us"]],
+        why:"Hypotetická podmínka (past) → would + sloveso." },
+      { type:"order", q:"Slož větu (2. kondicionál):", words:["If","I","found","gold","I","would","be","happy"],
+        why:"if + past simple (found) + would + infinitiv." },
+      { type:"listen", q:"Poslechni a napiš:", say:"mountain", answers:["mountain"], lang:"en-US", hint:"hora",
+        why:"„mountain“ = hora." }
     ]},
-  { id:"mustafar", title:"The Shadow of Mustafar", place:"Mustafar", safeTitle:"The Fire Mountain", safePlace:"Ohnivý svět", scene:"lava", accent:"#ff5a2a", accentL:"#ff9a6a",
-    intro:"St\u00edn Mustafaru t\u011b varuje: Temn\u00fd lord je bl\u00edzko.",
+  { id:"volcano", title:"The Fire Shrine", place:"Sopečná svatyně", safeTitle:"The Fire Shrine", safePlace:"Sopečná svatyně", scene:"lava", accent:"#ff5a2a", accentL:"#ff9a6a",
+    intro:"Nad řekou lávy stojí ohnivá svatyně. Poslední zkouška před chrámem — všechny kondicionály dohromady.",
     questions:[
-      { type:"order", q:"Slo\u017e v\u011btu (p\u0159\u00edtomn\u00fd pr\u016fb\u011bhov\u00fd):", words:["The","lava","is","rising","fast"],
-        why:"P\u0159\u00edtomn\u00fd pr\u016fb\u011bhov\u00fd \u010das: to be (is) + sloveso s -ing (rising)." },
-      { type:"listen", q:"Poslechni a vyber, co sly\u0161\u00ed\u0161:", say:"danger", options:["danger","ranger","dancer","dagger"], answer:"danger", lang:"en-US",
-        why:"\u201edanger\u201c [dejnd\u017er] = nebezpe\u010d\u00ed; li\u0161\u00ed se od podobn\u011b zn\u011bj\u00edc\u00edch slov." },
-      { type:"choice", q:"Choose: You ___ not escape!", options:["shall","will","would","might"], answer:"shall",
-        why:"\u201eshall\u201c zde nese d\u016fraz/rozhodnost ve v\u00fdznamu z\u00e1kazu." }
+      { type:"choice", q:"Which is a SECOND conditional?", options:["If I were braver, I would enter.","If you touch it, it breaks.","If we run, we will escape.","When the sun sets, it gets cold."], answer:"If I were braver, I would enter.",
+        why:"2. kondicionál = if + past simple + would + infinitiv." },
+      { type:"choice", q:"First conditional: If the lava ___, we will run.", options:["rises","will rise","rose","would rise"], answer:"rises",
+        why:"1. kondicionál: v if-větě přítomný čas (rises)." },
+      { type:"type", q:"Doplň: If we ___ (not/leave) now, the temple will collapse.", answers:["don’t leave","do not leave","dont leave"], hint:"zápor přít. času",
+        why:"Zápor v if-větě: don’t leave (do not leave)." },
+      { type:"choice", q:"Zero conditional: If you heat rock enough, it ___.", options:["melts","will melt","would melt","melted"], answer:"melts",
+        why:"Nultý kondicionál (obecná pravda): přítomný + přítomný." },
+      { type:"order", q:"Slož větu (2. kondicionál):", words:["If","we","had","a","key","we","would","open","it"],
+        why:"2. kondicionál: had + would open." },
+      { type:"listen", q:"Poslechni a napiš:", say:"treasure", answers:["treasure"], lang:"en-US", hint:"poklad",
+        why:"„treasure“ = poklad." }
     ]}
 ];
 
 const BOSS = {
-  title: "The Final Star Battle",     // úroveň 10 (Death Star)
-  place: "Death Star",
-  // {boss} se doplní za běhu → intro reaguje na skin i výměnu LABELS (dřív se jméno „zapeklo" při načtení)
-  intro: "The Final Star Battle \u2014 {boss} t\u011b o\u010dek\u00e1v\u00e1 na palub\u011b Hv\u011bzdy smrti. \u201ETv\u016fj v\u00fdcvik skon\u010dil.\u201C",
-  introSafe: "Posledn\u00ed souboj \u2014 {boss} t\u011b o\u010dek\u00e1v\u00e1 na palub\u011b temn\u00e9 pevnosti. \u201ETv\u016fj v\u00fdcvik skon\u010dil.\u201C",
-  // každá správná odpověď ubere lordovi život; špatná tě stojí život
+  title: "The Lost Temple",           // finále — ztracený chrám
+  place: "Ztracen\u00fd chr\u00e1m",
+  // {boss} se doplní za běhu → intro reaguje na skin i výměnu LABELS
+  intro: "Ztracen\u00fd chr\u00e1m \u2014 {boss} st\u0159e\u017e\u00ed relikvii v posledn\u00ed s\u00edni. \u201eKdo chybuje, ten odejde s prázdnou.\u201C",
+  introSafe: "Ztracen\u00fd chr\u00e1m \u2014 {boss} st\u0159e\u017e\u00ed poklad v posledn\u00ed s\u00edni. \u201eKdo chybuje, ten odejde s prázdnou.\u201C",
+  // každá správná odpověď ubere Strážci život; špatná tě stojí život
   questions:[
-    { type:"choice", q:"Choose the correct past form: I ___ the Force.", options:["felt","feeled","feel","fell"], answer:"felt",
-      why:"\u201efeel\u201c je nepravideln\u00e9: feel \u2013 felt \u2013 felt. \u201efell\u201c pat\u0159\u00ed k \u201efall\u201c." },
-    { type:"choice", q:"Plural of \u201echild\u201c:", options:["children","childs","childes","child"], answer:"children",
-      why:"\u201echild\u201c m\u00e1 nepravideln\u00e9 mno\u017en\u00e9 \u010d\u00edslo: children." },
-    { type:"type", q:"Dopl\u0148: She has lived here ___ 2010. (for/since)", answers:["since"],
-      hint:"konkr\u00e9tn\u00ed bod v \u010dase", why:"\u201esince\u201c + bod v \u010dase (2010); \u201efor\u201c + d\u00e9lka obdob\u00ed (5 years)." },
-    { type:"choice", q:"Choose: If I ___ you, I would run.", options:["were","was","am","be"], answer:"were",
-      why:"Druh\u00fd kondicion\u00e1l: \u201eif I were you\u201c \u2014 ve v\u0161ech osob\u00e1ch \u201ewere\u201c." },
-    { type:"choice", q:"Posledn\u00ed \u00fader \u2014 vyber spr\u00e1vn\u011b: the opposite of \u201elight\u201c:", options:["dark","heavy","bright","day"], answer:"dark",
-      why:"\u201elight\u201c m\u00e1 dva v\u00fdznamy; protikladem ke \u201esv\u011btlu\u201c je \u201edark\u201c (tma)." }
+    { type:"choice", q:"If you take the idol, the temple ___ collapse.", options:["will","would","won\u2019t","was"], answer:"will",
+      why:"1. kondicion\u00e1l: re\u00e1ln\u00fd budouc\u00ed n\u00e1sledek \u2192 will collapse." },
+    { type:"choice", q:"Second conditional: If I ___ the guardian, I would not run.", options:["knew","know","will know","had known"], answer:"knew",
+      why:"2. kondicion\u00e1l: v if-v\u011bt\u011b past simple (knew)." },
+    { type:"type", q:"Dopl\u0148 (unless/if): You will fail ___ you solve the riddle.", answers:["unless"], hint:"pokud ne",
+      why:"\u201eunless\u201c = pokud ne \u2014 selže\u0161, pokud hádanku nevy\u0159e\u0161\u00ed\u0161." },
+    { type:"choice", q:"Zero conditional: If the door closes, the room ___ dark.", options:["goes","will go","would go","went"], answer:"goes",
+      why:"Obecn\u00e9 pravidlo: p\u0159\u00edtomn\u00fd + p\u0159\u00edtomn\u00fd \u010das (goes dark)." },
+    { type:"order", q:"Posledn\u00ed \u00fader \u2014 slo\u017e v\u011btu (2. kondicion\u00e1l):", words:["If","you","were","wise","you","would","leave","now"],
+      why:"2. kondicion\u00e1l: if + were + would + infinitiv." }
   ]
 };
 
@@ -906,7 +947,7 @@ try{
    6) STAV
    ════════════════════════════════════════════════════════════════════ */
 const S = {
-  name:"Rytíř", diff:DIFFICULTIES[1], teacher:false,
+  name:"Objevitel", diff:DIFFICULTIES[1], teacher:false,
   stationIdx:0, qIdx:0, done:{}, results:{},
   heroLives:4, heroMax:4, bossHp:100, bsIdx:0,
   total:0, correct:0, bossWon:false, id:"", date:"", justCompleted:null,
@@ -920,12 +961,12 @@ const $ = s=>document.querySelector(s);
 const $$ = s=>Array.from(document.querySelectorAll(s));
 function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function makeId(){let s="HR-";for(let i=0;i<6;i++)s+="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random()*32)];return s;}
+function makeId(){let s="RH-";for(let i=0;i<6;i++)s+="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random()*32)];return s;}
 function normName(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim(); }
 /* Aktivace učitele jménem zrušena (unifikace LUDUS) — pouze 3× ťuk na logo LUDUS nebo ?teacher=1. */
 
 /* ── ukládání postupu (localStorage; bez něj tiše degraduje – funguje na nasazené stránce) ── */
-const STORE_KEY="hvezdni_rytiri_save_v1";
+const STORE_KEY="relic_hunter_save_v1";
 function safeGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
 function safeSet(k,v){ try{ window.localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 function safeDel(k){ try{ window.localStorage.removeItem(k); }catch(e){} }
@@ -940,19 +981,19 @@ function loadProgress(){
   return null;
 }
 function resumeProgress(d){
-  S.name = d.name || "Rytíř";
+  S.name = d.name || "Objevitel";
   const diff = DIFFICULTIES.find(x=>x.name===d.diffName) || DIFFICULTIES[1];
   S.diff=diff; S.heroMax=S.heroLives=diff.lives;
   S.done = d.done || {}; S.results = d.results || {};
   S.bossWon = !!d.bossWon;
   S.stationIdx=0; S.qIdx=0; S.bsIdx=0; S.bossHp=100; S.justCompleted=null;
   S.id=makeId(); S.date=new Date().toLocaleString("cs-CZ");
-  renderMap(); setAccent("#2e8fff","#8fc0ff"); show("screen-map"); bg("map",true);
+  renderMap(); setAccent("#d9a441","#f2d488"); show("screen-map"); bg("map",true);
 }
 
 /* ── V2: ZVUK — sloty AUDIO mají přednost; prázdný slot = syntetický zvuk
       (WebAudio oscilátory, žádné soubory). Tlačítko ztlumení vlevo nahoře. ── */
-const MUTE_KEY="hvezdni_rytiri_mute_v1";
+const MUTE_KEY="relic_hunter_mute_v1";
 let _muted = safeGet(MUTE_KEY)==="1";
 let _ac=null;
 function ac(){
@@ -1022,8 +1063,8 @@ function initMute(){ const b=$("#muteBtn"); if(!b) return; b.onclick=()=>setMute
 /* aktuální barva světa (mění UI i barvu světelného švihu) */
 function setAccent(a, aL){
   const root=document.documentElement.style;
-  root.setProperty("--accent", a || "#2e8fff");
-  root.setProperty("--accentL", aL || "#8fc0ff");
+  root.setProperty("--accent", a || "#d9a441");
+  root.setProperty("--accentL", aL || "#f2d488");
 }
 let cur=null, transit=false, pendingShow=null;
 function show(id, withJump){
@@ -1122,75 +1163,99 @@ function logoArt(){
 }
 
 const SCENES = {
+  /* Pou\u0161\u0165 + hrobka: duny, pyramida a sfinga v z\u00e1padu slunce */
   desert(){return `<svg viewBox="0 0 520 200" preserveAspectRatio="xMidYMid slice">
     <defs><linearGradient id="dsky" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#3a1d4d"/><stop offset="45%" stop-color="#b65a3c"/><stop offset="100%" stop-color="#e6a85c"/></linearGradient>
       <radialGradient id="sun" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3c4"/><stop offset="60%" stop-color="#ffcf6b"/><stop offset="100%" stop-color="#ff9d3d" stop-opacity="0"/></radialGradient></defs>
     <rect width="520" height="200" fill="#c0613f"/>
-    <rect width="520" height="120" fill="url(#dsky)"/>
-    ${bgStars(20)}
-    <g transform="translate(360,46)"><g class="anim-shimmer"><circle r="26" fill="url(#sun)"/><circle r="13" fill="#fff0bf"/></g></g>
-    <g transform="translate(410,64)"><g class="anim-shimmer" style="animation-delay:1.4s"><circle r="15" fill="url(#sun)"/><circle r="7" fill="#ffd98a"/></g></g>
-    <path d="M0,120 Q130,96 260,116 T520,108 L520,200 L0,200Z" fill="#9c4a2e"/>
-    <path d="M0,150 Q160,128 320,150 T520,142 L520,200 L0,200Z" fill="#7d3a23"/>
-    <g transform="translate(90,150)"><rect x="-6" y="-44" width="12" height="44" fill="#3c2418"/><circle cy="-48" r="9" fill="#2e1b12"/></g>
-    <g transform="translate(150,118)"><g class="anim-fly"><path d="M0,0 L26,-5 L40,0 L26,5 Z" fill="#cfd6e6"/><rect x="6" y="-2" width="10" height="4" fill="#9aa3bd"/></g></g>
+    <rect width="520" height="130" fill="url(#dsky)"/>
+    <g transform="translate(360,58)"><g class="anim-shimmer"><circle r="30" fill="url(#sun)"/><circle r="15" fill="#fff0bf"/></g></g>
+    <path d="M120,132 L200,44 L280,132 Z" fill="#8a5326"/>
+    <path d="M200,44 L280,132 L242,132 Z" fill="#6e3f1c"/>
+    <path d="M118,132 L200,44 L200,132 Z" fill="#a4682f"/>
+    <path d="M330,132 L360,132 L360,104 Q388,92 400,104 L400,132 L446,132 L446,132 Z" fill="#7d4a22"/>
+    <path d="M356,104 Q380,88 400,104" fill="none" stroke="#5c3518" stroke-width="3"/>
+    <path d="M0,124 Q130,100 260,120 T520,112 L520,200 L0,200Z" fill="#9c4a2e"/>
+    <path d="M0,152 Q160,130 320,152 T520,144 L520,200 L0,200Z" fill="#7d3a23"/>
+    <g transform="translate(78,152)"><rect x="-5" y="-40" width="10" height="40" fill="#3c2418"/><path d="M0,-42 q-20,-6 -26,4 q18,-4 26,2 q8,-6 26,-2 q-6,-10 -26,-4" fill="#2e6b2e"/></g>
+    <g transform="translate(150,118)"><g class="anim-fly"><path d="M0,0 L24,-4 L36,0 L24,4 Z" fill="#3a2a18"/><path d="M8,-2 L14,-12 L20,-2Z" fill="#4a3620"/></g></g>
   </svg>`;},
 
+  /* Horsk\u00fd kl\u00e1\u0161ter: no\u010dn\u00ed \u0161t\u00edty, kl\u00e1\u0161ter na \u00fete\u0161u, modlitebn\u00ed praporky, sn\u00edh */
   ice(){return `<svg viewBox="0 0 520 200" preserveAspectRatio="xMidYMid slice">
-    <defs><linearGradient id="isky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08213f"/><stop offset="100%" stop-color="#16527a"/></linearGradient>
-      <linearGradient id="aur" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2ee6c0" stop-opacity="0"/><stop offset="50%" stop-color="#54f0d0" stop-opacity=".7"/><stop offset="100%" stop-color="#7a9cff" stop-opacity="0"/></linearGradient></defs>
+    <defs><linearGradient id="isky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08213f"/><stop offset="100%" stop-color="#16527a"/></linearGradient></defs>
     <rect width="520" height="200" fill="url(#isky)"/>
     ${bgStars(26)}
-    <path d="M0,40 Q260,8 520,46" stroke="url(#aur)" stroke-width="22" fill="none" class="anim-shimmer"/>
-    <path d="M0,70 Q260,40 520,72" stroke="url(#aur)" stroke-width="12" fill="none" class="anim-shimmer" style="animation-delay:1.2s"/>
-    <path d="M0,140 L120,96 L210,140Z" fill="#cfe6ff"/><path d="M170,150 L300,90 L430,150Z" fill="#b3d6f7"/><path d="M360,150 L460,104 L520,150Z" fill="#cfe6ff"/>
+    <circle cx="430" cy="46" r="18" fill="#e9f2ff"/><circle cx="422" cy="42" r="15" fill="#16527a"/>
+    <path d="M0,150 L120,70 L210,150Z" fill="#cfe6ff"/><path d="M170,150 L300,58 L430,150Z" fill="#b3d6f7"/><path d="M360,150 L470,84 L520,150Z" fill="#cfe6ff"/>
+    <path d="M255,104 L300,58 L345,104 Z" fill="#eaf4ff"/>
     <rect y="150" width="520" height="50" fill="#e8f4ff"/>
-    <g transform="translate(110,150)"><g class="anim-step">
-      <rect x="-22" y="-30" width="44" height="22" rx="4" fill="#3a4763"/>
-      <rect x="-30" y="-26" width="12" height="9" rx="2" fill="#2b364d"/>
-      <rect x="-16" y="-8" width="6" height="8" fill="#27303f"/><rect x="-4" y="-8" width="6" height="8" fill="#27303f"/>
-      <rect x="8" y="-8" width="6" height="8" fill="#27303f"/><rect x="16" y="-8" width="6" height="8" fill="#27303f"/>
-      <circle cx="-24" cy="-21" r="2" fill="#ff5a5a"/>
-    </g></g>
+    <g transform="translate(228,150)">
+      <rect x="-30" y="-40" width="60" height="40" fill="#7a3a2a"/>
+      <rect x="-38" y="-46" width="76" height="8" fill="#5c2a1e"/>
+      <rect x="-20" y="-28" width="14" height="18" fill="#2a140e"/><rect x="6" y="-28" width="14" height="18" fill="#2a140e"/>
+      <rect x="-4" y="-64" width="8" height="20" fill="#5c2a1e"/>
+      <path d="M0,-62 L34,-56 L0,-50 Z" fill="#e0b23c"/>
+    </g>
+    <g stroke="#caa24b" stroke-width="1.5"><path d="M120,64 Q200,80 300,60" fill="none"/></g>
+    <g><rect x="150" y="66" width="9" height="7" fill="#d94b3a"/><rect x="176" y="70" width="9" height="7" fill="#4ba3d9"/><rect x="202" y="72" width="9" height="7" fill="#e0b23c"/><rect x="228" y="70" width="9" height="7" fill="#4bd98a"/><rect x="254" y="66" width="9" height="7" fill="#d94b3a"/></g>
   </svg>`;},
 
+  /* Katakomby: kamenn\u00e1 s\u00ed\u0148, sloupy, hieroglyfy a sv\u011btlo pochodn\u00ed */
   station(){return `<svg viewBox="0 0 520 200" preserveAspectRatio="xMidYMid slice">
-    <defs><radialGradient id="sph" cx="38%" cy="34%" r="70%"><stop offset="0" stop-color="#8a93ad"/><stop offset="60%" stop-color="#4a5168"/><stop offset="100%" stop-color="#20242f"/></radialGradient></defs>
-    <rect width="520" height="200" fill="#03050d"/>${bgStars(40)}
-    <g transform="translate(150,108)"><g class="anim-spin" style="animation-duration:40s">
-      <circle r="72" fill="url(#sph)"/>
-      <path d="M-72,-6 A72,72 0 0,1 72,-6 L72,4 L-72,4 Z" fill="#11141d" opacity=".85"/>
-      <circle r="22" cx="-22" cy="-30" fill="#363c4e"/><circle r="22" cx="-22" cy="-30" fill="#2a2f3d" opacity=".6"/>
-      <line x1="-72" y1="-6" x2="72" y2="-6" stroke="#0a0c12" stroke-width="3"/>
-      <circle r="2.4" cx="30" cy="20" fill="#7fd0ff"/><circle r="2" cx="10" cy="40" fill="#7fd0ff" opacity=".7"/>
-    </g></g>
-    <g transform="translate(330,70)"><g class="anim-fly2">
-      <rect x="-3" y="-3" width="6" height="6" fill="#2b3142"/>
-      <path d="M-3,-3 L-16,-12 L-16,12 L-3,3Z" fill="#3a4258"/><path d="M3,-3 L16,-12 L16,12 L3,3Z" fill="#3a4258"/>
-    </g></g>
+    <defs><linearGradient id="stw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2016"/><stop offset="100%" stop-color="#120c07"/></linearGradient>
+      <radialGradient id="torch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffcf6b"/><stop offset="60%" stop-color="#ff8a2c" stop-opacity=".45"/><stop offset="100%" stop-color="#ff8a2c" stop-opacity="0"/></radialGradient></defs>
+    <rect width="520" height="200" fill="url(#stw)"/>
+    <rect x="40" y="20" width="440" height="180" fill="#1a120a"/>
+    <g fill="#3a2c1a" stroke="#241a10" stroke-width="2">
+      <rect x="60" y="24" width="48" height="176"/><rect x="412" y="24" width="48" height="176"/></g>
+    <g stroke="#5c4426" stroke-width="1.4" opacity=".7"><path d="M66,50 h36 M66,86 h36 M66,122 h36 M66,158 h36 M418,50 h36 M418,86 h36 M418,122 h36 M418,158 h36"/></g>
+    <rect x="220" y="70" width="80" height="130" fill="#0c0804"/>
+    <path d="M220,70 L260,44 L300,70 Z" fill="#2a1c10"/>
+    <g fill="#caa24b" opacity=".85"><rect x="150" y="60" width="8" height="8"/><rect x="150" y="76" width="8" height="14"/><rect x="164" y="60" width="8" height="22"/><rect x="356" y="60" width="8" height="14"/><rect x="356" y="80" width="8" height="8"/><rect x="342" y="60" width="8" height="22"/></g>
+    <g transform="translate(120,96)"><rect x="-2" y="0" width="4" height="40" fill="#3a2414"/><circle cx="0" cy="-2" r="10" fill="url(#torch)" class="anim-pulse"/><circle cx="0" cy="-2" r="4" fill="#ffd98a"/></g>
+    <g transform="translate(400,96)"><rect x="-2" y="0" width="4" height="40" fill="#3a2414"/><circle cx="0" cy="-2" r="10" fill="url(#torch)" class="anim-pulse" style="animation-delay:.7s"/><circle cx="0" cy="-2" r="4" fill="#ffd98a"/></g>
+    <rect y="188" width="520" height="12" fill="#0a0704"/>
   </svg>`;},
 
+  /* D\u017eungle: chr\u00e1m-pyramida v mlze, li\u00e1ny, sv\u011bt\u00e9lkuj\u00edc\u00ed modla */
   forest(){return `<svg viewBox="0 0 520 200" preserveAspectRatio="xMidYMid slice">
-    <defs><linearGradient id="fsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c2818"/><stop offset="100%" stop-color="#1c4d2e"/></linearGradient></defs>
-    <rect width="520" height="200" fill="url(#fsky)"/>${bgStars(16)}
-    <g opacity=".8"><path d="M40,200 L40,40 M40,40 L20,70 M40,55 L62,80 M40,75 L24,100" stroke="#0e3a22" stroke-width="14" fill="none" stroke-linecap="round"/></g>
-    <path d="M120,200 L120,20 M120,30 L92,66 M120,52 L150,86 M120,80 L98,116" stroke="#103f25" stroke-width="20" fill="none" stroke-linecap="round"/>
-    <path d="M430,200 L430,16 M430,28 L402,64 M430,50 L460,84 M430,80 L406,116" stroke="#0e3a22" stroke-width="22" fill="none" stroke-linecap="round"/>
-    <path d="M310,200 L310,46 M310,52 L288,82 M310,72 L334,100" stroke="#0c3320" stroke-width="14" fill="none" stroke-linecap="round"/>
-    <ellipse cx="260" cy="178" rx="300" ry="40" fill="#08220f" opacity=".7"/>
-    <g transform="translate(220,110)"><g class="anim-fly"><rect x="-14" y="-3" width="28" height="6" rx="3" fill="#5a6478"/><rect x="10" y="-1" width="10" height="2" fill="#9fb0ff"/></g></g>
+    <defs><linearGradient id="fsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c2818"/><stop offset="100%" stop-color="#1c4d2e"/></linearGradient>
+      <radialGradient id="idol" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe487"/><stop offset="70%" stop-color="#e0b23c" stop-opacity=".3"/><stop offset="100%" stop-color="#e0b23c" stop-opacity="0"/></radialGradient></defs>
+    <rect width="520" height="200" fill="url(#fsky)"/>${bgStars(10)}
+    <g opacity=".6" fill="#0e3a22"><path d="M180,150 L200,120 L220,150 Z"/><path d="M160,150 L188,110 L216,150 Z"/><path d="M300,150 L320,120 L340,150 Z"/></g>
+    <path d="M150,150 L370,150 L340,120 L180,120 Z" fill="#3f5a3a"/>
+    <path d="M180,120 L340,120 L316,94 L204,94 Z" fill="#4a6a44"/>
+    <path d="M204,94 L316,94 L296,72 L224,72 Z" fill="#557a4d"/>
+    <path d="M244,72 L276,72 L276,150 L244,150 Z" fill="#31492e"/>
+    <path d="M250,120 L270,120 L270,150 L250,150 Z" fill="#0c1808"/>
+    <circle cx="260" cy="86" r="16" fill="url(#idol)" class="anim-pulse"/><circle cx="260" cy="86" r="5" fill="#ffe487"/>
+    <path d="M40,200 L40,30 M40,44 L20,74 M40,60 L64,90 M40,84 L22,112" stroke="#0e3a22" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M470,200 L470,26 M470,40 L446,72 M470,58 L494,90" stroke="#0e3a22" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <g stroke="#2e5a34" stroke-width="2" fill="none" opacity=".7"><path d="M120,0 Q140,40 120,90"/><path d="M400,0 Q384,44 402,96"/></g>
+    <ellipse cx="260" cy="182" rx="320" ry="34" fill="#08220f" opacity=".7"/>
     <g id="fireflies"></g>
   </svg>`;},
 
+  /* Ohniv\u00e1 svatyn\u011b: kamenn\u00e1 modla nad l\u00e1vou, pochodn\u011b */
   lava(){return `<svg viewBox="0 0 520 200" preserveAspectRatio="xMidYMid slice">
     <defs><linearGradient id="lsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0608"/><stop offset="100%" stop-color="#5e1410"/></linearGradient>
       <radialGradient id="glow" cx="50%" cy="100%" r="80%"><stop offset="0" stop-color="#ff7a2c"/><stop offset="60%" stop-color="#c22a14" stop-opacity=".4"/><stop offset="100%" stop-color="#c22a14" stop-opacity="0"/></radialGradient></defs>
-    <rect width="520" height="200" fill="url(#lsky)"/>${bgStars(10)}
-    <path d="M0,150 L80,90 L150,140 L240,80 L330,140 L420,96 L520,150 L520,200 L0,200Z" fill="#1c0c08"/>
+    <rect width="520" height="200" fill="url(#lsky)"/>${bgStars(8)}
+    <path d="M0,150 L80,96 L150,140 L240,88 L330,140 L420,100 L520,150 L520,200 L0,200Z" fill="#1c0c08"/>
+    <g transform="translate(260,150)">
+      <rect x="-40" y="-24" width="80" height="24" fill="#241812"/>
+      <rect x="-26" y="-72" width="52" height="48" fill="#3a2a1c" stroke="#1c130c" stroke-width="2"/>
+      <path d="M-26,-72 L0,-92 L26,-72 Z" fill="#4a3624"/>
+      <circle cx="-12" cy="-52" r="5" fill="#ff8a2c" class="anim-breathe"/><circle cx="12" cy="-52" r="5" fill="#ff8a2c" class="anim-breathe" style="animation-delay:.3s"/>
+      <path d="M-10,-38 Q0,-30 10,-38" stroke="#1c130c" stroke-width="3" fill="none"/>
+    </g>
     <rect y="150" width="520" height="50" fill="url(#glow)" class="anim-pulse"/>
     <path d="M0,168 Q120,156 260,170 T520,166" stroke="#ff8a3c" stroke-width="5" fill="none" class="anim-pulse"/>
     <path d="M0,184 Q140,176 280,186 T520,182" stroke="#ffb15a" stroke-width="3" fill="none" class="anim-pulse" style="animation-delay:.8s"/>
+    <g transform="translate(70,150)"><rect x="-2" y="-40" width="4" height="40" fill="#3a2414"/><circle cx="0" cy="-42" r="7" fill="#ffd98a" class="anim-pulse"/></g>
+    <g transform="translate(450,150)"><rect x="-2" y="-40" width="4" height="40" fill="#3a2414"/><circle cx="0" cy="-42" r="7" fill="#ffd98a" class="anim-pulse" style="animation-delay:.5s"/></g>
     <g id="embers"></g>
   </svg>`;}
 };
@@ -1215,90 +1280,83 @@ function firefly(host){const d=document.createElement("div");
   host.appendChild(d);const dur=Math.random()*4+3;
   if(canAnim(d)) try{ d.animate([{transform:"translate(0,0)",opacity:.2},{transform:`translate(${Math.random()*30-15}px,${Math.random()*20-10}px)`,opacity:1},{transform:"translate(0,0)",opacity:.2}],{duration:dur*1000,iterations:Infinity,delay:-Math.random()*dur*1000,easing:"ease-in-out"}); }catch(e){}}
 
-// — Temný lord (boss): vlastní stylizovaná helma
+// — Strážce chrámu (boss): vlastní stylizovaná kamenná modla (žádná reprodukce chráněného díla)
 function vaderArt(){return `<svg viewBox="0 0 200 240" aria-hidden="true">
   <defs>
-   <linearGradient id="vSkin" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#50555f"/><stop offset=".28" stop-color="#262a32"/><stop offset=".66" stop-color="#15171c"/><stop offset="1" stop-color="#0a0b0e"/></linearGradient>
-   <radialGradient id="vSheen" cx=".4" cy=".22" r=".45"><stop offset="0" stop-color="#c7cbd4" stop-opacity=".9"/><stop offset="1" stop-color="#c7cbd4" stop-opacity="0"/></radialGradient>
-   <radialGradient id="vEye" cx=".5" cy=".42" r=".72"><stop offset="0" stop-color="#d18a30"/><stop offset=".45" stop-color="#5e3614"/><stop offset="1" stop-color="#140a06"/></radialGradient>
-   <linearGradient id="vGrille" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#3c4049"/><stop offset="1" stop-color="#0b0c0f"/></linearGradient>
-   <linearGradient id="vCheek" x1="0" y1="0" x2="1" y2=".4"><stop offset="0" stop-color="#2e323a"/><stop offset="1" stop-color="#101216"/></linearGradient>
+   <linearGradient id="vStone" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#8a6a3a"/><stop offset=".4" stop-color="#5c4324"/><stop offset="1" stop-color="#2e2011"/></linearGradient>
+   <radialGradient id="vSheen" cx=".4" cy=".24" r=".5"><stop offset="0" stop-color="#e0c07a" stop-opacity=".7"/><stop offset="1" stop-color="#e0c07a" stop-opacity="0"/></radialGradient>
+   <radialGradient id="vEye" cx=".5" cy=".42" r=".72"><stop offset="0" stop-color="#ffcf6b"/><stop offset=".45" stop-color="#c22a14"/><stop offset="1" stop-color="#3a0c06"/></radialGradient>
+   <linearGradient id="vGold" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#ffe487"/><stop offset="1" stop-color="#b8841c"/></linearGradient>
   </defs>
-  <!-- plášť / ramena -->
-  <path d="M6,240 Q14,168 52,156 Q100,142 148,156 Q186,168 194,240 Z" fill="#060708"/>
-  <path d="M28,240 Q38,194 58,176 L58,240 Z" fill="#0b0c0f"/>
-  <path d="M172,240 Q162,194 142,176 L142,240 Z" fill="#0b0c0f"/>
-  <path d="M62,240 L72,204 Q100,192 128,204 L138,240 Z" fill="#101216"/>
-  <!-- helma -->
-  <path d="M100,8 C 58,8 34,38 33,84 C 32,114 40,140 55,160 C 61,180 73,197 87,207 Q 100,214 113,207 C 127,197 139,180 145,160 C 160,140 168,114 167,84 C 166,38 142,8 100,8 Z" fill="url(#vSkin)" stroke="#000" stroke-width="1.5"/>
-  <ellipse cx="76" cy="48" rx="28" ry="36" fill="url(#vSheen)" transform="rotate(-18 76 48)"/>
-  <path d="M164,66 Q168,100 156,132" stroke="#4a505b" stroke-width="1.8" fill="none" opacity=".3" stroke-linecap="round"/>
-  <path d="M99,14 Q94,52 98,98 L102,98 Q106,52 101,14 Z" fill="#595f6a" opacity=".5"/>
-  <!-- obočí (svraštělé) -->
-  <path d="M40,98 Q58,90 70,96 Q82,102 91,116 Q96,123 100,121 Q104,123 109,116 Q118,102 130,96 Q142,90 160,98 L155,113 Q124,101 113,123 Q105,131 100,129 Q95,131 87,123 Q76,101 45,113 Z" fill="#0a0b0d"/>
-  <path d="M45,101 Q66,93 87,114 M155,101 Q134,93 113,114" stroke="#4c515b" stroke-width="2.5" fill="none" opacity=".55" stroke-linecap="round"/>
-  <path d="M97,104 L103,104 L102,118 L98,118 Z" fill="#000" opacity=".55"/>
-  <!-- lícní plošky -->
-  <path d="M44,124 L58,132 L66,168 L50,154 Z" fill="url(#vCheek)"/>
-  <path d="M156,124 L142,132 L134,168 L150,154 Z" fill="url(#vCheek)"/>
+  <!-- podstavec / ramena chrámové sochy -->
+  <path d="M6,240 Q14,176 52,164 Q100,150 148,164 Q186,176 194,240 Z" fill="#241a0e"/>
+  <path d="M40,240 L52,196 Q100,184 148,196 L160,240 Z" fill="#3a2a16"/>
+  <!-- pokrývka hlavy (headdress) -->
+  <path d="M100,4 L172,58 Q176,96 160,150 L40,150 Q24,96 28,58 Z" fill="url(#vGold)" stroke="#7a5410" stroke-width="2"/>
+  <g stroke="#7a5410" stroke-width="2" opacity=".8"><path d="M100,10 L100,40 M64,26 L74,54 M136,26 L126,54 M44,60 L58,90 M156,60 L142,90"/></g>
+  <!-- kamenná tvář -->
+  <path d="M56,54 L144,54 C 158,72 158,120 148,150 C 140,182 122,206 100,214 C 78,206 60,182 52,150 C 42,120 42,72 56,54 Z" fill="url(#vStone)" stroke="#1c130a" stroke-width="1.5"/>
+  <ellipse cx="78" cy="86" rx="26" ry="30" fill="url(#vSheen)" transform="rotate(-16 78 86)"/>
+  <!-- obočí (masivní kamenné) -->
+  <path d="M52,108 Q74,98 92,110 L88,122 Q72,112 56,120 Z" fill="#1c130a"/>
+  <path d="M148,108 Q126,98 108,110 L112,122 Q128,112 144,120 Z" fill="#1c130a"/>
   <!-- žhnoucí aura očí (dýchá) -->
-  <ellipse cx="69" cy="131" rx="27" ry="17" fill="#ff9a2a" opacity=".13" class="anim-breathe"/>
-  <ellipse cx="131" cy="131" rx="27" ry="17" fill="#ff9a2a" opacity=".13" class="anim-breathe" style="animation-delay:.25s"/>
-  <!-- oči -->
-  <path d="M46,116 L92,121 L85,148 L54,142 Z" fill="url(#vEye)"/>
-  <path d="M154,116 L108,121 L115,148 L146,142 Z" fill="url(#vEye)"/>
-  <path d="M50,120 L84,124 L82,132 L53,130 Z" fill="#ffdc9a" opacity=".42"/>
-  <path d="M150,120 L116,124 L118,132 L147,130 Z" fill="#ffdc9a" opacity=".42"/>
-  <path d="M46,116 L92,121 L85,148 L54,142 Z" fill="none" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M154,116 L108,121 L115,148 L146,142 Z" fill="none" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="74" cy="126" rx="24" ry="15" fill="#ff9a2a" opacity=".16" class="anim-breathe"/>
+  <ellipse cx="126" cy="126" rx="24" ry="15" fill="#ff9a2a" opacity=".16" class="anim-breathe" style="animation-delay:.25s"/>
+  <!-- oči (drahokamy) -->
+  <path d="M58,118 L92,122 L84,140 L62,136 Z" fill="url(#vEye)" stroke="#1c130a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M142,118 L108,122 L116,140 L138,136 Z" fill="url(#vEye)" stroke="#1c130a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M62,122 L84,125 L82,131 L64,129 Z" fill="#ffe9a8" opacity=".5"/>
+  <path d="M138,122 L116,125 L118,131 L136,129 Z" fill="#ffe9a8" opacity=".5"/>
   <!-- nos -->
-  <path d="M91,121 L109,121 L107,152 L100,160 L93,152 Z" fill="#1c1f25"/>
-  <path d="M96,125 L104,125 L103,150 L100,156 L97,150 Z" fill="#000"/>
-  <!-- dýchací mřížka -->
-  <path d="M68,156 L132,156 L120,192 Q100,205 80,192 Z" fill="#15171c" stroke="#000" stroke-width="1.5"/>
-  <path d="M68,156 L52,130 M132,156 L148,130" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M71,156 L56,134 M129,156 L144,134" stroke="#3c424b" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
-  <rect x="80" y="161" width="40" height="24" rx="2" fill="url(#vGrille)"/>
-  <rect x="84" y="161" width="2.6" height="24" fill="#0a0b0e"/><rect x="90" y="161" width="2.6" height="24" fill="#0a0b0e"/><rect x="96" y="161" width="2.6" height="24" fill="#0a0b0e"/><rect x="102" y="161" width="2.6" height="24" fill="#0a0b0e"/><rect x="108" y="161" width="2.6" height="24" fill="#0a0b0e"/><rect x="114" y="161" width="2.6" height="24" fill="#0a0b0e"/>
-  <path d="M82,185 L118,185 L110,197 Q100,203 90,197 Z" fill="#0e0f13"/>
-  <circle cx="78" cy="187" r="3.8" fill="#24272e" stroke="#000"/><circle cx="122" cy="187" r="3.8" fill="#24272e" stroke="#000"/>
-  <path d="M35,82 Q33,112 47,140" stroke="#565c67" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+  <path d="M92,124 L108,124 L106,158 L100,166 L94,158 Z" fill="#2e2011"/>
+  <!-- ústa / masky -->
+  <path d="M70,176 L130,176 L118,196 Q100,206 82,196 Z" fill="#1c130a"/>
+  <g stroke="#5c4324" stroke-width="2"><path d="M78,184 h44 M84,190 h32"/></g>
+  <!-- amulet na hrudi -->
+  <circle cx="100" cy="224" r="12" fill="url(#vGold)" stroke="#7a5410" stroke-width="2"/>
+  <path d="M100,216 l2,6 6,0 -5,4 2,6 -5,-4 -5,4 2,-6 -5,-4 6,0 Z" fill="#c22a14"/>
 </svg>`;}
 
-// — hrdina (rytíř se světelným mečem) pro HUD
+// — hrdina (objevitel s kloboukem a bičem) pro HUD
 function heroArt(){return `<svg viewBox="0 0 80 80" aria-hidden="true">
   <defs>
-    <linearGradient id="hCloak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4868"/><stop offset="1" stop-color="#1a2236"/></linearGradient>
-    <radialGradient id="hGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2e8fff" stop-opacity=".55"/><stop offset="1" stop-color="#2e8fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="hJacket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5a34"/><stop offset="1" stop-color="#3e2c16"/></linearGradient>
+    <radialGradient id="hGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#d9a441" stop-opacity=".5"/><stop offset="1" stop-color="#d9a441" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="80" height="80" fill="#04060f"/>
-  <ellipse cx="52" cy="46" rx="26" ry="26" fill="url(#hGlow)" class="anim-pulse"/>
-  <path d="M36,76 Q18,73 18,48 Q18,26 38,22 Q58,26 58,48 Q58,73 40,76 Z" fill="url(#hCloak)"/>
-  <path d="M27,28 Q38,11 50,28 L46,42 Q38,33 31,42 Z" fill="#0e1626"/>
-  <path d="M27,28 Q38,11 50,28" fill="none" stroke="#5e7bd6" stroke-width="1.6" opacity=".7"/>
-  <ellipse cx="38.5" cy="43" rx="8" ry="9.5" fill="#0a0f1d"/>
-  <path d="M49,52 Q60,50 64,42" stroke="#243150" stroke-width="6.5" fill="none" stroke-linecap="round"/>
-  <!-- světelný meč -->
-  <rect x="60" y="5" width="8.5" height="42" rx="4.25" fill="#2e8fff" opacity=".32" class="anim-pulse"/>
-  <rect x="61.5" y="5" width="5.5" height="42" rx="2.75" fill="#86c4ff" opacity=".85"/>
-  <rect x="62.9" y="5" width="2.6" height="42" rx="1.3" fill="#ffffff"/>
-  <circle cx="64.2" cy="6" r="3.6" fill="#e6f3ff" opacity=".9"/>
-  <!-- jílec -->
-  <rect x="60.4" y="45" width="7.6" height="14" rx="2" fill="#3f4d6b"/>
-  <rect x="60.4" y="48" width="7.6" height="2" fill="#aeb8d0"/>
-  <rect x="60.4" y="52" width="7.6" height="2" fill="#aeb8d0"/>
-  <rect x="63" y="59" width="2.4" height="4" fill="#2a3650"/>
+  <rect width="80" height="80" fill="#0d0a06"/>
+  <ellipse cx="40" cy="42" rx="28" ry="28" fill="url(#hGlow)" class="anim-pulse"/>
+  <!-- rameno / bunda -->
+  <path d="M22,76 Q18,54 30,46 L50,46 Q62,54 58,76 Z" fill="url(#hJacket)"/>
+  <path d="M40,46 L40,72" stroke="#2e2011" stroke-width="2" opacity=".6"/>
+  <!-- šátek -->
+  <path d="M30,48 L50,48 L44,56 L36,56 Z" fill="#9c3a2a"/>
+  <!-- obličej -->
+  <ellipse cx="40" cy="38" rx="11" ry="12" fill="#d8a978"/>
+  <path d="M32,40 Q40,46 48,40" fill="none" stroke="#5c3a1e" stroke-width="1.6" opacity=".5"/>
+  <!-- klobouk se širokou krempou -->
+  <path d="M20,30 Q40,36 60,30 Q54,34 40,34 Q26,34 20,30 Z" fill="#4a3218"/>
+  <path d="M27,30 Q28,16 40,15 Q52,16 53,30 Z" fill="#5c3f20"/>
+  <path d="M27,29 Q40,32 53,29" stroke="#2e2011" stroke-width="2" fill="none"/>
+  <!-- bič (svinuté lano) -->
+  <path d="M60,40 q10,4 8,16 q-2,8 -10,8" fill="none" stroke="#caa24b" stroke-width="3" stroke-linecap="round" class="anim-pulse"/>
+  <circle cx="60" cy="40" r="3" fill="#8a6a3a"/>
 </svg>`;}
 
-// — znak Řádu (vlastní okřídlená hvězda) pro odměnu/výsledek
+// — relikvie (vlastní zlatý medailon se slunečním diskem a okem) pro odměnu/výsledek
 function sigilArt(size){const w=size||120;return `<svg width="${w}" height="${w}" viewBox="0 0 120 120" class="sigilStamp" aria-hidden="true">
-  <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset="100%" stop-color="#ffb02e"/></linearGradient></defs>
-  <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sg)" stroke-width="2" opacity=".7"/>
-  <path d="M60,16 L67,50 L60,58 L53,50Z" fill="url(#sg)"/>
-  <path d="M20,72 Q44,52 60,58 Q42,66 24,86 Z" fill="url(#sg)" opacity=".9"/>
-  <path d="M100,72 Q76,52 60,58 Q78,66 96,86 Z" fill="url(#sg)" opacity=".9"/>
-  <path d="M60,58 L60,104 M48,96 L60,104 L72,96" stroke="url(#sg)" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <circle cx="60" cy="58" r="4" fill="#fff"/>
+  <defs><radialGradient id="sg" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#fff7d6"/><stop offset=".5" stop-color="#ffcf6b"/><stop offset="1" stop-color="#b8841c"/></radialGradient></defs>
+  <g class="anim-spin" style="transform-box:fill-box;transform-origin:center;animation-duration:26s">
+    <g stroke="#ffe9a8" stroke-width="3" stroke-linecap="round" opacity=".9">
+      <path d="M60,4 L60,16 M60,104 L60,116 M4,60 L16,60 M104,60 L116,60 M20,20 L28,28 M92,92 L100,100 M100,20 L92,28 M28,92 L20,100"/>
+    </g>
+  </g>
+  <circle cx="60" cy="60" r="40" fill="url(#sg)" stroke="#7a5410" stroke-width="2"/>
+  <circle cx="60" cy="60" r="40" fill="none" stroke="#fff7d6" stroke-width="1" opacity=".5"/>
+  <path d="M32,60 Q60,42 88,60 Q60,78 32,60 Z" fill="#3a2a12"/>
+  <circle cx="60" cy="60" r="10" fill="#c22a14"/>
+  <circle cx="60" cy="60" r="4" fill="#1c130a"/>
+  <circle cx="56" cy="56" r="2" fill="#ffe9a8" opacity=".8"/>
 </svg>`;}
 
 /* ════════════════════════════════════════════════════════════════════
@@ -1325,7 +1383,7 @@ function initStart(){
   $("#crawlText").addEventListener("animationend", introDone);
   $("#startBtn").onclick=()=>{
     const n=$("#pname").value.trim();
-    S.name = n || "Rytíř";
+    S.name = n || "Objevitel";
     S.heroMax = S.heroLives = S.diff.lives;
     S.stationIdx=0; S.qIdx=0; S.done={}; S.results={}; S.justCompleted=null;
     S.total=0; S.correct=0; S.bossWon=false; S.bossHp=100; S.bsIdx=0;
@@ -1346,7 +1404,7 @@ function refreshResume(){
   if(d){
     const c=doneCount(d.done), total=STATIONS.length;
     // oprava: textContent NEescapovat (esc() tu zdvojovalo entity, např. „&" → „&amp;")
-    $("#resumeInfo").textContent = (d.name?d.name+" · ":"") + (d.bossWon ? "dohráno" : (c+"/"+total+" světů"));
+    $("#resumeInfo").textContent = (d.name?d.name+" · ":"") + (d.bossWon ? "dohráno" : (c+"/"+total+" míst"));
     btn.style.display=""; note.style.display="";
     if(d.name) $("#pname").value=d.name;
   } else { btn.style.display="none"; note.style.display="none"; }
@@ -1397,7 +1455,7 @@ function goMap(){
   clearTimeout(introTimer);
   const pre=$("#preCrawl"); if(pre) pre.classList.remove("on");
   const vid=$("#introVideo"); try{vid.pause();}catch(e){}
-  setAccent("#2e8fff","#8fc0ff");        // mapa = výchozí (modrá/zlatá)
+  setAccent("#d9a441","#f2d488");        // mapa = výchozí (modrá/zlatá)
   renderMap();
   // kdyby běžel přechod (rychlý skip hned po náběhu intra), počkej a pak ukaž mapu
   const tryShow=()=>{ if(transit){ setTimeout(tryShow,100); return; } show("screen-map"); bg("map",true);
@@ -1437,11 +1495,14 @@ function allDone(){ return STATIONS.every(s=>S.done[s.id]); }
 
 // rotující povrch uvnitř koule → dojem otáčení planety
 function planetSurface(x,y,R,i){
-  return `<g clip-path="url(#cp${i})"><g class="anim-spin" style="transform-box:fill-box;transform-origin:center;animation-duration:${18+i*3}s">`+
-    `<ellipse cx="${x}" cy="${(y-R*0.28).toFixed(1)}" rx="${(R*1.15).toFixed(1)}" ry="${(R*0.34).toFixed(1)}" fill="#fff" opacity=".09"/>`+
-    `<ellipse cx="${x}" cy="${(y+R*0.34).toFixed(1)}" rx="${(R*0.95).toFixed(1)}" ry="${(R*0.3).toFixed(1)}" fill="#000" opacity=".2"/>`+
-    `<ellipse cx="${(x-R*0.3).toFixed(1)}" cy="${(y+R*0.05).toFixed(1)}" rx="${(R*0.3).toFixed(1)}" ry="${(R*0.18).toFixed(1)}" fill="#000" opacity=".12"/>`+
-    `</g></g>`;
+  // malý stylizovaný symbol vykopávky (dva sloupy + práh) uvnitř značky na mapě
+  const b=(y+R*0.42).toFixed(1);
+  return `<g clip-path="url(#cp${i})" opacity=".55">`+
+    `<rect x="${(x-R*0.5).toFixed(1)}" y="${(y-R*0.15).toFixed(1)}" width="${(R*0.24).toFixed(1)}" height="${(R*0.55).toFixed(1)}" fill="#2e2011"/>`+
+    `<rect x="${(x+R*0.26).toFixed(1)}" y="${(y-R*0.15).toFixed(1)}" width="${(R*0.24).toFixed(1)}" height="${(R*0.55).toFixed(1)}" fill="#2e2011"/>`+
+    `<rect x="${(x-R*0.55).toFixed(1)}" y="${(y-R*0.28).toFixed(1)}" width="${(R*1.1).toFixed(1)}" height="${(R*0.16).toFixed(1)}" fill="#3a2a16"/>`+
+    `<rect x="${(x-R*0.6).toFixed(1)}" y="${b}" width="${(R*1.2).toFixed(1)}" height="${(R*0.14).toFixed(1)}" fill="#241a0e"/>`+
+    `</g>`;
 }
 function planetNode(st,x,y,stt,i){
   const R=17, locked=stt==="locked", done=stt==="done", open=stt==="open";
@@ -1481,19 +1542,52 @@ function bossNode(bx,by,unlocked){
   return { defs, node:`<g class="node ${unlocked?'':'locked'}" data-boss="1">${s}</g>` };
 }
 
+// — pozadí mapy: stará pergamenová mapa (souše, mřížka rovnoběžek, kompas)
+function mapDefs(){
+  return `<radialGradient id="parch" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#e9d3a0"/><stop offset=".7" stop-color="#d8bd83"/><stop offset="1" stop-color="#b89658"/></radialGradient>`+
+    `<radialGradient id="vig" cx=".5" cy=".5" r=".6"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#3a2a12" stop-opacity=".5"/></radialGradient>`;
+}
+function mapBackdrop(){
+  let s=`<rect x="0" y="0" width="520" height="360" rx="10" fill="url(#parch)"/>`;
+  // rovnoběžky / poledníky
+  s+=`<g stroke="#8a6a3a" stroke-width=".6" opacity=".28">`;
+  for(let y=40;y<360;y+=40) s+=`<line x1="10" y1="${y}" x2="510" y2="${y}"/>`;
+  for(let x=40;x<520;x+=40) s+=`<line x1="${x}" y1="10" x2="${x}" y2="350"/>`;
+  s+=`</g>`;
+  // stylizované souše
+  s+=`<g fill="#c2a86e" stroke="#9c7c46" stroke-width="1.4" opacity=".85">`+
+    `<path d="M30,70 Q90,30 170,60 Q230,84 200,150 Q150,200 90,180 Q26,158 30,70 Z"/>`+
+    `<path d="M300,40 Q400,30 470,80 Q500,130 450,150 Q380,150 350,110 Q300,90 300,40 Z"/>`+
+    `<path d="M250,220 Q340,190 440,230 Q500,260 470,320 Q380,350 300,320 Q240,290 250,220 Z"/>`+
+    `</g>`;
+  // vlnky moře
+  s+=`<g stroke="#9c7c46" stroke-width="1" fill="none" opacity=".35"><path d="M40,300 q10,-6 20,0 t20,0 t20,0"/><path d="M360,120 q10,-6 20,0 t20,0"/><path d="M120,240 q10,-6 20,0 t20,0"/></g>`;
+  // kompasová růžice
+  s+=`<g transform="translate(468,312)" opacity=".9"><circle r="26" fill="none" stroke="#7a5410" stroke-width="1.4"/><circle r="20" fill="none" stroke="#7a5410" stroke-width=".8" opacity=".6"/>`+
+    `<path d="M0,-24 L5,0 L0,24 L-5,0 Z" fill="#9c3a2a"/><path d="M-24,0 L0,5 L24,0 L0,-5 Z" fill="#7a5410"/>`+
+    `<path d="M0,-24 L5,0 L0,0 Z" fill="#c94b3a"/><text x="0" y="-30" text-anchor="middle" font-size="11" fill="#7a5410" font-weight="700">S</text></g>`;
+  s+=`<rect x="0" y="0" width="520" height="360" rx="10" fill="url(#vig)"/>`;
+  s+=`<rect x="3" y="3" width="514" height="354" rx="9" fill="none" stroke="#7a5410" stroke-width="2" opacity=".55"/>`;
+  return s;
+}
 function renderMap(){
   $("#mapGreet").textContent = LABELS.heroRank+" "+S.name;
+  renderRelics();
   const svg=$("#mapSvg");
   const L=layoutNodes(STATIONS.length);
   const NODE=L.stations, BOSSP=L.boss;
   let defs="", lanes="", nodes="";
   const pts=NODE.concat([BOSSP]);
+  const done=doneCount(S.done);
   for(let i=0;i<pts.length-1;i++){
-    lanes+=`<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[i+1][0]}" y2="${pts[i+1][1]}" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 6" opacity=".55"/>`;
+    const reached = i < done; // úsek už procestován → plná sytá barva
+    lanes+=`<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[i+1][0]}" y2="${pts[i+1][1]}" stroke="#7a4a24" stroke-width="4" opacity=".4" stroke-linecap="round"/>`;
+    lanes+=`<line x1="${pts[i][0]}" y1="${pts[i][1]}" x2="${pts[i+1][0]}" y2="${pts[i+1][1]}" stroke="${reached?'#b5321f':'#9c7c46'}" stroke-width="2.4" stroke-dasharray="2 7" stroke-linecap="round" opacity="${reached?'.95':'.7'}" class="route-dash"/>`;
   }
   STATIONS.forEach((st,i)=>{ const [x,y]=NODE[i]; const p=planetNode(st,x,y,stationState(i),i); defs+=p.defs; nodes+=p.node; });
   const b=bossNode(BOSSP[0],BOSSP[1],allDone()); defs+=b.defs; nodes+=b.node;
-  svg.innerHTML = `<defs>${defs}</defs>${lanes}${nodes}`;
+  const routeStyle=`<style>.route-dash{animation:rDash 1.6s linear infinite}@keyframes rDash{to{stroke-dashoffset:-18}}@media (prefers-reduced-motion:reduce){.route-dash{animation:none}}</style>`;
+  svg.innerHTML = `<defs>${mapDefs()}${defs}</defs>${mapBackdrop()}${routeStyle}${lanes}${nodes}`;
   svg.querySelectorAll(".node").forEach(g=>{
     g.addEventListener("click",()=>{
       if(g.classList.contains("locked")) return;
@@ -1514,7 +1608,7 @@ function flyShip(fromIdx){
   const ang=Math.atan2(to[1]-from[1], to[0]-from[0])*180/Math.PI;
   const ns="http://www.w3.org/2000/svg";
   const g=document.createElementNS(ns,"g");
-  g.innerHTML=`<g transform="rotate(${ang.toFixed(1)})"><ellipse cx="-10" cy="0" rx="8" ry="3.4" fill="#9fd0ff" opacity=".45"/><path d="M9,0 L-6,-5 L-2,0 L-6,5 Z" fill="#dfeaf7" stroke="#2e8fff" stroke-width=".8"/><circle cx="-6" cy="0" r="2.2" fill="#86c4ff"/></g>`;
+  g.innerHTML=`<g transform="rotate(${ang.toFixed(1)})"><path d="M-9,0 L7,-1.4 L11,0 L7,1.4 Z" fill="#4a3218" stroke="#2e2011" stroke-width=".6"/><rect x="-6" y="-6" width="3" height="12" rx="1" fill="#7a5410"/><rect x="-1" y="-4.5" width="2.4" height="9" rx="1" fill="#8a6a3a"/><line x1="-6" y1="-4" x2="-1" y2="-4" stroke="#5c3f20" stroke-width=".8"/><line x1="-6" y1="4" x2="-1" y2="4" stroke="#5c3f20" stroke-width=".8"/><circle cx="9" cy="0" r="1.4" fill="#c94b3a"/></g>`;
   g.style.transform=`translate(${from[0]}px,${from[1]}px)`;
   svg.appendChild(g);
   let anim;
@@ -1738,7 +1832,7 @@ function renderQuestion(q, ui, ctx){
     hintRow.style.display="none";
     if(fxTarget){ try{ ok ? slashFx(fxTarget) : shockFx(fxTarget); }catch(e){} }
     sfx(ok?"correct":"wrong"); buzz(ok?18:[40,50,40]);   // V2: haptika na mobilu
-    let html=`<div class="verdict ${ok?'good':'miss'}">${ok?'Správně — Síla je s tebou.':'Tentokrát ne.'}</div>`;
+    let html=`<div class="verdict ${ok?'good':'miss'}">${ok?'Správně!':'Tentokrát ne.'}</div>`;
     if(!ok && correctText) html+=`<div class="ans">Správně: <b>${esc(correctText)}</b></div>`;
     if(q.why) html+=`<div class="why"><span>Proč</span>${esc(q.why)}</div>`;
     ui.fb.className="feedback show "+(ok?"good":"miss"); ui.fb.innerHTML=html;
@@ -1877,7 +1971,7 @@ function renderQuestion(q, ui, ctx){
 
   // adaptivita: po sérii chyb Síla sama napoví
   if(ctx.autoHint && S._hint){
-    const note=document.createElement("div"); note.className="qhint adaptive"; note.textContent="✨ Síla ti napovídá (po sérii chyb).";
+    const note=document.createElement("div"); note.className="qhint adaptive"; note.textContent="✨ Deník ti napovídá (po sérii chyb).";
     ui.opts.appendChild(note);
     try{ S._hint(); }catch(e){}
   }
@@ -1889,11 +1983,14 @@ function renderQ(){
   $("#stName").textContent=placeOf(st);
   $("#stCounter").textContent = entry.review ? "Opakování chyby" : `Otázka ${Math.min(r.answered+1, r.total)}/${r.total}`;
   $("#stBar").style.width=(r.answered/r.total*100)+"%";
+  trapArmMaybe(entry,r,st);
   renderQuestion(entry.q, {q:$("#stQ"), opts:$("#stOpts"), fb:$("#stFb")}, {
     teacher:S.teacher,
     autoHint:(S.streakWrong||0)>=2,
     onAnswer:(ok)=>{
+      trapClear();
       if(!entry.scored){ entry.scored=true; r.answered++; if(ok) r.correct++; }   // skóruje se jen 1. pokus
+      S.trapArmed = !ok;
       S.streakWrong = ok ? 0 : (S.streakWrong||0)+1;
       if(!ok && !entry.review){ S.activeQ.push({q:entry.q, scored:true, review:true}); }  // chybu zopakuj na konci
       $("#stBar").style.width=(r.answered/r.total*100)+"%";
@@ -1902,14 +1999,33 @@ function renderQ(){
     onContinue:()=>{ S.qIdx++; if(S.qIdx>=S.activeQ.length) finishStation(st); else renderQ(); }
   });
 }
+/* Past: chyba „ozbrojí" past — další otázka má 20 s; vypršení se počítá jako chyba (a přijde v opakování). */
+let _trapTimer=null;
+function trapClear(){ if(_trapTimer){clearInterval(_trapTimer);_trapTimer=null;} const b=$("#trapBar"); if(b)b.classList.remove("on"); }
+function trapArmMaybe(entry,r,st){
+  trapClear();
+  if(!S.trapArmed || S.teacher || entry.review) return;
+  const b=$("#trapBar"), tEl=$("#trapT"); if(!b||!tEl) return;
+  let left=20; tEl.textContent=left; b.classList.add("on"); sfx("wrong");
+  _trapTimer=setInterval(()=>{ left--; tEl.textContent=Math.max(left,0);
+    if(left<=0){ trapClear(); S.trapArmed=false;
+      if(!entry.scored){ entry.scored=true; r.answered++; }
+      S.streakWrong=(S.streakWrong||0)+1;
+      if(!entry.review) S.activeQ.push({q:entry.q, scored:true, review:true});
+      $("#stFb").textContent="⏱ Past sklapla! Otázka se vrátí na konci."; 
+      setTimeout(()=>{ S.qIdx++; if(S.qIdx>=S.activeQ.length) finishStation(st); else renderQ(); }, 1200);
+    }
+  },1000);
+}
 function finishStation(st){
+  trapClear();
   S.done[st.id]=true;
   S.justCompleted=S.stationIdx;
   saveProgress();
   const wa=st.accent, waL=st.accentL, idx=S.stationIdx;
-  reward(`${placeOf(st)} zvládnuto`, `Získáváš odznak Řádu`, ()=>{
-    const back=()=>{ renderMap(); setAccent("#2e8fff","#8fc0ff"); warpOut("screen-map", idx, wa, waL); bg("map",true); };
-    if(allDone()){ reward(`Výcvik dokončen`, `${LABELS.bossName} tě vyzývá k souboji`, back, true); }
+  reward(`${placeOf(st)} prozkoumáno`, `Získáváš relikvii: ${(RELICS[st.id]||{}).ic||""} ${(RELICS[st.id]||{}).cs||""}`, ()=>{
+    const back=()=>{ renderMap(); setAccent("#d9a441","#f2d488"); warpOut("screen-map", idx, wa, waL); bg("map",true); };
+    if(allDone()){ reward(`Výprava dokončena`, `${LABELS.bossName} tě vyzývá k souboji`, back, true); }
     else { back(); }
   });
 }
@@ -1963,7 +2079,7 @@ function updateHud(){
 }
 function renderBossQ(){
   const q=S.bossQ[S.bsIdx];
-  $("#bsCounter").textContent=`Útok ${S.bsIdx+1}/${S.bossQ.length}`;
+  $("#bsCounter").textContent=`Střet ${S.bsIdx+1}/${S.bossQ.length}`;
   renderQuestion(q, {q:$("#bsQ"), opts:$("#bsOpts"), fb:$("#bsFb")}, {
     teacher:S.teacher,
     autoHint:(S.streakWrong||0)>=2,
@@ -1979,7 +2095,7 @@ function renderBossQ(){
     },
     onContinue:()=>{
       S.bsIdx++;
-      if(S.bsIdx>=S.bossQ.length){ S.bsIdx=0; $("#bossLine").textContent="Souboj pokračuje…"; }
+      if(S.bsIdx>=S.bossQ.length){ S.bsIdx=0; $("#bossLine").textContent="Strážce se brání…"; }
       renderBossQ();
     }
   });
@@ -2035,12 +2151,12 @@ function finalBlow(then){
   setTimeout(()=>{ flashScreen("#ffd24a", true); then&&then(); }, 940);
 }
 function bossWin(){
-  $("#bossLine").textContent=LABELS.bossName+" poražen. Galaxie je zachráněna.";
+  $("#bossLine").textContent=LABELS.bossName+" poražen. Relikvie je tvá.";
   $("#bsOpts").innerHTML=""; $("#bsQ").textContent="";
-  reward("Vítězství!", LABELS.faction+" padlo", finishGame, true);
+  reward("Vítězství!", "Relikvie je tvá", finishGame, true);
 }
 function bossLose(){
-  $("#bossLine").textContent="Podlehl jsi temnotě… ale rytíř nikdy nevzdává.";
+  $("#bossLine").textContent="Chrám tě přemohl… ale objevitel nikdy nevzdává.";
   sfx("defeat"); bg("",false);
   const opts=$("#bsOpts"); opts.innerHTML="";
   const b=document.createElement("button"); b.className="btn"; b.textContent="↻ Postavit se znovu";
@@ -2064,7 +2180,7 @@ function finishGame(){
   const pct=tot? Math.round(cor/tot*100):0;
   const gr=gradeOf(pct);
   $("#resCrest").innerHTML=sigilArt(72);
-  $("#resTitle").textContent = S.bossWon ? "Galaxie zachráněna" : "Výcvik ukončen";
+  $("#resTitle").textContent = S.bossWon ? "Relikvie získána" : "Výprava ukončena";
   $("#resWho").textContent = LABELS.heroRank+" "+S.name;
   $("#resGrade").textContent=gr.g;
   $("#resGradeWord").textContent=gr.w;
@@ -2112,7 +2228,7 @@ function victoryFx(){
     setTimeout(()=>{try{p.remove();}catch(e){}},dur+1100);
   }
 }
-$("#againBtn").onclick=()=>{ setAccent("#2e8fff","#8fc0ff"); show("screen-start"); bg("",false); };
+$("#againBtn").onclick=()=>{ setAccent("#d9a441","#f2d488"); show("screen-start"); bg("",false); };
 
 /* ════════════════════════════════════════════════════════════════════
    17) CELÁ OBRAZOVKA
@@ -2155,7 +2271,7 @@ function initFs(){
    Fotky se před uložením zmenší na max 1280 px (JPEG ~0.82), aby se
    vešly do kvóty localStorage. Klíč: prefix + id světa / "boss".
    ════════════════════════════════════════════════════════════════════ */
-const IMG_PREFIX="hvezdni_rytiri_img_v1_";
+const IMG_PREFIX="relic_hunter_img_v1_";
 function imgGet(id){ return safeGet(IMG_PREFIX+id); }
 function imgDel(id){ safeDel(IMG_PREFIX+id); }
 function imgSet(id,data){ return safeSet(IMG_PREFIX+id,data); }
@@ -2185,7 +2301,7 @@ function loadScaled(file, cb){
    V2-B) SKIN — přepnutí original/safe za běhu (LABELS se přepíšou,
    UI se překreslí; volba se pamatuje v localStorage a přes ?skin=)
    ════════════════════════════════════════════════════════════════════ */
-const SKIN_KEY="hvezdni_rytiri_skin_v1";
+const SKIN_KEY="relic_hunter_skin_v1";
 function applySkin(sk){
   SKIN = SKINS[sk] ? sk : "original";
   safeSet(SKIN_KEY, SKIN);
@@ -2235,9 +2351,9 @@ function buildTeacherPanel(){
   /* skoky panel nezavírají — sekce se ukáže hned vedle panelu a dá se proklikávat */
   btn(g,"Start",()=>{ show("screen-start"); });
   btn(g,"Intro",()=>{ tpEnsureRun(); startIntro(); });
-  btn(g,"Mapa",()=>{ tpEnsureRun(); renderMap(); setAccent("#2e8fff","#8fc0ff"); show("screen-map"); });
+  btn(g,"Mapa",()=>{ tpEnsureRun(); renderMap(); setAccent("#d9a441","#f2d488"); show("screen-map"); });
   STATIONS.forEach((st,i)=>btn(g, (i+1)+". "+placeOf(st), ()=>{ tpEnsureRun(); enterStation(i); }));
-  btn(g,"⚔ Souboj",()=>{ tpEnsureRun(); startBoss(); });
+  btn(g,"⚔ Chrám",()=>{ tpEnsureRun(); startBoss(); });
   btn(g,"Výsledek",()=>{ tpEnsureRun(); finishGame(); });
 
   sec("Aktuální úloha");
@@ -2246,15 +2362,15 @@ function buildTeacherPanel(){
 
   sec("Vzhled (skin)");
   g=grid(); g.id="tpSkinSeg";
-  const bO=btn(g,"Star Wars",()=>applySkin("original")); bO.dataset.skin="original";
-  const bS=btn(g,"Bezpečná verze",()=>applySkin("safe")); bS.dataset.skin="safe";
+  const bO=btn(g,"Indiana Jones",()=>applySkin("original")); bO.dataset.skin="original";
+  const bS=btn(g,"Lovci relikvií",()=>applySkin("safe")); bS.dataset.skin="safe";
   [...g.children].forEach(b=>b.classList.toggle("warn", b.dataset.skin===SKIN));
 
   sec("Obrázky (fotky z galerie)");
   const note=document.createElement("p"); note.className="tpNote";
   note.textContent="Fotka nahradí SVG scénu světa (Ken Burns) / pozadí souboje. Ukládá se jen do tohoto zařízení (localStorage), zmenšeno na 1280 px.";
   body.appendChild(note);
-  const rows=[...STATIONS.map((st,i)=>({id:st.id,label:(i+1)+". "+placeOf(st)})), {id:"boss",label:"⚔ Souboj (pozadí)"}];
+  const rows=[...STATIONS.map((st,i)=>({id:st.id,label:(i+1)+". "+placeOf(st)})), {id:"boss",label:"⚔ Chrám (pozadí)"}];
   rows.forEach(r=>{
     const row=document.createElement("div"); row.className="tpRow";
     const lbl=document.createElement("span"); lbl.className="lbl"; lbl.textContent=r.label;
@@ -2402,7 +2518,7 @@ window.LUDUS_UNIFY = {
 /* ═══ LUDUS MEDIA — sem se vkládají base64 média (dodá Daniel) ═══
    introVideo : "data:video/mp4;base64,...."   intro klip (prázdné = intro se přeskočí)
    soundtrack : "data:audio/mpeg;base64,...."  hudební smyčka (prázdné = jen WebAudio SFX) */
-var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hvězdní rytíři" };
+var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Lovci relikvií" };
 
 (function(){
   var cfg = window.LUDUS_UNIFY || {};  /* hooks: getSound,setSound,save,reset,getLang,afterCine */
