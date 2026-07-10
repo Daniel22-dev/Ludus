@@ -24,6 +24,6 @@ LUDUS je lokální dílna výukových her určená k oficiálnímu internímu po
 
 LUDUS nevyžaduje jména ani jiné identifikátory žáků. Do AI generování nesmí vstupovat citlivé údaje, hodnocení konkrétního žáka ani dokumenty obsahující osobní údaje bez anonymizace.
 
-## Stav verze 1.14.0
+## Stav verze 1.14.1
 
-Jádro dílny je připraveno pro oficiální interní provoz. Produkčně doporučené jsou pouze enginy se stavem `ready`; rozpracované enginy jsou jednoznačně označeny a jejich exportní způsobilost je řízena samostatným polem `builderCompatible`.
+Jádro dílny je připraveno pro oficiální interní provoz. Produkčně doporučené jsou pouze enginy se stavem `ready`; rozpracované enginy jsou jednoznačně označeny a v katalogu vizuálně zvýrazněny a jejich exportní způsobilost je řízena samostatným polem `builderCompatible`.

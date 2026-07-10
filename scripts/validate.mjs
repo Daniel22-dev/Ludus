@@ -82,6 +82,9 @@ need(src.includes('applyTemplate'), 'src/index.html: chybí applyTemplate');
 need(src.includes(`const APP_VERSION='${VERSION}'`), `src/index.html: APP_VERSION není ${VERSION}`);
 need(src.includes('function engineCanBuild'), 'src/index.html: chybí oddělení stavu enginu od kompatibility exportu');
 need(src.includes('builderCompatible'), 'src/index.html: builderCompatible se nepoužívá');
+need(src.includes('.card.in-progress'), 'src/index.html: chybí zvýraznění rozpracovaných her');
+need(src.includes('function engineCardClass'), 'src/index.html: chybí oddělení vizuálního stavu karty');
+need(src.includes('data-back-step=\"0\"') && src.includes('data-back-step=\"1\"'), 'src/index.html: chybí tlačítka Zpět v krocích Svět/Obsah');
 need(!/AIza[0-9A-Za-z_\-]{20,}/.test(src), 'src/index.html: podezření na hardcoded Gemini API key');
 const srcScripts = [...src.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)];
 srcScripts.forEach((m, i) => {

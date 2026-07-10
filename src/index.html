@@ -166,9 +166,29 @@
   .badge.free{background:rgba(62,230,143,.12);color:var(--green);border:1px solid rgba(62,230,143,.25)}
   .badge.intern{background:rgba(255,107,125,.12);color:var(--red);border:1px solid rgba(255,107,125,.28)}
   .card.locked{opacity:.5;cursor:not-allowed}
-  .card.dim{opacity:.5;filter:saturate(.7)}
-  .card.dim:hover{opacity:.78;filter:none}
+  .card.ready{border-color:rgba(62,230,143,.30);box-shadow:0 14px 34px -30px rgba(62,230,143,.85)}
+  .card.in-progress{opacity:1;filter:none;border-color:rgba(180,117,255,.58);
+    background:radial-gradient(130% 95% at 50% 0%,rgba(180,117,255,.15),transparent 62%),var(--panel);
+    box-shadow:0 0 0 1px rgba(180,117,255,.10),0 0 28px -13px rgba(180,117,255,.85),0 18px 38px -30px rgba(180,117,255,.95)}
+  .card.in-progress:hover{border-color:rgba(204,163,255,.86);background:radial-gradient(130% 95% at 50% 0%,rgba(180,117,255,.22),transparent 64%),var(--panel2);
+    box-shadow:0 0 0 1px rgba(180,117,255,.18),0 0 34px -11px rgba(180,117,255,.95),0 22px 42px -30px rgba(180,117,255,1)}
+  .card.planned{opacity:.52;filter:saturate(.65)}
+  .card.planned:hover{opacity:.76;filter:saturate(.9)}
   .card.locked:hover{transform:none}
+
+  .stage-nav{position:sticky;top:10px;z-index:12;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin:0 0 16px;padding:8px;border:1px solid var(--line2);border-radius:14px;background:var(--bg2);
+    box-shadow:0 12px 30px -24px rgba(0,0,0,.9)}
+  .stage-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;border:1px solid var(--line2);
+    background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 13px;font:700 12.5px var(--sans);cursor:pointer;transition:.16s}
+  .stage-back:hover{border-color:var(--gold);color:var(--gold-soft);transform:translateX(-2px)}
+  .stage-context{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dim);font-size:11.5px;padding-right:6px}
+  .stage-context b{color:var(--ink)}
+  @media(max-width:640px){
+    .stage-nav{top:6px;margin-bottom:14px;padding:6px}
+    .stage-back{width:100%;min-height:44px;font-size:13px}
+    .stage-context{display:none}
+  }
 
   /* topic step */
   .field{margin-bottom:18px}
@@ -304,7 +324,8 @@
   .ebadge{font:700 10.5px var(--sans);padding:3px 8px;border-radius:999px;border:1px solid var(--line2)}
   .ebadge.on{color:var(--green);border-color:rgba(62,230,143,.4);background:rgba(62,230,143,.08)}
   .ebadge.off{color:var(--gold-soft);border-color:rgba(245,185,66,.35);background:rgba(245,185,66,.06)}
-  .ebadge.draft{color:var(--violet);border-color:rgba(180,117,255,.4);background:rgba(180,117,255,.08)}
+  .ebadge.draft{color:#cda8ff;border-color:rgba(180,117,255,.52);background:rgba(180,117,255,.12);box-shadow:0 0 18px -10px rgba(180,117,255,.95)}
+  .ebadge.draft.preview{border-style:dashed;background:rgba(180,117,255,.08)}
   .zap{display:inline-flex;align-items:center;gap:2px;font:700 9.5px var(--sans);letter-spacing:.04em;color:var(--amber);
     border:1px solid rgba(255,194,75,.42);background:rgba(255,194,75,.10);border-radius:999px;padding:2px 6px;white-space:nowrap}
   .step>span:last-child{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px}
@@ -1287,7 +1308,7 @@ const ENGINE_BASE='engines/';
    GAME_ENGINES — registr enginů podle dvojice svět + mechanika (skinId:frame).
    Stav: ready (hotová) | draft/wip/in-progress (rozpracovaná) | planned/content-only (plánovaná).
    Interně mohou ještě existovat fallback stavy generic/content-only.
-   Svět svítí jako hratelný jen tehdy, když má pro zvolenou mechaniku engine.
+   Všechny rozpracované světy v katalogu svítí fialově. Exportní způsobilost určuje samostatně builderCompatible.
    ===================================================================== */
 const ENGINE_STATUSES={ready:1,draft:1,wip:1,'in-progress':1,generic:1,'content-only':1,planned:1};
 const GAME_CAPS={
@@ -1338,7 +1359,18 @@ function engineStatusLabel(input){
 }
 function engineStatusCss(st){st=normalizeEngineStatus(st);return st==='ready'||st==='generic'?'on':(st==='draft'?'draft':'off');}
 function engineStatusIcon(st){st=normalizeEngineStatus(st);return st==='ready'||st==='generic'?'✓':(st==='draft'?'◐':'⌛');}
-function engineStatusBadge(eng){const st=normalizeEngineStatus(eng&&eng.status),blocked=!!(eng&&eng.builderCompatible===false&&st!=='planned');return '<div class="ebadge '+(blocked?'off':engineStatusCss(st))+'">'+(blocked?'◌':engineStatusIcon(st))+' '+esc(engineStatusLabel(eng||st))+'</div>';}
+function engineStatusBadge(eng){
+  const st=normalizeEngineStatus(eng&&eng.status), blocked=!!(eng&&eng.builderCompatible===false&&st!=='planned');
+  const css=st==='draft'?('draft'+(blocked?' preview':'')):(blocked?'off':engineStatusCss(st));
+  const icon=st==='draft'?'◐':(blocked?'◌':engineStatusIcon(st));
+  return '<div class="ebadge '+css+'">'+icon+' '+esc(engineStatusLabel(eng||st))+'</div>';
+}
+function engineCardClass(eng){
+  const st=normalizeEngineStatus(eng&&eng.status);
+  if(st==='draft')return ' in-progress';
+  if(st==='ready'||st==='generic')return ' ready';
+  return ' planned';
+}
 function engineCanBuild(eng){return !!(eng&&eng.engine&&eng.builderCompatible!==false&&normalizeEngineStatus(eng.status)!=='planned');}
 function builderCompatibilityLabel(eng){if(!eng)return 'bez vlastního enginu';if(engineCanBuild(eng))return normalizeEngineStatus(eng.status)==='ready'?'ověřený export':'export k testování';return eng.engine?'pouze náhled — hratelný export blokován':'engine zatím neexistuje';}
 function flowLabel(id){return FLOW_MODELS[id]||id||'neuvedeno';}
@@ -1953,21 +1985,17 @@ function stageSkins(){
   const list=SKINS.filter(sk=>sk.frames.includes(state.frame));
   // engine se vyhodnocuje pro dvojici svět + zvolená mechanika (ne jen mechaniku)
   const skinEngine=sk=>getGameEngine(sk.id,state.frame);
-  const skinStatus=sk=>engineStatusFor(sk.id,state.frame)||'content-only';
-  const isPlayable=eng=>engineCanBuild(eng);
   const cards=list.map(sk=>{
     const on=state.skin===sk.id;
     const eng=skinEngine(sk);
-    const status=skinStatus(sk);
-    const playable=isPlayable(eng);
-    const dim=!playable; // bez enginu: kartu zeslabit, ale nechat čitelnou
+    const visualClass=engineCardClass(eng);
     const engBadge=engineStatusBadge(eng);
     if(sk.twin){
       const internal=!pub;
       // ve vnitřním režimu je originál výchozí; veřejně zamčeno na bezpečné
       const brandedNow = pub ? false : (on ? state.branded : internal);
       const swDisabled=pub;
-      return `<div class="card${dim?' dim':''}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}" tabindex="0" role="button">
+      return `<div class="card${visualClass}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}" tabindex="0" role="button">
         <span class="ic" style="filter:drop-shadow(0 3px 10px ${sk.c}66)">${sk.ic}</span>
         <h3>${brandedNow?esc(sk.brand):esc(sk.safe)}</h3>
         <div class="tl">${esc(sk.en)}</div>
@@ -1981,7 +2009,7 @@ function stageSkins(){
         ${brandedNow?'<div class="badge intern">⚠ jen interně</div>':''}
       </div>`;
     }
-    return `<button class="card${dim?' dim':''}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}">
+    return `<button class="card${visualClass}" data-skin="${sk.id}" aria-pressed="${on}" style="--accent:${sk.c}">
       <span class="ic" style="filter:drop-shadow(0 3px 10px ${sk.c}66)">${sk.ic}</span>
       <h3>${esc(sk.safe)}</h3>
       <div class="tl">${esc(sk.en)}</div>
@@ -1991,11 +2019,9 @@ function stageSkins(){
     </button>`;
   }).join('');
   const f=FRAMES[state.frame];
-  const nPlay=list.filter(sk=>isPlayable(skinEngine(sk))).length;
-  const leadEng = nPlay>0
-    ? 'Svítící světy mají ověřený datový kontrakt — mohou vytvořit hratelný export. Zeslabené jsou plánované nebo pouze náhledové: dílna pro ně připraví obsah · recept · třídní soutěž · lesson pack, ale rozbitý HTML export nepovolí.'
-    : 'Žádný svět pro tuto mechaniku zatím nemá ověřený exportní kontrakt — připraví se obsah · recept · třídní soutěž · lesson pack. Náhledové enginy zůstávají viditelné, ale hratelný export je bezpečně blokován.';
-  return `<p class="eyebrow">Krok II</p><h2>Vyber svět pro „${f.cz}“</h2>
+  const leadEng='Hotové světy jsou označené zeleně. Všechny rozpracované světy svítí fialově; jejich štítek rozlišuje „export k testování“ a „pouze náhled“. Zeslabené zůstávají jen plánované světy, jejichž engine ještě nevznikl.';
+  return `<div class="stage-nav"><button class="stage-back" type="button" data-back-step="0">← Zpět na mechaniky</button><span class="stage-context">Vybraná mechanika: <b>${esc(f.cz)}</b></span></div>
+    <p class="eyebrow">Krok II</p><h2>Vyber svět pro „${f.cz}“</h2>
     <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.<br><span style="color:var(--faint)">${leadEng}</span></p>
     <div class="grid">${cards}</div>`;
 }
@@ -2056,7 +2082,9 @@ function stageTopic(){
   }
   const chips=pick.map(t=>`<button class="chip" data-topic="${t.id}" aria-pressed="${state.topic&&state.topic.id===t.id}">${t.cz}</button>`).join('');
   const cur=state.topic?`<div class="note">Aktivní téma: <b>${esc(state.topic.cz)}</b> · ${KIND_CZ[state.topic.kind]||'vlastní'} · operace: ${topOps(state.topic).map(o=>OPS[o].cz).join(', ')||'—'}</div>`:'';
-  return `<p class="eyebrow">Krok III</p><h2>Vlož učivo</h2>
+  const chosenWorld=currentWorldTitle(selectedEngine(),selectedSkin());
+  return `<div class="stage-nav"><button class="stage-back" type="button" data-back-step="1">← Zpět na světy</button><span class="stage-context">Vybraný svět: <b>${esc(chosenWorld)}</b></span></div>
+    <p class="eyebrow">Krok III</p><h2>Vlož učivo</h2>
     <p class="lead">Napiš učivo nebo výukový cíl — gramatiku, ale i děj, proces, model, pojmy či příčiny a důsledky. Nebo klikni na hotové. Jádro vpravo přepočítá, jestli to s tvou mechanikou bude fungovat.</p>
     ${gameSettingsMarkup()}
     <div class="field">
@@ -2281,6 +2309,10 @@ function updateSteps(){
 function go(step){state.step=step;updateSteps();renderStage();renderCore();}
 
 function wireStage(){
+  document.querySelectorAll('[data-back-step]').forEach(btn=>btn.onclick=()=>{
+    beep(500,.06,'sine');
+    go(+btn.dataset.backStep);
+  });
   // frames
   document.querySelectorAll('[data-frame]').forEach(c=>c.onclick=()=>{
     state.frame=c.dataset.frame;
@@ -2491,7 +2523,7 @@ document.querySelectorAll('.step').forEach(b=>b.onclick=()=>{beep(540,.06);go(+b
 function precheck(){
   if(!state.frame||!state.skin||!state.topic){toast('Dokonči všechny tři kroky.');return null;}
   const eng=getGameEngine(state.skin,state.frame);
-  if(!eng){toast('Svět „'+((SKINS.find(x=>x.id===state.skin)||{}).safe||state.skin)+'" zatím nemá vlastní engine pro mechaniku „'+FRAMES[state.frame].cz+'". Vyber svět, který u téhle mechaniky svítí jako hratelný, nebo zvol Vygenerovat (obsah / lesson pack).');return null;}
+  if(!eng){toast('Svět „'+((SKINS.find(x=>x.id===state.skin)||{}).safe||state.skin)+'" zatím nemá vlastní engine pro mechaniku „'+FRAMES[state.frame].cz+'". Vyber svět se štítkem „hotová“ nebo „export k testování“, případně zvol Vygenerovat (obsah / lesson pack).');return null;}
   if(!engineCanBuild(eng)){toast('Tento rozpracovaný engine je zatím pouze náhled. Hratelný HTML export je zablokován, dokud engine bezpečně nepřijme LUDUS_CONTENT z dílny. Obsah, recept, třídní soutěž a lesson pack vytvořit můžeš.');return null;}
   const sk=SKINS.find(x=>x.id===state.skin);
   const useBranded=state.branded&&sk.twin&&state.exportTarget!=='public';
@@ -2811,9 +2843,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.0';
+const APP_VERSION='1.14.1';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.1: Opravená orientace v dílně — všechny rozpracované hry nyní svítí fialově bez ohledu na stav exportního adaptéru; zeslabené zůstávají pouze plánované. Do kroků Svět a Obsah přibyla výrazná, na mobilu přilnavá tlačítka Zpět na mechaniky / Zpět na světy.',
   '1.14.0: Produkční sjednocení enginů — společný přepínač CZ/EN ve všech hrách, bilingvní učitelský panel a report, pravdivý builderCompatible kontrakt s blokací neověřených exportů, opravené převzetí obsahu v Laughworks a Stranger Things, opravy Chronosu a Matrixu, přísnější validace katalogu a Lara Croft / Tomb Raider jako plánovaný quest.',
   '1.13.0: sjednocen manifest všech existujících HTML enginů; doplněn standardní učitelský vstup (#ludusBadge, 3× ťuk, ?teacher=1), záchranný učitelský dock, export reportu, validační testy npm test a knihovna hotových šablon učiva.',
   '1.11.1: Dotažení dvojjazyčnosti a diagnostiky. LOTR (a jeho kopie v repu) má nově plnou statickou lokalizaci UI — úvod, výběr rasy, mapa, vak, souboj i certifikát se přepínají mezi EN/CS a přepnutí jazyka přerenderuje i aktuální obrazovku; ověřeno automatickým skenerem (0 zbytků cizího jazyka v UI). Star Wars a Hogwarts prověřeny jako plně dvojjazyčné (bez zásahu). Opravena chyba self-testu toContentV2: houses/teams se nyní zachovají jako pole i objekt, takže diagnostika builderu prochází 34/34.',
@@ -2850,7 +2883,7 @@ function showIntro(){
   modalOpen('Vítej v LUDUS — jak to funguje',
     '<p>Postav výukovou hru ve třech krocích, bez programování. Postupuj zleva doprava.</p>'+
     '<div class="guide-step"><span class="gnum">I</span><div><b>Mechanika</b><small>Vyber, jak se hraje (kampaň, quest, únikovka, detektivka, souboj…). U každé je vidět, jestli z ní vznikne hratelná hra, nebo podklad pro obsah · recept · soutěž · lesson pack.</small></div></div>'+
-    '<div class="guide-step"><span class="gnum">II</span><div><b>Svět</b><small>Oblékni mechaniku do atmosféry. Vnitřně je u dvojčat originál, veřejně bezpečná verze. Zeslabené světy zatím nemají hratelný engine.</small></div></div>'+
+    '<div class="guide-step"><span class="gnum">II</span><div><b>Svět</b><small>Oblékni mechaniku do atmosféry. Vnitřně je u dvojčat originál, veřejně bezpečná verze. Fialově svítí všechny rozpracované světy; zeslabené jsou pouze plánované.</small></div></div>'+
     '<div class="guide-step"><span class="gnum">III</span><div><b>Obsah</b><small>Zadej učivo nebo vyber z nabídky. Po zadání všech tří parametrů Jádro „vykuje“ % vhodnosti a doporučí mini-hry.</small></div></div>'+
     '<p style="margin-top:12px"><b>Co stojí požadavek:</b> krok či akce s <span class="zap">⚡ Gemini</span> může spotřebovat požadavek na API (analýza neznámého tématu, generování hry). Mechanika a svět jsou zdarma.</p>'+
     '<p><b>Nahoře:</b> 🔑 klíč k API · 🌙 denní/noční režim · ⛶ celá obrazovka. Tlačítkem „Sestavit novou hru“ v kroku III výběr kdykoli vyčistíš.</p>'+

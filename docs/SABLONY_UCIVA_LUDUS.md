@@ -1,6 +1,6 @@
 # LUDUS — knihovna hotových šablon učiva
 
-Verze: 1.14.0
+Verze: 1.14.1
 
 Šablony slouží jako rychlý start bez zbytečného nastavování. V dílně nastaví téma, doporučenou mechaniku, svět a jazyk obsahu. Nejde o uzamčený obsah — učitel může šablonu dál upravit, vygenerovat hru přes Gemini nebo z ní vytvořit lesson pack.
 

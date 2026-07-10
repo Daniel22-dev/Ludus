@@ -4,11 +4,11 @@ Dílna výukových her.
 
 ## Aktuální stav
 
-Verze: **1.14.0**
+Verze: **1.14.1**
 
 ## Provozní verdikt
 
-Jádro LUDUS 1.14.0 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
+Jádro LUDUS 1.14.1 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -64,6 +64,14 @@ Testy hlídají manifest, pravdivé pole `builderCompatible`, existenci engine s
 - `docs/ENGINE_RELEASE_CHECKLIST.md` — povinná brána před označením enginu jako hotového.
 - `docs/SABLONY_UCIVA_LUDUS.md` — knihovna hotových šablon a doporučené použití.
 - `docs/manualy/` — závazná sada manuálů 00–07.
+
+## 1.14.1
+
+- Všechny hry se stavem `draft` / rozpracovaná nyní v katalogu svítí fialově, včetně enginů označených „pouze náhled“.
+- Zeslabené zůstávají pouze plánované světy bez hotového enginu.
+- Exportní způsobilost se dál pravdivě rozlišuje štítkem „export k testování“ nebo „pouze náhled“; vizuální stav už se s technickou kompatibilitou nemíchá.
+- Do kroku Svět přibylo tlačítko **Zpět na mechaniky** a do kroku Obsah tlačítko **Zpět na světy**. Na mobilu jsou tlačítka široká a při posouvání zůstávají přichycená nahoře.
+- Zvýšena PWA cache na `ludus-pwa-v1.14.1`, aby se po nasazení nenačítalo staré rozhraní.
 
 ## 1.14.0
 
