@@ -1,0 +1,16 @@
+{
+  "schema": "ai-studio-app-manifest-v1",
+  "id": "ludus",
+  "name": {"cs": "LUDUS", "en": "LUDUS"},
+  "version": "__APP_VERSION__",
+  "status": {"cs": "Produkční jádro", "en": "Production core"},
+  "description": {"cs": "Dílna výukových her, která převádí učivo do různých herních světů a mechanik.", "en": "A learning-game workshop that transforms content into different game worlds and mechanics."},
+  "launchUrl": "https://daniel22-dev.github.io/Ludus/",
+  "repository": "daniel22-dev/Ludus",
+  "icon": "assets/apps/ludus.png",
+  "accent": "#a877ff",
+  "tags": [{"cs":"Gamifikace","en":"Gamification"},{"cs":"Týmová výuka","en":"Team learning"}],
+  "capabilities": ["gamification", "game-builder", "team-learning", "offline-export"],
+  "compatibility": {"studioMinVersion": "0.2.0", "materialSchema": "ghrab-material-v1"},
+  "publishedAt": "__BUILD_TIME__"
+}

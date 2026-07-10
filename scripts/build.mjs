@@ -45,6 +45,16 @@ if (fs.existsSync(ENGINES_DIR)) {
   }
 }
 
+// 3b) veřejný manifest pro AI Studio GHRAB
+const studioManifestTemplate = path.join(ROOT, "studio", "app-manifest.template.json");
+if (fs.existsSync(studioManifestTemplate)) {
+  const appVersion = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8")).version;
+  const studioManifest = fs.readFileSync(studioManifestTemplate, "utf8")
+    .replaceAll("__APP_VERSION__", appVersion)
+    .replaceAll("__BUILD_TIME__", buildTime);
+  fs.writeFileSync(path.join(DIST, "studio-manifest.json"), studioManifest, "utf8");
+}
+
 // 4) přehled
 const kb = p => (fs.statSync(p).size / 1024).toFixed(1) + " kB";
 console.log("✅  Build dokončen");

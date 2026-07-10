@@ -94,3 +94,9 @@ Testy hlídají manifest, pravdivé pole `builderCompatible`, existenci engine s
 - Sjednoceno ukládání rozehraných her napříč hotovými enginy.
 - Každý hotový engine deklaruje LUDUS progress API v1: `saveProgress`, `loadProgress`, `resumeProgress`, `clearProgress`, `getProgressSummary`.
 - Pas hry a `engines/manifest.json` ukazují schopnost save/load/resume.
+
+## Napojení na AI Studio GHRAB
+
+Build vytváří veřejný soubor `dist/studio-manifest.json`. AI Studio z něj automaticky načítá aktuální verzi, stav, adresu a metadata LUDUSu.
+
+Pro okamžitou synchronizaci nastav v repozitáři secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné hodinové kontrole.
