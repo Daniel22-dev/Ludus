@@ -1,7 +1,7 @@
 {
   "schemaVersion": "ludus-engines-manifest-v2",
-  "updatedAt": "2026-07-09",
-  "note": "Kanonický katalog enginů a plánovaných světů. Statusy: ready (hotová) — jen Hogwarts; draft (rozpracovaná) — všechny ostatní enginy se souborem; planned (plánovaná) — světy bez enginu. Nové rozpracované enginy 1.12.0: Lovci relikvií (indiana-jones.html) a Kostka osudu (dnd.html). Statusy se promítají do LUDUSu z tohoto manifestu.",
+  "updatedAt": "2026-07-10",
+  "note": "Kanonický katalog enginů a plánovaných světů. Verze 1.14.0: produkční sjednocení CZ/EN, společný učitelský panel, pravdivý builderCompatible kontrakt a plánovaná Lara Croft / Tomb Raider. Status určuje fázi vývoje; builderCompatible samostatně určuje, zda smí dílna vytvořit hratelný HTML export.",
   "statusLabels": {
     "ready": {
       "cs": "Hotová",
@@ -89,15 +89,17 @@
         "hasFinalCode": false,
         "hasLeaderboard": false,
         "hasSimulation": false,
-        "hasSaveLoadResume": true
+        "hasSaveLoadResume": true,
+        "hasFinalChallenge": false,
+        "hasInventory": false
       },
       "contract": {
         "manifest": "vložený v HTML enginu + zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
         "themeVariants": "official + safe vložené v HTML enginu",
-        "adapter": "adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)",
-        "contentV2": "LUDUS posílá v2 vedle GAME_CONTENT v1",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
         "capabilities": "deklarováno v manifestu",
         "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
@@ -113,7 +115,9 @@
           "getProgressSummary",
           "hasProgress"
         ]
-      }
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "starwars-academy",
@@ -190,8 +194,8 @@
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
         "themeVariants": "official + safe vložené v HTML enginu",
-        "adapter": "adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)",
-        "contentV2": "LUDUS posílá v2 vedle GAME_CONTENT v1",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
         "capabilities": "deklarováno v manifestu",
         "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
@@ -207,7 +211,9 @@
           "getProgressSummary",
           "hasProgress"
         ]
-      }
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "lotr-grammar-quest",
@@ -279,8 +285,8 @@
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
         "themeVariants": "official + safe vložené v HTML enginu",
-        "adapter": "adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)",
-        "contentV2": "LUDUS posílá v2 vedle GAME_CONTENT v1",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
         "capabilities": "deklarováno v manifestu",
         "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
@@ -304,7 +310,9 @@
           "getProgressSummary",
           "hasProgress"
         ]
-      }
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "chronos-timeline",
@@ -355,7 +363,49 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en",
+        "es"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": false,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "frostline-detective",
@@ -409,7 +459,48 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "capabilities": {
+        "hasMap": false,
+        "hasStations": true,
+        "hasBoss": false,
+        "hasClues": true,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "Pouze náhled: engine vyžaduje vlastní detektivní dialekt (podezřelí, stopy a řešení); kanonické stanice z dílny zatím nepřebírá bezpečně.",
+        "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Pouze náhled: engine vyžaduje vlastní detektivní dialekt (podezřelí, stopy a řešení); kanonické stanice z dílny zatím nepřebírá bezpečně."
     },
     {
       "id": "illusion-detective",
@@ -460,7 +551,48 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "capabilities": {
+        "hasMap": false,
+        "hasStations": true,
+        "hasBoss": false,
+        "hasClues": true,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "Pouze náhled: engine vyžaduje detektivní scény, podezřelé a řešení; běžný výstup stanic z dílny není s tímto flow významově kompatibilní.",
+        "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Pouze náhled: engine vyžaduje detektivní scény, podezřelé a řešení; běžný výstup stanic z dílny není s tímto flow významově kompatibilní."
     },
     {
       "id": "maple-escape",
@@ -511,7 +643,48 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": false,
+        "hasClues": true,
+        "hasFinalCode": true,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "laughworks-lab",
@@ -561,7 +734,48 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "capabilities": {
+        "hasMap": false,
+        "hasStations": true,
+        "hasBoss": false,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": true,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "wild-arena",
@@ -612,17 +826,241 @@
       "brandModes": [
         "official",
         "safe"
-      ]
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": true,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": false,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },
     {
       "id": "lotr-grammar-quest-en",
       "variantOf": "lotr-grammar-quest",
-      "name": "Middle-earth: A Grammar Quest (EN varianta, prázdný hudební slot)",
+      "gameKey": "sundered-en:quest",
+      "skinId": "sundered-en",
+      "gameId": "lotr-en",
+      "gameIdAliases": [
+        "middle-earth-en",
+        "middleearth-en",
+        "sundered-en",
+        "lotr-grammar-quest-en"
+      ],
+      "mechanicId": "quest",
+      "name": "Middle-earth: A Grammar Quest (EN varianta)",
+      "title": {
+        "cs": "Middle-earth: Gramatická výprava (EN)",
+        "en": "Middle-earth: A Grammar Quest",
+        "safeCs": "The Sundered Realm — EN",
+        "safeEn": "The Sundered Realm — EN"
+      },
       "file": "middle-earth-en.html",
       "url": "engines/middle-earth-en.html",
+      "contentTopicId": "template",
+      "flowModel": "mapStationsFinalChallenge",
+      "addedVersion": "1.11.0",
       "status": "draft",
       "engineKind": "single-html",
-      "note": "Anglická varianta enginu sundered:quest. Bez gameKey — v katalogu UI se nezobrazuje, kanonický engine je lotr.html."
+      "supportedMechanics": [
+        "quest"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "wordbank",
+        "yesno"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank",
+        "ordering"
+      ],
+      "uiLanguages": [
+        "en",
+        "cs"
+      ],
+      "contentLanguages": [
+        "en",
+        "cs",
+        "es"
+      ],
+      "supportLanguages": [
+        "en",
+        "cs",
+        "es"
+      ],
+      "brandModes": [
+        "official",
+        "safe"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": true,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasFinalChallenge": true,
+        "hasInventory": true,
+        "hasSaveLoadResume": true
+      },
+      "contract": {
+        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
+        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
+        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "note": "Anglická varianta quest enginu. Kanonický český engine zůstává lotr.html; tento záznam je úplný kvůli testům a auditovatelnosti.",
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+    },
+    {
+      "id": "lara-croft-quest-planned",
+      "gameKey": "tombraider:quest",
+      "skinId": "tombraider",
+      "gameId": "tombraider",
+      "gameIdAliases": [
+        "lara-croft",
+        "tomb-raider",
+        "guardian-of-lost-relics"
+      ],
+      "mechanicId": "quest",
+      "name": "Lara Croft — plánovaný engine",
+      "title": {
+        "cs": "Lara Croft: Výprava za relikviemi",
+        "en": "Lara Croft: Relic Quest",
+        "safeCs": "Strážkyně ztracených relikvií",
+        "safeEn": "Guardian of Lost Relics"
+      },
+      "file": null,
+      "url": null,
+      "contentTopicId": "template",
+      "addedVersion": "1.14.0",
+      "status": "planned",
+      "flowModel": "mapStationsFinalChallenge",
+      "engineKind": "planned",
+      "supportedMechanics": [
+        "quest"
+      ],
+      "supports": [
+        "mc4",
+        "mc2",
+        "wordbank",
+        "yesno"
+      ],
+      "supportedExerciseTypes": [
+        "mcq",
+        "trueFalse",
+        "wordBank",
+        "ordering"
+      ],
+      "uiLanguages": [
+        "cs",
+        "en"
+      ],
+      "contentLanguages": [
+        "cs",
+        "en"
+      ],
+      "supportLanguages": [
+        "cs",
+        "en"
+      ],
+      "brandModes": [
+        "official",
+        "safe"
+      ],
+      "capabilities": {
+        "hasMap": true,
+        "hasStations": true,
+        "hasBoss": true,
+        "hasFinalChallenge": true,
+        "hasInventory": true,
+        "hasClues": false,
+        "hasFinalCode": false,
+        "hasLeaderboard": false,
+        "hasSimulation": false,
+        "hasSaveLoadResume": false
+      },
+      "contract": {
+        "manifest": "plánováno v engines/manifest.json",
+        "supportedExerciseTypes": "návrh připraven",
+        "i18n": "povinně cs + en při vývoji",
+        "themeVariants": "official + safe při vývoji",
+        "adapter": "doplnit při vývoji enginu",
+        "contentV2": "export není dostupný, protože engine zatím neexistuje",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "doplnit při vývoji enginu"
+      },
+      "progressApi": {
+        "version": "ludus-progress-api-v1",
+        "storage": "localStorage",
+        "methods": [
+          "saveProgress",
+          "loadProgress",
+          "resumeProgress",
+          "clearProgress",
+          "getProgressSummary",
+          "hasProgress"
+        ]
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Plánováno: engine ještě neexistuje."
     },
     {
       "id": "minions-collection-planned",
@@ -697,12 +1135,14 @@
         "supportedExerciseTypes": "zatím orientační návrh; bude potvrzen při stavbě enginu",
         "i18n": "čeká na build enginu",
         "themeVariants": "čeká na build enginu",
-        "adapter": "čeká na build enginu",
-        "contentV2": "LUDUS umí poslat v2 obsah; engine zatím neexistuje",
+        "adapter": "doplnit při vývoji enginu",
+        "contentV2": "export není dostupný, protože engine zatím neexistuje",
         "flowModel": "návrh deklarovaný v manifestu",
         "capabilities": "návrh deklarovaný v manifestu",
         "progressApi": "čeká na build enginu"
-      }
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Plánováno: engine ještě neexistuje."
     },
     {
       "id": "monsters-role-sim-planned",
@@ -779,12 +1219,14 @@
         "supportedExerciseTypes": "zatím orientační návrh; bude potvrzen při stavbě enginu",
         "i18n": "čeká na build enginu",
         "themeVariants": "čeká na build enginu",
-        "adapter": "čeká na build enginu",
-        "contentV2": "LUDUS umí poslat v2 obsah; engine zatím neexistuje",
+        "adapter": "doplnit při vývoji enginu",
+        "contentV2": "export není dostupný, protože engine zatím neexistuje",
         "flowModel": "návrh deklarovaný v manifestu",
         "capabilities": "návrh deklarovaný v manifestu",
         "progressApi": "čeká na build enginu"
-      }
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Plánováno: engine ještě neexistuje."
     },
     {
       "mechanicId": "quest",
@@ -869,11 +1311,17 @@
       ],
       "contract": {
         "manifest": "zrcadlený v engines/manifest.json",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
         "themeVariants": "official + safe vložené v HTML enginu",
-        "adapter": "CHYBÍ — obsah je zatím napevno v HTML, engine nepřijímá LUDUS_CONTENT v2 (doplnit při dokončování)",
-        "flowModel": "deklarováno v manifestu"
-      }
+        "adapter": "Pouze náhled: obsah je zatím napevno v HTML a chybí adaptér na LUDUS_CONTENT v2.",
+        "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "builderCompatible": false,
+      "builderCompatibilityNote": "Pouze náhled: obsah je zatím napevno v HTML a chybí adaptér na LUDUS_CONTENT v2."
     },
     {
       "mechanicId": "quest",
@@ -960,12 +1408,17 @@
       ],
       "contract": {
         "manifest": "zrcadlený v engines/manifest.json",
+        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
         "themeVariants": "official + safe vložené v HTML enginu",
-        "adapter": "adaptér na LUDUS_CONTENT v2 vložený (__ludusCoerceV2)",
-        "contentV2": "LUDUS posílá v2 vedle GAME_CONTENT v1",
-        "flowModel": "deklarováno v manifestu"
-      }
+        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
+        "flowModel": "deklarováno v manifestu",
+        "capabilities": "deklarováno v manifestu",
+        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
+      },
+      "builderCompatible": true,
+      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     }
   ]
 }

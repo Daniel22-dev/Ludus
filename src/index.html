@@ -1309,9 +1309,10 @@ const ES_CONTENT_LANGS=['cs','en','es'];
 const DEFAULT_READY_CONTRACT={manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v manifestu enginu',i18n:'vložené v HTML enginu',themeVariants:'official + safe vložené v HTML enginu',adapter:'adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v manifestu',capabilities:'deklarováno v manifestu',progressApi:'ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary'};
 const DEFAULT_DRAFT_CONTRACT={manifest:'deklarováno v engines/manifest.json',supportedExerciseTypes:'deklarováno v LUDUS manifestu',i18n:'čeká na build enginu',themeVariants:'čeká na build enginu',adapter:'čeká na build enginu',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v manifestu',capabilities:'deklarováno v manifestu',progressApi:'čeká na build enginu'};
 const GAME_ENGINES={
-  'arcanum:academy':{skinId:'arcanum',gameId:'arcanum',gameIdAliases:['hogwarts','hogwarts-grammar-academy'],mechanicId:'academy',title:'Akademie Arkána',engine:ENGINE_BASE+'hogwarts.html',engineKind:'single-html',status:'ready',uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','classify','wordBank'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT)},
-  'knights:academy':{skinId:'knights',gameId:'starwars',gameIdAliases:['knights','star-knights'],mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',engineKind:'single-html',status:'draft',uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['classify','mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','classify','wordBank'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ES_CONTENT_LANGS,supportLanguages:ES_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT)},
-  'sundered:quest':{skinId:'sundered',gameId:'lotr',mechanicId:'quest',title:'LOTR: A Grammar Quest',engine:ENGINE_BASE+'lotr.html',engineKind:'single-html',status:'draft',uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ES_CONTENT_LANGS,supportLanguages:ES_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT,{manifest:'vložený v HTML enginu + zrcadlený v engines/manifest.json'})}
+  'arcanum:academy':{skinId:'arcanum',gameId:'arcanum',gameIdAliases:['hogwarts','hogwarts-grammar-academy'],mechanicId:'academy',title:'Akademie Arkána',engine:ENGINE_BASE+'hogwarts.html',engineKind:'single-html',status:'ready',builderCompatible:true,uiStatus:'hotová',statusLabel:{cs:'Hotová',en:'Ready'},pack:'ACADEMY_RC_PACK',contentTopicId:'relclauses',supports:['classify','mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','classify','wordBank'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT)},
+  'knights:academy':{skinId:'knights',gameId:'starwars',gameIdAliases:['knights','star-knights'],mechanicId:'academy',title:'Hvězdní rytíři',engine:ENGINE_BASE+'star-wars.html',engineKind:'single-html',status:'draft',builderCompatible:true,uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['classify','mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','classify','wordBank'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ES_CONTENT_LANGS,supportLanguages:ES_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT)},
+  'sundered:quest':{skinId:'sundered',gameId:'lotr',mechanicId:'quest',title:'LOTR: A Grammar Quest',engine:ENGINE_BASE+'lotr.html',engineKind:'single-html',status:'draft',builderCompatible:true,uiStatus:'rozpracovaná',statusLabel:{cs:'Rozpracovaná',en:'In progress'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.academyBoss,uiLanguages:['cs','en'],contentLanguages:ES_CONTENT_LANGS,supportLanguages:ES_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_READY_CONTRACT,{manifest:'vložený v HTML enginu + zrcadlený v engines/manifest.json'})},
+  'tombraider:quest':{skinId:'tombraider',gameId:'tombraider',gameIdAliases:['lara-croft','tomb-raider'],mechanicId:'quest',title:'Lara Croft — plánováno',engine:'',engineKind:'planned',status:'planned',builderCompatible:false,uiStatus:'plánovaná',statusLabel:{cs:'Plánovaná',en:'Planned'},pack:'ACADEMY_RC_PACK',contentTopicId:'template',supports:['mc4','mc2','wordbank','yesno'],supportedExerciseTypes:['mcq','trueFalse','wordBank','ordering'],flowModel:'mapStationsFinalChallenge',capabilities:GAME_CAPS.contentOnly,uiLanguages:['cs','en'],contentLanguages:ALL_CONTENT_LANGS,supportLanguages:ALL_CONTENT_LANGS,brandModes:['official','safe'],contract:Object.assign({},DEFAULT_DRAFT_CONTRACT)}
 };
 function gameKey(skinId,frame){return String(skinId)+':'+String(frame);}
 function getGameEngine(skinId,frame){
@@ -1329,13 +1330,17 @@ function engineStatusFor(skinId,frame){const e=getGameEngine(skinId,frame);retur
 function engineStatusLabel(input){
   const eng=(input&&typeof input==='object')?input:null;
   const st=normalizeEngineStatus(eng?eng.status:input);
+  if(eng&&st==='draft')return eng.builderCompatible===false?'rozpracovaná · pouze náhled':'rozpracovaná · export k testování';
+  if(eng&&st==='ready'&&eng.builderCompatible===false)return 'hotová · export blokován';
   if(eng&&eng.uiStatus)return String(eng.uiStatus);
   if(eng&&eng.statusLabel&&eng.statusLabel.cs)return String(eng.statusLabel.cs).toLowerCase();
   return ({ready:'hotová',draft:'rozpracovaná',generic:'hotová','content-only':'plánovaná',planned:'plánovaná'})[st]||'plánovaná';
 }
 function engineStatusCss(st){st=normalizeEngineStatus(st);return st==='ready'||st==='generic'?'on':(st==='draft'?'draft':'off');}
 function engineStatusIcon(st){st=normalizeEngineStatus(st);return st==='ready'||st==='generic'?'✓':(st==='draft'?'◐':'⌛');}
-function engineStatusBadge(eng){const st=normalizeEngineStatus(eng&&eng.status);return '<div class="ebadge '+engineStatusCss(st)+'">'+engineStatusIcon(st)+' '+esc(engineStatusLabel(eng||st))+'</div>';}
+function engineStatusBadge(eng){const st=normalizeEngineStatus(eng&&eng.status),blocked=!!(eng&&eng.builderCompatible===false&&st!=='planned');return '<div class="ebadge '+(blocked?'off':engineStatusCss(st))+'">'+(blocked?'◌':engineStatusIcon(st))+' '+esc(engineStatusLabel(eng||st))+'</div>';}
+function engineCanBuild(eng){return !!(eng&&eng.engine&&eng.builderCompatible!==false&&normalizeEngineStatus(eng.status)!=='planned');}
+function builderCompatibilityLabel(eng){if(!eng)return 'bez vlastního enginu';if(engineCanBuild(eng))return normalizeEngineStatus(eng.status)==='ready'?'ověřený export':'export k testování';return eng.engine?'pouze náhled — hratelný export blokován':'engine zatím neexistuje';}
 function flowLabel(id){return FLOW_MODELS[id]||id||'neuvedeno';}
 function capLabel(k){return ({hasMap:'mapa',hasStations:'stanice',hasBoss:'boss',hasClues:'stopy',hasFinalCode:'finální kód',hasLeaderboard:'žebříček',hasSimulation:'simulace',hasSaveLoadResume:'save/load/resume'})[k]||k;}
 function engineCaps(eng){return Object.assign({},GAME_CAPS.contentOnly,(eng&&eng.capabilities)||{});}
@@ -1387,6 +1392,7 @@ function enginePassportHtml(eng){
   html+='<div><b>Engine název</b><span>'+esc(eng.title)+'</span></div>';
   html+='<div><b>gameId / mechanicId</b><span>'+esc(eng.gameId)+' / '+esc(eng.mechanicId)+'</span></div>';
   html+='<div><b>Stav</b><span>'+esc(engineStatusLabel(eng))+'</span></div>';
+  html+='<div><b>Kompatibilita s dílnou</b><span>'+esc(builderCompatibilityLabel(eng))+'</span></div>';
   html+='<div><b>Engine soubor</b><span>'+esc(eng.engine||'není připojen')+'</span></div>';
   html+='<div><b>Flow model</b><span>'+esc(flowLabel(eng.flowModel))+'</span></div>';
   html+='<div><b>Typy cvičení</b><span>'+esc(engineSupports(eng).join(', '))+'</span></div>';
@@ -1412,10 +1418,11 @@ function updatePreflightPanel(){
   const caps=eng?capBadges(eng):'<span class="cap off">– bez vlastního enginu</span>';
   const allowed=allowedExerciseTypes(state.topic,eng);
   const est=normalizeEngineStatus(eng&&eng.status);
-  const cls=eng?(est==='ready'||est==='generic'?'ok':(est==='draft'?'warn':'warn')):'bad';
+  const cls=eng?(engineCanBuild(eng)?(est==='ready'||est==='generic'?'ok':'warn'):'bad'):'bad';
   panel.hidden=false;
   body.innerHTML=''
     +'<div class="pitem '+cls+'"><b>Engine</b>'+esc(eng?currentWorldTitle(eng,sk)+' · '+engineStatusLabel(eng):'bez vlastního enginu')+'</div>'
+    +'<div class="pitem '+(engineCanBuild(eng)?'ok':'bad')+'"><b>Export z dílny</b>'+esc(builderCompatibilityLabel(eng))+'</div>'
     +'<div class="pitem"><b>Mechanika</b>'+esc((FRAMES[state.frame]&&FRAMES[state.frame].cz)||state.frame)+'</div>'
     +'<div class="pitem"><b>Flow model</b>'+esc(eng?flowLabel(eng.flowModel):'content-only / recept')+'</div>'
     +'<div class="pitem"><b>Jazyky</b>UI: '+esc(langName(state.uiLang))+' · obsah: '+esc(langName(state.contentLang))+' · podpora: '+esc(langName(state.supportLang))+'</div>'
@@ -1479,6 +1486,9 @@ function mergeEngineManifestRecord(key,m,labels){
   eng.engine=m.url||((m.file)?ENGINE_BASE+m.file:eng.engine);
   eng.engineKind=m.engineKind||eng.engineKind||'single-html';
   eng.status=ns;
+  if(typeof m.builderCompatible==='boolean')eng.builderCompatible=m.builderCompatible;
+  else if(typeof eng.builderCompatible!=='boolean')eng.builderCompatible=false;
+  eng.builderCompatibilityNote=m.builderCompatibilityNote||eng.builderCompatibilityNote||'';
   const lbl=manifestStatusLabel(raw,ns,labels,m);
   if(lbl){eng.statusLabel=lbl; eng.uiStatus=lbl.cs?String(lbl.cs).toLowerCase():eng.uiStatus;}
   else {delete eng.statusLabel; delete eng.uiStatus;}
@@ -1681,6 +1691,7 @@ const SKINS = [
   {id:'maple',    safe:'Tajemství v Javorové rokli', en:'Maple Falls Mystery', brand:'Stranger Things', twin:true, frames:['detective','escape'], c:'#ff5e5e', ic:'📼'},
   {id:'saboteur', safe:'Sabotér na palubě',   en:'The Saboteur',        brand:'Among Us',          twin:true, frames:['detective'],             c:'#ff8a3d', ic:'🛰️'},
   {id:'relic',    safe:'Lovci relikvií',      en:'Relic Hunter',        brand:'Indiana Jones',     twin:true, frames:['quest','escape'],        c:'#d9a441', ic:'🏺'},
+  {id:'tombraider',safe:'Strážkyně ztracených relikvií', en:'Guardian of Lost Relics', brand:'Tomb Raider / Lara Croft', twin:true, frames:['quest','escape'], c:'#54c7a6', ic:'🗿'},
   {id:'heist',    safe:'Dokonalá loupež',     en:'The Perfect Heist',   brand:'Money Heist',       twin:true, frames:['escape','roleSim'],      c:'#e8534f', ic:'🎭'},
   {id:'show',     safe:'Velká jazyková show', en:'The Grammar Show',    brand:'TV soutěže',        twin:true, frames:['quizShow'],              c:'#ffd479', ic:'📺'},
   {id:'lastone',  safe:'Poslední, kdo zůstane',en:'Last One Standing',  brand:'Battle royale',     twin:true, frames:['boss','quizShow'],       c:'#9ad14b', ic:'🎯'},
@@ -1747,6 +1758,35 @@ const TOPICS = [
   {id:'argument', cz:'Sestav argument / rozhodovací proces', kind:'argumentation', domain:'civics', kw:['argument','rozhodov','práva','povinnost','občank','zsv'], ops:{combine:.8,order:.6,produce:.6,associate:.5}},
   {id:'mathsteps', cz:'Postup řešení úlohy', kind:'problemSolving', domain:'math', kw:['postup řešení','úloh','rovnic','matemat'], ops:{order:.9,combine:.6,produce:.6}},
 ];
+
+const TEMPLATE_LIBRARY = [
+  {id:'aj-relclauses-b1', label:'AJ B1 · vztažné věty', subject:'Angličtina', level:'B1', topicId:'relclauses', frame:'academy', skin:'arcanum', contentLang:'en', supportLang:'cs', note:'Rychlá šablona pro who/which/that a defining vs. non-defining.'},
+  {id:'aj-present-perfect-b1', label:'AJ B1 · present perfect vs past simple', subject:'Angličtina', level:'B1', topicId:'pp', frame:'detective', skin:'frostline', contentLang:'en', supportLang:'cs', note:'Dedukce dobře sedí na finished/unfinished time a since/for.'},
+  {id:'aj-conditionals-b1b2', label:'AJ B1/B2 · conditionals', subject:'Angličtina', level:'B1/B2', topicId:'conditionals', frame:'quest', skin:'relic', contentLang:'en', supportLang:'cs', note:'Quest postupně mapuje typy podmínkových vět.'},
+  {id:'aj-irregular-verbs-a2', label:'AJ A2 · nepravidelná slovesa', subject:'Angličtina', level:'A2', topicId:'irregular', frame:'boss', skin:'lastone', contentLang:'en', supportLang:'cs', note:'Krátký dril tvarů pod tlakem.'},
+  {id:'sp-preterito-indefinido-a2', label:'ŠJ A2 · pretérito indefinido', subject:'Španělština', level:'A2', topic:{id:'sp_indefinido', cz:'Pretérito indefinido', kind:'grammar', domain:'language', kw:['indefinido','pretérito'], ops:{produce:.9,select:.7,transform:.5,order:.3}}, frame:'academy', skin:'arcanum', contentLang:'es', supportLang:'cs', note:'Tvary pravidelných i základních nepravidelných sloves.'},
+  {id:'sp-indefinido-imperfecto-b1', label:'ŠJ B1 · indefinido vs imperfecto', subject:'Španělština', level:'B1', topic:{id:'sp_indef_imperf', cz:'Indefinido vs. imperfecto', kind:'narrative', domain:'language', kw:['indefinido','imperfecto'], ops:{classify:.8,select:.75,produce:.55,order:.5}}, frame:'detective', skin:'frostline', contentLang:'es', supportLang:'cs', note:'Detektivka sedí na kontrast děje, okolností a pozadí.'},
+  {id:'dejepis-ww1-priciny', label:'Dějepis · příčiny 1. světové války', subject:'Dějepis', level:'SŠ', topicId:'ww1causes', frame:'timeline', skin:'timepatrol', contentLang:'cs', supportLang:'cs', note:'Časová osa a příčina/důsledek.'},
+  {id:'biologie-fotosynteza', label:'Biologie · fotosyntéza jako proces', subject:'Biologie', level:'SŠ', topicId:'photosynthesis', frame:'lab', skin:'forensic', contentLang:'cs', supportLang:'cs', note:'Skládání procesu a modelu v laboratoři.'}
+];
+function templateTopic(tpl){
+  if(!tpl)return null;
+  if(tpl.topic)return Object.assign({custom:false}, tpl.topic);
+  const base=TOPICS.find(t=>t.id===tpl.topicId);
+  return base?Object.assign({}, base):null;
+}
+function applyTemplate(id){
+  const tpl=TEMPLATE_LIBRARY.find(t=>t.id===id); if(!tpl)return false;
+  const topic=templateTopic(tpl); if(!topic)return false;
+  state.topic=topic; state.frame=tpl.frame||state.frame; state.skin=tpl.skin||state.skin;
+  if(tpl.contentLang) state.contentLang=tpl.contentLang;
+  if(tpl.supportLang) state.supportLang=tpl.supportLang;
+  state.templateId=tpl.id; state.forged=false; state.forging=false;
+  const note=document.querySelector('#tplNote');
+  if(note) note.innerHTML='✓ Šablona nastavena: <b>'+esc(tpl.label)+'</b>. '+esc(tpl.note||'');
+  toast('Použita šablona: '+tpl.label); beep(720,.08,'sine'); refresh(); renderStage(); return true;
+}
+
 const KIND_CZ={grammar:'gramatika',vocab:'slovní zásoba',functional:'funkční jazyk',revision:'opakování',narrative:'vyprávění',
   facts:'fakta a pojmy',classification:'třídění a systém',sequence:'posloupnost / postup',process:'proces / model',causeEffect:'příčiny a důsledky',problemSolving:'řešení problému',argumentation:'argumentace',creation:'tvorba',model:'model / struktura'};
 const DOMAIN_CZ={language:'jazyky',history:'dějepis',science:'přírodní vědy',geography:'zeměpis',math:'matematika',ict:'informatika',civics:'ZSV / občanka',literature:'literatura',art:'umění',cross:'průřezové'};
@@ -1914,12 +1954,12 @@ function stageSkins(){
   // engine se vyhodnocuje pro dvojici svět + zvolená mechanika (ne jen mechaniku)
   const skinEngine=sk=>getGameEngine(sk.id,state.frame);
   const skinStatus=sk=>engineStatusFor(sk.id,state.frame)||'content-only';
-  const isPlayable=st=>st==='ready'||st==='draft'||st==='generic';
+  const isPlayable=eng=>engineCanBuild(eng);
   const cards=list.map(sk=>{
     const on=state.skin===sk.id;
     const eng=skinEngine(sk);
     const status=skinStatus(sk);
-    const playable=isPlayable(status);
+    const playable=isPlayable(eng);
     const dim=!playable; // bez enginu: kartu zeslabit, ale nechat čitelnou
     const engBadge=engineStatusBadge(eng);
     if(sk.twin){
@@ -1951,10 +1991,10 @@ function stageSkins(){
     </button>`;
   }).join('');
   const f=FRAMES[state.frame];
-  const nPlay=list.filter(sk=>isPlayable(skinStatus(sk))).length;
+  const nPlay=list.filter(sk=>isPlayable(skinEngine(sk))).length;
   const leadEng = nPlay>0
-    ? 'Svítící světy mají engine — vznikne z nich hratelná hra. Zeslabené zatím engine nemají: poslouží jako podklad pro obsah · recept · třídní soutěž · lesson pack.'
-    : 'Žádný svět pro tuhle mechaniku zatím nemá engine — připraví se obsah · recept · třídní soutěž · lesson pack. Plně hratelná hra zatím vzniká ze světů u mechaniky <b>Akademie</b>.';
+    ? 'Svítící světy mají ověřený datový kontrakt — mohou vytvořit hratelný export. Zeslabené jsou plánované nebo pouze náhledové: dílna pro ně připraví obsah · recept · třídní soutěž · lesson pack, ale rozbitý HTML export nepovolí.'
+    : 'Žádný svět pro tuto mechaniku zatím nemá ověřený exportní kontrakt — připraví se obsah · recept · třídní soutěž · lesson pack. Náhledové enginy zůstávají viditelné, ale hratelný export je bezpečně blokován.';
   return `<p class="eyebrow">Krok II</p><h2>Vyber svět pro „${f.cz}“</h2>
     <p class="lead">Ve vnitřní výuce má dvojče rovnou originální název i vzhled — přepínačem na kartě se kdykoli vrátíš k bezpečné verzi. Pro veřejné sdílení je vzhled zamčený na bezpečný. Volná díla smí kamkoli.<br><span style="color:var(--faint)">${leadEng}</span></p>
     <div class="grid">${cards}</div>`;
@@ -2030,6 +2070,17 @@ function stageTopic(){
     <div class="field">
       <label>Nebo vyber z připravených <span style="color:var(--faint);font-weight:400">(nabídka podle mechaniky)</span></label>
       <div class="chips">${chips}</div>
+    </div>
+    <div class="field">
+      <label>Knihovna hotových šablon <span style="color:var(--faint);font-weight:400">(bez AI, nastaví téma + doporučený svět)</span></label>
+      <div class="row">
+        <select class="input" id="templateSelect" style="flex:1;min-width:260px">
+          <option value="">— vybrat šablonu —</option>
+          ${TEMPLATE_LIBRARY.map(t=>`<option value="${esc(t.id)}" ${state.templateId===t.id?'selected':''}>${esc(t.label)} · ${esc(t.subject)} · ${esc(t.level)}</option>`).join('')}
+        </select>
+        <button class="btn ghost" id="useTemplate" type="button">Použít šablonu</button>
+      </div>
+      <div class="note" id="tplNote">Šablona šetří čas i tokeny: přednastaví téma, mechaniku, svět a jazyk obsahu. Obsah hry se dál může vygenerovat přes Gemini nebo použít jako lesson pack.</div>
     </div>
     <div class="field">
       <label>Hotový pracovní list <span class="zap">⚡</span> <span style="color:var(--faint);font-weight:400">(nepovinné — obrázek nebo PDF)</span></label>
@@ -2262,6 +2313,11 @@ function wireStage(){
     state.skin=id; state.branded=!(sw.dataset.on==='true');
     beep(state.branded?440:520,.08,'square');refresh();renderStage();
   });
+
+  const tplSel=$('#templateSelect');
+  const tplBtn=$('#useTemplate');
+  if(tplBtn&&tplSel) tplBtn.onclick=()=>{ if(!tplSel.value){const n=$('#tplNote'); if(n)n.textContent='Vyber nejdřív konkrétní šablonu.'; return;} applyTemplate(tplSel.value); };
+  if(tplSel) tplSel.onchange=()=>{const tpl=TEMPLATE_LIBRARY.find(t=>t.id===tplSel.value); const n=$('#tplNote'); if(n)n.textContent=tpl?(tpl.label+' — '+(tpl.note||'')):'Šablona šetří čas i tokeny: přednastaví téma, mechaniku, svět a jazyk obsahu.';};
   // topic chips
   document.querySelectorAll('[data-topic]').forEach(c=>c.onclick=()=>{
     const t=TOPICS.find(x=>x.id===c.dataset.topic);
@@ -2292,7 +2348,7 @@ function wireStage(){
 }
 function resetBuild(){
   state.frame=null;state.skin=null;state.branded=false;state.topic=null;
-  state.forged=false;state.forging=false;state.worksheet=null;clearTimeout(forgeTimer);
+  state.forged=false;state.forging=false;state.worksheet=null;state.templateId=null;clearTimeout(forgeTimer);
   beep(420,.1,'triangle');
   go(0);refresh();
   toast('Začínáš novou hru — mechanika, svět i téma vyčištěny.');
@@ -2436,6 +2492,7 @@ function precheck(){
   if(!state.frame||!state.skin||!state.topic){toast('Dokonči všechny tři kroky.');return null;}
   const eng=getGameEngine(state.skin,state.frame);
   if(!eng){toast('Svět „'+((SKINS.find(x=>x.id===state.skin)||{}).safe||state.skin)+'" zatím nemá vlastní engine pro mechaniku „'+FRAMES[state.frame].cz+'". Vyber svět, který u téhle mechaniky svítí jako hratelný, nebo zvol Vygenerovat (obsah / lesson pack).');return null;}
+  if(!engineCanBuild(eng)){toast('Tento rozpracovaný engine je zatím pouze náhled. Hratelný HTML export je zablokován, dokud engine bezpečně nepřijme LUDUS_CONTENT z dílny. Obsah, recept, třídní soutěž a lesson pack vytvořit můžeš.');return null;}
   const sk=SKINS.find(x=>x.id===state.skin);
   const useBranded=state.branded&&sk.twin&&state.exportTarget!=='public';
   return {eng,sk,useBranded,world:useBranded?sk.brand:sk.safe};
@@ -2459,7 +2516,7 @@ function packMeta(pack,sk,world,useBranded,topicLabel,isRC){
     teacher:pack.meta.teacher||'',
     saveKey:'ludus_'+sk.id+'_'+(state.topic.id||'gen'),
     lang:{ui:normLang(state.uiLang), content:normLang(state.contentLang), support:normLang(state.supportLang)},
-    game:{gameId:eng?eng.gameId:(state.skin||''), mechanicId:state.frame, engineStatus:eng?eng.status:'content-only', engineTitle:eng?eng.title:'', engineFile:eng?eng.engine:'', flowModel:eng?eng.flowModel:'contentOnly', capabilities:engineCaps(eng)},
+    game:{gameId:eng?eng.gameId:(state.skin||''), mechanicId:state.frame, engineStatus:eng?eng.status:'content-only', engineTitle:eng?eng.title:'', engineFile:eng?eng.engine:'', builderCompatible:eng?engineCanBuild(eng):false, flowModel:eng?eng.flowModel:'contentOnly', capabilities:engineCaps(eng)},
     frame:state.frame, exerciseTypes:allowedExerciseTypes(state.topic,eng)
   });
   pack.schema=LUDUS_SCHEMA;
@@ -2505,9 +2562,10 @@ async function injectAndStore(pack,world){
   window.__lastColor=(sk&&sk.c)||'#b475ff'; window.__lastSpec=window.__spec||null;
   const contentV2=toContentV2(pack); window.__lastContentV2=contentV2;
   const eng=getGameEngine(state.skin,state.frame);
+  const canBuild=engineCanBuild(eng);
   let engine=null;
-  if(eng){ try{ engine=await loadEngine(state.skin,state.frame); }catch(e){ engine=null; toast(e.message||'Engine se nepodařilo načíst.'); } }
-  if(eng && engine){
+  if(canBuild){ try{ engine=await loadEngine(state.skin,state.frame); }catch(e){ engine=null; toast(e.message||'Engine se nepodařilo načíst.'); } }
+  if(canBuild && engine){
     const safeJson=o=>JSON.stringify(o).replace(/<\//g,'<\\/');
     const inject='<script>window.GAME_CONTENT='+safeJson(pack)+';window.LUDUS_CONTENT='+safeJson(contentV2)+';window.LUDUS_CONTENT_VERSION=2;<\/script>';
     window.__lastGame=engine.replace('<head>','<head>\n'+inject);
@@ -2593,7 +2651,7 @@ Nepoužívej žádný jiný typ cvičení než povolené výše. "a" je index sp
   if(!stations.length) throw mkErr('Gemini nevrátilo použitelné stanice'+(warn.length?(' ('+warn.length+' zahozeno: '+warn.slice(0,2).join('; ')+')'):'')+'. Zkus to znovu, případně přepni model.','BAD_SCHEMA');
   const pack=packMeta({meta:{},houses:defaultTeams(p.sk),stations},p.sk,p.world,p.useBranded,topic,false);
   await injectAndStore(pack,p.world);
-  return {world:p.world,count:stations.length,hasEngine:!!p.eng,dropped:warn.length};
+  return {world:p.world,count:stations.length,hasEngine:engineCanBuild(p.eng),previewOnly:!!(p.eng&&!engineCanBuild(p.eng)),dropped:warn.length};
 }
 function downloadGame(){
   const blob=new Blob([window.__lastGame],{type:'text/html'});
@@ -2613,7 +2671,7 @@ $('#build').onclick=async()=>{
       toast('Hra vygenerována a stažena: '+g.world+' × '+state.topic.cz+' ('+g.count+' stanic)'+drop+'. Otevři a hraj.');
     } else if(g){
       beep(720,.1,'triangle');
-      toast('Obsah vytvořen: '+g.world+' × '+state.topic.cz+' ('+g.count+' stanic)'+drop+'. Tato mechanika zatím nemá vlastní hru — stáhni 🏫 Třídní soutěž, 📋 Lesson pack nebo zkopíruj recept.');
+      toast('Obsah vytvořen: '+g.world+' × '+state.topic.cz+' ('+g.count+' stanic)'+drop+'. '+(g.previewOnly?'Vybraný engine je zatím pouze náhled, proto LUDUS nepovolil neověřený HTML export. ':'Tato mechanika zatím nemá vlastní hru. ')+'Stáhni 🏫 Třídní soutěž, 📋 Lesson pack nebo zkopíruj recept.');
     }
   }catch(err){toast(gErr(err));}
   finally{btn.dataset.busy='';btn.innerHTML=orig;}
@@ -2753,9 +2811,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.11.1';
+const APP_VERSION='1.14.0';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.0: Produkční sjednocení enginů — společný přepínač CZ/EN ve všech hrách, bilingvní učitelský panel a report, pravdivý builderCompatible kontrakt s blokací neověřených exportů, opravené převzetí obsahu v Laughworks a Stranger Things, opravy Chronosu a Matrixu, přísnější validace katalogu a Lara Croft / Tomb Raider jako plánovaný quest.',
+  '1.13.0: sjednocen manifest všech existujících HTML enginů; doplněn standardní učitelský vstup (#ludusBadge, 3× ťuk, ?teacher=1), záchranný učitelský dock, export reportu, validační testy npm test a knihovna hotových šablon učiva.',
   '1.11.1: Dotažení dvojjazyčnosti a diagnostiky. LOTR (a jeho kopie v repu) má nově plnou statickou lokalizaci UI — úvod, výběr rasy, mapa, vak, souboj i certifikát se přepínají mezi EN/CS a přepnutí jazyka přerenderuje i aktuální obrazovku; ověřeno automatickým skenerem (0 zbytků cizího jazyka v UI). Star Wars a Hogwarts prověřeny jako plně dvojjazyčné (bez zásahu). Opravena chyba self-testu toContentV2: houses/teams se nyní zachovají jako pole i objekt, takže diagnostika builderu prochází 34/34.',
   '1.11.0: Velká unifikace her: každý engine má jednotné ovládání vpravo nahoře (uložit · zvuk · restart · fullscreen), footer vlastníka, sloty pro intro video a soundtrack (LUDUS_MEDIA), učitelský náhled jen přes 3× ťuk na logo LUDUS nebo ?teacher=1 (aktivace jménem zrušena) a ukotvený učitelský panel s živými skoky, které panel nezavírají. Do katalogu přibylo 7 rozpracovaných enginů (Časová hlídka, Zimní expres, Simulakrum, Javorová rokle, Továrna na smích, Zakletá aréna, EN varianta LOTR) a nová mechanika Aréna. Jen Hogwarts je hotová; Star Wars a LOTR přepnuty na rozpracované.',
   '1.10.1: Sjednoceno ukládání rozehraných her: hotové enginy mají společné LUDUS progress API v1 (saveProgress, loadProgress, resumeProgress, clearProgress, getProgressSummary). Pas hry i manifest deklarují save/load/resume jako schopnost enginu.',

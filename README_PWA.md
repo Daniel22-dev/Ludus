@@ -5,7 +5,7 @@ Tato verze přidává instalovatelnou PWA vrstvu pro LUDUS.
 ## Co je přidáno
 
 - `public/manifest.webmanifest` — název, barvy, ikony a režim standalone.
-- `public/sw.js` — service worker s verzovanou cache `ludus-pwa-v1.9.5`.
+- `public/sw.js` — service worker s verzovanou cache `ludus-pwa-v1.14.0`.
 - `public/icons/` — ikony aplikace včetně `maskable` varianty pro Android.
 - `scripts/build.mjs` kopíruje obsah `public/` do `dist/`, aby GitHub Pages nasazoval i PWA soubory.
 
@@ -18,3 +18,5 @@ Tato verze přidává instalovatelnou PWA vrstvu pro LUDUS.
 ## Při další aktualizaci
 
 Při změně PWA souborů zvednout číslo verze cache v `public/sw.js`, aby se uživatelům nedržela stará verze.
+
+Aktuální cache: `ludus-pwa-v1.14.0`.
