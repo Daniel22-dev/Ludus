@@ -451,6 +451,8 @@
       <button class="btn ghost" id="play">Přehrát poslední</button>
       <button class="btn ghost" id="copy">Kopírovat spec</button>
       <button class="btn ghost" id="copyContent">Kopírovat LUDUS_CONTENT</button>
+      <button class="btn ghost" id="studioImport">⇄ Import z AI Studia</button>
+      <input id="studioImportFile" type="file" accept="application/json,.json" hidden>
       <span class="pill" id="enginepill">1 obsah → tematická hra · třídní soutěž · lesson pack</span>
     </div>
   </section>
@@ -2754,6 +2756,50 @@ $('#dlLesson').onclick=()=>{
 let toastT;
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),4200);}
 
+
+/* ---- AI Studio GHRAB: přímý import GHRAB Material v1 / LUDUS_CONTENT v2 ---- */
+const STUDIO_HANDOFF_KEY='ghrab.handoff.v1', STUDIO_EVENTS_KEY='ghrab.pilot.events.v2';
+function studioGet(k){try{return localStorage.getItem(k)}catch(e){console.warn('AI Studio bridge: čtení úložiště selhalo',e);return null}}
+function studioParse(k,f){try{return JSON.parse(studioGet(k)||JSON.stringify(f))}catch(_){return f}}
+function studioSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){console.warn('AI Studio bridge: zápis do úložiště selhal',e);return false}}
+function studioRemove(k){try{localStorage.removeItem(k)}catch(e){console.warn('AI Studio bridge: odstranění z úložiště selhalo',e)}}
+function studioValidMaterial(m){return !!(m&&m.schema==='ghrab-material-v1'&&m.id&&m.title&&m.subject&&m.content&&typeof m.content==='object')}
+function studioRecord(materialId){const a=studioParse(STUDIO_EVENTS_KEY,[]);a.push({at:new Date().toISOString(),type:'handoff-consumed',appId:'ludus',materialId:materialId||'',estimatedMinutes:15});studioSet(STUDIO_EVENTS_KEY,JSON.stringify(a.slice(-500)))}
+function studioTake(){const p=studioParse(STUDIO_HANDOFF_KEY,null);if(!p||p.schema!=='ghrab-handoff-v1'||p.target!=='ludus'||!studioValidMaterial(p.material))return null;if(Date.parse(p.expiresAt||'')<Date.now()){studioRemove(STUDIO_HANDOFF_KEY);return null}studioRemove(STUDIO_HANDOFF_KEY);return p}
+function studioLang(v){v=String(v||'cs').toLowerCase();return v==='en'?'en':'cs'}
+function studioExercise(task){
+  const prompt=String(task.prompt||'').trim(), exp=String(task.explanation||'');
+  if(task.type==='select'){const opts=Array.isArray(task.options)?task.options:[];let a=typeof task.answer==='number'?task.answer:opts.findIndex(x=>String(x).toLowerCase()===String(task.answer).toLowerCase());return {type:'mc4',inst:prompt,qs:[{t:prompt,opts:opts.length?opts:['A','B'],a:Math.max(0,a),exp}]}}
+  if(task.type==='truefalse'){const opts=Array.isArray(task.options)&&task.options.length>=2?task.options:['Ano','Ne'];let a=typeof task.answer==='number'?task.answer:(/^(ano|true|pravda|yes)$/i.test(String(task.answer))?0:1);return {type:'mc2',inst:prompt,qs:[{t:prompt,opts,a,exp}]}}
+  if(task.type==='order'){const items=Array.isArray(task.options)?task.options:[];return {type:'wordbank',inst:prompt,qs:[{t:prompt,bank:items,a:Array.isArray(task.answer)?task.answer.join(' '):items.join(' '),exp}]}}
+  return {type:'wordbank',inst:prompt,qs:[{t:prompt,bank:Array.isArray(task.options)?task.options:[],a:String(task.answer||''),exp}]};
+}
+async function studioImportMaterial(m){
+  if(!m||m.schema!=='ghrab-material-v1')throw new Error('Soubor není GHRAB Material v1.');
+  const tasks=(m.content&&Array.isArray(m.content.tasks)?m.content.tasks:[]).filter(t=>t&&t.prompt&&['select','truefalse','short','order'].includes(t.type));
+  if(tasks.length<3)throw new Error('Pro hru jsou potřeba alespoň tři podporované úlohy.');
+  state.frame='academy';state.skin='arcanum';state.branded=false;state.contentLang=studioLang(m.language);state.supportLang='cs';
+  state.topic={id:'studio_'+Date.now(),cz:m.title||'Materiál z AI Studia',kind:'facts',domain:'cross',ops:{produce:.7,select:.8,order:.5,associate:.5},custom:true};
+  const sk=SKINS.find(x=>x.id===state.skin),world='AI Studio GHRAB';
+  const stations=tasks.map((t,i)=>({id:i,name:'Stanice '+(i+1),icon:['✦','◇','⬡','⌁'][i%4],topic:m.title||'',atmo:'Výuková mise z AI Studio GHRAB.',reward:{name:'Datový fragment'},ex:studioExercise(t)}));
+  let pack={schema:1,meta:{teacher:'',sourceMaterialId:m.id,objectives:m.objectives||[]},houses:defaultTeams(sk),stations};
+  pack=packMeta(pack,sk,world,false,m.title||'Materiál z AI Studia',false);
+  window.__spec={schemaVersion:'1.0',source:'AI Studio GHRAB',materialId:m.id,title:m.title,subject:m.subject,level:m.level,objectives:m.objectives||[]};
+  refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(m.id);toast('Materiál z AI Studia načten: '+tasks.length+' úloh. Hra, třídní soutěž i lesson pack jsou připraveny.');
+}
+async function studioImportContent(v2){
+  if(!v2||v2.schemaVersion!=='ludus-content-v2')throw new Error('Soubor není LUDUS_CONTENT v2.');
+  state.frame='academy';state.skin='arcanum';state.branded=false;state.topic={id:'studio_'+Date.now(),cz:v2.meta&&v2.meta.topic||'Importovaný obsah',kind:'facts',domain:'cross',ops:{produce:.7,select:.8,order:.5},custom:true};
+  const sk=SKINS.find(x=>x.id===state.skin),world=v2.meta&&v2.meta.world||'AI Studio GHRAB';
+  const stations=(v2.stations||[]).map((s,i)=>({id:s.id??i,name:s.name||'Stanice '+(i+1),icon:s.icon||'✦',topic:s.topic||state.topic.cz,atmo:s.atmo||'',reward:s.reward||{name:'Fragment'},ex:s.exercise||s.ex||null})).filter(s=>s.ex);
+  if(stations.length<1)throw new Error('Import neobsahuje použitelné stanice.');
+  let pack={schema:1,meta:{teacher:'',sourceMaterialId:v2.meta&&v2.meta.sourceMaterialId||''},houses:defaultTeams(sk),stations};pack=packMeta(pack,sk,world,false,state.topic.cz,false);window.__spec={schemaVersion:'1.0',source:'AI Studio GHRAB',title:state.topic.cz};refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(pack.meta.sourceMaterialId);toast('LUDUS_CONTENT v2 načten: '+stations.length+' stanic.');
+}
+async function studioReadFile(file){const data=JSON.parse(await file.text());if(data.schema==='ghrab-material-v1')return studioImportMaterial(data);if(data.schemaVersion==='ludus-content-v2'||data.kind==='ludus.content')return studioImportContent(data);throw new Error('Nepodporovaný formát souboru.');}
+$('#studioImport').onclick=()=>$('#studioImportFile').click();
+$('#studioImportFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;try{await studioReadFile(f)}catch(err){toast(err.message||String(err))}};
+window.addEventListener('load',()=>{if(new URLSearchParams(location.search).get('studioHandoff')!=='1')return;const p=studioTake();if(p){window.__studioReturnUrl=p.studioUrl||'';setTimeout(()=>studioImportMaterial(p.material).catch(err=>toast(err.message||String(err))),350)}},{once:true});
+
 /* ---- ambient embers ---- */
 (function(){
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
@@ -2843,9 +2889,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.1';
+const APP_VERSION='1.14.2';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.2: přímé napojení na AI Studio GHRAB — LUDUS umí převzít krátkodobou lokální předávku GHRAB Material v1 nebo ručně importovat GHRAB Material / LUDUS_CONTENT v2. Z podporovaných úloh vytvoří stanice, připraví hratelný engine, třídní soutěž i lesson pack bez dalšího dotazu na AI. Předávka se po načtení smaže a nic se neposílá na server.',
   '1.14.1: Opravená orientace v dílně — všechny rozpracované hry nyní svítí fialově bez ohledu na stav exportního adaptéru; zeslabené zůstávají pouze plánované. Do kroků Svět a Obsah přibyla výrazná, na mobilu přilnavá tlačítka Zpět na mechaniky / Zpět na světy.',
   '1.14.0: Produkční sjednocení enginů — společný přepínač CZ/EN ve všech hrách, bilingvní učitelský panel a report, pravdivý builderCompatible kontrakt s blokací neověřených exportů, opravené převzetí obsahu v Laughworks a Stranger Things, opravy Chronosu a Matrixu, přísnější validace katalogu a Lara Croft / Tomb Raider jako plánovaný quest.',
   '1.13.0: sjednocen manifest všech existujících HTML enginů; doplněn standardní učitelský vstup (#ludusBadge, 3× ťuk, ?teacher=1), záchranný učitelský dock, export reportu, validační testy npm test a knihovna hotových šablon učiva.',

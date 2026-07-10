@@ -52,6 +52,12 @@ if (fs.existsSync(studioManifestTemplate)) {
   const studioManifest = fs.readFileSync(studioManifestTemplate, "utf8")
     .replaceAll("__APP_VERSION__", appVersion)
     .replaceAll("__BUILD_TIME__", buildTime);
+  const parsedStudioManifest = JSON.parse(studioManifest);
+  const statusText = `${parsedStudioManifest.status?.cs || ''} ${parsedStudioManifest.status?.en || ''}`.toLowerCase();
+  if (/produk|production/.test(statusText)) {
+    console.error("❌ Manifest pro AI Studio nesmí před schválením školy deklarovat produkční provoz.");
+    process.exit(1);
+  }
   fs.writeFileSync(path.join(DIST, "studio-manifest.json"), studioManifest, "utf8");
 }
 

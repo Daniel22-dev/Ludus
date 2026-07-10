@@ -1,0 +1,10 @@
+LUDUS 1.14.2 — AI STUDIO READY
+
+1. Rozbal ZIP.
+2. Na GitHubu otevři repozitář Ludus.
+3. Nahraj OBSAH této složky přímo do kořene repozitáře.
+4. Povol přepsání souborů a potvrď commit do větve main.
+5. Počkej na zelený běh v Actions.
+6. Otevři aplikaci a proveď Ctrl+F5.
+
+Verze 1.14.2 přidává Studio Bridge v1, krátkodobý handoff a ruční import GHRAB Material / LUDUS_CONTENT v2.
