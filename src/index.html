@@ -2590,6 +2590,27 @@ function toContentV2(pack){
     finalChallenge:finalChallenge
   };
 }
+
+/* Nasazené enginy jsou chráněné centrálním přístupem AI Studia. Při exportu
+   učitelské hry se ochranná vrstva odstraní, aby výsledný soubor zůstal volně
+   použitelný pro žáky a nevyžadoval účet ani přístup do AI Studia. */
+function stripDeploymentAccessGate(source){
+  const parsed=new DOMParser().parseFromString(String(source||''),'text/html');
+  parsed.documentElement.removeAttribute('data-ghrab-access');
+  parsed.querySelectorAll('link[href="/AI-Studio-GHRAB/access/access-gate.css"],style[data-ghrab-access-style],script[data-ghrab-access-bootstrap],noscript[data-ghrab-access-noscript]').forEach(function(node){node.remove();});
+  parsed.querySelectorAll('script[type="application/ghrab-protected"]').forEach(function(sourceScript){
+    const executable=parsed.createElement('script');
+    [...sourceScript.attributes].forEach(function(attr){
+      if(['type','data-ghrab-protected','data-ghrab-original-type'].indexOf(attr.name)<0) executable.setAttribute(attr.name,attr.value);
+    });
+    const originalType=sourceScript.getAttribute('data-ghrab-original-type');
+    if(originalType) executable.type=originalType;
+    executable.textContent=sourceScript.textContent;
+    sourceScript.replaceWith(executable);
+  });
+  return '<!DOCTYPE html>\n'+parsed.documentElement.outerHTML;
+}
+
 async function injectAndStore(pack,world){
   const sk=SKINS.find(x=>x.id===state.skin);
   window.__lastPack=pack; window.__lastWorld=world; window.__lastTopic=state.topic.cz;
@@ -2602,7 +2623,8 @@ async function injectAndStore(pack,world){
   if(canBuild && engine){
     const safeJson=o=>JSON.stringify(o).replace(/<\//g,'<\\/');
     const inject='<script>window.GAME_CONTENT='+safeJson(pack)+';window.LUDUS_CONTENT='+safeJson(contentV2)+';window.LUDUS_CONTENT_VERSION=2;<\/script>';
-    window.__lastGame=engine.replace('<head>','<head>\n'+inject);
+    const exportEngine=stripDeploymentAccessGate(engine);
+    window.__lastGame=exportEngine.replace('<head>','<head>\n'+inject);
     window.__lastGameName=(world.replace(/[^a-z0-9]+/gi,'-')+'-'+(state.topic.id||'gen')+'.html').toLowerCase().replace(/^-+/,'');
   } else {
     window.__lastGame=null; window.__lastGameName=null;
@@ -2889,9 +2911,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.2';
+const APP_VERSION='1.14.3';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.3 · Centrální přístup AI Studio GHRAB: dílna i všechny veřejné adresy enginů se spustí až po kryptografickém ověření oprávnění LUDUS. Správce aktivuje přístup jednou ve Studiu. Exportované hry zůstávají záměrně bez přístupové brány, aby je mohli žáci používat offline bez účtu.',
   '1.14.2: přímé napojení na AI Studio GHRAB — LUDUS umí převzít krátkodobou lokální předávku GHRAB Material v1 nebo ručně importovat GHRAB Material / LUDUS_CONTENT v2. Z podporovaných úloh vytvoří stanice, připraví hratelný engine, třídní soutěž i lesson pack bez dalšího dotazu na AI. Předávka se po načtení smaže a nic se neposílá na server.',
   '1.14.1: Opravená orientace v dílně — všechny rozpracované hry nyní svítí fialově bez ohledu na stav exportního adaptéru; zeslabené zůstávají pouze plánované. Do kroků Svět a Obsah přibyla výrazná, na mobilu přilnavá tlačítka Zpět na mechaniky / Zpět na světy.',
   '1.14.0: Produkční sjednocení enginů — společný přepínač CZ/EN ve všech hrách, bilingvní učitelský panel a report, pravdivý builderCompatible kontrakt s blokací neověřených exportů, opravené převzetí obsahu v Laughworks a Stranger Things, opravy Chronosu a Matrixu, přísnější validace katalogu a Lara Croft / Tomb Raider jako plánovaný quest.',
@@ -2904,9 +2927,7 @@ const CHANGELOG=[
   '1.9.8: engines/manifest.json je rozšířený z pouhého seznamu stavů na kanonický katalog enginů — LUDUS z něj přebírá gameId, mechanicId, soubor enginu, flowModel, jazyky, typy cvičení, capabilities i kontrolní smlouvu. Star Wars / Hvězdní rytíři mají sjednocené gameId na starwars, starý skinId knights zůstává jen jako výběr světa v UI. Manuály 00–07 jsou přidané do docs/manualy a build je kopíruje do dist/docs.',
   '1.9.7: Stav her (hotová / rozpracovaná / plánovaná) se teď čte z engines/manifest.json — je to jediný zdroj pravdy. Stačí ho změnit na jednom místě v manifestu; hodnota v registru enginů zůstává jen jako záloha pro případ, že by manifest nešel načíst (offline). Stav se páruje přes název .html souboru a po načtení manifestu se karty světů, Pas hry i preflight překreslí.',
   '1.9.6: Star Wars / Hvězdní rytíři engine teď přijímá obsah z dílny i ve tvaru LUDUS_CONTENT v2 — typy mc4/mc2/yesno/wordbank/classify a stanice (jedno cvičení s polem qs) se v enginu převedou na samostatné úlohy a doplnil se bezpečný fallback v2→v1→ukázka, takže žáci uvidí vygenerovaný obsah místo dema. LOTR (Rozlomené království) vrácen na rozpracovaný, protože engine soubor je zatím prázdný; narovnány smlouvy hotových her v Pasu hry; teams se z dílny posílají jako objekt.',
-  '1.9.5: Přidána instalovatelná PWA verze LUDUSu — vlastní prémiová ikona, manifest, service worker, mobilní standalone režim a kopírování PWA souborů do dist při buildu.',
-  '1.9.4: LOTR je připojený jako hotová hra pro mechaniku Quest; štítky v kartách, Pasu hry a preflightu teď čtou uiStatus/statusLabel a zobrazují hotová / rozpracovaná / plánovaná.'
-];
+  '1.9.5: Přidána instalovatelná PWA verze LUDUSu — vlastní prémiová ikona, manifest, service worker, mobilní standalone režim a kopírování PWA souborů do dist při buildu.',];
 function modalOpen(title,html){const m=$('#infoModal');$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;m.classList.add('open');m.setAttribute('aria-hidden','false');$('#modalClose').focus();}
 function modalClose(){const m=$('#infoModal');m.classList.remove('open');m.setAttribute('aria-hidden','true');}
 function openChangelog(){

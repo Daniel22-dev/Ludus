@@ -1,11 +1,11 @@
 {
   "name": "ludus",
-  "version": "1.14.2",
+  "version": "1.14.3",
   "description": "LUDUS — dílna výukových her (builder + samostatné enginy)",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node scripts/validate.mjs"
+    "test": "node scripts/build.mjs && node scripts/validate.mjs"
   },
   "engines": {
     "node": ">=18"

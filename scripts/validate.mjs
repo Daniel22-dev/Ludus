@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { stripStudioProtection } from './access-protection.mjs';
 
 const ROOT = path.resolve('.');
 const VERSION = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version;
@@ -94,6 +95,25 @@ srcScripts.forEach((m, i) => {
   try { new vm.Script(js, { filename: `src/index.html#script${i + 1}` }); }
   catch (e) { errors.push(`src/index.html: JS syntax script ${i + 1}: ${e.message}`); }
 });
+
+
+// Centrální přístup: nasazená dílna i každý engine musí být fail-closed.
+const distIndex=read('dist/index.html');
+need(/data-ghrab-access="checking"/.test(distIndex),'dist/index.html: chybí fail-closed stav');
+need(distIndex.includes('/AI-Studio-GHRAB/access/app-guard.js'),'dist/index.html: chybí centrální app-guard');
+need(distIndex.includes("const APP_ID=\"ludus\"")||distIndex.includes("const APP_ID='ludus'"),'dist/index.html: nesedí app ID ludus');
+need((distIndex.match(/application\/ghrab-protected/g)||[]).length>=2,'dist/index.html: aplikační skripty nejsou inertní');
+need(src.includes('function stripDeploymentAccessGate'),'src/index.html: chybí odstranění brány ze studentského exportu');
+need(src.includes('const exportEngine=stripDeploymentAccessGate(engine)'),'src/index.html: export nepoužívá očištěný engine');
+for(const file of uniqueHtml){
+  const deployed=read('dist/engines/'+file);
+  need(/data-ghrab-access="checking"/.test(deployed),`dist/engines/${file}: chybí fail-closed stav`);
+  need(deployed.includes('/AI-Studio-GHRAB/access/app-guard.js'),`dist/engines/${file}: chybí centrální guard`);
+  need((deployed.match(/application\/ghrab-protected/g)||[]).length>=1,`dist/engines/${file}: skripty nejsou inertní`);
+  const student=stripStudioProtection(deployed);
+  need(!/data-ghrab-access-bootstrap|application\/ghrab-protected|access-gate\.css/.test(student),`dist/engines/${file}: ochranu nelze bezpečně odstranit pro export`);
+  need(/<script(?:\s|>)/i.test(student),`dist/engines/${file}: po očištění chybí spustitelný studentský skript`);
+}
 
 if (errors.length) {
   console.error('❌ LUDUS validation failed');

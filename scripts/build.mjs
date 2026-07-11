@@ -1,5 +1,6 @@
 import fs   from "node:fs";
 import path from "node:path";
+import { protectHtmlForStudio } from "./access-protection.mjs";
 
 const ROOT        = path.resolve(".");
 const SRC_INDEX   = path.join(ROOT, "src", "index.html");
@@ -22,6 +23,7 @@ if (!fs.existsSync(SRC_INDEX)) {
 const buildTime = new Date().toISOString();
 let html = fs.readFileSync(SRC_INDEX, "utf8");
 html = html.replace(/(<html[^>]*>)/i, `$1\n<!-- BUILD: ${buildTime} -->`);
+html = protectHtmlForStudio(html, "ludus");
 fs.writeFileSync(path.join(DIST, "index.html"), html, "utf8");
 
 // 2) PWA / public assets -> dist/
@@ -39,8 +41,13 @@ let engineCount = 0;
 if (fs.existsSync(ENGINES_DIR)) {
   for (const f of fs.readdirSync(ENGINES_DIR)) {
     if (f.endsWith(".html") || f === "manifest.json") {
-      fs.copyFileSync(path.join(ENGINES_DIR, f), path.join(DIST_ENG, f));
-      if (f.endsWith(".html")) engineCount++;
+      if (f.endsWith(".html")) {
+        const engineHtml = fs.readFileSync(path.join(ENGINES_DIR, f), "utf8");
+        fs.writeFileSync(path.join(DIST_ENG, f), protectHtmlForStudio(engineHtml, "ludus"), "utf8");
+        engineCount++;
+      } else {
+        fs.copyFileSync(path.join(ENGINES_DIR, f), path.join(DIST_ENG, f));
+      }
     }
   }
 }
