@@ -103,6 +103,14 @@ need(/data-ghrab-access="checking"/.test(distIndex),'dist/index.html: chybí fai
 need(distIndex.includes('/AI-Studio-GHRAB/access/app-guard.js'),'dist/index.html: chybí centrální app-guard');
 need(distIndex.includes("const APP_ID=\"ludus\"")||distIndex.includes("const APP_ID='ludus'"),'dist/index.html: nesedí app ID ludus');
 need((distIndex.match(/application\/ghrab-protected/g)||[]).length>=2,'dist/index.html: aplikační skripty nejsou inertní');
+const classFunctionsPos=distIndex.indexOf('/*__CLASS_FUNCS__*/');
+const accessBootstrapTag='<script type="module" data-ghrab-access-bootstrap>';
+const accessBootstrapPos=distIndex.indexOf(accessBootstrapTag);
+const finalBodyClosePos=distIndex.toLowerCase().lastIndexOf('</body>');
+need(classFunctionsPos>=0,'dist/index.html: chybí funkce exportu třídního kvízu');
+need(accessBootstrapPos>classFunctionsPos,'dist/index.html: přístupový bootstrap byl vložen dovnitř exportní HTML šablony a rozbíjí stránku');
+need(finalBodyClosePos>accessBootstrapPos,'dist/index.html: přístupový bootstrap není před koncovým </body> hlavního dokumentu');
+need(distIndex.indexOf(accessBootstrapTag,accessBootstrapPos+1)===-1,'dist/index.html: přístupový bootstrap musí být vložen právě jednou');
 need(src.includes('function stripDeploymentAccessGate'),'src/index.html: chybí odstranění brány ze studentského exportu');
 need(src.includes('const exportEngine=stripDeploymentAccessGate(engine)'),'src/index.html: export nepoužívá očištěný engine');
 for(const file of uniqueHtml){

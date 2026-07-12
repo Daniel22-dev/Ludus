@@ -2928,9 +2928,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.4';
+const APP_VERSION='1.14.5';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.5 · Kritická oprava vykreslení: přístupový bootstrap se už nevkládá do vložené HTML šablony třídního kvízu. JavaScript se proto nezobrazuje jako text pod zápatím a hlavní dílna se načítá správně na mobilu i počítači.',
   '1.14.4 · Sjednocená školní identita: hlavní dílna používá stejné oficiální logo jako ostatní aplikace, vedle něj výrazný nápis GYMNÁZIUM, OSTRAVA-HRABŮVKA a v zápatí přesně sjednocený dvouřádkový autorský blok.',
   '1.14.3 · Centrální přístup AI Studio GHRAB: dílna i všechny veřejné adresy enginů se spustí až po kryptografickém ověření oprávnění LUDUS. Správce aktivuje přístup jednou ve Studiu. Exportované hry zůstávají záměrně bez přístupové brány, aby je mohli žáci používat offline bez účtu.',
   '1.14.2: přímé napojení na AI Studio GHRAB — LUDUS umí převzít krátkodobou lokální předávku GHRAB Material v1 nebo ručně importovat GHRAB Material / LUDUS_CONTENT v2. Z podporovaných úloh vytvoří stanice, připraví hratelný engine, třídní soutěž i lesson pack bez dalšího dotazu na AI. Předávka se po načtení smaže a nic se neposílá na server.',

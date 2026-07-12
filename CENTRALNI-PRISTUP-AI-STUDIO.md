@@ -1,4 +1,4 @@
-# Centrální přístup AI Studio GHRAB — LUDUS 1.14.4
+# Centrální přístup AI Studio GHRAB — LUDUS 1.14.5
 
 Dílna LUDUS a všechny přímo dostupné stránky v `dist/engines/` jsou při buildu chráněny oprávněním `ludus`. Jejich aplikační skripty jsou inertní, dokud AI Studio kryptograficky neověří podepsaný přístup.
 

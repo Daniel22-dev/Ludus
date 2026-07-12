@@ -1,4 +1,4 @@
-const LUDUS_CACHE = 'ludus-pwa-v1.14.4';
+const LUDUS_CACHE = 'ludus-pwa-v1.14.5';
 const CORE_ASSETS = [
   './',
   './index.html',

@@ -69,7 +69,9 @@ try {
 }catch(error){ console.error('AI Studio access bootstrap failed',error); showBootstrapFailure(); }
 </script>
 <noscript data-ghrab-access-noscript><style>html[data-ghrab-access="checking"] body{visibility:visible}</style><main style="max-width:42rem;margin:4rem auto;padding:1.5rem;font-family:system-ui">Tato aplikace vyžaduje zapnutý JavaScript a platný přístup z AI Studia GHRAB.</main></noscript>`;
-  return html.replace(/<\/body>/i,bootstrap+'\n</body>');
+  const bodyClose = html.toLowerCase().lastIndexOf('</body>');
+  if (bodyClose < 0) return html + '\n' + bootstrap;
+  return html.slice(0, bodyClose) + bootstrap + '\n' + html.slice(bodyClose);
 }
 
 export function stripStudioProtection(source){
