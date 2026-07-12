@@ -5,7 +5,7 @@
     "cs": "LUDUS",
     "en": "LUDUS"
   },
-  "version": "1.14.5",
+  "version": "1.14.6",
   "status": {
     "cs": "Ověřováno v pilotu",
     "en": "Being validated in pilot"
@@ -15,6 +15,7 @@
     "en": "A learning-game workshop that transforms content into different game worlds and mechanics."
   },
   "launchUrl": "https://daniel22-dev.github.io/Ludus/",
+  "manualUrl": "https://daniel22-dev.github.io/Ludus/manual/",
   "repository": "daniel22-dev/Ludus",
   "icon": "assets/apps/ludus.png",
   "accent": "#a877ff",
@@ -39,5 +40,5 @@
     "materialSchema": "ghrab-material-v1",
     "studioBridge": "1.1"
   },
-  "publishedAt": "2026-07-12T12:02:26.053Z"
+  "publishedAt": "2026-07-12T15:20:11.883Z"
 }

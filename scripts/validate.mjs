@@ -77,6 +77,10 @@ for (const file of uniqueHtml) {
 }
 
 const src = read('src/index.html');
+need(fs.existsSync(path.join(ROOT,'public','manual','index.html')), 'public/manual/index.html: chybí interaktivní manuál');
+need(src.includes('manual-launch-btn') && src.includes('./manual/'), 'src/index.html: chybí tlačítko interaktivního manuálu');
+const manualHtml=read('public/manual/index.html');
+need(manualHtml.includes('data-ghrab-access-bootstrap') && manualHtml.includes('const APP_ID="ludus"'), 'LUDUS manuál: chybí zděděná přístupová ochrana');
 need(src.includes('const TEMPLATE_LIBRARY'), 'src/index.html: chybí TEMPLATE_LIBRARY');
 need(src.includes('templateSelect'), 'src/index.html: chybí UI pro knihovnu šablon');
 need(src.includes('applyTemplate'), 'src/index.html: chybí applyTemplate');

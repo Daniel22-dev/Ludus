@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs" data-ghrab-access="checking">
-<!-- BUILD: 2026-07-12T12:02:26.053Z -->
+<!-- BUILD: 2026-07-12T15:20:11.883Z -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -388,6 +388,11 @@
   .foot-version{display:inline-block;margin-top:4px;color:var(--faint);font-size:11px}
   @media(max-width:720px){header.bar{align-items:flex-start}.brand{gap:10px;flex:1}.school-logo-box{flex-basis:58px;width:58px;height:58px;padding:5px;border-radius:14px}.school-name{font-size:13px;line-height:1.18;letter-spacing:.055em}.brand .lockup{flex-direction:column;gap:0}.mark{font-size:23px}.controls{width:100%;justify-content:flex-end}}
 
+
+/* Interaktivní manuál celé aplikace — oddělený od kontextových nápověd */
+a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:inherit;position:relative}
+a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
+a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
 </style>
 </head>
 <body>
@@ -411,6 +416,7 @@
         <button id="tgPublic" aria-pressed="false">🌐 Veřejné sdílení</button>
       </div>
       <button class="iconbtn" id="theme" aria-pressed="false" title="Denní / noční režim">🌙</button>
+      <a class="iconbtn manual-launch-btn" id="manualLaunch" href="./manual/" target="_blank" rel="noopener" aria-label="Otevřít interaktivní manuál celé aplikace" title="Interaktivní manuál celé aplikace">📖</a>
       <button class="iconbtn" id="fullscreen" aria-pressed="false" title="Celá obrazovka">⛶</button>
       <button class="iconbtn" id="sound" aria-pressed="true" title="Zvuky rozhraní">🔊</button>
       <button class="iconbtn" id="apiToggle" title="API klíč a model Gemini">🔑</button>
@@ -2929,9 +2935,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.5';
+const APP_VERSION='1.14.6';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.14.6 · Integrovaný interaktivní manuál: samostatné tlačítko 📖 v pravém horním rohu otevírá úplnou produktovou prohlídku v nové kartě. Zachovává stávající návody, testy a nápovědy beze změny; manuál dědí oprávnění LUDUSu z AI Studia a je dostupný i v PWA balíčku.',
   '1.14.5 · Kritická oprava vykreslení: přístupový bootstrap se už nevkládá do vložené HTML šablony třídního kvízu. JavaScript se proto nezobrazuje jako text pod zápatím a hlavní dílna se načítá správně na mobilu i počítači.',
   '1.14.4 · Sjednocená školní identita: hlavní dílna používá stejné oficiální logo jako ostatní aplikace, vedle něj výrazný nápis GYMNÁZIUM, OSTRAVA-HRABŮVKA a v zápatí přesně sjednocený dvouřádkový autorský blok.',
   '1.14.3 · Centrální přístup AI Studio GHRAB: dílna i všechny veřejné adresy enginů se spustí až po kryptografickém ověření oprávnění LUDUS. Správce aktivuje přístup jednou ve Studiu. Exportované hry zůstávají záměrně bez přístupové brány, aby je mohli žáci používat offline bez účtu.',
