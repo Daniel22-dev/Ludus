@@ -4,11 +4,11 @@ Dílna výukových her.
 
 ## Aktuální stav
 
-Verze: **1.14.3**
+Verze: **1.14.4**
 
 ## Provozní verdikt
 
-Jádro LUDUS 1.14.3 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
+Jádro LUDUS 1.14.4 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -65,6 +65,11 @@ Testy hlídají manifest, pravdivé pole `builderCompatible`, existenci engine s
 - `docs/SABLONY_UCIVA_LUDUS.md` — knihovna hotových šablon a doporučené použití.
 - `docs/manualy/` — závazná sada manuálů 00–07.
 
+## 1.14.4
+
+- Sjednocena školní identita: stejné logo, výrazný název školy a společný formát autorského zápatí.
+- PWA cache zvýšena na `ludus-pwa-v1.14.4`.
+
 ## 1.14.3
 
 - Přidán přímý lokální import z AI Studia GHRAB přes krátkodobou předávku `ghrab-handoff-v1`.
@@ -109,4 +114,4 @@ Build vytváří veřejný soubor `dist/studio-manifest.json`. AI Studio z něj 
 
 Pro okamžitou synchronizaci nastav v repozitáři secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné hodinové kontrole.
 
-Verze 1.14.3 obsahuje přímý Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované úlohy převádí na stanice a může připravit hratelný engine, třídní soutěž a lesson pack bez dalšího AI volání.
+Verze 1.14.4 obsahuje přímý Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované úlohy převádí na stanice a může připravit hratelný engine, třídní soutěž a lesson pack bez dalšího AI volání.

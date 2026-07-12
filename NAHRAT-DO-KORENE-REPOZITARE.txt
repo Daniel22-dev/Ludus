@@ -1,11 +1,11 @@
-LUDUS 1.14.3 — CENTRÁLNĚ CHRÁNĚNÝ
+LUDUS 1.14.4 — CENTRÁLNĚ CHRÁNĚNÝ
 
 Nejdříve musí být nasazeno AI Studio GHRAB 0.6.1.
 
 1. Rozbal ZIP.
 2. V GitHub Desktopu otevři repozitář Ludus.
 3. Nahraď obsah repozitáře obsahem rozbaleného ZIPu; zachovej pouze lokální složku .git.
-4. Commit: LUDUS v1.14.3.
+4. Commit: LUDUS v1.14.4.
 5. Push origin a počkej na zelený běh v Actions.
 6. Proveď Ctrl+Shift+R a ověř dílnu i jednu přímou adresu enginu.
 
