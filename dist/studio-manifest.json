@@ -5,7 +5,7 @@
     "cs": "LUDUS",
     "en": "LUDUS"
   },
-  "version": "1.14.6",
+  "version": "1.15.0",
   "status": {
     "cs": "Ověřováno v pilotu",
     "en": "Being validated in pilot"
@@ -40,5 +40,5 @@
     "materialSchema": "ghrab-material-v1",
     "studioBridge": "1.1"
   },
-  "publishedAt": "2026-07-12T15:20:11.883Z"
+  "publishedAt": "2026-07-13T11:15:46.363Z"
 }

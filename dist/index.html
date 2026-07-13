@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs" data-ghrab-access="checking">
-<!-- BUILD: 2026-07-12T15:20:11.883Z -->
+<!-- BUILD: 2026-07-13T11:15:46.363Z -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2701,6 +2701,18 @@ function normalizeStations(arr,opts){
       ex:cleanEx};
   }).filter(Boolean);
 }
+function recordLudusTelemetry(outputKind,outcome,quantity=1){
+  try{
+    window.GHRABTelemetry?.recordOutput({
+      outputKind,
+      attemptedQuantity:quantity,
+      successfulQuantity:outcome==='success'?quantity:0,
+      failedQuantity:outcome==='error'?quantity:0,
+      cancelledQuantity:outcome==='cancelled'?quantity:0,
+      outcome
+    });
+  }catch(error){console.warn('Telemetrie LUDUS se nezapsala.',error);}
+}
 async function generateAndAssemble(){
   const p=precheckContent();if(!p)return null;
   const world=p.world, topic=state.topic.cz;
@@ -2741,19 +2753,20 @@ function downloadGame(){
   setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 $('#build').onclick=async()=>{
-  if(!precheckContent())return;
+  const pre=precheckContent();if(!pre)return;
+  const expectedKind=engineCanBuild(pre.eng)?'game':'content-pack';
   const btn=$('#build');btn.dataset.busy='true';const orig=btn.innerHTML;btn.innerHTML='<span class="spin"></span>Generuji obsah…';
   try{
     const g=await generateAndAssemble();
     const drop=g&&g.dropped?(' · '+g.dropped+' stanic zahozeno (Testy → Diagnostika)'):'';
     if(g&&g.hasEngine&&window.__lastGame){
-      downloadGame();beep(760,.12,'triangle');
+      downloadGame();recordLudusTelemetry('game','success');beep(760,.12,'triangle');
       toast('Hra vygenerována a stažena: '+g.world+' × '+state.topic.cz+' ('+g.count+' stanic)'+drop+'. Otevři a hraj.');
     } else if(g){
-      beep(720,.1,'triangle');
+      recordLudusTelemetry('content-pack','success');beep(720,.1,'triangle');
       toast('Obsah vytvořen: '+g.world+' × '+state.topic.cz+' ('+g.count+' stanic)'+drop+'. '+(g.previewOnly?'Vybraný engine je zatím pouze náhled, proto LUDUS nepovolil neověřený HTML export. ':'Tato mechanika zatím nemá vlastní hru. ')+'Stáhni 🏫 Třídní soutěž, 📋 Lesson pack nebo zkopíruj recept.');
     }
-  }catch(err){toast(gErr(err));}
+  }catch(err){recordLudusTelemetry(expectedKind,/zrušeno|cancel/i.test(String(err&&err.message||err))?'cancelled':'error');toast(gErr(err));}
   finally{btn.dataset.busy='';btn.innerHTML=orig;}
 };
 $('#example').onclick=async()=>{
@@ -2788,6 +2801,7 @@ $('#dlClass').onclick=()=>{
   const html=buildClassQuizHtml(world+' — '+topic, topic, world, window.__lastColor||'#b475ff', window.__lastSpec||{}, tasks);
   dlBlob(html,'lvdvs-trida-'+slug(world+'-'+topic)+'.html');
   beep(720,.12,'triangle');
+  recordLudusTelemetry('class-quiz','success');
   toast('Třídní soutěž stažena: '+tasks.length+' otázek · týmy, časovač, adaptivní obtížnost, přehled chyb.');
 };
 $('#dlLesson').onclick=()=>{
@@ -2796,6 +2810,7 @@ $('#dlLesson').onclick=()=>{
   const html=buildLessonPackHtml(window.__lastSpec||{}, tasks);
   dlBlob(html,'lvdvs-lesson-pack-'+slug((window.__lastWorld||'svet')+'-'+(window.__lastTopic||'tema'))+'.html');
   beep(620,.1,'triangle');
+  recordLudusTelemetry('lesson-pack','success');
   toast('Lesson pack stažen: úroveň CEFR + metodika + klíč ('+tasks.length+' položek).');
 };
 
@@ -2935,10 +2950,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.14.6';
+const APP_VERSION='1.15.0';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
-  '1.14.6 · Integrovaný interaktivní manuál: samostatné tlačítko 📖 v pravém horním rohu otevírá úplnou produktovou prohlídku v nové kartě. Zachovává stávající návody, testy a nápovědy beze změny; manuál dědí oprávnění LUDUSu z AI Studia a je dostupný i v PWA balíčku.',
+  '1.15.0 · Integrovaný interaktivní manuál: samostatné tlačítko 📖 v pravém horním rohu otevírá úplnou produktovou prohlídku v nové kartě. Zachovává stávající návody, testy a nápovědy beze změny; manuál dědí oprávnění LUDUSu z AI Studia a je dostupný i v PWA balíčku.',
   '1.14.5 · Kritická oprava vykreslení: přístupový bootstrap se už nevkládá do vložené HTML šablony třídního kvízu. JavaScript se proto nezobrazuje jako text pod zápatím a hlavní dílna se načítá správně na mobilu i počítači.',
   '1.14.4 · Sjednocená školní identita: hlavní dílna používá stejné oficiální logo jako ostatní aplikace, vedle něj výrazný nápis GYMNÁZIUM, OSTRAVA-HRABŮVKA a v zápatí přesně sjednocený dvouřádkový autorský blok.',
   '1.14.3 · Centrální přístup AI Studio GHRAB: dílna i všechny veřejné adresy enginů se spustí až po kryptografickém ověření oprávnění LUDUS. Správce aktivuje přístup jednou ve Studiu. Exportované hry zůstávají záměrně bez přístupové brány, aby je mohli žáci používat offline bez účtu.',

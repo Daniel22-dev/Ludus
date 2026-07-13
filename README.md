@@ -4,11 +4,11 @@ Dílna výukových her.
 
 ## Aktuální stav
 
-Verze: **1.14.6**
+Verze: **1.15.0**
 
 ## Provozní verdikt
 
-Jádro LUDUS 1.14.6 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
+Jádro LUDUS 1.15.0 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -65,12 +65,12 @@ Testy hlídají manifest, pravdivé pole `builderCompatible`, existenci engine s
 - `docs/SABLONY_UCIVA_LUDUS.md` — knihovna hotových šablon a doporučené použití.
 - `docs/manualy/` — závazná sada manuálů 00–07.
 
-## 1.14.6
+## 1.15.0
 
 - Opravena kritická chyba nasazovací ochrany: přístupový bootstrap se nyní vkládá před poslední `</body>` hlavního dokumentu, nikoli do vložené HTML šablony třídního kvízu.
 - JavaScript LUDUSu se už na mobilu ani v desktopovém prohlížeči nezobrazuje jako text pod zápatím.
 - Přidán regresní test, který zakáže návrat této chyby v dalších sestaveních.
-- PWA cache zvýšena na `ludus-pwa-v1.14.6`.
+- PWA cache zvýšena na `ludus-pwa-v1.15.0`.
 
 ## 1.14.4
 
@@ -121,4 +121,4 @@ Build vytváří veřejný soubor `dist/studio-manifest.json`. AI Studio z něj 
 
 Pro okamžitou synchronizaci nastav v repozitáři secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné hodinové kontrole.
 
-Verze 1.14.6 obsahuje přímý Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované úlohy převádí na stanice a může připravit hratelný engine, třídní soutěž a lesson pack bez dalšího AI volání.
+Verze 1.15.0 obsahuje přímý Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované úlohy převádí na stanice a může připravit hratelný engine, třídní soutěž a lesson pack bez dalšího AI volání.
