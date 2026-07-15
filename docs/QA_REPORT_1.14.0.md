@@ -1,3 +1,5 @@
+> **Historický dokument:** Tento report se vztahuje k verzi 1.14.0 a jeho tehdejší provozní verdikt není platný pro aktuální stav. Pro verzi 1.16.0 použijte `../QA_REPORT_1.16.0.md` a `../AUDIT_IMPLEMENTACE_1.16.0.md`.
+
 # LUDUS 1.14.0 — závěrečný QA report
 
 Datum: 10. července 2026

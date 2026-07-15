@@ -1,3 +1,5 @@
+> **Historický dokument:** Tento audit popisuje starší stav řady 1.14.x a není zdrojem aktuálního provozního verdiktu. Aktuální stav je v `AUDIT_IMPLEMENTACE_1.16.0.md`, `CHANGELOG.md` a `QA_REPORT_1.16.0.md`.
+
 # LUDUS 1.14.0 — hloubkový audit č. 2
 
 Datum: 10. července 2026

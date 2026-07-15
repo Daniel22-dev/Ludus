@@ -30,6 +30,9 @@ Engine smí být označen `ready` až po splnění všech bodů.
 - [ ] Interní brandovaná varianta.
 - [ ] Veřejná safe varianta bez chráněných názvů a postav.
 - [ ] Správné přepnutí obrázků, názvů a textů mezi režimy.
+- [ ] `official` a `safe` mají správně přiřazené vlastní intro a soundtrack nebo výslovně prázdný fallback.
+- [ ] Média jsou zapsána v `media/registry.json`; audit je nesmí automaticky odstranit.
+- [ ] Offline export obsahuje pouze média zvolené varianty.
 
 ## Release
 

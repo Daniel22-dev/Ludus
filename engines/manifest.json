@@ -1,7 +1,7 @@
 {
   "schemaVersion": "ludus-engines-manifest-v2",
-  "updatedAt": "2026-07-10",
-  "note": "Kanonický katalog enginů a plánovaných světů. Verze 1.14.0: produkční sjednocení CZ/EN, společný učitelský panel, pravdivý builderCompatible kontrakt a plánovaná Lara Croft / Tomb Raider. Status určuje fázi vývoje; builderCompatible samostatně určuje, zda smí dílna vytvořit hratelný HTML export.",
+  "updatedAt": "2026-07-15",
+  "note": "Kanonický katalog enginů. Verze 1.16.0: opravy výběru mechaniky, výkonu lokalizační vrstvy, CI a exportů; odstraněn redundantní middle-earth-en.html. Status určuje fázi vývoje, builderCompatible samostatně určuje možnost sestavit hratelný HTML export.",
   "statusLabels": {
     "ready": {
       "cs": "Hotová",
@@ -866,105 +866,6 @@
           "hasProgress"
         ]
       },
-      "builderCompatible": true,
-      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
-    },
-    {
-      "id": "lotr-grammar-quest-en",
-      "variantOf": "lotr-grammar-quest",
-      "gameKey": "sundered-en:quest",
-      "skinId": "sundered-en",
-      "gameId": "lotr-en",
-      "gameIdAliases": [
-        "middle-earth-en",
-        "middleearth-en",
-        "sundered-en",
-        "lotr-grammar-quest-en"
-      ],
-      "mechanicId": "quest",
-      "name": "Middle-earth: A Grammar Quest (EN varianta)",
-      "title": {
-        "cs": "Middle-earth: Gramatická výprava (EN)",
-        "en": "Middle-earth: A Grammar Quest",
-        "safeCs": "The Sundered Realm — EN",
-        "safeEn": "The Sundered Realm — EN"
-      },
-      "file": "middle-earth-en.html",
-      "url": "engines/middle-earth-en.html",
-      "contentTopicId": "template",
-      "flowModel": "mapStationsFinalChallenge",
-      "addedVersion": "1.11.0",
-      "status": "draft",
-      "engineKind": "single-html",
-      "supportedMechanics": [
-        "quest"
-      ],
-      "supports": [
-        "mc4",
-        "mc2",
-        "wordbank",
-        "yesno"
-      ],
-      "supportedExerciseTypes": [
-        "mcq",
-        "trueFalse",
-        "wordBank",
-        "ordering"
-      ],
-      "uiLanguages": [
-        "en",
-        "cs"
-      ],
-      "contentLanguages": [
-        "en",
-        "cs",
-        "es"
-      ],
-      "supportLanguages": [
-        "en",
-        "cs",
-        "es"
-      ],
-      "brandModes": [
-        "official",
-        "safe"
-      ],
-      "capabilities": {
-        "hasMap": true,
-        "hasStations": true,
-        "hasBoss": true,
-        "hasClues": false,
-        "hasFinalCode": false,
-        "hasLeaderboard": false,
-        "hasSimulation": false,
-        "hasFinalChallenge": true,
-        "hasInventory": true,
-        "hasSaveLoadResume": true
-      },
-      "contract": {
-        "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
-        "supportedExerciseTypes": "deklarováno v manifestu i enginu",
-        "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
-        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
-        "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
-        "flowModel": "deklarováno v manifestu",
-        "capabilities": "deklarováno v manifestu",
-        "progressApi": "ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary"
-      },
-      "progressApi": {
-        "version": "ludus-progress-api-v1",
-        "storage": "localStorage",
-        "methods": [
-          "saveProgress",
-          "loadProgress",
-          "resumeProgress",
-          "clearProgress",
-          "getProgressSummary",
-          "hasProgress"
-        ]
-      },
-      "note": "Anglická varianta quest enginu. Kanonický český engine zůstává lotr.html; tento záznam je úplný kvůli testům a auditovatelnosti.",
       "builderCompatible": true,
       "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     },

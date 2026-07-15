@@ -1,14 +1,12 @@
 # LUDUS
 
-Dílna výukových her.
+Dílna výukových her pro interní pilotní provoz Gymnázia, Ostrava-Hrabůvka.
 
 ## Aktuální stav
 
-Verze: **1.15.0**
+Verze: **1.16.1**
 
-## Provozní verdikt
-
-Jádro LUDUS 1.15.0 je připraveno jako oficiální interní školní nástroj. Hratelné exporty jsou povoleny pouze enginům s pravdivě ověřeným `builderCompatible: true`; rozpracované náhledové enginy zůstávají v katalogu, ale nemohou vytvořit nefunkční HTML výstup. Stav `ready` je vyhrazen produkčně ověřeným enginům.
+LUDUS je připraven k řízenému školnímu pilotu. Jednotlivé hry se posuzují samostatně podle stavu v `engines/manifest.json`; označení `ready` znamená produkčně ověřený engine, `draft` rozpracovanou hru a `planned` pouze plán. Export je dovolen jen enginům s `builderCompatible: true`.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -16,109 +14,96 @@ Jádro LUDUS 1.15.0 je připraveno jako oficiální interní školní nástroj. 
 - samostatné enginy: `engines/*.html`
 - kanonický katalog enginů: `engines/manifest.json`
 - PWA soubory: `public/`
-- dokumentace: `docs/` a `docs/manualy/`
+- dokumentace: `docs/`
 
-## Manifest enginů
+## Důležité provozní omezení
 
-`engines/manifest.json` je hlavní místo pro běžná metadata enginů. LUDUS z něj po načtení přebírá zejména:
+**LUDUS není nástroj pro klasifikované testování.** Exportované hry jsou samostatné statické HTML soubory. Učitelský režim lze otevřít parametrem `?teacher=1` a řešení jsou technicky součástí souboru. LUDUS je určen pro výuku, procvičování, opakování a formativní zpětnou vazbu, nikoli pro zabezpečené známkované testy.
 
-- `status` hry (`ready`, `draft`, `planned`),
-- `gameId`, `skinId`, `mechanicId` a `gameKey`,
+Při práci s obsahem je nutná anonymizace. Do AI generování se nevkládají jména žáků, individuální hodnocení ani jiné osobní či citlivé údaje.
+
+## Manifest enginů a volba hry
+
+`engines/manifest.json` je hlavní zdroj metadat enginů. Dílna z něj načítá zejména:
+
+- stav hry (`ready`, `draft`, `planned`),
+- přesnou dvojici `skinId` + `mechanicId`,
 - soubor enginu (`file` / `url`),
-- `flowModel`, podporované typy cvičení, jazyky a brand režimy,
-- `builderCompatible` (zda lze bezpečně vytvořit hratelný export),
-- `capabilities`, `contract` a `progressApi`.
+- podporované typy cvičení, jazyky a režimy brandingu,
+- `builderCompatible`, `capabilities`, `contract` a `progressApi`.
 
-`src/index.html` obsahuje ještě fallback registr pro případ, kdy se manifest nenačte, například při lokálním otevření přes `file://`.
+Engine se nyní vybírá **výhradně podle přesné kombinace světa a mechaniky**. Dílna už nesmí tiše nahradit zvolenou mechaniku jiným enginem stejného světa. `src/index.html` obsahuje fallback registr pro lokální otevření přes `file://`, ale zachovává stejné pravidlo.
 
-## PWA verze
+## PWA a offline provoz
 
-LUDUS obsahuje instalovatelnou PWA vrstvu: manifest, service worker a vlastní ikony. Build kopíruje složku `public/` do `dist/`.
+LUDUS obsahuje instalovatelnou PWA vrstvu s vlastní identitou, service workerem a ikonami. Samotná dílna je však chráněna centrální přístupovou bránou AI Studia, jejíž ověření vyžaduje síť. Proto není slibován plně offline start chráněné dílny.
+
+**Hotové exportované hry fungují offline** jako samostatné HTML soubory. To je doporučený režim pro výuku bez spolehlivého internetu.
+
+## Média her a pravidlo pro budoucí audity
+
+Každá hra může mít samostatné intro a soundtrack pro variantu `official` i `safe`. Soubory jsou mimo HTML v `media/<hra>/<varianta>/` a jejich technická evidence je v `media/registry.json`. Dílna při exportu vloží do samostatného HTML pouze média aktuálně zvolené varianty; export proto funguje offline a nenese média druhé varianty.
+
+**Registrovaná média se při auditu automaticky nemažou.** Audit kontroluje funkčnost, formát, velikost a integritu a může upozornit na neověřená práva. Odstranění nebo náhrada proběhne pouze na výslovný pokyn vlastníka aplikace. Za oprávnění k použití a veřejné distribuci dodaného materiálu odpovídá osoba, která médium dodala nebo publikaci schválila.
+
+Aktuálně mají Bradavice obnoveno původní intro i soundtrack v `official` variantě. `safe` varianta je připravena na vlastní odlišná média.
 
 ## Učitelský režim
 
-Každý engine má sjednocený bezpečnostní vstup:
+Každý engine má sjednocený vstup:
 
 - logo `#ludusBadge` vlevo nahoře,
-- 3× ťuknutí do 1,2 s,
-- URL přepínač `?teacher=1`,
-- standardní záchranný dock pro učitele,
-- export / kopírování základního učitelského reportu.
+- 3× rychlé klepnutí,
+- URL parametr `?teacher=1`,
+- standardní učitelský dock,
+- export nebo kopírování základního reportu.
 
-Jednotlivé hry mohou mít vlastní bohatší učitelský panel. Standardní dock je pojistka, aby učitel nemusel u každé hry hledat jiný vstup.
+Tento režim je praktická pomůcka, nikoli bezpečnostní ochrana před žáky.
 
-## Testy
+## Testy a CI
 
-Spusť:
+Spuštění lokálně:
 
 ```bash
+npm ci
 npm test
-npm run build
 ```
 
-Testy hlídají manifest, pravdivé pole `builderCompatible`, existenci engine souborů, CZ/EN standardní vrstvu, progress API, verze dokumentace/PWA cache, syntaxi všech vložených skriptů, nepřítomnost tvrdě vloženého Gemini klíče a to, že se nevrací stará aktivace učitele jménem.
+`npm test` vytvoří produkční build a spustí statické i behaviorální regresní testy. Kontroluje mimo jiné:
+
+- syntaxi zdrojových a vygenerovaných skriptů,
+- konzistenci manifestu, verzí a PWA cache,
+- přesné párování světa a mechaniky,
+- funkční dělení týmů v třídní soutěži,
+- výsledek interní diagnostiky dílny,
+- klidový stav standardního bloku enginů bez nekonečných DOM mutací,
+- integritu registrovaných médií, jejich hashů a oddělení variant,
+- vložení pouze vybrané mediální varianty do offline exportu,
+- ochranu proti tvrdě vloženému API klíči,
+- dostupnost licence a evidence původu médií.
+
+GitHub Actions spouští `npm test` samostatně při pushi a pull requestu a znovu před nasazením na GitHub Pages. Pro skutečně povinnou bránu je na GitHubu vhodné zapnout ochranu větve `main` a vyžadovat zelený check **Validate LUDUS**.
 
 ## Dokumentace
 
-- `docs/PROVOZNI_NASAZENI_LUDUS.md` — pravidla oficiálního interního provozu.
-- `docs/ENGINE_RELEASE_CHECKLIST.md` — povinná brána před označením enginu jako hotového.
-- `docs/SABLONY_UCIVA_LUDUS.md` — knihovna hotových šablon a doporučené použití.
-- `docs/manualy/` — závazná sada manuálů 00–07.
-
-## 1.15.0
-
-- Opravena kritická chyba nasazovací ochrany: přístupový bootstrap se nyní vkládá před poslední `</body>` hlavního dokumentu, nikoli do vložené HTML šablony třídního kvízu.
-- JavaScript LUDUSu se už na mobilu ani v desktopovém prohlížeči nezobrazuje jako text pod zápatím.
-- Přidán regresní test, který zakáže návrat této chyby v dalších sestaveních.
-- PWA cache zvýšena na `ludus-pwa-v1.15.0`.
-
-## 1.14.4
-
-- Sjednocena školní identita: stejné logo, výrazný název školy a společný formát autorského zápatí.
-- PWA cache zvýšena na `ludus-pwa-v1.14.4`.
-
-## 1.14.3
-
-- Přidán přímý lokální import z AI Studia GHRAB přes krátkodobou předávku `ghrab-handoff-v1`.
-- Přidán ruční import souborů `ghrab-material-v1` a `LUDUS_CONTENT v2`.
-- Podporované strukturované úlohy se převádějí na stanice a připraví hratelný engine, třídní soutěž i lesson pack bez dalšího AI volání.
-- Předávka se po načtení smaže; data se neposílají na server.
-- Zvýšena PWA cache na `ludus-pwa-v1.14.3`.
-
-## 1.14.1
-
-- Všechny hry se stavem `draft` / rozpracovaná nyní v katalogu svítí fialově, včetně enginů označených „pouze náhled“.
-- Zeslabené zůstávají pouze plánované světy bez hotového enginu.
-- Exportní způsobilost se dál pravdivě rozlišuje štítkem „export k testování“ nebo „pouze náhled“; vizuální stav už se s technickou kompatibilitou nemíchá.
-- Do kroku Svět přibylo tlačítko **Zpět na mechaniky** a do kroku Obsah tlačítko **Zpět na světy**. Na mobilu jsou tlačítka široká a při posouvání zůstávají přichycená nahoře.
-- Zvýšena PWA cache na `ludus-pwa-v1.14.1`, aby se po nasazení nenačítalo staré rozhraní.
-
-## 1.14.0
-
-- Všech 12 existujících enginů má jednotný přepínač CZ/EN, bilingvní učitelský dock a report.
-- Stav vývoje je oddělen od exportní způsobilosti přes `builderCompatible`; náhledový engine už nemůže vytvořit rozbitý HTML export.
-- Laughworks a Stranger Things byly opraveny tak, aby skutečně používaly obsah vložený dílnou místo vlastního dema.
-- Orient Express, Matrix a Indiana Jones jsou pravdivě označeny jako náhledové, dokud nedostanou plný adaptér svého speciálního herního flow.
-- Opravena lokalizace Chronosu, přepínání bootovací animace Matrixu, duplicitní patičky a legacy anglická kopie Middle-earth.
-- Lara Croft / Tomb Raider je zobrazena jako plánovaný svět mechaniky Quest.
-- Přidány přísnější validační testy, GitHub Actions kontrola, provozní dokumentace a povinný release checklist enginů.
-- Sjednocena čísla verzí v `package.json`, README, PWA dokumentaci a service worker cache.
-
-## 1.12.0
-
-- Přidány rozpracované enginy Lovci relikvií a Kostka osudu.
-- Pokračovala unifikace učitelského režimu, owner footeru a PWA nasazení.
-
-## 1.10.1
-
-- Sjednoceno ukládání rozehraných her napříč hotovými enginy.
-- Každý hotový engine deklaruje LUDUS progress API v1: `saveProgress`, `loadProgress`, `resumeProgress`, `clearProgress`, `getProgressSummary`.
-- Pas hry a `engines/manifest.json` ukazují schopnost save/load/resume.
+- `CHANGELOG.md` — jediný zdroj pravdy pro historii verzí.
+- `AUDIT_IMPLEMENTACE_1.16.0.md` — vyhodnocení a realizace hloubkového auditu.
+- `QA_REPORT_1.16.1.md` — aktuální ověřovací protokol médií a exportu.
+- `QA_REPORT_1.16.0.md` — historický ověřovací protokol auditní opravy.
+- `docs/PROVOZNI_NASAZENI_LUDUS.md` — pravidla pilotního provozu.
+- `docs/ENGINE_RELEASE_CHECKLIST.md` — povinná brána před stavem `ready`.
+- `docs/MEDIA_PROVENANCE.md` — evidence médií a jejich původu.
+- `docs/SABLONY_UCIVA_LUDUS.md` — doporučené šablony učiva.
+- `docs/manualy/` — sada manuálů 00–07.
 
 ## Napojení na AI Studio GHRAB
 
-Build vytváří veřejný soubor `dist/studio-manifest.json`. AI Studio z něj automaticky načítá aktuální verzi, stav, adresu a metadata LUDUSu.
+Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuální verzi, stav, adresu a metadata LUDUSu.
 
-Pro okamžitou synchronizaci nastav v repozitáři secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné hodinové kontrole.
+Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
 
-Verze 1.15.0 obsahuje přímý Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované úlohy převádí na stanice a může připravit hratelný engine, třídní soutěž a lesson pack bez dalšího AI volání.
+LUDUS 1.16.1 podporuje Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
+
+## Licence
+
+Zdrojový kód a školní identita jsou chráněny podmínkami v souboru `LICENSE`. Veřejný repozitář automaticky neuděluje právo aplikaci převzít, dále šířit nebo komerčně využívat.

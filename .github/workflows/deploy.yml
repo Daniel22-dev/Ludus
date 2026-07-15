@@ -22,8 +22,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build
-        run: node scripts/build.mjs
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test (build + behavior validation)
+        run: npm test
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

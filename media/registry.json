@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "ludus-media-registry-v1",
+  "policy": {
+    "auditAction": "preserve-registered-media",
+    "removal": "only-on-explicit-owner-instruction",
+    "missingRightsEvidence": "warning-not-deletion",
+    "standaloneExport": "inline-selected-variant",
+    "variantIsolation": true
+  },
+  "engines": {
+    "hogwarts-grammar-academy": {
+      "engineFile": "engines/hogwarts.html",
+      "variants": {
+        "official": {
+          "intro": {
+            "path": "media/hogwarts/official/intro.mp4",
+            "mime": "video/mp4",
+            "bytes": 1019636,
+            "sha256": "47479798aa100a6fd83d1e9ce4f5a4f351c70b469cc1c76347e8c05915c8bc7a",
+            "sourceRecord": "Obnoveno z uživatelem dodaného repozitáře LUDUS 1.15.0.",
+            "rightsStatus": "user-supplied-not-verified",
+            "auditAction": "preserve-and-warn"
+          },
+          "soundtrack": {
+            "path": "media/hogwarts/official/soundtrack.mp3",
+            "mime": "audio/mpeg",
+            "bytes": 265403,
+            "sha256": "161ccb0055b39c99529f422910fa16ef28f9e247c44ec99e03d17e02403021d2",
+            "sourceRecord": "Obnoveno z uživatelem dodaného repozitáře LUDUS 1.15.0.",
+            "rightsStatus": "user-supplied-not-verified",
+            "auditAction": "preserve-and-warn"
+          }
+        },
+        "safe": {
+          "intro": null,
+          "soundtrack": null,
+          "status": "Připraveno pro budoucí alternativní intro a soundtrack."
+        }
+      }
+    }
+  }
+}

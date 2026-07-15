@@ -1,22 +1,26 @@
-# LUDUS PWA
+# LUDUS PWA 1.16.1
 
-Tato verze přidává instalovatelnou PWA vrstvu pro LUDUS.
+LUDUS obsahuje instalovatelnou PWA vrstvu pro pohodlné otevření dílny v samostatném okně.
 
-## Co je přidáno
+## Součásti
 
-- `public/manifest.webmanifest` — název, barvy, ikony a režim standalone.
-- `public/sw.js` — service worker s verzovanou cache `ludus-pwa-v1.15.0`.
-- `public/icons/` — ikony aplikace včetně `maskable` varianty pro Android.
-- `scripts/build.mjs` kopíruje obsah `public/` do `dist/`, aby GitHub Pages nasazoval i PWA soubory.
+- `public/manifest.webmanifest` — stabilní identita `/Ludus/`, název, barvy, ikony a režim `standalone`.
+- `public/sw.js` — service worker s cache `ludus-pwa-v1.16.1`.
+- `public/icons/` — běžné a maskable ikony pro Android.
+- `scripts/build.mjs` — kopíruje PWA soubory do `dist/`.
 
-## Instalace na mobilu
+## Důležité omezení
 
-1. Po nasazení otevřít adresu GitHub Pages pro LUDUS.
-2. V Chromu zvolit `⋮ → Přidat na plochu / Instalovat aplikaci`.
-3. Aplikace se má zobrazit s vlastní ikonou LUDUS a otevřít v samostatném okně.
+Přístup do dílny ověřuje centrální ochrana AI Studia. Toto ověření je mimo scope service workeru a vyžaduje síť. Instalovaná PWA proto není deklarována jako plně offline aplikace.
 
-## Při další aktualizaci
+Hotové herní exporty jsou samostatné HTML soubory a lze je otevřít bez internetu. Pro výuku v místě s nejistým připojením je vhodné hru předem vyexportovat a uložit do zařízení.
 
-Při změně PWA souborů zvednout číslo verze cache v `public/sw.js`, aby se uživatelům nedržela stará verze.
+## Instalace
 
-Aktuální cache: `ludus-pwa-v1.15.0`.
+1. Otevřít nasazenou adresu LUDUSu v Chromu nebo Edge.
+2. Zvolit `Instalovat aplikaci` / `Přidat na plochu`.
+3. Ověřit, že se LUDUS otevře ve vlastním okně a že je přístup potvrzen přes AI Studio.
+
+## Aktualizace
+
+Při změně PWA assetů je nutné zvýšit jméno cache v `public/sw.js` a verzi v dokumentaci. Aktuální cache: `ludus-pwa-v1.16.1`.

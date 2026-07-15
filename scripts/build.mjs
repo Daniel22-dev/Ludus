@@ -9,6 +9,7 @@ const DIST        = path.join(ROOT, "dist");
 const DIST_ENG    = path.join(DIST, "engines");
 const PUBLIC_DIR  = path.join(ROOT, "public");
 const DOCS_DIR    = path.join(ROOT, "docs");
+const MEDIA_DIR   = path.join(ROOT, "media");
 
 // čistý dist
 fs.rmSync(DIST, { recursive: true, force: true });
@@ -34,6 +35,11 @@ if (fs.existsSync(PUBLIC_DIR)) {
 // 2b) dokumentace -> dist/docs/
 if (fs.existsSync(DOCS_DIR)) {
   fs.cpSync(DOCS_DIR, path.join(DIST, "docs"), { recursive: true });
+}
+
+// 2c) registrovaná média -> dist/media/
+if (fs.existsSync(MEDIA_DIR)) {
+  fs.cpSync(MEDIA_DIR, path.join(DIST, "media"), { recursive: true });
 }
 
 // 3) enginy + manifest -> dist/engines/

@@ -1,29 +1,40 @@
 # LUDUS — provozní nasazení ve škole
 
-## Účel
+## Účel a stav
 
-LUDUS je lokální dílna výukových her určená k oficiálnímu internímu používání. Převádí učivo do herních forem, umožňuje nastavit jazyk rozhraní, obsah a podpůrná vysvětlení a vytváří samostatné HTML výstupy bez nutnosti žákovských účtů.
+LUDUS 1.16.0 je dílna výukových her určená pro **řízený interní pilot**. Převádí učivo do herních forem a vytváří samostatné HTML výstupy bez žákovských účtů. Pilotní stav se vztahuje k celé dílně; každý engine má navíc vlastní stav `ready`, `draft` nebo `planned`.
 
-## Provozní režim
+## Povinná pravidla
 
-1. Učitel pracuje pouze s anonymizovaným obsahem a nevkládá osobní údaje žáků.
-2. Pro veřejné sdílení používá bezpečnou tematickou variantu. Brandované varianty jsou určeny jen pro interní výuku.
-3. Hratelný HTML export je dostupný jen u enginů s `builderCompatible: true`.
-4. Rozpracované enginy označené „pouze náhled“ lze prohlížet, ale LUDUS z nich záměrně nevytvoří neověřenou hru.
-5. Hotový engine musí projít checklistem v `ENGINE_RELEASE_CHECKLIST.md` a teprve potom může získat stav `ready`.
+1. Učitel pracuje pouze s anonymizovaným obsahem. Nevkládá jména žáků, individuální hodnocení ani citlivé údaje.
+2. LUDUS se používá pro výuku, procvičování a formativní práci. **Není určen pro zabezpečené klasifikované testování.**
+3. Učitelský režim `?teacher=1` a správné odpovědi nelze ve statickém HTML považovat za tajné.
+4. Veřejné sdílení je dovoleno jen pro obsah, grafiku a branding, k nimž existuje právo zveřejnění.
+5. Hratelný export je dostupný pouze u enginů s `builderCompatible: true`.
+6. Engine musí přesně odpovídat zvolené dvojici světa a mechaniky. Tichá náhrada jinou mechanikou není dovolena.
+7. Engine smí dostat stav `ready` až po splnění `ENGINE_RELEASE_CHECKLIST.md`.
+8. Před každou hodinou učitel provede krátký smoke test na zařízení a v prohlížeči, které skutečně použije.
 
-## Doporučené zavedení
+## PWA, síť a offline výuka
 
-- určit správce aplikace a vlastníka vydání,
-- používat GitHub Pages jako jednotný distribuční bod,
-- každé vydání ověřit příkazy `npm test` a `npm run build`,
-- změny nasazovat přes kontrolovaný release ZIP,
-- udržovat krátký changelog a evidenci ověřených enginů.
+Instalovatelná PWA usnadňuje spouštění dílny, ale vstup ověřuje centrální přístupová brána AI Studia. Otevření chráněné dílny proto vyžaduje síťové ověření.
 
-## Ochrana dat
+Vyexportované hry jsou samostatné HTML soubory a fungují offline. Pro hodinu bez jistého internetu je nutné hru připravit a uložit předem.
 
-LUDUS nevyžaduje jména ani jiné identifikátory žáků. Do AI generování nesmí vstupovat citlivé údaje, hodnocení konkrétního žáka ani dokumenty obsahující osobní údaje bez anonymizace.
+## API klíč
 
-## Stav verze 1.14.1
+Na sdíleném školním počítači se klíč ukládá pouze pro aktuální relaci. Trvalé uložení je dovoleno jen na osobním důvěryhodném zařízení. Cílovým řešením je školní proxy, aby klíč nemusel být v prohlížeči; její nasazení je samostatný infrastrukturní úkol.
 
-Jádro dílny je připraveno pro oficiální interní provoz. Produkčně doporučené jsou pouze enginy se stavem `ready`; rozpracované enginy jsou jednoznačně označeny a v katalogu vizuálně zvýrazněny a jejich exportní způsobilost je řízena samostatným polem `builderCompatible`.
+## Vydávání verzí
+
+- změny jdou přes zdrojové soubory, nikoli ruční úpravu `dist/`,
+- `dist/` se v repozitáři neuchovává a vzniká až během buildu,
+- každé vydání musí projít `npm ci` a `npm test`,
+- GitHub Actions musí mít zelený check **Validate LUDUS** a zelený test před deployem,
+- na větvi `main` se doporučuje zapnout branch protection,
+- změny se zapisují pouze do `CHANGELOG.md`,
+- média musí být evidována v `docs/MEDIA_PROVENANCE.md`.
+
+## Odpovědnost učitele
+
+AI výstup ani herní engine nenahrazuje odbornou kontrolu. Učitel před použitím ověří správné odpovědi, jazykovou přesnost, přiměřenost věku, časovou náročnost, funkčnost ovládání a to, že žákům není při projekci zobrazen učitelský panel.
