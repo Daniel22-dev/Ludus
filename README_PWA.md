@@ -1,11 +1,11 @@
-# LUDUS PWA 1.16.2
+# LUDUS PWA 1.16.3
 
 LUDUS obsahuje instalovatelnou PWA vrstvu pro pohodlné otevření dílny v samostatném okně.
 
 ## Součásti
 
 - `public/manifest.webmanifest` — stabilní identita `/Ludus/`, název, barvy, ikony a režim `standalone`.
-- `public/sw.js` — service worker s cache `ludus-pwa-v1.16.2`.
+- `public/sw.js` — service worker s cache `ludus-pwa-v1.16.3`.
 - `public/icons/` — běžné a maskable ikony pro Android.
 - `scripts/build.mjs` — kopíruje PWA soubory do `dist/`.
 
@@ -23,4 +23,4 @@ Hotové herní exporty jsou samostatné HTML soubory a lze je otevřít bez inte
 
 ## Aktualizace
 
-Při změně PWA assetů je nutné zvýšit jméno cache v `public/sw.js` a verzi v dokumentaci. Aktuální cache: `ludus-pwa-v1.16.2`.
+Při změně PWA assetů je nutné zvýšit jméno cache v `public/sw.js` a verzi v dokumentaci. Aktuální cache: `ludus-pwa-v1.16.3`.

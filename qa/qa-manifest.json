@@ -2,7 +2,7 @@
   "standard": "GHRAB-QA-1.0.2",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.2",
+  "appVersion": "1.16.3",
   "entryPoint": "dist/index.html",
   "serveRoot": "dist",
   "buildRoot": "dist",
@@ -47,17 +47,17 @@
     {
       "file": "src/index.html",
       "regex": "APP_VERSION='([0-9.]+)'",
-      "expected": "1.16.2"
+      "expected": "1.16.3"
     },
     {
       "file": "public/sw.js",
       "regex": "ludus-pwa-v([0-9.]+)",
-      "expected": "1.16.2"
+      "expected": "1.16.3"
     },
     {
       "file": "README.md",
       "regex": "Verze: \\*\\*([0-9.]+)\\*\\*",
-      "expected": "1.16.2"
+      "expected": "1.16.3"
     }
   ],
   "pwaTargets": [

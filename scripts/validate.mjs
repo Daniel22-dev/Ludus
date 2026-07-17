@@ -123,7 +123,7 @@ async function main() {
     const rel = 'engines/' + file;
     const txt = read(rel);
     need(txt.includes('LUDUS STANDARD BLOCK START'), `${rel}: chybí standardní LUDUS blok`);
-    need(txt.includes('LUDUS STANDARD BLOCK START v1.16.2'), `${rel}: standardní blok nemá verzi 1.16.2`);
+    need(txt.includes('LUDUS STANDARD BLOCK START v1.16.3'), `${rel}: standardní blok nemá verzi 1.16.3`);
     need(txt.includes('ludusLangSwitch') && txt.includes('window.LUDUS_I18N'), `${rel}: chybí jednotný přepínač CZ/EN`);
     need(txt.includes('id="ludusBadge"') || txt.includes("id='ludusBadge'"), `${rel}: chybí #ludusBadge`);
     need(/teacher=1/.test(txt), `${rel}: chybí ?teacher=1`);
@@ -140,7 +140,7 @@ async function main() {
       need(txt.includes('function applyThemeMedia'), 'hogwarts.html: chybí přepínání médií podle varianty');
     }
 
-    const block = txt.match(/<!-- LUDUS STANDARD BLOCK START v1\.16\.2 -->([\s\S]*?)<!-- LUDUS STANDARD BLOCK END v1\.16\.2 -->/);
+    const block = txt.match(/<!-- LUDUS STANDARD BLOCK START v1\.16\.3 -->([\s\S]*?)<!-- LUDUS STANDARD BLOCK END v1\.16\.3 -->/);
     if (block) standardHashes.add(crypto.createHash('sha256').update(block[1]).digest('hex'));
 
     const scripts = [...txt.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)];

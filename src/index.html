@@ -415,7 +415,7 @@ a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacit
         <button id="tgPublic" aria-pressed="false">🌐 Veřejné sdílení</button>
       </div>
       <button class="iconbtn" id="theme" aria-pressed="false" title="Denní / noční režim">🌙</button>
-      <a class="iconbtn manual-launch-btn" id="manualLaunch" href="./manual/" target="_blank" rel="noopener" aria-label="Otevřít interaktivní manuál celé aplikace" title="Interaktivní manuál celé aplikace">📖</a>
+      <a class="iconbtn manual-launch-btn" id="manualLaunch" href="./manual/" target="_self" aria-label="Otevřít interaktivní manuál celé aplikace" title="Interaktivní manuál celé aplikace">📖</a>
       <button class="iconbtn" id="fullscreen" aria-pressed="false" title="Celá obrazovka">⛶</button>
       <button class="iconbtn" id="sound" aria-pressed="true" title="Zvuky rozhraní">🔊</button>
       <button class="iconbtn" id="apiToggle" title="API klíč a model Gemini">🔑</button>
@@ -2991,9 +2991,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.16.2';
+const APP_VERSION='1.16.3';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.16.3 · Interaktivní manuál odpovídá aktuálním funkcím a při otevření z LUDUSu uvnitř AI Studia zůstává ve stejném pracovním rámci; nová PWA cache zajistí načtení opravy i ve starší instalaci.',
   '1.16.2 · Jednotná GHRAB QA 1.0.1: reprodukovatelný release příkaz, Chromium galerie všech enginů, bezpečnostní a PWA brány a verdikt vázaný na SHA-256 buildu.',
   '1.16.1 · Zavedena trvalá správa médií: Bradavice mají zpět intro a soundtrack, varianty mají oddělené zdroje a export vkládá pouze vybranou variantu pro offline hraní.',
   '1.16.0 · Auditní opravná verze: odstraněna nekonečná překladová smyčka, opraveno dělení týmů, striktní vazba svět + mechanika, CI brána, PWA registrace a bezpečnější export enginů.',
@@ -3003,7 +3004,6 @@ const CHANGELOG=[
   '1.14.4 · Zpřesněn kontrakt builderCompatible a vizuální stavy hotových, rozpracovaných a plánovaných enginů.',
   '1.14.3 · Přidána bezpečná předávka materiálu z AI Studia a kontrola importovaných struktur.',
   '1.14.2 · Sjednoceny výstupy hry, třídní soutěže a lesson packu.',
-  '1.14.1 · Doplněny diagnostické testy a kontrola kompatibility enginů.',
 ];
 function modalOpen(title,html){const m=$('#infoModal');$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;m.classList.add('open');m.setAttribute('aria-hidden','false');$('#modalClose').focus();}
 function modalClose(){const m=$('#infoModal');m.classList.remove('open');m.setAttribute('aria-hidden','true');}

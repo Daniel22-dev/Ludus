@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.3 – Aktuální manuál uvnitř AI Studia
+
+- interaktivní manuál byl ověřen a aktualizován pro současné mechaniky, světy, importy a výstupy LUDUSu;
+- tlačítko manuálu otevírá příručku ve stejném pracovním rámci místo nové karty;
+- zvýšena verze PWA cache, aby se změna načetla i ve dříve nainstalované aplikaci.
+
 ## 1.16.2
 
 - Engine Stranger Things se po pozdním uvolnění centrální brány spustí i tehdy, když již proběhl `DOMContentLoaded`; prázdná obrazovka pod krycí vrstvou je opravena.

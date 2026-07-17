@@ -1,4 +1,4 @@
-const LUDUS_CACHE = 'ludus-pwa-v1.16.2';
+const LUDUS_CACHE = 'ludus-pwa-v1.16.3';
 const CORE_ASSETS = [
   './index.html',
   './manifest.webmanifest',
