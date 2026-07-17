@@ -82,6 +82,10 @@ async function launchBrowser() {
       "--disable-dev-shm-usage",
       "--mute-audio",
       "--autoplay-policy=no-user-gesture-required",
+      "--disable-webgl",
+      "--disable-accelerated-2d-canvas",
+      "--disable-accelerated-video-decode",
+      "--disable-features=Vulkan,CanvasOopRasterization",
     ],
   });
 }
@@ -115,11 +119,17 @@ async function killBrowserDescendants() {
 async function closeWithLimit(target, ms = 8000, forceChildren = false) {
   if (!target) return;
   const ownedPids = forceChildren ? await descendantPids(process.pid) : [];
+  let closed = false;
   await Promise.race([
-    target.close().catch(() => {}),
+    target
+      .close()
+      .then(() => {
+        closed = true;
+      })
+      .catch(() => {}),
     new Promise((resolve) => setTimeout(resolve, ms)),
   ]);
-  if (forceChildren) {
+  if (forceChildren && !closed) {
     for (const pid of ownedPids) {
       try {
         process.kill(pid, "SIGKILL");
@@ -270,221 +280,248 @@ async function inspectPage(page, scenario) {
 
 let browser;
 let runsInBrowser = 0;
-const maxRunsPerBrowser = Number(process.env.GHRAB_VISUAL_BROWSER_BATCH || 1);
+const maxRunsPerBrowser = Number(process.env.GHRAB_VISUAL_BROWSER_BATCH || 4);
+
+function isTransientBrowserError(error) {
+  return /Target (?:page|context|browser).*closed|has been closed|browserContext\.newPage|browser.*disconnected|Browser closed|crash/i.test(
+    String(error),
+  );
+}
+
+async function resetBrowser(force = false) {
+  await closeWithLimit(browser, 8000, force);
+  browser = undefined;
+  runsInBrowser = 0;
+}
+
+async function ensureBrowser() {
+  if (
+    !browser ||
+    !browser.isConnected() ||
+    runsInBrowser >= maxRunsPerBrowser
+  ) {
+    await resetBrowser(true);
+    browser = await launchBrowser();
+    runsInBrowser = 0;
+  }
+  return browser;
+}
+
+async function runVisualCase(scenario, viewport) {
+  const transientErrors = [];
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    let context;
+    try {
+      const activeBrowser = await ensureBrowser();
+      runsInBrowser += 1;
+      context = await activeBrowser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        deviceScaleFactor: 1,
+      });
+      const page = await context.newPage();
+      const consoleErrors = [];
+      const pageErrors = [];
+      const badResponses = [];
+
+      page.on("console", (message) => {
+        if (
+          message.type() === "error" &&
+          !/Failed to load resource: net::ERR_FAILED/.test(message.text())
+        ) {
+          consoleErrors.push(message.text());
+        }
+      });
+      page.on("pageerror", (error) => {
+        const text = String(error);
+        if (
+          !/Failed to read the 'localStorage' property.*Access is denied/i.test(
+            text,
+          )
+        ) {
+          pageErrors.push(text);
+        }
+      });
+      page.on("response", (response) => {
+        if (
+          response.status() >= 400 &&
+          new URL(response.url()).origin === new URL(baseUrl).origin
+        ) {
+          badResponses.push(`${response.status()} ${response.url()}`);
+        }
+      });
+      await page.route("**/*", async (route) => {
+        const request = route.request();
+        if (["media", "font"].includes(request.resourceType())) {
+          return route.fulfill({ status: 204, body: "" });
+        }
+        return route.continue();
+      });
+      await page.route("**/AI-Studio-GHRAB/access/app-guard.js", (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: "text/javascript",
+          body: guardJs,
+        }),
+      );
+      await page.route("**/AI-Studio-GHRAB/access/access-gate.css", (route) =>
+        route.fulfill({ status: 200, contentType: "text/css", body: "" }),
+      );
+
+      await setLocalDocument(page, serveRoot, scenario.url, baseUrl);
+      for (const step of scenario.steps || []) {
+        if (step.action === "wait") await page.waitForTimeout(step.ms || 500);
+        if (step.action === "click") {
+          await page.locator(step.selector).first().click({ timeout: 5000 });
+        }
+        if (step.action === "clickIfVisible") {
+          const target = page.locator(step.selector).first();
+          if ((await target.count()) && (await target.isVisible())) {
+            await target.click({ timeout: step.timeout || 5000 });
+          }
+        }
+        if (step.action === "fill") {
+          await page.locator(step.selector).first().fill(step.value || "");
+        }
+        if (step.action === "select") {
+          await page.locator(step.selector).first().selectOption(step.value);
+        }
+        if (step.action === "press") await page.keyboard.press(step.key);
+        if (step.action === "evaluate") await page.evaluate(step.script);
+      }
+      await page.waitForTimeout(scenario.settleMs || 700);
+      await waitForImages(page);
+      const checks = await inspectPage(page, scenario);
+      const filename =
+        `${scenario.id}__${viewport.width}x${viewport.height}.png`.replace(
+          /[^a-zA-Z0-9_.-]/g,
+          "-",
+        );
+      const screenshot = `qa-screenshots/${filename}`;
+      const buffer = await page.screenshot({
+        path: path.join(SCREEN_DIR, filename),
+        fullPage: false,
+      });
+      const pixels = blankStats(buffer);
+      const problems = [];
+      if (checks.htmlHidden || checks.bodyHidden) problems.push("html/body je skryté");
+      if (checks.textLength < (scenario.minVisibleText || 20)) {
+        problems.push(`viditelný text je příliš krátký (${checks.textLength})`);
+      }
+      if (!checks.expected) problems.push(`chybí očekávaný text ${scenario.expectedText}`);
+      if (
+        checks.overflow > 2 &&
+        (!checks.overflowClipped || checks.interactiveOutside.length)
+      ) {
+        problems.push(
+          `horizontální přetékání ${checks.overflow}px${checks.interactiveOutside.length ? " s interaktivním prvkem mimo viewport" : ""}`,
+        );
+      }
+      if (checks.overlays.length) problems.push("prázdná interaktivní fullscreen vrstva");
+      if (checks.visible.some((item) => !item.ok)) {
+        problems.push(
+          `povinný prvek není viditelný: ${checks.visible
+            .filter((item) => !item.ok)
+            .map((item) => item.selector)
+            .join(", ")}`,
+        );
+      }
+      if (checks.broken.length) problems.push(`nenačtené obrázky (${checks.broken.length})`);
+      if (pixels.sd < 2 || pixels.whiteRatio > 0.995 || pixels.blackRatio > 0.995) {
+        problems.push(`screenshot je pravděpodobně prázdný (sd=${pixels.sd.toFixed(2)})`);
+      }
+      if (consoleErrors.length) problems.push(`console.error (${consoleErrors.length})`);
+      if (pageErrors.length) problems.push(`pageerror (${pageErrors.length})`);
+      if (badResponses.length) problems.push(`lokální HTTP chyba (${badResponses.length})`);
+
+      if (problems.length) {
+        return {
+          matrix: {
+            scenario: scenario.id,
+            viewport: `${viewport.width}x${viewport.height}`,
+            status: "FAIL",
+            message: problems.join("; "),
+            screenshot,
+          },
+          finding: finding(
+            "visual",
+            "MAJOR",
+            "VISUAL_SCENARIO_FAIL",
+            `${scenario.id} ${viewport.width}x${viewport.height}: ${problems.join("; ")}`,
+            JSON.stringify({
+              checks,
+              pixels,
+              consoleErrors,
+              pageErrors,
+              badResponses,
+            }).slice(0, 8000),
+          ),
+        };
+      }
+
+      return {
+        matrix: {
+          scenario: scenario.id,
+          viewport: `${viewport.width}x${viewport.height}`,
+          status: "PASS",
+          message: transientErrors.length
+            ? `Obnoveno po dočasném pádu Chromia (${transientErrors.length} pokus).`
+            : "",
+          screenshot,
+        },
+      };
+    } catch (error) {
+      const text = String(error);
+      if (isTransientBrowserError(error) && attempt < 2) {
+        transientErrors.push(text);
+        await closeWithLimit(context, 2500);
+        context = undefined;
+        await resetBrowser(true);
+        continue;
+      }
+      return {
+        matrix: {
+          scenario: scenario.id,
+          viewport: `${viewport.width}x${viewport.height}`,
+          status: "FAIL",
+          message: text,
+          screenshot: "",
+        },
+        finding: finding(
+          "visual",
+          isTransientBrowserError(error) ? "BLOCKER" : "MAJOR",
+          isTransientBrowserError(error) ? "CHROMIUM_RUNTIME" : "VISUAL_RUNTIME",
+          `${scenario.id} ${viewport.width}x${viewport.height}: ${text}`,
+          transientErrors.length ? transientErrors.join("\n--- retry ---\n") : "",
+        ),
+      };
+    } finally {
+      await closeWithLimit(context, 2500);
+    }
+  }
+}
+
 try {
   for (const scenario of plan.scenarios) {
     const viewports = scenario.viewports?.length
       ? scenario.viewports
       : manifest.requiredViewports;
-    try {
-      for (const viewport of viewports) {
-        if (
-          !browser ||
-          !browser.isConnected() ||
-          runsInBrowser >= maxRunsPerBrowser
-        ) {
-          await closeWithLimit(browser, 8000, true);
-          browser = await launchBrowser();
-          runsInBrowser = 0;
-        }
-        runsInBrowser += 1;
-        const context = await browser.newContext({
-          viewport: { width: viewport.width, height: viewport.height },
-          deviceScaleFactor: 1,
-        });
-        const page = await context.newPage();
-        const consoleErrors = [];
-        const pageErrors = [];
-        const badResponses = [];
-        page.on("console", (message) => {
-          if (
-            message.type() === "error" &&
-            !/Failed to load resource: net::ERR_FAILED/.test(message.text())
-          ) {
-            consoleErrors.push(message.text());
-          }
-        });
-        page.on("pageerror", (error) => {
-          const text = String(error);
-          if (
-            !/Failed to read the 'localStorage' property.*Access is denied/i.test(
-              text,
-            )
-          )
-            pageErrors.push(text);
-        });
-        page.on("response", (response) => {
-          if (
-            response.status() >= 400 &&
-            new URL(response.url()).origin === new URL(baseUrl).origin
-          ) {
-            badResponses.push(`${response.status()} ${response.url()}`);
-          }
-        });
-        await page.route("**/*", async (route) => {
-          const request = route.request();
-          if (["media", "font"].includes(request.resourceType())) {
-            return route.fulfill({ status: 204, body: "" });
-          }
-          return route.continue();
-        });
-        await page.route("**/AI-Studio-GHRAB/access/app-guard.js", (route) =>
-          route.fulfill({
-            status: 200,
-            contentType: "text/javascript",
-            body: guardJs,
-          }),
-        );
-        await page.route("**/AI-Studio-GHRAB/access/access-gate.css", (route) =>
-          route.fulfill({ status: 200, contentType: "text/css", body: "" }),
-        );
-
-        let status = "PASS";
-        let message = "";
-        let screenshot = "";
-        try {
-          await setLocalDocument(page, serveRoot, scenario.url, baseUrl);
-          for (const step of scenario.steps || []) {
-            if (step.action === "wait")
-              await page.waitForTimeout(step.ms || 500);
-            if (step.action === "click")
-              await page
-                .locator(step.selector)
-                .first()
-                .click({ timeout: 5000 });
-            if (step.action === "clickIfVisible") {
-              const target = page.locator(step.selector).first();
-              if ((await target.count()) && (await target.isVisible()))
-                await target.click({ timeout: step.timeout || 5000 });
-            }
-            if (step.action === "fill")
-              await page
-                .locator(step.selector)
-                .first()
-                .fill(step.value || "");
-            if (step.action === "select")
-              await page
-                .locator(step.selector)
-                .first()
-                .selectOption(step.value);
-            if (step.action === "press") await page.keyboard.press(step.key);
-            if (step.action === "evaluate") await page.evaluate(step.script);
-          }
-          await page.waitForTimeout(scenario.settleMs || 700);
-          await waitForImages(page);
-          const checks = await inspectPage(page, scenario);
-          const filename =
-            `${scenario.id}__${viewport.width}x${viewport.height}.png`.replace(
-              /[^a-zA-Z0-9_.-]/g,
-              "-",
-            );
-          screenshot = `qa-screenshots/${filename}`;
-          const buffer = await page.screenshot({
-            path: path.join(SCREEN_DIR, filename),
-            fullPage: false,
-          });
-          const pixels = blankStats(buffer);
-          const problems = [];
-          if (checks.htmlHidden || checks.bodyHidden)
-            problems.push("html/body je skryté");
-          if (checks.textLength < (scenario.minVisibleText || 20)) {
-            problems.push(
-              `viditelný text je příliš krátký (${checks.textLength})`,
-            );
-          }
-          if (!checks.expected)
-            problems.push(`chybí očekávaný text ${scenario.expectedText}`);
-          if (
-            checks.overflow > 2 &&
-            (!checks.overflowClipped || checks.interactiveOutside.length)
-          ) {
-            problems.push(
-              `horizontální přetékání ${checks.overflow}px${checks.interactiveOutside.length ? " s interaktivním prvkem mimo viewport" : ""}`,
-            );
-          }
-          if (checks.overlays.length)
-            problems.push("prázdná interaktivní fullscreen vrstva");
-          if (checks.visible.some((item) => !item.ok)) {
-            problems.push(
-              `povinný prvek není viditelný: ${checks.visible
-                .filter((item) => !item.ok)
-                .map((item) => item.selector)
-                .join(", ")}`,
-            );
-          }
-          if (checks.broken.length)
-            problems.push(`nenačtené obrázky (${checks.broken.length})`);
-          if (
-            pixels.sd < 2 ||
-            pixels.whiteRatio > 0.995 ||
-            pixels.blackRatio > 0.995
-          ) {
-            problems.push(
-              `screenshot je pravděpodobně prázdný (sd=${pixels.sd.toFixed(2)})`,
-            );
-          }
-          if (consoleErrors.length)
-            problems.push(`console.error (${consoleErrors.length})`);
-          if (pageErrors.length)
-            problems.push(`pageerror (${pageErrors.length})`);
-          if (badResponses.length)
-            problems.push(`lokální HTTP chyba (${badResponses.length})`);
-          if (problems.length) {
-            status = "FAIL";
-            message = problems.join("; ");
-            findings.push(
-              finding(
-                "visual",
-                "MAJOR",
-                "VISUAL_SCENARIO_FAIL",
-                `${scenario.id} ${viewport.width}x${viewport.height}: ${message}`,
-                JSON.stringify({
-                  checks,
-                  pixels,
-                  consoleErrors,
-                  pageErrors,
-                  badResponses,
-                }).slice(0, 8000),
-              ),
-            );
-          }
-        } catch (error) {
-          status = "FAIL";
-          message = String(error);
-          findings.push(
-            finding(
-              "visual",
-              "MAJOR",
-              "VISUAL_RUNTIME",
-              `${scenario.id} ${viewport.width}x${viewport.height}: ${message}`,
-            ),
-          );
-        }
-        matrix.push({
-          scenario: scenario.id,
-          viewport: `${viewport.width}x${viewport.height}`,
-          status,
-          message,
-          screenshot,
-        });
-        await closeWithLimit(context);
-      }
-    } catch (error) {
-      findings.push(
-        finding(
-          "visual",
-          "BLOCKER",
-          "CHROMIUM_SCENARIO_START",
-          `${scenario.id}: Chromium se nepodařilo spustit nebo pokračovat: ${error.message}`,
-        ),
-      );
-      await closeWithLimit(browser, 8000, true);
-      browser = undefined;
-      runsInBrowser = 0;
+    for (const viewport of viewports) {
+      const result = await runVisualCase(scenario, viewport);
+      matrix.push(result.matrix);
+      if (result.finding) findings.push(result.finding);
     }
   }
+} catch (error) {
+  findings.push(
+    finding(
+      "visual",
+      "BLOCKER",
+      "CHROMIUM_START",
+      `Chromium pro vizuální kontrolu nelze spustit: ${error.message}`,
+    ),
+  );
 } finally {
-  await closeWithLimit(browser, 8000, true);
+  await resetBrowser(true);
   await Promise.race([
     new Promise((resolve) => server.close(resolve)),
     new Promise((resolve) => setTimeout(resolve, 2000)),
