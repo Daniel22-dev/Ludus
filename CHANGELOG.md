@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.16.2
+
+- Engine Stranger Things se po pozdním uvolnění centrální brány spustí i tehdy, když již proběhl `DOMContentLoaded`; prázdná obrazovka pod krycí vrstvou je opravena.
+
+- Překladová vrstva nahrazuje krátké tokeny pouze jako samostatná slova; vlastní jména jako JONES ani slova CONSOLE, NOON, OFFLINE a OKLAHOMA se již nepoškodí.
+
+- zavedena jednotná certifikační brána GHRAB QA Standard 1.0.1;
+- doplněny skutečné Chromium screenshoty hlavní dílny a všech herních enginů;
+- release verdikt je vázán na verzi a SHA-256 buildu a bez deployed smoke testu zůstává AUTOMATED_READY.
+
 Všechny významné změny LUDUSu jsou vedeny na jednom místě. Verze odpovídá `package.json`, aplikaci, PWA cache i manuálu.
 
 ## 1.16.1 — 2026-07-15

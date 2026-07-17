@@ -1,0 +1,85 @@
+{
+  "standard": "GHRAB-QA-1.0.2",
+  "appId": "ludus",
+  "appName": "LUDUS",
+  "appVersion": "1.16.2",
+  "entryPoint": "dist/index.html",
+  "serveRoot": "dist",
+  "buildRoot": "dist",
+  "installCommand": "npm ci --no-fund",
+  "buildCommand": "npm run build",
+  "testCommand": "npm test",
+  "headlessCommand": "",
+  "auditCommand": "npm audit --audit-level=high",
+  "features": {
+    "pwa": true,
+    "ai": true,
+    "centralAccessGuard": true,
+    "fileExport": true,
+    "studentRuntime": true,
+    "teacherRuntime": true,
+    "localStorage": true,
+    "serviceWorker": true
+  },
+  "requiredViewports": [
+    {
+      "width": 360,
+      "height": 800
+    },
+    {
+      "width": 412,
+      "height": 915
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "versionChecks": [
+    {
+      "file": "src/index.html",
+      "regex": "APP_VERSION='([0-9.]+)'",
+      "expected": "1.16.2"
+    },
+    {
+      "file": "public/sw.js",
+      "regex": "ludus-pwa-v([0-9.]+)",
+      "expected": "1.16.2"
+    },
+    {
+      "file": "README.md",
+      "regex": "Verze: \\*\\*([0-9.]+)\\*\\*",
+      "expected": "1.16.2"
+    }
+  ],
+  "pwaTargets": [
+    {
+      "id": "ludus",
+      "root": "dist",
+      "manifest": "manifest.webmanifest",
+      "serviceWorker": "sw.js",
+      "cachePrefix": "ludus-pwa-"
+    }
+  ],
+  "security": {
+    "allowedEmails": [
+      "balaz@ghrabuvka.cz"
+    ],
+    "requiresCsvFormulaProtection": false
+  },
+  "compatibility": {
+    "runtimeSourceRoots": [
+      "src",
+      "public"
+    ],
+    "disallowRegexLookbehind": true
+  }
+}

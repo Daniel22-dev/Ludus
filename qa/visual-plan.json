@@ -1,0 +1,184 @@
+{
+  "scenarios": [
+    {
+      "id": "ludus-workshop",
+      "name": "Hlavní dílna",
+      "url": "/index.html",
+      "expectedText": "Postav hru",
+      "mustVisible": ["h1", ".bar"],
+      "viewports": [
+        {
+          "width": 360,
+          "height": 800
+        },
+        {
+          "width": 412,
+          "height": 915
+        },
+        {
+          "width": 768,
+          "height": 1024
+        },
+        {
+          "width": 1366,
+          "height": 768
+        },
+        {
+          "width": 1920,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "id": "engine-stranger-things",
+      "name": "Engine Javorové rokli",
+      "url": "/engines/stranger-things.html",
+      "expectedText": "Javorové rokli",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 360,
+          "height": 800
+        },
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-chronos",
+      "name": "Engine Časová hlídka",
+      "url": "/engines/chronos.html",
+      "expectedText": "Časová hlídka",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-dnd",
+      "name": "Engine Kostka osudu",
+      "url": "/engines/dnd.html",
+      "expectedText": "Kostka osudu",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-hogwarts",
+      "name": "Engine Hogwarts",
+      "url": "/engines/hogwarts.html",
+      "expectedText": "Hogwarts",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-indiana-jones",
+      "name": "Engine Indiana Jones",
+      "url": "/engines/indiana-jones.html",
+      "expectedText": "Indiana Jones",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 412,
+          "height": 915
+        },
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-jumanji",
+      "name": "Engine Jumanji",
+      "url": "/engines/jumanji.html",
+      "expectedText": "Zakletá",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-laughworks",
+      "name": "Engine Továrna na smích",
+      "url": "/engines/laughworks.html",
+      "expectedText": "Továrna na smích",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-lotr",
+      "name": "Engine Middle-earth",
+      "url": "/engines/lotr.html",
+      "expectedText": "Středozem",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-matrix",
+      "name": "Engine Detektivka",
+      "url": "/engines/matrix.html",
+      "expectedText": "Případ Simulakrum",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-orient-express",
+      "name": "Engine Zimním expresu",
+      "url": "/engines/orient-express.html",
+      "expectedText": "Zimním expresu",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    },
+    {
+      "id": "engine-star-wars",
+      "name": "Engine Star Wars",
+      "url": "/engines/star-wars.html",
+      "expectedText": "Star Wars",
+      "mustVisible": ["body"],
+      "viewports": [
+        {
+          "width": 1366,
+          "height": 768
+        }
+      ]
+    }
+  ]
+}

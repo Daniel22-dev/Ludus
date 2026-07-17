@@ -5456,7 +5456,7 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academ
 <!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
 
 
-<!-- LUDUS STANDARD BLOCK START v1.16.0 -->
+<!-- LUDUS STANDARD BLOCK START v1.16.2 -->
 <style>
   #ludusBadge{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));z-index:2147483000;min-width:58px;height:34px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:900 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.12em;color:#fff;background:rgba(12,16,28,.82);border:1px solid rgba(255,255,255,.28);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(10px);cursor:pointer;user-select:none}
   #ludusBadge:active,#ludusLangSwitch:active{transform:scale(.96)}
@@ -5472,7 +5472,7 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academ
 </style>
 <script>
 (function(){
-  var VERSION='1.16.0', currentLang='cs', translating=false, mo=null, translatePending=false;
+  var VERSION='1.16.2', currentLang='cs', translating=false, mo=null, translatePending=false;
   var textSources=new WeakMap(), attrSources=new WeakMap(), htmlSources=new WeakMap();
   var titleRecord={source:document.title,last:document.title,sourceLang:'cs'};
   var COPY={
@@ -5615,13 +5615,20 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academ
   function qs(s,r){return (r||document).querySelector(s);} function qsa(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
   function contentLang(){var c=window.LUDUS_CONTENT||window.GAME_CONTENT||{},m=c.meta||{},l=c.lang||{};var v=c.uiLang||l.ui||m.uiLang||(typeof m.lang==='string'?m.lang:'');return v==='en'?'en':'cs';}
   function detectSourceLang(s){var v=String(s||''),cs=0,en=0,i;for(i=0;i<CS_EN_KEYS.length&&cs<2;i++)if(v.indexOf(CS_EN_KEYS[i])>=0)cs++;for(i=0;i<EN_CS_KEYS.length&&en<2;i++)if(v.indexOf(EN_CS_KEYS[i])>=0)en++;return en>cs?'en':'cs';}
+  function replaceMappedToken(text,key,value){
+    var escaped=String(key).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    var startsWord=/^[\p{L}\p{N}_]/u.test(key),endsWord=/[\p{L}\p{N}_]$/u.test(key);
+    var source=(startsWord?'(^|[^\\p{L}\\p{N}_])':'')+escaped+(endsWord?'(?![\\p{L}\\p{N}_])':'');
+    var re=new RegExp(source,'gu');
+    return String(text).replace(re,function(match,prefix){return startsWord?(prefix+value):value;});
+  }
   function translateString(s,lang,sourceLang){var out=String(s||''),src=sourceLang==='en'?'en':'cs';if(lang===src)return out;if(src==='cs'&&lang==='en'){
     out=out.replace(/Zbývají\s+(\d+)\s+život(?:y|ů)/gi,'$1 lives remaining')
       .replace(/(\d+)\s+chyb(?:a|y|u|ami)?\s+v\s+souboji/gi,'$1 mistakes in battle')
       .replace(/Legenda o draku/gi,'Legend of the dragon');
   }
     var map=src==='cs'?CS_EN:EN_CS,keys=src==='cs'?CS_EN_KEYS:EN_CS_KEYS;
-    for(var i=0;i<keys.length;i++){var k=keys[i];if(out.indexOf(k)>=0)out=out.split(k).join(map[k]);}
+    for(var i=0;i<keys.length;i++){var k=keys[i];if(out.indexOf(k)>=0)out=replaceMappedToken(out,k,map[k]);}
     return out;
   }
   function nodeRecord(node){var current=node.nodeValue,rec=textSources.get(node);if(!rec||rec.last!==current){rec={source:current,last:current,sourceLang:detectSourceLang(current)};textSources.set(node,rec);}return rec;}
@@ -5665,7 +5672,7 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academ
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
-<!-- LUDUS STANDARD BLOCK END v1.16.0 -->
+<!-- LUDUS STANDARD BLOCK END v1.16.2 -->
 
 </body>
 </html>

@@ -123,7 +123,7 @@ async function main() {
     const rel = 'engines/' + file;
     const txt = read(rel);
     need(txt.includes('LUDUS STANDARD BLOCK START'), `${rel}: chybí standardní LUDUS blok`);
-    need(txt.includes('LUDUS STANDARD BLOCK START v1.16.0'), `${rel}: standardní blok nemá verzi 1.16.0`);
+    need(txt.includes('LUDUS STANDARD BLOCK START v1.16.2'), `${rel}: standardní blok nemá verzi 1.16.2`);
     need(txt.includes('ludusLangSwitch') && txt.includes('window.LUDUS_I18N'), `${rel}: chybí jednotný přepínač CZ/EN`);
     need(txt.includes('id="ludusBadge"') || txt.includes("id='ludusBadge'"), `${rel}: chybí #ludusBadge`);
     need(/teacher=1/.test(txt), `${rel}: chybí ?teacher=1`);
@@ -140,7 +140,7 @@ async function main() {
       need(txt.includes('function applyThemeMedia'), 'hogwarts.html: chybí přepínání médií podle varianty');
     }
 
-    const block = txt.match(/<!-- LUDUS STANDARD BLOCK START v1\.16\.0 -->([\s\S]*?)<!-- LUDUS STANDARD BLOCK END v1\.16\.0 -->/);
+    const block = txt.match(/<!-- LUDUS STANDARD BLOCK START v1\.16\.2 -->([\s\S]*?)<!-- LUDUS STANDARD BLOCK END v1\.16\.2 -->/);
     if (block) standardHashes.add(crypto.createHash('sha256').update(block[1]).digest('hex'));
 
     const scripts = [...txt.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)];
@@ -227,6 +227,9 @@ async function main() {
     const student = stripStudioProtection(deployed);
     need(!/data-ghrab-access-bootstrap|application\/ghrab-protected|access-gate\.css/.test(student), `dist/engines/${file}: ochranu nelze bezpečně odstranit pro export`);
     need(/<script(?:\s|>)/i.test(student), `dist/engines/${file}: po očištění chybí spustitelný studentský skript`);
+    if(file==='stranger-things.html'){
+      need(deployed.includes('document.readyState==="loading"') && deployed.includes('else startEscapeEngine()'), 'dist/engines/stranger-things.html: pozdní aktivace po guardu musí spustit engine i po DOMContentLoaded');
+    }
   }
 
   // Chování dílny v DOM: self-testy, přesná mechanika a skutečně vygenerovaný třídní kvíz.
@@ -305,6 +308,8 @@ async function main() {
       need(i18n.translateString('Legenda o draku', 'en', 'cs') === 'Legend of the dragon', 'i18n: Legenda o draku se překládá neúplně');
       need(i18n.translateString('Zbývají 3 životy', 'en', 'cs') === '3 lives remaining', 'i18n: dynamický počet životů se překládá neúplně');
       need(i18n.translateString('5 chyb v souboji', 'en', 'cs') === '5 mistakes in battle', 'i18n: dynamický počet chyb se překládá chybně');
+      need(i18n.translateString('JONES CONSOLE NOON OFFLINE OKLAHOMA', 'cs', 'en') === 'JONES CONSOLE NOON OFFLINE OKLAHOMA', 'i18n: krátké tokeny ON/OFF/OK/NO nesmějí poškodit vlastní jména a delší slova');
+      need(i18n.translateString('ON OFF', 'cs', 'en').includes('ZAPNUTO') && i18n.translateString('ON OFF', 'cs', 'en').includes('VYPNUTO'), 'i18n: samostatné krátké tokeny se stále překládají');
       const probe = engineDom.window.document.createElement('div');
       probe.textContent = 'Mapa kobky';
       engineDom.window.document.body.appendChild(probe);

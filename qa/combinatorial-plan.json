@@ -1,0 +1,16 @@
+{
+  "parameters": {
+    "engine": ["stranger-things", "chronos", "dnd", "hogwarts", "indiana-jones", "jumanji", "laughworks", "lotr", "matrix", "orient-express", "star-wars"],
+    "stage": ["intro", "start", "play", "finish", "restart"],
+    "content": ["short", "long", "image", "audio-video"],
+    "device": ["mobile", "tablet", "desktop"]
+  },
+  "criticalTriples": [
+    {"engine":"stranger-things","stage":"start","device":"mobile"},
+    {"engine":"indiana-jones","content":"long","device":"mobile"},
+    {"engine":"indiana-jones","stage":"restart","content":"image"}
+  ],
+  "fixedScenarios": [{"engine":"stranger-things","stage":"intro","content":"short","device":"desktop"}],
+  "validator": "qa/combinatorial-validator.mjs",
+  "limitations": ["Každý engine je navíc otevřen v Chromium galerii; pairwise validátor kontroluje jeho konkrétní chráněný export a společné regresní invarianty."]
+}

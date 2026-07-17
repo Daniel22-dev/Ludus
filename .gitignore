@@ -3,3 +3,4 @@ node_modules/
 webroot/
 *.log
 .DS_Store
+qa-results/
