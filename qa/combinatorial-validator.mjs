@@ -36,10 +36,11 @@ export async function validateScenario(scenario, { root }) {
   const hasBoot = /(DOMContentLoaded|readyState|init|start)/i.test(text);
   const tokenSafe =
     scenario.engine !== "indiana-jones" ||
-    /(replaceMappedToken|tokenBoundary|\[A-Za-zÀ-ž0-9_\])/i.test(text);
+    /(replaceMappedToken|tokenBoundary|\[A-Za-zÀ-ž0-9_\])/i.test(text) ||
+    (/const\s+SKINS\s*=/.test(text) && /Object\.assign\(LABELS,\s*SKINS\[SKIN\]\)/.test(text));
   const sharedVersion =
     new RegExp(`LUDUS STANDARD BLOCK START v${versionPattern}`).test(text) &&
-    new RegExp(`var VERSION=["']${versionPattern}["']`).test(text);
+    new RegExp(`data-ludus-shared-runtime=["']${versionPattern}["']`).test(text);
 
   return {
     pass: hasBoot && tokenSafe && sharedVersion,

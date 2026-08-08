@@ -12,6 +12,7 @@ import {
 import { constants as fsConstants } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { stripStudioProtection } from "./access-protection.mjs";
 
 export const STANDARD = "GHRAB-QA-1.0.2";
 export const ROOT = path.resolve(
@@ -162,7 +163,7 @@ export function mimeFor(file) {
     }[ext] || "application/octet-stream"
   );
 }
-export async function startStaticServer(rootDir, { deploymentBasePath = "" } = {}) {
+export async function startStaticServer(rootDir, { deploymentBasePath = "", bypassStudioProtection = false } = {}) {
   const normalizedBasePath = String(deploymentBasePath || "")
     .replace(/^\/+|\/+$/g, "");
   const server = createServer(async (req, res) => {
@@ -192,6 +193,7 @@ export async function startStaticServer(rootDir, { deploymentBasePath = "" } = {
       });
       if (path.extname(target).toLowerCase() === ".html") {
         let html = await readFile(target, "utf8");
+        if (bypassStudioProtection) html = stripStudioProtection(html);
         html = html.replace(
           /<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/gi,
           "",

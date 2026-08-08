@@ -1,4 +1,8 @@
 ## 1.16.11 — P5 (2026-08-05)
+### CI hotfix 2026-08-08
+- Opraveny GitHub QA brány podle reálných axe/visual/combinatorial/media evidence artefaktů.
+- Zachována politika private official médií: veřejný source je nemusí obsahovat, přítomné soukromé soubory se hashově ověřují a public dist je nesmí balit.
+
 
 
 ## 1.16.11 — P5 R2
