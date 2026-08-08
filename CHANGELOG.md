@@ -1,4 +1,53 @@
+## 1.16.11 — P5 (2026-08-05)
+
+
+## 1.16.11 — P5 R2
+
+- Veřejný a školní build používá profil unofficial a neobsahuje nedoložená oficiální média.
+- Official média jsou oddělena do soukromého owner-controlled doplňku.
+- Doplněny přístupné názvy polí hráčů a runtime audit všech enginů.
+
+
+- Předprodukční akceptace bez povinného školního serveru.
+- Nulové otevřené automatické a11y nálezy jsou podmínkou P5 brány.
+- Přidán aktualizovaný release-acceptance kontrakt a odložený GitHub upload.
+
 # Changelog
+
+## 1.16.9 — P4 FINAL (2026-08-04)
+
+- Finální certifikace, čisté buildy, přístupnost, výkon, bezpečnost a release evidence.
+- Přidána povinná `qa:p4:ci` brána.
+
+## 1.16.8 - 2026-08-04 (P3)
+
+- Platforma 1.1.0, pristupnost, performance budgety a modularizace P3.
+
+## 1.16.7 — P2: sjednocení platformy GHRAB (2026-08-04)
+
+- jeden kanonický školní logotyp a jednotná autorská patička;
+- GHRAB Platform 1.0.0: motiv, storage namespace s vratnou migrací, Studio Bridge 2.0 a artifact envelope v1;
+- jednotný název PWA cache `ghrab-ludus-v1.16.7` a řízená aktualizace;
+- platformní konformitní test je součástí buildu a CI.
+
+
+## 1.16.6 — P1 (2026-08-04)
+
+- Produkční bezpečnost, serverový profil, datové manifesty a jednotná observability vrstva.
+- GHRAB AI Core 1.0.0 a přepínání direct-gemini / school-gateway.
+
+# Changelog
+
+## 1.16.5 — 2026-08-04
+
+- Etapa P0: service worker už nezmrazuje centrální Access Guard, bootstrap všech enginů používá server-ready konfiguraci a reportér neblokuje start.
+## 1.16.4 – Sjednocený reportér chyb ve všech stránkách LUDUSu
+
+- hlavní dílna i samostatné enginy používají jednu lokální kopii společného reportéru AI Studia;
+- centrální reportér app-guardu je vypnutý, takže na žádné stránce nevzniká dvojí tlačítko ani dvojí sada posluchačů;
+- adaptér rozpozná explicitní motiv a u starších enginů bezpečně odvodí světlý či tmavý vzhled z pozadí;
+- reportér je součástí PWA cache a manuál odkazuje na aktuální centrální návod;
+- herní mechaniky, média a exporty zůstaly beze změny.
 
 ## 1.16.3 – Aktuální manuál uvnitř AI Studia
 

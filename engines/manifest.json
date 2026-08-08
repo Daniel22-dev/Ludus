@@ -79,7 +79,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": true,
@@ -97,7 +97,7 @@
         "manifest": "vložený v HTML enginu + zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
-        "themeVariants": "official + safe vložené v HTML enginu",
+        "themeVariants": "official + unofficial vložené v HTML enginu",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -175,7 +175,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": true,
@@ -193,7 +193,7 @@
         "manifest": "vložený v HTML enginu + zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
-        "themeVariants": "official + safe vložené v HTML enginu",
+        "themeVariants": "official + unofficial vložené v HTML enginu",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -265,7 +265,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "engineKind": "single-html",
       "capabilities": {
@@ -284,7 +284,7 @@
         "manifest": "vložený v HTML enginu + zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
-        "themeVariants": "official + safe vložené v HTML enginu",
+        "themeVariants": "official + unofficial vložené v HTML enginu",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -362,7 +362,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -385,7 +385,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -458,7 +458,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -480,7 +480,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "Pouze náhled: engine vyžaduje vlastní detektivní dialekt (podezřelí, stopy a řešení); kanonické stanice z dílny zatím nepřebírá bezpečně.",
         "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
         "flowModel": "deklarováno v manifestu",
@@ -550,7 +550,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -572,7 +572,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "Pouze náhled: engine vyžaduje detektivní scény, podezřelé a řešení; běžný výstup stanic z dílny není s tímto flow významově kompatibilní.",
         "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
         "flowModel": "deklarováno v manifestu",
@@ -642,7 +642,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -664,7 +664,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -733,7 +733,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -755,7 +755,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -825,7 +825,7 @@
       "engineKind": "single-html",
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "supportLanguages": [
         "cs",
@@ -847,7 +847,7 @@
         "manifest": "zrcadlený v engines/manifest.json a ověřovaný validačním testem",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu nebo kryté standardním LUDUS blokem",
-        "themeVariants": "official + safe deklarované v manifestu; safe je doporučen pro veřejný export",
+        "themeVariants": "official + unofficial deklarované v manifestu; safe je doporučen pro veřejný export",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -923,7 +923,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": true,
@@ -941,7 +941,7 @@
         "manifest": "plánováno v engines/manifest.json",
         "supportedExerciseTypes": "návrh připraven",
         "i18n": "povinně cs + en při vývoji",
-        "themeVariants": "official + safe při vývoji",
+        "themeVariants": "official + unofficial při vývoji",
         "adapter": "doplnit při vývoji enginu",
         "contentV2": "export není dostupný, protože engine zatím neexistuje",
         "flowModel": "deklarováno v manifestu",
@@ -1019,7 +1019,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": false,
@@ -1103,7 +1103,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": false,
@@ -1152,7 +1152,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": true,
@@ -1214,7 +1214,7 @@
         "manifest": "zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
-        "themeVariants": "official + safe vložené v HTML enginu",
+        "themeVariants": "official + unofficial vložené v HTML enginu",
         "adapter": "Pouze náhled: obsah je zatím napevno v HTML a chybí adaptér na LUDUS_CONTENT v2.",
         "contentV2": "export hratelného HTML z dílny je zablokován, dokud engine neprojde kontraktem",
         "flowModel": "deklarováno v manifestu",
@@ -1247,7 +1247,7 @@
       ],
       "brandModes": [
         "official",
-        "safe"
+        "unofficial"
       ],
       "capabilities": {
         "hasMap": true,
@@ -1311,7 +1311,7 @@
         "manifest": "zrcadlený v engines/manifest.json",
         "supportedExerciseTypes": "deklarováno v manifestu i enginu",
         "i18n": "vložené v HTML enginu",
-        "themeVariants": "official + safe vložené v HTML enginu",
+        "themeVariants": "official + unofficial vložené v HTML enginu",
         "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
         "contentV2": "export z dílny je povolen; kompatibilita je kontrolována manifestem a validačním testem",
         "flowModel": "deklarováno v manifestu",
@@ -1321,5 +1321,8 @@
       "builderCompatible": true,
       "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
     }
-  ]
+  ],
+  "brandModeAliases": {
+    "safe": "unofficial"
+  }
 }

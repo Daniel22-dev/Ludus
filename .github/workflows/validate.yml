@@ -20,8 +20,11 @@ jobs:
         run: npm ci --registry=https://registry.npmjs.org --no-audit --no-fund
       - name: Test application
         run: npm test
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install pinned Playwright Chromium
+        shell: bash
+        run: |
+          npx playwright install --with-deps chromium
+          node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
       - name: Run GHRAB QA release gate
         run: npm run qa:release
       - name: Upload QA evidence

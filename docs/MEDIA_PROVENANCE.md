@@ -1,47 +1,26 @@
-# Evidence a provozní politika médií LUDUS
+# LUDUS media packaging – P3
 
-## Závazné pravidlo
+Tematická audiovizuální média jsou záměrnou součástí her LUDUS. Výchozí profil `official` balí všechna média, která jsou zapsaná v `media/registry.json` a schválená vlastníkem aplikace.
 
-Registrovaná intro videa a soundtracky se při technickém, bezpečnostním ani kvalitativním auditu automaticky nemažou. Audit má oddělit dvě otázky:
+Technická brána ověřuje:
 
-1. **Technická funkčnost** — soubor existuje, má správný formát, hash, načte se a exportuje se do správné varianty.
-2. **Oprávnění k použití** — evidence zdroje a práv může být úplná, neúplná nebo neověřená. Neúplný záznam vyvolá upozornění, nikoli automatický zásah do aplikace.
+- existenci souboru;
+- shodu cesty, velikosti a SHA-256;
+- vazbu na konkrétní engine a roli (`intro`, `soundtrack` apod.);
+- že distribuční build skutečně obsahuje registrované soubory.
 
-Odstranění, nahrazení nebo vypnutí média se provede pouze na výslovný pokyn vlastníka aplikace. Audit nesmí svévolně měnit uměleckou koncepci hry.
+Registr není nezávislým právním posudkem. Eviduje rozhodnutí vlastníka aplikace a technickou integritu souborů. Média se automaticky nemažou ani nevyřazují z buildu.
 
-## Technická struktura
+Další hry lze doplnit podle konvence:
 
 ```text
-media/<engine>/<varianta>/intro.mp4
-media/<engine>/<varianta>/soundtrack.mp3
-media/registry.json
+media/<engine>/official/intro.mp4
+media/<engine>/official/soundtrack.mp3
 ```
 
-Varianty:
+Po přidání souboru se doplní záznam do `media/registry.json` a `media/rights-records.json`; build pak kontroluje jeho hash a zahrne jej do GitHub i school-server distribuce.
 
-- `official` — značková/interní podoba hry,
-- `safe` — alternativní podoba s vlastním odlišným intrem a soundtrackem.
 
-Při exportu se do samostatného HTML vloží pouze vybraná varianta. Média druhé varianty se do souboru nepřibalují.
+## P5: official a unofficial
 
-## Aktuální evidence — Bradavice
-
-| Role | Soubor | Technický stav | Evidence práv |
-|---|---|---|---|
-| intro | `media/hogwarts/official/intro.mp4` | MP4, H.264/AAC, 848×450, 5,064 s | uživatelem dodaný materiál, technickým auditem neověřeno |
-| soundtrack | `media/hogwarts/official/soundtrack.mp3` | MP3, 44,1 kHz stereo, 16,562 s | uživatelem dodaný materiál, technickým auditem neověřeno |
-| safe intro | zatím nepřidáno | engine intro přeskočí | — |
-| safe soundtrack | zatím nepřidáno | zůstávají WebAudio efekty | — |
-
-Přesné velikosti a SHA-256 jsou vedeny strojově v `media/registry.json`.
-
-## Postup při přidání další hry nebo varianty
-
-1. Dodat soubor a určit engine, variantu a roli (`intro` / `soundtrack`).
-2. Uložit jej do příslušné složky `media/`.
-3. Doplnit cestu do atributů `data-ludus-src-official` nebo `data-ludus-src-safe` v enginu.
-4. Doplnit záznam do `media/registry.json`, včetně SHA-256 a stavu evidence práv.
-5. Spustit `npm test`.
-6. Browser smoke testem ověřit spuštění videa, hudby a offline export vybrané varianty.
-
-Technická evidence ani tento dokument samy o sobě nepotvrzují licenci k veřejné distribuci. Za oprávnění k použití dodaného materiálu odpovídá osoba, která jej dodala nebo publikaci schválila.
+Kanonické režimy jsou `official` (oficiální názvosloví a registrovaný tematický soundtrack) a `unofficial` (vlastní názvosloví a soundtrack vytvořený AI nebo dodaný vlastníkem). Historické označení `safe` je pouze kompatibilní technický alias pro `unofficial`.

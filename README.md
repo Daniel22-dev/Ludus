@@ -1,10 +1,14 @@
 # LUDUS
 
+**Aktuální verze:** 1.16.11  
+**Platforma:** GHRAB Platform 1.1.0 · etapa P3
+
+
 Dílna výukových her pro interní pilotní provoz Gymnázia, Ostrava-Hrabůvka.
 
 ## Aktuální stav
 
-Verze: **1.16.3**
+Verze: **1.16.11**
 
 LUDUS je připraven k řízenému školnímu pilotu. Jednotlivé hry se posuzují samostatně podle stavu v `engines/manifest.json`; označení `ready` znamená produkčně ověřený engine, `draft` rozpracovanou hru a `planned` pouze plán. Export je dovolen jen enginům s `builderCompatible: true`.
 
@@ -44,9 +48,9 @@ LUDUS obsahuje instalovatelnou PWA vrstvu s vlastní identitou, service workerem
 
 Každá hra může mít samostatné intro a soundtrack pro variantu `official` i `safe`. Soubory jsou mimo HTML v `media/<hra>/<varianta>/` a jejich technická evidence je v `media/registry.json`. Dílna při exportu vloží do samostatného HTML pouze média aktuálně zvolené varianty; export proto funguje offline a nenese média druhé varianty.
 
-**Registrovaná média se při auditu automaticky nemažou.** Audit kontroluje funkčnost, formát, velikost a integritu a může upozornit na neověřená práva. Odstranění nebo náhrada proběhne pouze na výslovný pokyn vlastníka aplikace. Za oprávnění k použití a veřejné distribuci dodaného materiálu odpovídá osoba, která médium dodala nebo publikaci schválila.
+**Tematická média jsou součástí her.** Výchozí build balí všechny soubory registrované v `media/registry.json` a ověřuje jejich cestu, velikost a SHA-256. Registr slouží k technické správě a dohledatelnosti; odstranění média je možné pouze na výslovný pokyn vlastníka aplikace. Další soundtracky lze doplňovat pod `media/<engine>/official/` a zapsat do registru.
 
-Aktuálně mají Bradavice obnoveno původní intro i soundtrack v `official` variantě. `safe` varianta je připravena na vlastní odlišná média.
+Bradavické intro a soundtrack jsou na výslovné rozhodnutí vlastníka aplikace součástí běžného GitHub i school-server buildu. Build ověřuje jejich cestu, velikost a SHA-256; registr slouží k technické správě médií a automaticky je nevyřazuje.
 
 ## Učitelský režim
 
@@ -102,8 +106,13 @@ Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuál
 
 Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
 
-LUDUS 1.16.3 podporuje Studio Bridge v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
+LUDUS 1.16.11 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
 
 ## Licence
 
 Zdrojový kód a školní identita jsou chráněny podmínkami v souboru `LICENSE`. Veřejný repozitář automaticky neuděluje právo aplikaci převzít, dále šířit nebo komerčně využívat.
+
+
+## P5: official a unofficial
+
+Kanonické režimy jsou `official` (oficiální názvosloví a registrovaný tematický soundtrack) a `unofficial` (vlastní názvosloví a soundtrack vytvořený AI nebo dodaný vlastníkem). Historické označení `safe` je pouze kompatibilní technický alias pro `unofficial`.

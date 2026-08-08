@@ -1,0 +1,116 @@
+{
+  "schema": "ghrab-data-manifest-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.11",
+  "manifestVersion": 3,
+  "dataCategories": [
+    "settings",
+    "application-content",
+    "diagnostics",
+    "ai-prompts-and-results"
+  ],
+  "privacy": {
+    "studentContentMayOccur": true,
+    "telemetryContainsContent": false,
+    "diagnosticsContainContentByDefault": false,
+    "pseudonymisationIsNotAnonymisation": true
+  },
+  "stores": [
+    {
+      "kind": "localStorage",
+      "category": "application-data",
+      "patterns": [
+        "ghrab.ludus.*",
+        "ghrab.ludus.jumanji.sound"
+      ],
+      "sensitivity": "potentially-personal",
+      "authority": "client",
+      "clearOnEndWork": true
+    },
+    {
+      "kind": "sessionStorage",
+      "category": "session-data",
+      "patterns": [
+        "ghrab.ludus.gemini_key_session"
+      ],
+      "sensitivity": "confidential",
+      "authority": "client",
+      "clearOnEndWork": true
+    },
+    {
+      "kind": "localStorage",
+      "category": "credential",
+      "patterns": [
+        "ghrab.ludus.gemini_key",
+        "ghrab.ludus.gemini_key_session"
+      ],
+      "sensitivity": "secret",
+      "authority": "client-direct-mode-only",
+      "clearOnEndWork": true
+    },
+    {
+      "kind": "sessionStorage",
+      "category": "credential",
+      "patterns": [
+        "ghrab.ludus.gemini_key",
+        "ghrab.ludus.gemini_key_session"
+      ],
+      "sensitivity": "secret",
+      "authority": "client-direct-mode-only",
+      "clearOnEndWork": true
+    },
+    {
+      "kind": "cacheStorage",
+      "category": "application-cache",
+      "patterns": [
+        "ghrab-ludus-v*",
+        "ludus*"
+      ],
+      "sensitivity": "non-content-cache",
+      "authority": "client",
+      "clearOnEndWork": false
+    }
+  ],
+  "retention": {
+    "defaultDays": 30,
+    "sessionEndsOnLogout": true,
+    "serverLogsDays": 30
+  },
+  "export": {
+    "supported": true,
+    "requiresExplicitUserAction": true,
+    "includesSecrets": false,
+    "envelopeSchema": "ghrab-artifact-envelope-v1",
+    "artifactTypes": [],
+    "nativeFormats": [
+      "html",
+      "json"
+    ]
+  },
+  "deletion": {
+    "supported": true,
+    "clientVerified": true,
+    "serverEndpoint": "data/ludus"
+  },
+  "sharedDevice": {
+    "supported": true,
+    "defaultInSchoolProfile": true,
+    "control": "GHRABPlatform.endWork()"
+  },
+  "storageNamespace": {
+    "schema": "ghrab-storage-namespace-v1",
+    "prefix": "ghrab.ludus.",
+    "migrationId": "p2-storage-namespace-v1",
+    "backup": "full",
+    "rollbackSupported": true
+  },
+  "import": {
+    "supported": true,
+    "artifactTypes": [
+      "studio-material",
+      "ludus-content"
+    ],
+    "acceptsLegacyJson": true,
+    "checksumRequiredForEnvelope": true
+  }
+}

@@ -22,6 +22,7 @@ const findings = [];
 const matrix = [];
 const { server, baseUrl } = await startStaticServer(
   path.join(ROOT, manifest.serveRoot || "dist"),
+  { deploymentBasePath: manifest.deploymentBasePath || "" },
 );
 let browser;
 const guardJs = `export async function protectApp(appId){document.documentElement.dataset.ghrabAccess='granted';document.dispatchEvent(new CustomEvent('ghrab:app-access-granted',{detail:{permit:{appId,qa:true}}}));return true}`;
@@ -98,6 +99,16 @@ try {
         await page.route("**/AI-Studio-GHRAB/access/access-gate.css", (r) =>
           r.fulfill({ status: 200, contentType: "text/css", body: "" }),
         );
+        await page.route("**/AI-Studio-GHRAB/config/support.json", (r) =>
+          r.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({ administratorEmail: "balaz@ghrabuvka.cz" }),
+          }),
+        );
+        await page.route("**/AI-Studio-GHRAB/config/apps.generated.json", (r) =>
+          r.fulfill({ status: 200, contentType: "application/json", body: "[]" }),
+        );
         const url =
           baseUrl + (flow.url.startsWith("/") ? flow.url : `/${flow.url}`);
         await setLocalDocument(
@@ -106,6 +117,15 @@ try {
           flow.url,
           baseUrl,
         );
+        await page.waitForFunction(
+          () => document.documentElement.dataset.ghrabAccess !== "checking",
+          null,
+          { timeout: 7000 },
+        );
+        const accessState = await page.locator("html").getAttribute("data-ghrab-access");
+        if (accessState === "denied") {
+          throw new Error("Přístupový bootstrap skončil stavem denied.");
+        }
         for (const step of flow.steps || []) {
           if (step.action === "wait") await page.waitForTimeout(step.ms || 500);
           if (step.action === "click")

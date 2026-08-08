@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ludus-media-rights-records-v1.schema.json",
+  "title": "LUDUS media rights records",
+  "type": "object",
+  "required": [
+    "schema",
+    "releasePolicy",
+    "records"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ludus-media-rights-records-v1"
+    },
+    "releasePolicy": {
+      "type": "object"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "sha256",
+          "rightsStatus",
+          "publicRelease"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^media/"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "rightsStatus": {
+            "type": "string"
+          },
+          "publicRelease": {
+            "type": "boolean"
+          },
+          "evidence": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  }
+}

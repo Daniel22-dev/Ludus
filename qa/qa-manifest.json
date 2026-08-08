@@ -2,7 +2,7 @@
   "standard": "GHRAB-QA-1.0.2",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.3",
+  "appVersion": "1.16.11",
   "entryPoint": "dist/index.html",
   "serveRoot": "dist",
   "buildRoot": "dist",
@@ -10,7 +10,7 @@
   "buildCommand": "npm run build",
   "testCommand": "npm test",
   "headlessCommand": "",
-  "auditCommand": "npm audit --audit-level=high",
+  "auditCommand": "npm audit --omit=dev --audit-level=high",
   "features": {
     "pwa": true,
     "ai": true,
@@ -47,17 +47,17 @@
     {
       "file": "src/index.html",
       "regex": "APP_VERSION='([0-9.]+)'",
-      "expected": "1.16.3"
+      "expected": "1.16.11"
     },
     {
       "file": "public/sw.js",
-      "regex": "ludus-pwa-v([0-9.]+)",
-      "expected": "1.16.3"
+      "regex": "ghrab-ludus-v([0-9.]+)",
+      "expected": "1.16.11"
     },
     {
       "file": "README.md",
       "regex": "Verze: \\*\\*([0-9.]+)\\*\\*",
-      "expected": "1.16.3"
+      "expected": "1.16.11"
     }
   ],
   "pwaTargets": [
@@ -66,7 +66,7 @@
       "root": "dist",
       "manifest": "manifest.webmanifest",
       "serviceWorker": "sw.js",
-      "cachePrefix": "ludus-pwa-"
+      "cachePrefix": "ghrab-ludus-v"
     }
   ],
   "security": {
@@ -81,5 +81,6 @@
       "public"
     ],
     "disallowRegexLookbehind": true
-  }
+  },
+  "deploymentBasePath": "/Ludus/"
 }

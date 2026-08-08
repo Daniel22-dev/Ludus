@@ -1,0 +1,191 @@
+{
+  "schema": "ludus-engine-index-v1",
+  "appVersion": "1.16.11",
+  "generatedFrom": "engines/manifest.json",
+  "sharedRuntime": "runtime/ludus-engine-runtime.js",
+  "engines": [
+    {
+      "file": "hogwarts.html",
+      "title": {
+        "cs": "Akademie Arkána",
+        "en": "Arcanum Academy",
+        "officialCs": "Hogwarts Grammar Academy",
+        "officialEn": "Hogwarts Grammar Academy"
+      },
+      "status": "ready",
+      "mechanicId": "academy",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": true
+    },
+    {
+      "file": "star-wars.html",
+      "title": {
+        "cs": "Hvězdní rytíři",
+        "en": "Star Knights",
+        "officialCs": "Star Wars Academy",
+        "officialEn": "Star Wars Academy"
+      },
+      "status": "draft",
+      "mechanicId": "academy",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": true
+    },
+    {
+      "file": "lotr.html",
+      "title": {
+        "cs": "LOTR: Gramatická výprava",
+        "en": "LOTR: A Grammar Quest",
+        "safeCs": "Rozlomené království",
+        "safeEn": "The Sundered Realm"
+      },
+      "status": "draft",
+      "mechanicId": "quest",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": true
+    },
+    {
+      "file": "chronos.html",
+      "title": {
+        "cs": "Časová hlídka",
+        "en": "Time Patrol",
+        "officialCs": "Návrat do budoucnosti / Doctor Who",
+        "officialEn": "Back to the Future / Doctor Who"
+      },
+      "status": "draft",
+      "mechanicId": "timeline",
+      "flowModel": "timelineRestore",
+      "builderCompatible": true
+    },
+    {
+      "file": "orient-express.html",
+      "title": {
+        "cs": "Vražda v Zimním expresu",
+        "en": "The Frostline Express",
+        "officialCs": "Vražda v Orient expresu",
+        "officialEn": "Murder on the Orient Express"
+      },
+      "status": "draft",
+      "mechanicId": "detective",
+      "flowModel": "roomsCluesAccusation",
+      "builderCompatible": false
+    },
+    {
+      "file": "matrix.html",
+      "title": {
+        "cs": "Případ Simulakrum",
+        "en": "The Simulacrum Case",
+        "officialCs": "Matrix: Anomálie",
+        "officialEn": "Matrix: Anomaly"
+      },
+      "status": "draft",
+      "mechanicId": "detective",
+      "flowModel": "scenesEvidenceAccusation",
+      "builderCompatible": false
+    },
+    {
+      "file": "stranger-things.html",
+      "title": {
+        "cs": "Únik z Javorové rokle",
+        "en": "Maple Falls Escape",
+        "officialCs": "Stranger Things",
+        "officialEn": "Stranger Things"
+      },
+      "status": "draft",
+      "mechanicId": "escape",
+      "flowModel": "roomsCodesFinalLock",
+      "builderCompatible": true
+    },
+    {
+      "file": "laughworks.html",
+      "title": {
+        "cs": "Továrna na smích",
+        "en": "Laughworks Factory",
+        "officialCs": "Příšerky s.r.o.",
+        "officialEn": "Monsters, Inc."
+      },
+      "status": "draft",
+      "mechanicId": "lab",
+      "flowModel": "stationsSynthesis",
+      "builderCompatible": true
+    },
+    {
+      "file": "jumanji.html",
+      "title": {
+        "cs": "Zakletá aréna",
+        "en": "The Wild Arena",
+        "officialCs": "Jumanji · Aréna",
+        "officialEn": "Jumanji · Arena"
+      },
+      "status": "draft",
+      "mechanicId": "arena",
+      "flowModel": "arenaRoundsBoss",
+      "builderCompatible": true
+    },
+    {
+      "file": null,
+      "title": {
+        "cs": "Lara Croft: Výprava za relikviemi",
+        "en": "Lara Croft: Relic Quest",
+        "safeCs": "Strážkyně ztracených relikvií",
+        "safeEn": "Guardian of Lost Relics"
+      },
+      "status": "planned",
+      "mechanicId": "quest",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": false
+    },
+    {
+      "title": {
+        "cs": "Banánová parta",
+        "en": "Banana Crew",
+        "officialCs": "Mimoni",
+        "officialEn": "Minions"
+      },
+      "status": "planned",
+      "mechanicId": "collection",
+      "flowModel": "drillTrainer",
+      "builderCompatible": false
+    },
+    {
+      "title": {
+        "cs": "Příšerky: Na směně",
+        "en": "Laughworks Factory",
+        "officialCs": "Příšerky s.r.o.",
+        "officialEn": "Monsters, Inc."
+      },
+      "status": "planned",
+      "mechanicId": "roleSim",
+      "flowModel": "drillTrainer",
+      "builderCompatible": false
+    },
+    {
+      "file": "indiana-jones.html",
+      "title": {
+        "cs": "Lovci relikvií",
+        "en": "Relic Hunters",
+        "officialCs": "Indiana Jones — Lovci relikvií",
+        "officialEn": "Indiana Jones — Relic Hunters"
+      },
+      "status": "draft",
+      "mechanicId": "quest",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": false
+    },
+    {
+      "file": "dnd.html",
+      "title": {
+        "cs": "Kostka osudu",
+        "en": "Roll & Quest",
+        "officialCs": "Dungeons & Dragons — Kostka osudu",
+        "officialEn": "Dungeons & Dragons — Roll & Quest"
+      },
+      "status": "draft",
+      "mechanicId": "quest",
+      "flowModel": "mapStationsFinalChallenge",
+      "builderCompatible": true
+    }
+  ],
+  "brandModeAliases": {
+    "safe": "unofficial"
+  }
+}
