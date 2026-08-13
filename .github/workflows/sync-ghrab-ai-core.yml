@@ -53,6 +53,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --registry=https://registry.npmjs.org
 
+      - name: Install pinned Playwright Chromium
+        shell: bash
+        run: |
+          npx playwright install --with-deps chromium
+          node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+
       - name: Synchronize signed artifacts
         env:
           MANIFEST_URL: ${{ github.event.client_payload.manifestUrl }}

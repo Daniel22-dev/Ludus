@@ -1,3 +1,9 @@
+## 1.16.13 — oprava GitHub Actions (2026-08-13)
+
+- Playwright Chromium se ve validačním, nasazovacím a AI Core synchronizačním workflow instaluje před `npm test` a předává se přes `CHROMIUM_PATH`.
+- Interní validace nově hlídá správné pořadí instalace prohlížeče a aplikačních testů, aby se chyba v CI nevrátila.
+- Funkce aplikace, reportér i registrovaná média zůstaly beze změny; PWA cache je `ghrab-ludus-v1.16.13`.
+
 ## 1.16.12 — sjednocení reportéru (2026-08-13)
 
 - Reportér používá dvoukrokové vytvoření a skutečné stažení diagnostického ZIPu; Gmail je dostupný až po kliknutí na stažení.

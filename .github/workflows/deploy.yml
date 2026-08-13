@@ -30,13 +30,13 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
 
-      - name: Test application
-        run: npm test
       - name: Install pinned Playwright Chromium
         shell: bash
         run: |
           npx playwright install --with-deps chromium
           node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+      - name: Test application
+        run: npm test
       - name: Run unified error reporter regression
         run: npm run test:reporter
       - name: Run GHRAB QA release gate

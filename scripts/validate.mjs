@@ -470,8 +470,21 @@ async function main() {
 
   const validateWorkflow = read('.github/workflows/validate.yml');
   const deployWorkflow = read('.github/workflows/deploy.yml');
+  const syncCoreWorkflow = read('.github/workflows/sync-ghrab-ai-core.yml');
   need(validateWorkflow.includes('npm ci') && validateWorkflow.includes('npm test'), '.github/workflows/validate.yml: chybí npm ci / npm test');
   need(deployWorkflow.includes('npm ci') && deployWorkflow.includes('npm test'), '.github/workflows/deploy.yml: nasazení není blokováno testy');
+  for (const [workflowPath, workflow] of [
+    ['.github/workflows/validate.yml', validateWorkflow],
+    ['.github/workflows/deploy.yml', deployWorkflow],
+    ['.github/workflows/sync-ghrab-ai-core.yml', syncCoreWorkflow],
+  ]) {
+    const browserInstallPosition = workflow.indexOf('playwright install --with-deps chromium');
+    const applicationTestPosition = workflow.indexOf('run: npm test');
+    need(
+      browserInstallPosition >= 0 && applicationTestPosition >= 0 && browserInstallPosition < applicationTestPosition,
+      `${workflowPath}: Playwright Chromium musí být nainstalován a CHROMIUM_PATH nastaven před npm test`,
+    );
+  }
 
   // Centrální přístup: nasazená dílna i každý engine musí být fail-closed.
   const distMediaRegistry = JSON.parse(read('dist/media/registry.json'));
