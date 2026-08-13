@@ -1,3 +1,10 @@
+## 1.16.12 — sjednocení reportéru (2026-08-13)
+
+- Reportér používá dvoukrokové vytvoření a skutečné stažení diagnostického ZIPu; Gmail je dostupný až po kliknutí na stažení.
+- Rozhraní i e-mail vyžadují ruční přiložení ZIPu a pomocné video je bezpečně skryté uvnitř reportéru i při scrollování.
+- Regresní sada fyzicky ověřuje stažený ZIP, jeho snímky a diagnostiku, jednu instanci reportéru, motivy, mobilní zobrazení a klávesnici.
+- Herní enginy, média a jejich licence nebyly měněny; PWA cache je `ghrab-ludus-v1.16.12`.
+
 ## 1.16.11 — P5 (2026-08-05)
 ### CI hotfix 2026-08-08
 - Opraveny GitHub QA brány podle reálných axe/visual/combinatorial/media evidence artefaktů.

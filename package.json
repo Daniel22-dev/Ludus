@@ -1,6 +1,6 @@
 {
   "name": "ludus",
-  "version": "1.16.11",
+  "version": "1.16.12",
   "description": "LUDUS — dílna výukových her (builder + samostatné enginy)",
   "type": "module",
   "scripts": {
