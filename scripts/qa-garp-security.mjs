@@ -19,8 +19,9 @@ const stdModule=read('dist/access/deployment-config.js');
 const schoolModule=read('dist-school-server/access/deployment-config.js');
 const schoolInfo=json('dist-school-server/server-ready-build-info.json');
 
-check('version.package',pkg.version==='1.16.15',pkg.version);
+check('version.package',pkg.version==='1.16.16',pkg.version);
 check('build.standard.exists',fs.existsSync(path.join(root,'dist/index.html')));
+check('access-gate.stylesheet-injected',/<link\b[^>]*data-ghrab-access-gate-css\b[^>]*href=[\"']\.\/access\/access-gate\.css[\"'][^>]*>/i.test(read('dist/index.html')));
 check('build.school.exists',fs.existsSync(path.join(root,'dist-school-server/index.html')));
 check('deployment.standard.failure-mode',stdModule.includes('const CONFIG_FAILURE_MODE = "github-fallback";'));
 check('deployment.school.failure-mode',schoolModule.includes('const CONFIG_FAILURE_MODE = "fail-closed";'));
@@ -83,7 +84,7 @@ check('actions.no-moving-major',refs.every(x=>!/@v\d+(?:\.|$)/i.test(x.ref)));
 const allowedActions=new Set(['actions/checkout','actions/setup-node','actions/upload-artifact','actions/configure-pages','actions/upload-pages-artifact','actions/deploy-pages']);
 check('actions.allowlist',refs.every(x=>allowedActions.has(x.ref.split('@')[0])),refs.filter(x=>!allowedActions.has(x.ref.split('@')[0])).map(x=>x.ref).join(','));
 
-if(checks.length!==48){console.error(`Internal QA definition error: expected 48 checks, got ${checks.length}`);process.exit(2);}
+if(checks.length!==49){console.error(`Internal QA definition error: expected 49 checks, got ${checks.length}`);process.exit(2);}
 
 // Runtime simulation: a missing deployment.json must retain signed fallback in standard dist,
 // while the school-server copy must reject and therefore leave protected scripts locked.

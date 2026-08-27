@@ -1,3 +1,9 @@
+## 1.16.16 — 2026-08-27
+
+- Hotfix synchronizuje `sharedAccessVersion` s aktuální podepsanou konfigurací AI Studia, aby se aplikace po bezpečnostní rotaci nezamykala kvůli `configuration-version-mismatch`.
+- Opraven build přístupové brány: `access-gate.css` se nyní skutečně vloží do výsledného `dist/index.html` i když zdrojový JavaScript obsahuje text selektoru používaný při exportu her.
+- Pedagogické funkce a datové formáty se nemění.
+
 ## 1.16.15 — GARP bezpečnostní kandidát, kolo 2 (2026-08-27)
 - Opraven potvrzený HIGH nález z Claude kola 1: nedůvěryhodné hodnoty herního obsahu se na dotčených cestách v enginech Chronos, Hogwarts, LOTR a Laughworks již nevkládají jako aktivní HTML.
 - Náhled sestavené hry běží uvnitř sandboxovaného iframe bez `allow-same-origin`, takže herní dokument nemá same-origin přístup k localStorage/IndexedDB builderu.

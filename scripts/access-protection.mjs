@@ -45,7 +45,7 @@ export function protectHtmlForStudio(source, appId = 'ludus', relativeDepth = 0)
   const rootPrefix = relativeDepth > 0 ? '../'.repeat(relativeDepth) : './';
   const accessBase = `${rootPrefix}access/`;
   if (!/data-ghrab-access=/i.test(html)) html = html.replace(/<html\b([^>]*)>/i, '<html$1 data-ghrab-access="checking">');
-  if (!/data-ghrab-access-gate-css/i.test(html)) {
+  if (!/<link\b[^>]*data-ghrab-access-gate-css\b/i.test(html)) {
     html = html.replace(/<\/head>/i, `<link rel="stylesheet" data-ghrab-access-gate-css href="${accessBase}access-gate.css">\n<style data-ghrab-access-style>html[data-ghrab-access="checking"] body{visibility:hidden}</style>\n</head>`);
   }
   html = transformActualScripts(html, (opening, content) => protectScriptOpen(opening) + content + '</script>');
