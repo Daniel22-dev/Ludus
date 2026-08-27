@@ -31,6 +31,13 @@ files = walk(targetDist);
 for (const runtimeProfile of files.filter((file) => file.endsWith(`${path.sep}runtime-config.school-server.js`))) {
   fs.copyFileSync(runtimeProfile, path.join(path.dirname(runtimeProfile), "runtime-config.js"));
 }
+for (const deploymentModule of files.filter((file) => file.endsWith(`${path.sep}access${path.sep}deployment-config.js`))) {
+  const source = fs.readFileSync(deploymentModule, "utf8");
+  const from = 'const CONFIG_FAILURE_MODE = "github-fallback";';
+  const to = 'const CONFIG_FAILURE_MODE = "fail-closed";';
+  if (!source.includes(from)) throw new Error("School-server build neumí aktivovat fail-closed deployment režim.");
+  fs.writeFileSync(deploymentModule, source.replace(from, to), "utf8");
+}
 for (const manifestPath of files.filter((file) => file.endsWith(`${path.sep}manifest.webmanifest`))) {
   const manifest = readJson(manifestPath);
   manifest.id = "./";
@@ -80,6 +87,7 @@ writeJson(path.join(targetDist, "server-ready-build-info.json"), {
   apiBaseUrl: deployment.apiBaseUrl,
   containsSecrets: false,
   localProviderKeysAllowed: false,
+  deploymentConfigFailureMode: "fail-closed",
   serverSessionReady: deployment.features?.serverSessionReady === true,
   schoolGatewayReady: deployment.aiTransport === "school-gateway" ? deployment.features?.schoolGatewayReady === true : null,
   aiCoreVersion: deployment.aiTransport === "school-gateway" ? "1.0.0" : null,

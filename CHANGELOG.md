@@ -1,3 +1,15 @@
+## 1.16.15 — GARP bezpečnostní kandidát, kolo 2 (2026-08-27)
+- Opraven potvrzený HIGH nález z Claude kola 1: nedůvěryhodné hodnoty herního obsahu se na dotčených cestách v enginech Chronos, Hogwarts, LOTR a Laughworks již nevkládají jako aktivní HTML.
+- Náhled sestavené hry běží uvnitř sandboxovaného iframe bez `allow-same-origin`, takže herní dokument nemá same-origin přístup k localStorage/IndexedDB builderu.
+- Hogwarts wordbank používá číselné indexy místo vkládání obsahu slov do atributů `id`/`onclick`; preview režim bezpečně toleruje nedostupný localStorage.
+- GARP regresní brána rozšířena o kontroly L1 output encodingu a izolace preview.
+
+## 1.16.14 — GARP bezpečnostní kandidát (2026-08-27)
+- School-server build při nedostupné nebo neplatné deployment konfiguraci už nesmí degradovat do serverless profilu; bootstrap zůstane zamčený fail-closed.
+- Ruční JSON import má 2MB limit, limit hloubky/počtu uzlů a odmítá strukturální klíče použitelné pro prototype-pollution řetězce.
+- Náhled exportované hry otevírá novou kartu přes `rel="noopener noreferrer"`.
+- GitHub Actions jsou připnuté na neměnné commit SHA; doplněna samostatná GARP regresní brána.
+
 ## 1.16.13 — oprava GitHub Actions (2026-08-13)
 
 - Playwright Chromium se ve validačním, nasazovacím a AI Core synchronizačním workflow instaluje před `npm test` a předává se přes `CHROMIUM_PATH`.

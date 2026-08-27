@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.13" data-ghrab-no-footer>
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.15" data-ghrab-no-footer>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -535,6 +535,7 @@ body[data-skin="safe"] .vortex2{background:conic-gradient(from 180deg,transparen
 /* ─────────────────────────── helpers ─────────────────────────── */
 var $=function(s){return document.querySelector(s);};
 var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+function esc(s){return String(s==null?'':s).replace(/[&<>\"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c];});}
 function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
 function asArray(v){return Array.isArray(v)?v:(v==null?[]:[v]);}
 function localized(v,lang,fb){
@@ -894,7 +895,7 @@ function applyUILang(){
   $('#i-title').textContent=v.mainTitle;
   $('#i-subtitle').textContent=v.subtitle;
   var L=(MODEL&&MODEL.intro&&MODEL.intro.lede)?asArray(MODEL.intro.lede).map(function(x){return localized(x,UILANG,'');}).filter(Boolean):v.lede;
-  $('#i-lede').innerHTML='<p>'+L.join('</p><p style="margin-top:10px">')+'</p>';
+  $('#i-lede').innerHTML='<p>'+L.map(esc).join('</p><p style="margin-top:10px">')+'</p>';
   $('#name-in').placeholder=t('namePh');
   $('#begin-btn').textContent=t('begin');
   $('#continue-btn').textContent=t('cont');
@@ -1270,7 +1271,7 @@ function renderMap(){
     node.innerHTML='<div class="node-dot">'+(done
         ?'<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
         :(i+1))+'</div>'+
-      '<div class="node-body"><h3>'+a.name+'</h3><span>'+(done?(Math.round(pct*100)+' % · '+t('anomalyDone')):(a.tasks.length+' '+(a.tasks.length===1?'úloha':'úloh')))+'</span></div>'+
+      '<div class="node-body"><h3>'+esc(a.name)+'</h3><span>'+(done?(Math.round(pct*100)+' % · '+t('anomalyDone')):(a.tasks.length+' '+(a.tasks.length===1?'úloha':'úloh')))+'</span></div>'+
       (done?'<div class="node-pct">'+Math.round(pct*100)+'%</div>':'');
     node.addEventListener('click',function(){openAnomaly(i);});
     node.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openAnomaly(i);}});
@@ -1353,7 +1354,7 @@ function renderTimeline(container,task,onDone,opts){
   var card=el('div','q-card');
   var instr=localized(task.instruction,'cs','')||t('instrOrder');
   card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div>'+
-    '<div class="q-text">'+instr+'</div>'+
+    '<div class="q-text">'+esc(instr)+'</div>'+
     '<div class="tl-axis"><span>▲ '+t('oldest')+'</span><span>'+t('newest')+' ▼</span></div>';
   var board=el('div','tl-board');card.appendChild(board);
   var fb=el('div','fb');card.appendChild(fb);
@@ -1365,7 +1366,7 @@ function renderTimeline(container,task,onDone,opts){
     order.forEach(function(it,i){
       var row=el('div','evt');row.dataset.i=i;row._it=it;
       row.innerHTML='<div class="grip" aria-hidden="true"><span>'+(i+1)+'</span><i></i><i></i></div>'+
-        '<div class="lbl">'+it.label+(it.note?'<small style="display:block;color:var(--dim);font-size:11px;margin-top:2px">'+(solved?it.note:'')+'</small>':'')+'</div>'+
+        '<div class="lbl">'+esc(it.label)+(it.note?'<small style="display:block;color:var(--dim);font-size:11px;margin-top:2px">'+(solved?esc(it.note):'')+'</small>':'')+'</div>'+
         '<div class="when">'+fmtWhen(it.when)+'</div>'+
         '<div class="mv"><button class="up" aria-label="posunout výš" '+(i===0?'disabled':'')+'>▲</button><button class="dn" aria-label="posunout níž" '+(i===order.length-1?'disabled':'')+'>▼</button></div>';
       if(solved)row.classList.add('reveal','fixed');
@@ -1459,19 +1460,19 @@ function renderTimeline(container,task,onDone,opts){
 function renderMC(container,task,onDone,opts){
   var answered=false,firstOK=false;
   var card=el('div','q-card');
-  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="q-text">'+task.q+'</div>';
+  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="q-text">'+esc(task.q)+'</div>';
   var opts2=el('div','opts');card.appendChild(opts2);
   var fb=el('div','fb');card.appendChild(fb);var actions=el('div');card.appendChild(actions);
   container.appendChild(card);
   task.options.forEach(function(o,i){
-    var op=el('div','opt');op.innerHTML='<div class="mk">'+String.fromCharCode(65+i)+'</div><div>'+o+'</div>';
+    var op=el('div','opt');op.innerHTML='<div class="mk">'+String.fromCharCode(65+i)+'</div><div>'+esc(o)+'</div>';
     op.onclick=function(){if(answered)return;answered=true;
       var ok=(i===task.answerIndex);firstOK=ok;
       $$('.opt',opts2).forEach(function(x,xi){x.classList.add('dim');
         if(xi===task.answerIndex)x.classList.remove('dim'),x.classList.add('ok');
         if(xi===i&&!ok)x.classList.remove('dim'),x.classList.add('ng');});
-      if(ok){SFX.correct();fb.className='fb ok';fb.innerHTML='✔ '+(task.why||'Správně.');}
-      else{SFX.wrong();fb.className='fb ng';fb.innerHTML='✘ '+(task.why||'');}
+      if(ok){SFX.correct();fb.className='fb ok';fb.innerHTML='✔ '+esc(task.why||'Správně.');}
+      else{SFX.wrong();fb.className='fb ng';fb.innerHTML='✘ '+esc(task.why||'');}
       actions.appendChild(nextBtn(t('next'),function(){onDone({pct:firstOK?1:0,kind:'mc',name:task.q});}));
     };
     opts2.appendChild(op);
@@ -1481,7 +1482,7 @@ function renderMC(container,task,onDone,opts){
 function renderTF(container,task,onDone){
   var answered=false;
   var card=el('div','q-card');
-  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="q-text">'+task.q+'</div>';
+  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="q-text">'+esc(task.q)+'</div>';
   var opts2=el('div','opts');card.appendChild(opts2);var fb=el('div','fb');card.appendChild(fb);var actions=el('div');card.appendChild(actions);
   container.appendChild(card);
   [['✔ Pravda',true],['✘ Nepravda',false]].forEach(function(p){
@@ -1490,7 +1491,7 @@ function renderTF(container,task,onDone){
       $$('.opt',opts2).forEach(function(x){x.classList.add('dim');});
       op.classList.remove('dim');op.classList.add(ok?'ok':'ng');
       if(ok)SFX.correct();else SFX.wrong();
-      fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+(task.why||(task.answer?'Tvrzení platí.':'Tvrzení neplatí.'));
+      fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+esc(task.why||(task.answer?'Tvrzení platí.':'Tvrzení neplatí.'));
       actions.appendChild(nextBtn(t('next'),function(){onDone({pct:ok?1:0,kind:'tf',name:task.q});}));
     };opts2.appendChild(op);
   });
@@ -1499,17 +1500,17 @@ function renderTF(container,task,onDone){
 function renderGap(container,task,onDone){
   var answered=false;
   var card=el('div','q-card');
-  var sent=(task.sentence||'').replace(/_{2,}|\[\.\.\.\]|\.\.\./,'<span class="wb-gap" id="wbg">?</span>');
-  if(sent.indexOf('wbg')<0)sent=task.sentence+' <span class="wb-gap" id="wbg">?</span>';
+  var sent=esc(task.sentence||'').replace(/_{2,}|\[\.\.\.\]|\.\.\./,'<span class="wb-gap" id="wbg">?</span>');
+  if(sent.indexOf('wbg')<0)sent=esc(task.sentence)+' <span class="wb-gap" id="wbg">?</span>';
   card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="wb-sentence">'+sent+'</div>';
   var bank=el('div','wb-bank');card.appendChild(bank);var fb=el('div','fb');card.appendChild(fb);var actions=el('div');card.appendChild(actions);
   container.appendChild(card);
-  task.bank.forEach(function(w){var tk=el('div','wb-tok',w);tk.onclick=function(){if(answered)return;answered=true;
+  task.bank.forEach(function(w){var tk=el('div','wb-tok');tk.textContent=w;tk.onclick=function(){if(answered)return;answered=true;
     var gap=$('#wbg');gap.textContent=w;gap.classList.add('filled');tk.classList.add('used');
     var ok=(w.trim().toLowerCase()===(task.answer||'').trim().toLowerCase());
     if(ok)SFX.correct();else SFX.wrong();
     gap.style.color=ok?'var(--good)':'var(--bad)';
-    fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+(task.why||('Správně: '+task.answer));
+    fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+esc(task.why||('Správně: '+task.answer));
     actions.appendChild(nextBtn(t('next'),function(){onDone({pct:ok?1:0,kind:'gap',name:task.sentence});}));
   };bank.appendChild(tk);});
 }
@@ -1517,14 +1518,14 @@ function renderGap(container,task,onDone){
 function renderClassify(container,task,onDone){
   var answered=false;
   var card=el('div','q-card');
-  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="cl-item">'+task.item+'</div>';
+  card.innerHTML='<div class="q-instr">'+t('anomaly')+'</div><div class="cl-item">'+esc(task.item)+'</div>';
   var bins=el('div','cl-bins');card.appendChild(bins);var fb=el('div','fb');card.appendChild(fb);var actions=el('div');card.appendChild(actions);
   container.appendChild(card);
-  task.bins.forEach(function(b,i){var bin=el('div','cl-bin',b);bin.onclick=function(){if(answered)return;answered=true;
+  task.bins.forEach(function(b,i){var bin=el('div','cl-bin');bin.textContent=b;bin.onclick=function(){if(answered)return;answered=true;
     var ok=(i===task.answerIndex);
     $$('.cl-bin',bins).forEach(function(x,xi){if(xi===task.answerIndex)x.style.borderColor='var(--good)';if(xi===i&&!ok)x.style.borderColor='var(--bad)';});
     if(ok)SFX.correct();else SFX.wrong();
-    fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+(task.why||('Patří do: '+task.bins[task.answerIndex]));
+    fb.className='fb '+(ok?'ok':'ng');fb.innerHTML=(ok?'✔ ':'✘ ')+esc(task.why||('Patří do: '+task.bins[task.answerIndex]));
     actions.appendChild(nextBtn(t('next'),function(){onDone({pct:ok?1:0,kind:'cl',name:task.item});}));
   };bins.appendChild(bin);});
 }
@@ -1554,10 +1555,10 @@ function renderResult(){
   var verdict=t('verdict'+gr);
   var w=$('#res-wrap');w.innerHTML='';
   var card=el('div','res-card');
-  var topic=(MODEL&&MODEL.meta&&MODEL.meta.topic)?('<div class="res-meta">'+MODEL.meta.topic+'</div>'):'';
+  var topic=(MODEL&&MODEL.meta&&MODEL.meta.topic)?('<div class="res-meta">'+esc(MODEL.meta.topic)+'</div>'):'';
   card.innerHTML=
     '<div class="res-eyebrow">'+TV('certEyebrow')+'</div>'+
-    '<div class="res-name">'+(G.name||'Agent')+'</div>'+
+    '<div class="res-name">'+esc(G.name||'Agent')+'</div>'+
     '<div class="res-meta">'+t('testId')+': '+missionId()+' · '+ts+'</div>'+topic+
     '<div class="res-grade-wrap">'+
       '<div class="res-grade '+(gr===1?'g1':(gr===5?'g5':''))+'">'+gr+'</div>'+
@@ -1574,9 +1575,9 @@ function renderResult(){
   // detailní review
   var rev=el('div','review');rev.innerHTML='<h3>'+t('review')+'</h3>';
   (MODEL?MODEL.anomalies:[]).forEach(function(a){var s=G.scores[a.id];if(!s)return;var p=Math.round(s.pct*100);var ok=s.pct>=0.6;
-    var it=el('div','rev-item');it.innerHTML='<div class="rh">'+a.name+'<span class="tag '+(ok?'ok':'ng')+'">'+p+'%</span></div>';rev.appendChild(it);});
+    var it=el('div','rev-item');it.innerHTML='<div class="rh">'+esc(a.name)+'<span class="tag '+(ok?'ok':'ng')+'">'+p+'%</span></div>';rev.appendChild(it);});
   if(G.finScore){var p=Math.round(G.finScore.pct*100);var ok=G.finScore.pct>=0.6;
-    var it=el('div','rev-item');it.innerHTML='<div class="rh">'+(MODEL.finale?MODEL.finale.name:t('finTitle'))+'<span class="tag '+(ok?'ok':'ng')+'">'+p+'%</span></div>';rev.appendChild(it);}
+    var it=el('div','rev-item');it.innerHTML='<div class="rh">'+esc(MODEL.finale?MODEL.finale.name:t('finTitle'))+'<span class="tag '+(ok?'ok':'ng')+'">'+p+'%</span></div>';rev.appendChild(it);}
   w.appendChild(rev);
   // certifikát
   w.appendChild(buildCert(gr,pctR));
@@ -1601,10 +1602,10 @@ function buildCert(gr,pctR){
       '<circle cx="60" cy="40" r="2.5" fill="#7a5a18"/></svg>'+
     '<div class="cert-div"></div>'+
     '<div class="cert-grade-t">'+t('awarded')+'</div>'+
-    '<div class="cert-name serif">'+(G.name||'Agent')+'</div>'+
+    '<div class="cert-name serif">'+esc(G.name||'Agent')+'</div>'+
     '<div class="cert-grade-t">'+t('gradeOf')+'</div>'+
     '<div class="cert-grade serif">'+gr+' — '+gradeWord+' ('+pctR+'%)</div>'+
-    '<div class="cert-foot"><div><b>'+THEME.certPlace+'</b>'+(THEME.mode==='official'?'kontinuum':'velitelství')+'</div>'+
+    '<div class="cert-foot"><div><b>'+esc(THEME.certPlace)+'</b>'+(THEME.mode==='official'?'kontinuum':'velitelství')+'</div>'+
       '<div><b>'+TV('certSig')+'</b>'+TV('certRole')+'</div></div>';
   return c;
 }
@@ -1781,10 +1782,10 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Časová hlídka" };
 <!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
 
 
-<!-- LUDUS STANDARD BLOCK START v1.16.13 -->
+<!-- LUDUS STANDARD BLOCK START v1.16.15 -->
 <link rel="stylesheet" href="../runtime/ludus-engine-badge.css" data-ludus-shared-style="badge">
-<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.13"></script>
-<!-- LUDUS STANDARD BLOCK END v1.16.13 -->
+<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.15"></script>
+<!-- LUDUS STANDARD BLOCK END v1.16.15 -->
 
 </body>
 </html>

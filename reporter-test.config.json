@@ -2,7 +2,7 @@
   "distEntry": "dist/index.html",
   "appId": "ludus",
   "appName": "LUDUS",
-  "version": "1.16.13",
+  "version": "1.16.15",
   "reporterPath": "public/access/error-reporter.js",
   "stylePath": "public/access/error-reporter.css",
   "adapterPath": "public/access/error-reporter-adapter.js",

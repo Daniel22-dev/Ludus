@@ -1,6 +1,6 @@
 # LUDUS
 
-**Aktuální verze:** 1.16.13  
+**Aktuální verze:** 1.16.15  
 **Platforma:** GHRAB Platform 1.1.0 · etapa P3
 
 
@@ -8,7 +8,7 @@ Dílna výukových her pro interní pilotní provoz Gymnázia, Ostrava-Hrabůvka
 
 ## Aktuální stav
 
-Verze: **1.16.13**
+Verze: **1.16.15**
 
 LUDUS je připraven k řízenému školnímu pilotu. Jednotlivé hry se posuzují samostatně podle stavu v `engines/manifest.json`; označení `ready` znamená produkčně ověřený engine, `draft` rozpracovanou hru a `planned` pouze plán. Export je dovolen jen enginům s `builderCompatible: true`.
 
@@ -106,7 +106,7 @@ Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuál
 
 Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
 
-LUDUS 1.16.13 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
+LUDUS 1.16.15 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
 
 ## Licence
 

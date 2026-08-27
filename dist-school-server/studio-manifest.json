@@ -1,0 +1,90 @@
+{
+  "schema": "ai-studio-app-manifest-v1",
+  "id": "ludus",
+  "name": {
+    "cs": "LUDUS",
+    "en": "LUDUS"
+  },
+  "version": "1.16.15",
+  "status": {
+    "cs": "Ověřováno v pilotu",
+    "en": "Being validated in pilot"
+  },
+  "description": {
+    "cs": "Dílna výukových her, která převádí učivo do různých herních světů a mechanik.",
+    "en": "A learning-game workshop that transforms content into different game worlds and mechanics."
+  },
+  "launchUrl": "/apps/ludus/",
+  "manualUrl": "/apps/ludus/manual/",
+  "repository": "daniel22-dev/Ludus",
+  "icon": "assets/apps/ludus.png",
+  "accent": "#a877ff",
+  "tags": [
+    {
+      "cs": "Gamifikace",
+      "en": "Gamification"
+    },
+    {
+      "cs": "Týmová výuka",
+      "en": "Team learning"
+    }
+  ],
+  "capabilities": [
+    "gamification",
+    "game-builder",
+    "team-learning",
+    "offline-export",
+    "game-engines",
+    "classroom-games",
+    "ai-generation",
+    "print",
+    "ghrab-platform-v1",
+    "canonical-branding",
+    "storage-namespace-v1",
+    "artifact-envelope-v1"
+  ],
+  "compatibility": {
+    "studioMinVersion": "0.5.1",
+    "materialSchema": "ghrab-material-v1",
+    "studioBridge": "2.0",
+    "platformContract": "ghrab-platform-v1",
+    "platformRange": ">=1.0.0 <2.0.0"
+  },
+  "publishedAt": "2026-08-27T07:49:22.788Z",
+  "aiCore": {
+    "schema": "ghrab-ai-app-integration-v1",
+    "status": "integrated-p1",
+    "coreVersion": "1.0.0",
+    "contractVersion": "1",
+    "serverReady": true,
+    "conformancePassed": true,
+    "operationsManifestUrl": "/apps/ludus/ai-operations.json",
+    "runtimeSchema": "ghrab-runtime-config-v1",
+    "gatewayContract": "ghrab-ai-request-v1",
+    "certificationStatus": "certified-p1",
+    "certificationEvidence": "evidence/p1-ai-conformance.json",
+    "certifiedOperations": 2
+  },
+  "slug": "ludus",
+  "paths": {
+    "app": "https://daniel22-dev.github.io/Ludus/",
+    "manual": "https://daniel22-dev.github.io/Ludus/manual/",
+    "manifest": "https://daniel22-dev.github.io/Ludus/studio-manifest.json"
+  },
+  "platform": {
+    "contract": "ghrab-platform-v1",
+    "platformVersion": "1.1.0",
+    "requiredRange": ">=1.1.0 <2.0.0",
+    "brandVersion": "1.0.0",
+    "themeContract": "ghrab-theme-v1",
+    "storageContract": "ghrab-storage-namespace-v1",
+    "bridgeContract": "ghrab-studio-handoff-v2",
+    "artifactContract": "ghrab-artifact-envelope-v1",
+    "accessibilityContract": "ghrab-a11y-v1",
+    "performanceContract": "ghrab-performance-v1",
+    "moduleContract": "ghrab-lazy-modules-v1",
+    "cacheName": "ghrab-ludus-v1.16.15"
+  },
+  "deploymentProfile": "school-server",
+  "serverReadyPhase": "P3"
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.13" data-ghrab-no-footer>
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.15" data-ghrab-no-footer>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -778,10 +778,10 @@ function renderStep(step,color){
     body=`<div class="bank" id="bank">${shuffled(step.bank).map(w=>`<button class="chip" data-w="${esc(w)}">${esc(w)}</button>`).join("")}</div>`;
   }else{
     const two=step.options.length===2; const cls=step.classify?"opts cats":(two?"opts two":"opts");
-    body=`<div class="${cls}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${o.label}</span></button>`).join("")}</div>`;
+    body=`<div class="${cls}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${esc(o.label)}</span></button>`).join("")}</div>`;
   }
   host.innerHTML=`<div class="qcard"><div class="qtype">${typeLabel(step.type)}</div>
-    <p class="prompt${step.classify?' word':''}">${step.prompt}</p>${body}
+    <p class="prompt${step.classify?' word':''}">${esc(step.prompt)}</p>${body}
     <div class="fb" id="fb"></div>
     <div class="btnrow" id="controw" style="display:none"><button class="btn" id="cont">${T("cont")}</button></div></div>`;
   if(step.type==="wordbank"){
@@ -862,8 +862,8 @@ function screenSynthesis(){
 function renderStepSynth(step){
   const host=$("#qhost"); if(!host||!step)return; const two=step.options&&step.options.length===2;
   host.innerHTML=`<div class="qcard"><div class="qtype">${typeLabel(step.type)}</div>
-    <p class="prompt" style="font-size:18px">${step.prompt}</p>
-    <div class="opts ${two?'two':''}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${o.label}</span></button>`).join("")}</div>
+    <p class="prompt" style="font-size:18px">${esc(step.prompt)}</p>
+    <div class="opts ${two?'two':''}">${step.options.map(o=>`<button class="opt" data-id="${o.id}"><span class="dot"></span><span>${esc(o.label)}</span></button>`).join("")}</div>
     <div class="fb" id="fb"></div>
     <div class="btnrow" id="controw" style="display:none"><button class="btn" id="cont">${T("cont")}</button></div></div>`;
   host.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{ if(state.picked)return; judgeSynth(step,parseInt(b.dataset.id,10)===step.correctId,b); }));
@@ -1181,10 +1181,10 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Továrna na smích" };
 <!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
 
 
-<!-- LUDUS STANDARD BLOCK START v1.16.13 -->
+<!-- LUDUS STANDARD BLOCK START v1.16.15 -->
 <link rel="stylesheet" href="../runtime/ludus-engine-badge.css" data-ludus-shared-style="badge">
-<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.13"></script>
-<!-- LUDUS STANDARD BLOCK END v1.16.13 -->
+<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.15"></script>
+<!-- LUDUS STANDARD BLOCK END v1.16.15 -->
 
 </body>
 </html>

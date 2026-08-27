@@ -1,5 +1,6 @@
 const CONFIG_SCHEMA = "ghrab-deployment-config-v1";
 const CONFIG_VERSION = 1;
+const CONFIG_FAILURE_MODE = "github-fallback";
 const DEFAULT_STUDIO_BASE_URL = "/AI-Studio-GHRAB/";
 const MODULE_ROOT_URL = new URL("../", import.meta.url);
 const DEFAULT_CONFIG_URL = new URL("config/deployment.json", MODULE_ROOT_URL);
@@ -204,8 +205,15 @@ export async function loadDeploymentConfig({
           }
           return validate(await response.json());
         } catch (error) {
+          if (CONFIG_FAILURE_MODE === "fail-closed") {
+            console.error(
+              "GHRAB deployment konfigurace není dostupná; tento build je uzamčen fail-closed.",
+              error,
+            );
+            throw error;
+          }
           console.warn(
-            "GHRAB deployment konfigurace není dostupná; používám bezpečný GitHub fallback.",
+            "GHRAB deployment konfigurace není dostupná; používám serverless GitHub fallback, který stále vyžaduje platné podepsané oprávnění.",
             error,
           );
           return fallbackConfig();

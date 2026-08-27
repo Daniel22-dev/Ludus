@@ -1,0 +1,46 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "chronos-timeline",
+  "appVersion": "1.16.15",
+  "generatedAt": "2026-08-27T07:49:22.788Z",
+  "sourceFile": "chronos.html",
+  "status": "draft",
+  "builderCompatible": true,
+  "title": {
+    "cs": "Časová hlídka",
+    "en": "Time Patrol",
+    "officialCs": "Návrat do budoucnosti / Doctor Who",
+    "officialEn": "Back to the Future / Doctor Who"
+  },
+  "mechanicId": "timeline",
+  "flowModel": "timelineRestore",
+  "supportedExerciseTypes": [
+    "sequence",
+    "mcq",
+    "trueFalse",
+    "wordBank",
+    "classify"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": false,
+    "hasClues": false,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en",
+    "es"
+  ],
+  "mediaProfile": "unofficial"
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.13">
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.15">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2811,13 +2811,21 @@ $('#example').onclick=async()=>{
   downloadGame();beep(740,.12,'triangle');
   toast(g.isRC?('Ukázka stažena: '+g.world+' × vztažné věty.'):('Ukázka stažena na ukázkovém obsahu (vztažné věty). Vlastní téma vygeneruj přes Gemini.'));
 };
+function sandboxPreviewWrapper(gameHtml){
+  const safe=JSON.stringify(String(gameHtml||'')).replace(/<\//g,'<\\/');
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<title>LUDUS — bezpečný náhled</title><style>html,body,iframe{margin:0;width:100%;height:100%;border:0;background:#05070b}body{overflow:hidden}</style></head><body>'+
+    '<iframe id="game" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="Bezpečný náhled hry"></iframe>'+
+    '<script>document.getElementById("game").srcdoc='+safe+';<\/script></body></html>';
+}
 $('#play').onclick=()=>{
   if(!window.__lastGame){toast('Nejdřív sestav hru (Vygenerovat nebo Ukázka).');return;}
-  const blob=new Blob([window.__lastGame],{type:'text/html'});
+  const wrapper=sandboxPreviewWrapper(window.__lastGame);
+  const blob=new Blob([wrapper],{type:'text/html'});
   const url=URL.createObjectURL(blob);
-  const w=window.open(url,'_blank');
-  if(!w)toast('Prohlížeč zablokoval okno — stáhni hru tlačítkem.');
-  else{beep(700,.1,'sine');toast('Hra otevřena v novém okně.');}
+  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+  document.body.appendChild(a);a.click();a.remove();
+  beep(700,.1,'sine');toast('Hra otevřena v izolovaném náhledu.');
   setTimeout(()=>URL.revokeObjectURL(url),20000);
 };
 $('#copy').onclick=async()=>{
@@ -2893,7 +2901,34 @@ async function studioImportContent(v2){
   if(stations.length<1)throw new Error('Import neobsahuje použitelné stanice.');
   let pack={schema:1,meta:{teacher:'',sourceMaterialId:v2.meta&&v2.meta.sourceMaterialId||''},houses:defaultTeams(sk),stations};pack=packMeta(pack,sk,world,false,state.topic.cz,false);window.__spec={schemaVersion:'1.0',source:'AI Studio GHRAB',title:state.topic.cz};refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(pack.meta.sourceMaterialId);toast('LUDUS_CONTENT v2 načten: '+stations.length+' stanic.');
 }
-async function studioReadFile(file){const raw=await file.text(),parsed=window.GHRABArtifact?.unwrapMaybe?await window.GHRABArtifact.unwrapMaybe(raw,{allowLegacy:true,verifyChecksum:true}):{payload:JSON.parse(raw)},data=parsed.payload;if(data.schema==='ghrab-material-v1')return studioImportMaterial(data);if(data.schemaVersion==='ludus-content-v2'||data.kind==='ludus.content')return studioImportContent(data);throw new Error('Nepodporovaný formát souboru.');}
+const STUDIO_IMPORT_MAX_BYTES=2*1024*1024, STUDIO_IMPORT_MAX_DEPTH=32, STUDIO_IMPORT_MAX_NODES=20000;
+const STUDIO_IMPORT_FORBIDDEN_KEYS=new Set(['__proto__','prototype','constructor']);
+function studioValidateImportTree(root){
+  if(!root||typeof root!=='object')throw new Error('Import musí obsahovat JSON objekt.');
+  const stack=[{value:root,depth:0}];let nodes=0;
+  while(stack.length){
+    const {value,depth}=stack.pop();
+    if(depth>STUDIO_IMPORT_MAX_DEPTH)throw new Error('Import je příliš hluboce vnořený.');
+    if(++nodes>STUDIO_IMPORT_MAX_NODES)throw new Error('Import obsahuje příliš mnoho položek.');
+    if(!value||typeof value!=='object')continue;
+    for(const key of Object.keys(value)){
+      if(STUDIO_IMPORT_FORBIDDEN_KEYS.has(key))throw new Error('Import obsahuje zakázaný strukturální klíč.');
+      const child=value[key];
+      if(child&&typeof child==='object')stack.push({value:child,depth:depth+1});
+    }
+  }
+  return root;
+}
+async function studioReadFile(file){
+  if(!file||!Number.isFinite(file.size))throw new Error('Soubor nelze bezpečně načíst.');
+  if(file.size>STUDIO_IMPORT_MAX_BYTES)throw new Error('Import je příliš velký. Maximum jsou 2 MB.');
+  const raw=await file.text();
+  const parsed=window.GHRABArtifact?.unwrapMaybe?await window.GHRABArtifact.unwrapMaybe(raw,{allowLegacy:true,verifyChecksum:true}):{payload:JSON.parse(raw)};
+  const data=studioValidateImportTree(parsed.payload);
+  if(data.schema==='ghrab-material-v1')return studioImportMaterial(data);
+  if(data.schemaVersion==='ludus-content-v2'||data.kind==='ludus.content')return studioImportContent(data);
+  throw new Error('Nepodporovaný formát souboru.');
+}
 $('#studioImport').onclick=()=>$('#studioImportFile').click();
 $('#studioImportFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;try{await studioReadFile(f)}catch(err){toast(err.message||String(err))}};
 function runStudioHandoff(){if(new URLSearchParams(location.search).get('studioHandoff')!=='1')return;const p=studioTake();if(p){window.__studioReturnUrl=p.studioUrl||'';setTimeout(()=>studioImportMaterial(p.material).catch(err=>toast(err.message||String(err))),350)}}
@@ -2988,9 +3023,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.16.13';
+const APP_VERSION='1.16.15';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.16.15 · GARP kolo 2: importovaný herní obsah je na potvrzených cestách escapován a náhled běží v sandboxovaném iframe bez same-origin přístupu k úložišti builderu.',
+  '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',
   '1.16.13 · CI hotfix: GitHub Actions instalují připnuté Playwright Chromium a nastaví CHROMIUM_PATH před npm test; validace pořadí kroků brání opakování chyby.',
   '1.16.12 · Sjednocený reportér: skutečné dvoukrokové stažení diagnostického ZIPu, ruční přiložení do Gmailu a bezpečně skryté pomocné video.',
   '1.16.4 · Interaktivní manuál odpovídá aktuálním funkcím a při otevření z LUDUSu uvnitř AI Studia zůstává ve stejném pracovním rámci; nová PWA cache zajistí načtení opravy i ve starší instalaci.',
@@ -2999,8 +3036,6 @@ const CHANGELOG=[
   '1.16.0 · Auditní opravná verze: odstraněna nekonečná překladová smyčka, opraveno dělení týmů, striktní vazba svět + mechanika, CI brána, PWA registrace a bezpečnější export enginů.',
   '1.15.0 · Anonymní technické metriky výstupů bez témat, promptů a identity uživatele.',
   '1.14.6 · Integrovaný interaktivní manuál dostupný z aplikace i PWA balíčku.',
-  '1.14.5 · Opraven přístupový bootstrap tak, aby se nevkládal dovnitř exportní HTML šablony.',
-  '1.14.4 · Zpřesněn kontrakt builderCompatible a vizuální stavy hotových, rozpracovaných a plánovaných enginů.',
 ];
 function modalOpen(title,html){const m=$('#infoModal');$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;m.inert=false;m.classList.add('open');m.setAttribute('aria-hidden','false');$('#modalClose').focus();}
 function modalClose(){const m=$('#infoModal');m.classList.remove('open');m.setAttribute('aria-hidden','true');m.inert=true;}

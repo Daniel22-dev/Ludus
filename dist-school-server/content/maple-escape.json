@@ -1,0 +1,43 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "maple-escape",
+  "appVersion": "1.16.15",
+  "generatedAt": "2026-08-27T07:49:22.788Z",
+  "sourceFile": "stranger-things.html",
+  "status": "draft",
+  "builderCompatible": true,
+  "title": {
+    "cs": "Únik z Javorové rokle",
+    "en": "Maple Falls Escape",
+    "officialCs": "Stranger Things",
+    "officialEn": "Stranger Things"
+  },
+  "mechanicId": "escape",
+  "flowModel": "roomsCodesFinalLock",
+  "supportedExerciseTypes": [
+    "mcq",
+    "trueFalse",
+    "wordBank"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": false,
+    "hasClues": true,
+    "hasFinalCode": true,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}

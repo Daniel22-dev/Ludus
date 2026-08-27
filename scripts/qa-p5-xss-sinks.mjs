@@ -7,6 +7,22 @@ const patterns={innerHTML:/\.innerHTML\s*=/g,insertAdjacentHTML:/\.insertAdjacen
 const counts=Object.fromEntries(Object.keys(patterns).map(k=>[k,0])); const evidence=[];
 for(const f of files){const t=fs.readFileSync(f,'utf8');for(const [k,re] of Object.entries(patterns)){const n=[...t.matchAll(re)].length;counts[k]+=n;if(n)evidence.push({file:path.relative(root,f),kind:k,count:n})}}
 const failures=[]; for(const [k,n] of Object.entries(counts)){const allowed=Number(baseline.counts?.[k]??0); if(n>allowed)failures.push(`${k}: ${n} > baseline ${allowed}`)}
-const distHtml=path.join(root,'dist/index.html'); let csp=null;if(fs.existsSync(distHtml)){const t=fs.readFileSync(distHtml,'utf8');csp={unsafeInlineScript:/script-src[^;]*'unsafe-inline'/.test(t),unsafeInlineStyle:/style-src[^;]*'unsafe-inline'/.test(t)}}
-const report={schema:'ghrab-p5-xss-sink-audit-v1',appId:baseline.appId,counts,baseline:baseline.counts,csp,evidence,limitations:['This is a regression inventory, not proof that every HTML sink is safe.','Current inline-script architecture may still require unsafe-inline until CSP refactoring.'],failures,status:failures.length?'failed':'passed'};
+const headersPath=path.join(root,'public/config/security-headers.json'); let csp=null;
+if(fs.existsSync(headersPath)){
+  const headers=JSON.parse(fs.readFileSync(headersPath,'utf8'));
+  const staticPolicy=String(headers.staticProfile?.contentSecurityPolicy||'');
+  const schoolPolicy=String(headers.schoolServerProfile?.headers?.['Content-Security-Policy']||'');
+  const note=String(headers.staticProfile?.note||'')+' '+String(headers.schoolServerProfile?.note||'');
+  csp={
+    staticUnsafeInlineScript:/script-src[^;]*'unsafe-inline'/.test(staticPolicy),
+    staticUnsafeInlineStyle:/style-src[^;]*'unsafe-inline'/.test(staticPolicy),
+    schoolUnsafeInlineScript:/script-src[^;]*'unsafe-inline'/.test(schoolPolicy),
+    schoolUnsafeInlineStyle:/style-src[^;]*'unsafe-inline'/.test(schoolPolicy),
+    unsafeEval:/script-src[^;]*'unsafe-eval'/.test(staticPolicy)||/script-src[^;]*'unsafe-eval'/.test(schoolPolicy),
+    exceptionDocumented:/compatibility exception/i.test(note)&&/inline scripts\/styles/i.test(note)
+  };
+  if(csp.unsafeEval)failures.push('CSP contains unsafe-eval.');
+  if((csp.staticUnsafeInlineScript||csp.staticUnsafeInlineStyle||csp.schoolUnsafeInlineScript||csp.schoolUnsafeInlineStyle)&&!csp.exceptionDocumented)failures.push('CSP unsafe-inline exception is not documented truthfully.');
+}
+const report={schema:'ghrab-p5-xss-sink-audit-v1',appId:baseline.appId,counts,baseline:baseline.counts,csp,evidence,limitations:['This is a regression inventory, not proof that every HTML sink is safe.','unsafe-inline remains a known compatibility exception until a dedicated nonce/hash or external-module CSP refactor is validated across all engines.'],failures,status:failures.length?'failed':'passed'};
 fs.mkdirSync(path.join(root,'dist'),{recursive:true});fs.writeFileSync(path.join(root,'dist/qa-p5-xss-sinks-report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(failures.length)process.exit(1);

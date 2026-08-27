@@ -1,0 +1,45 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "starwars-academy",
+  "appVersion": "1.16.15",
+  "generatedAt": "2026-08-27T07:49:22.788Z",
+  "sourceFile": "star-wars.html",
+  "status": "draft",
+  "builderCompatible": true,
+  "title": {
+    "cs": "Hvězdní rytíři",
+    "en": "Star Knights",
+    "officialCs": "Star Wars Academy",
+    "officialEn": "Star Wars Academy"
+  },
+  "mechanicId": "academy",
+  "flowModel": "mapStationsFinalChallenge",
+  "supportedExerciseTypes": [
+    "mcq",
+    "trueFalse",
+    "classify",
+    "wordBank"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": true,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasClues": false,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en",
+    "es"
+  ],
+  "mediaProfile": "unofficial"
+}

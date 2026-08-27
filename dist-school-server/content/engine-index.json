@@ -1,0 +1,86 @@
+{
+  "schema": "ludus-engine-content-index-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.15",
+  "mediaProfile": "unofficial",
+  "generatedAt": "2026-08-27T07:49:22.788Z",
+  "engines": [
+    {
+      "engineId": "chronos-timeline",
+      "file": "engines/chronos.html",
+      "contentPack": "content/chronos-timeline.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "frostline-detective",
+      "file": "engines/orient-express.html",
+      "contentPack": "content/frostline-detective.json",
+      "status": "draft",
+      "builderCompatible": false
+    },
+    {
+      "engineId": "hogwarts-grammar-academy",
+      "file": "engines/hogwarts.html",
+      "contentPack": "content/hogwarts-grammar-academy.json",
+      "status": "ready",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "illusion-detective",
+      "file": "engines/matrix.html",
+      "contentPack": "content/illusion-detective.json",
+      "status": "draft",
+      "builderCompatible": false
+    },
+    {
+      "engineId": "laughworks-lab",
+      "file": "engines/laughworks.html",
+      "contentPack": "content/laughworks-lab.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "lotr-grammar-quest",
+      "file": "engines/lotr.html",
+      "contentPack": "content/lotr-grammar-quest.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "maple-escape",
+      "file": "engines/stranger-things.html",
+      "contentPack": "content/maple-escape.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "relic-hunters-quest",
+      "file": "engines/indiana-jones.html",
+      "contentPack": "content/relic-hunters-quest.json",
+      "status": "draft",
+      "builderCompatible": false
+    },
+    {
+      "engineId": "roll-and-quest",
+      "file": "engines/dnd.html",
+      "contentPack": "content/roll-and-quest.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "starwars-academy",
+      "file": "engines/star-wars.html",
+      "contentPack": "content/starwars-academy.json",
+      "status": "draft",
+      "builderCompatible": true
+    },
+    {
+      "engineId": "wild-arena",
+      "file": "engines/jumanji.html",
+      "contentPack": "content/wild-arena.json",
+      "status": "draft",
+      "builderCompatible": true
+    }
+  ]
+}

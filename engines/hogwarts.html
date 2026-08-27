@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.13" data-ghrab-no-footer>
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.15" data-ghrab-no-footer>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1292,6 +1292,7 @@ window.adaptLudusContentToGame=adaptLudusContentToGame;
 window.validateLudusContentForGame=validateLudusContentForGame;
 window.selfTestGame=selfTestGame;
 window.LUDUS_ENGINE={manifest:LUDUS_GAME_MANIFEST,exerciseSupport:EXERCISE_SUPPORT,themeVariants:THEME_VARIANTS,adapt:adaptLudusContentToGame,validate:validateLudusContentForGame,selfTest:selfTestGame,changeLog:LUDUS_ENGINE_CHANGELOG};
+function esc(s){return String(s==null?'':s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
 const I18N_DOM=[['#cine-go','btn_enter'],['#cine-skip','btn_skip_intro'],['#mute-btn','tip_music','title'],['#fs-btn','tip_fullscreen','title'],['#t-banner','teacher_mode'],['label[for="name-in"]','name_label'],['#name-in','name_ph','placeholder'],['button[onclick="beginJourney()"]','btn_begin'],['.save-note','save_note'],['#ng-btn','btn_new_game'],['.house-title','choose_house'],['.house-sub','house_sub'],['.map-hdr-title','castle_hdr'],['.reset-tiny','btn_start_over'],['.back-btn','btn_back_castle'],['#skip-btn','btn_skip_all'],['#boss-pname','boss_you'],['.btn-next','btn_continue'],['button[onclick="startBossFight()"]','btn_draw_wand'],['#boss-end-btn','btn_try_again'],['#rew-title','rew_title'],['#rew-btn','btn_return_castle'],['.cert-awarded','cert_awarded'],['.cert-grade-txt','cert_grade_txt'],['.cert-spell-lbl','cert_spell_lbl'],['#reset-modal-title','modal_reset_title'],['#reset-modal-body','modal_reset_body'],['#reset-modal-cancel','modal_cancel'],['#reset-modal-confirm','modal_confirm']];
 function applyI18n(){for(var i=0;i<I18N_DOM.length;i++){var sel=I18N_DOM[i][0],key=I18N_DOM[i][1],attr=I18N_DOM[i][2];var el=document.querySelector(sel);if(!el)continue;if(attr)el.setAttribute(attr,t(key));else el.innerHTML=t(key);}}
 const HOUSES=GAME_CONTENT.houses;
@@ -1302,7 +1303,7 @@ function applyMeta(){
   const m=GAME_CONTENT.meta||{};
   if(m.docTitle)document.title=m.docTitle;
   const set=(sel,val,asText)=>{const el=document.querySelector(sel);if(el&&val!=null){asText?el.textContent=val:el.innerHTML=val;}};
-  set('.main-title',m.introTitle);
+  set('.main-title',m.introTitle,true);
   set('.main-sub',m.introSub,true);
   set('.cert-school',m.certSchool,true);
   set('.cert-subject',m.certSubject,true);
@@ -1353,10 +1354,11 @@ applyI18n();
 let G={name:'',teacher:false,house:'',done:Array(STATIONS.length).fill(false),finished:false,finDate:'',cur:null,qIdx:0,answered:false,wbFill:'',wrongQs:[],reviewMode:false,reviewQueue:[],reviewPos:0};
 function progressPayload(){return {v:1,apiVersion:'ludus-progress-api-v1',engineId:LUDUS_GAME_MANIFEST.engineId,gameId:LUDUS_GAME_MANIFEST.gameId,mechanicId:LUDUS_GAME_MANIFEST.mechanicId,ts:Date.now(),name:G.name,house:G.house,done:G.done,finished:G.finished,finDate:G.finDate};}
 function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(progressPayload()));}catch(_e){}}
-function loadSave(){
+function loadSave(){try{
   const r=localStorage.getItem(SAVE_KEY);if(!r)return false;
   const d=JSON.parse(r);G.name=d.name||'';G.house=d.house||'';G.done=d.done||Array(STATIONS.length).fill(false);while(G.done.length<STATIONS.length)G.done.push(false);G.finished=d.finished||false;G.finDate=d.finDate||'';
   return !!G.name;
+}catch(_e){return false;}
 }
 function readProgressData(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?JSON.parse(raw):null;}catch(_e){return null;}}
 function doneCountFrom(data){const arr=(data&&Array.isArray(data.done))?data.done:[];return arr.filter(Boolean).length;}
@@ -2046,7 +2048,7 @@ function renderMap(){
     div.className='stn-card '+(isFinal?'final-u':st)+(isBonus?' bonus':'');
     const iconD=document.createElement('div');iconD.className='stn-icon';iconD.textContent=stn.icon;
     const bodyD=document.createElement('div');bodyD.className='stn-body';
-    bodyD.innerHTML=`<div class="stn-name">${stn.name}</div><div class="stn-topic">${stn.topic}</div>`;
+    bodyD.innerHTML=`<div class="stn-name">${esc(stn.name)}</div><div class="stn-topic">${esc(stn.topic)}</div>`;
     const statusD=document.createElement('div');statusD.className='stn-status';
     if(st==='completed')statusD.innerHTML='<span class="stn-badge">✅</span>';
     else if(st==='unlocked')statusD.innerHTML=`<button class="stn-go" onclick="event.stopPropagation();openStation(${i})">${t('btn_enter_station')}</button>`;
@@ -2058,7 +2060,7 @@ function renderMap(){
   });
   const cb=document.getElementById('coll-bar');
   const coll=STATIONS.filter((_,i)=>G.done[i]&&STATIONS[i].reward);
-  cb.innerHTML=coll.length===0?'<div class="coll-empty">'+t('coll_empty')+'</div>':`<div class="coll-label">${t('coll_label')}</div><div class="coll-icons">${coll.map(s=>s.reward.icon).join('')}</div>`;
+  cb.innerHTML=coll.length===0?'<div class="coll-empty">'+t('coll_empty')+'</div>':`<div class="coll-label">${t('coll_label')}</div><div class="coll-icons">${coll.map(s=>esc(s.reward.icon)).join('')}</div>`;
 }
 
 /* ══════ EXERCISE ENGINE ══════ */
@@ -2975,18 +2977,19 @@ function renderQ(){
   if(type==='builder')sbRender(); // paint initial empty slots
   if(G.teacher)setTimeout(()=>teacherReveal(type,q,opts),120);
 }
-function renderBinary(q,inst,opts){return`<div class="q-inst">${inst}</div><div class="q-text">${q.t}</div><div class="opts-2"><button class="opt-btn" onclick="checkBinary(0)">${opts[0]}</button><button class="opt-btn" onclick="checkBinary(1)">${opts[1]}</button></div>`;}
-function checkBinary(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.opts-2 .opt-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,q.exp);if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
-function renderMc4(q,inst){return`<div class="q-inst">${inst}</div><div class="q-text">${q.t}</div><div class="opts-4">${q.opts.map((o,i)=>`<button class="opt-btn" onclick="checkMc4(${i})">${o}</button>`).join('')}</div>`;}
-function checkMc4(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.opts-4 .opt-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,q.exp);if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
-function renderMc2(q,inst,opts){const o=q.opts||opts;return`<div class="q-inst">${q.inst||inst}</div><div class="mc2-wrap"><button class="mc2-btn" data-letter="A" onclick="checkMc2(0)">${o[0]}</button><button class="mc2-btn" data-letter="B" onclick="checkMc2(1)">${o[1]}</button></div>`;}
-function checkMc2(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.mc2-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,q.exp);if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
-function renderWordbank(q,inst){G.wbFill='';const sentence=q.t.replace('___','<span class="wb-blank" id="wb-bl" onclick="clearBlank()">___</span>');const shuffled=[...q.bank].sort(()=>Math.random()-.5);const words=shuffled.map(w=>`<button class="wb-word" id="wb-${w}" onclick="tapWord('${w}')">${w}</button>`).join('');return`<div class="q-inst">${q.inst||inst}</div><div class="wb-sentence">${sentence}</div><div class="wb-bank" id="wb-bank">${words}</div><div style="margin-top:10px"><button class="opt-btn" style="width:100%;opacity:.6" id="wb-sub" onclick="checkWordbank()" disabled>Submit →</button></div>`;}
-function tapWord(w){if(G.answered)return;const bl=document.getElementById('wb-bl');if(!bl)return;if(G.wbFill){const old=document.getElementById('wb-'+G.wbFill);if(old)old.classList.remove('used');}G.wbFill=w;const wEl=document.getElementById('wb-'+w);if(wEl)wEl.classList.add('used');bl.textContent=w;bl.classList.add('filled');const sub=document.getElementById('wb-sub');if(sub){sub.disabled=false;sub.style.opacity='1';}}
-function clearBlank(){if(G.answered)return;if(!G.wbFill)return;const old=document.getElementById('wb-'+G.wbFill);if(old)old.classList.remove('used');G.wbFill='';const bl=document.getElementById('wb-bl');if(bl){bl.textContent='___';bl.classList.remove('filled');}const sub=document.getElementById('wb-sub');if(sub){sub.disabled=true;sub.style.opacity='.6';}}
-function checkWordbank(){if(G.answered||!G.wbFill)return;G.answered=true;const q=curQ();const ok=G.wbFill===q.a;const bl=document.getElementById('wb-bl');if(bl)bl.classList.add(ok?'s-ok':'s-bad');document.querySelectorAll('.wb-word').forEach(b=>b.classList.add('disabled'));const sub=document.getElementById('wb-sub');if(sub)sub.classList.add('disabled');if(!ok){const corr=document.getElementById('wb-'+q.a);if(corr){corr.classList.remove('used');corr.style.background='rgba(26,107,56,.2)';corr.style.borderColor='#3aad6a';corr.style.color='#3aad6a';}}trackWrong(ok);showFb(ok,q.exp);if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
-function renderSpot(q,inst){const segs=q.segments.map((s,i)=>`<span class="seg" id="seg-${i}" onclick="checkSpot(${i})">${s}</span>`).join(' ');return`<div class="q-inst">${q.inst||inst}</div><p class="spot-hint">Tap the incorrect word or phrase:</p><div class="spot-sentence">${segs}</div>`;}
-function checkSpot(i){if(G.answered)return;G.answered=true;const q=curQ();const ok=i===q.a;document.querySelectorAll('.seg').forEach(s=>s.classList.add('disabled'));const tapped=document.getElementById('seg-'+i);if(tapped)tapped.classList.add(ok?'s-ok':'s-bad');if(!ok){const corr=document.getElementById('seg-'+q.a);if(corr)corr.classList.add('s-reveal');}trackWrong(ok);showFb(ok,q.exp+(ok?'':` Correct: <em>${q.correction}</em>`));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
+function renderBinary(q,inst,opts){return`<div class="q-inst">${esc(inst)}</div><div class="q-text">${esc(q.t)}</div><div class="opts-2"><button class="opt-btn" onclick="checkBinary(0)">${esc(opts[0])}</button><button class="opt-btn" onclick="checkBinary(1)">${esc(opts[1])}</button></div>`;}
+function checkBinary(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.opts-2 .opt-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,esc(q.exp));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
+function renderMc4(q,inst){return`<div class="q-inst">${esc(inst)}</div><div class="q-text">${esc(q.t)}</div><div class="opts-4">${q.opts.map((o,i)=>`<button class="opt-btn" onclick="checkMc4(${i})">${esc(o)}</button>`).join('')}</div>`;}
+function checkMc4(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.opts-4 .opt-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,esc(q.exp));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
+function renderMc2(q,inst,opts){const o=q.opts||opts;return`<div class="q-inst">${esc(q.inst||inst)}</div><div class="mc2-wrap"><button class="mc2-btn" data-letter="A" onclick="checkMc2(0)">${esc(o[0])}</button><button class="mc2-btn" data-letter="B" onclick="checkMc2(1)">${esc(o[1])}</button></div>`;}
+function checkMc2(chosen){if(G.answered)return;G.answered=true;const q=curQ();const ok=chosen===q.a;document.querySelectorAll('.mc2-btn').forEach((b,i)=>{b.classList.add('disabled');if(i===chosen&&ok)b.classList.add('s-ok');if(i===chosen&&!ok)b.classList.add('s-bad');if(i===q.a&&!ok)b.classList.add('s-reveal');});trackWrong(ok);showFb(ok,esc(q.exp));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
+let _wbWords=[];
+function renderWordbank(q,inst){G.wbFill='';G.wbFillIndex=-1;const sentence=esc(q.t).replace('___','<span class="wb-blank" id="wb-bl" onclick="clearBlank()">___</span>');_wbWords=[...q.bank].sort(()=>Math.random()-.5);const words=_wbWords.map((w,i)=>`<button class="wb-word" id="wb-${i}" onclick="tapWord(${i})">${esc(w)}</button>`).join('');return`<div class="q-inst">${esc(q.inst||inst)}</div><div class="wb-sentence">${sentence}</div><div class="wb-bank" id="wb-bank">${words}</div><div style="margin-top:10px"><button class="opt-btn" style="width:100%;opacity:.6" id="wb-sub" onclick="checkWordbank()" disabled>Submit →</button></div>`;}
+function tapWord(i){if(G.answered)return;const w=_wbWords[i];if(w==null)return;const bl=document.getElementById('wb-bl');if(!bl)return;if(G.wbFillIndex>=0){const old=document.getElementById('wb-'+G.wbFillIndex);if(old)old.classList.remove('used');}G.wbFill=w;G.wbFillIndex=i;const wEl=document.getElementById('wb-'+i);if(wEl)wEl.classList.add('used');bl.textContent=w;bl.classList.add('filled');const sub=document.getElementById('wb-sub');if(sub){sub.disabled=false;sub.style.opacity='1';}}
+function clearBlank(){if(G.answered)return;if(G.wbFillIndex==null||G.wbFillIndex<0)return;const old=document.getElementById('wb-'+G.wbFillIndex);if(old)old.classList.remove('used');G.wbFill='';G.wbFillIndex=-1;const bl=document.getElementById('wb-bl');if(bl){bl.textContent='___';bl.classList.remove('filled');}const sub=document.getElementById('wb-sub');if(sub){sub.disabled=true;sub.style.opacity='.6';}}
+function checkWordbank(){if(G.answered||!G.wbFill)return;G.answered=true;const q=curQ();const ok=G.wbFill===q.a;const bl=document.getElementById('wb-bl');if(bl)bl.classList.add(ok?'s-ok':'s-bad');document.querySelectorAll('.wb-word').forEach(b=>b.classList.add('disabled'));const sub=document.getElementById('wb-sub');if(sub)sub.classList.add('disabled');if(!ok){const corrIndex=_wbWords.findIndex(w=>w===q.a);const corr=corrIndex>=0?document.getElementById('wb-'+corrIndex):null;if(corr){corr.classList.remove('used');corr.style.background='rgba(26,107,56,.2)';corr.style.borderColor='#3aad6a';corr.style.color='#3aad6a';}}trackWrong(ok);showFb(ok,esc(q.exp));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
+function renderSpot(q,inst){const segs=q.segments.map((s,i)=>`<span class="seg" id="seg-${i}" onclick="checkSpot(${i})">${esc(s)}</span>`).join(' ');return`<div class="q-inst">${esc(q.inst||inst)}</div><p class="spot-hint">Tap the incorrect word or phrase:</p><div class="spot-sentence">${segs}</div>`;}
+function checkSpot(i){if(G.answered)return;G.answered=true;const q=curQ();const ok=i===q.a;document.querySelectorAll('.seg').forEach(s=>s.classList.add('disabled'));const tapped=document.getElementById('seg-'+i);if(tapped)tapped.classList.add(ok?'s-ok':'s-bad');if(!ok){const corr=document.getElementById('seg-'+q.a);if(corr)corr.classList.add('s-reveal');}trackWrong(ok);showFb(ok,esc(q.exp)+(ok?'':` Correct: <em>${esc(q.correction)}</em>`));if(ok){playCorrect();spellBurst();}else playWrong();bossOnAnswer(ok);}
 
 /* ── SENTENCE BUILDER ── */
 let _sb={placed:[],bank:[]}; // placed = array of token-ids in order; bank = array of token-ids still available
@@ -2995,9 +2998,9 @@ function renderBuilder(q,inst){
   const tokens=q.tokens.map((t,i)=>({id:'sbt-'+i,text:t}));
   const shuffled=[...tokens].sort(()=>Math.random()-.5);
   _sb={placed:[],bank:shuffled.map(t=>t.id),map:Object.fromEntries(tokens.map(t=>[t.id,t.text]))};
-  return `<div class="q-inst">${q.inst||inst}</div>
+  return `<div class="q-inst">${esc(q.inst||inst)}</div>
     <div class="sb-assembly" id="sb-asm"></div>
-    <div class="sb-bank" id="sb-bk">${shuffled.map(t=>`<button class="sb-tok${t.text===','?' comma':''}" id="${t.id}" onclick="sbPlace('${t.id}')">${t.text}</button>`).join('')}</div>
+    <div class="sb-bank" id="sb-bk">${shuffled.map(t=>`<button class="sb-tok${t.text===','?' comma':''}" id="${t.id}" onclick="sbPlace('${t.id}')">${esc(t.text)}</button>`).join('')}</div>
     <div class="sb-actions">
       <button class="sb-clear" onclick="sbClear()">↺ Clear</button>
       <button class="sb-submit" id="sb-sub" onclick="checkBuilder()" disabled>Submit →</button>
@@ -3032,15 +3035,15 @@ function sbRender(){
   let html='';
   for(let i=0;i<placed;i++){
     const id=_sb.placed[i];
-    html+=`<button class="sb-tok placed${_sb.map[id]===','?' comma':''}" onclick="sbReturn('${id}')">${_sb.map[id]}</button>`;
+    html+=`<button class="sb-tok placed${_sb.map[id]===','?' comma':''}" onclick="sbReturn('${id}')">${esc(_sb.map[id])}</button>`;
   }
   for(let i=placed;i<total;i++){
     const expected=q.correct[i]||'';
     const isComma=expected===',';
-    html+=`<span class="sb-slot${isComma?' comma':''}" style="--d:${(i-placed)*.15}s">${isComma?',':expected}</span>`;
+    html+=`<span class="sb-slot${isComma?' comma':''}" style="--d:${(i-placed)*.15}s">${isComma?',':esc(expected)}</span>`;
   }
   asm.innerHTML=html;
-  bk.innerHTML=_sb.bank.map(id=>`<button class="sb-tok${_sb.map[id]===','?' comma':''}" onclick="sbPlace('${id}')">${_sb.map[id]}</button>`).join('');
+  bk.innerHTML=_sb.bank.map(id=>`<button class="sb-tok${_sb.map[id]===','?' comma':''}" onclick="sbPlace('${id}')">${esc(_sb.map[id])}</button>`).join('');
   const sub=document.getElementById('sb-sub');
   if(sub){
     // Enable as soon as the assembly is at least as long as the target sentence.
@@ -3078,21 +3081,21 @@ function diagnoseBuilder(userTokens,correct,unused){
     // User picked the wrong pronoun; the correct one is left in the bank if it was a distractor case
     let extra='';
     if(unusedPron&&lc(unusedPron)===lc(correctPron)){
-      extra=` You left <strong>${correctPron.toUpperCase()}</strong> unused in the bank.`;
+      extra=` You left <strong>${esc(correctPron.toUpperCase())}</strong> unused in the bank.`;
     }
-    return {ok:false,reason:`Wrong pronoun: you used <strong>${usedPron.toUpperCase()}</strong>, but the correct one is <strong>${correctPron.toUpperCase()}</strong>.${extra}`};
+    return {ok:false,reason:`Wrong pronoun: you used <strong>${esc(usedPron.toUpperCase())}</strong>, but the correct one is <strong>${esc(correctPron.toUpperCase())}</strong>.${extra}`};
   }
   // Check unused content words (non-comma, non-pronoun) that should have been used
   const requiredMissing=correct.filter(t=>t!==',').filter(t=>!userWords.has(lc(t)));
   const extraUsed=userTokens.filter(t=>t!==',').filter(t=>!correctWords.has(lc(t)));
   if(requiredMissing.length>0&&extraUsed.length>0){
-    return {ok:false,reason:`You used <strong>${extraUsed.join(', ')}</strong> instead of <strong>${requiredMissing.join(', ')}</strong>. Read the sentence carefully and choose the words that match.`};
+    return {ok:false,reason:`You used <strong>${esc(extraUsed.join(', '))}</strong> instead of <strong>${esc(requiredMissing.join(', '))}</strong>. Read the sentence carefully and choose the words that match.`};
   }
   if(requiredMissing.length>0){
-    return {ok:false,reason:`Missing word${requiredMissing.length>1?'s':''}: <strong>${requiredMissing.join(', ')}</strong>.`};
+    return {ok:false,reason:`Missing word${requiredMissing.length>1?'s':''}: <strong>${esc(requiredMissing.join(', '))}</strong>.`};
   }
   if(extraUsed.length>0){
-    return {ok:false,reason:`Unexpected word${extraUsed.length>1?'s':''}: <strong>${extraUsed.join(', ')}</strong>. The bank contains distractors — only use what the correct sentence needs.`};
+    return {ok:false,reason:`Unexpected word${extraUsed.length>1?'s':''}: <strong>${esc(extraUsed.join(', '))}</strong>. The bank contains distractors — only use what the correct sentence needs.`};
   }
   return {ok:false,reason:'Word order is incorrect. Read the words and think about how the relative clause should attach.'};
 }
@@ -3110,9 +3113,9 @@ function checkBuilder(){
   // Color placed tokens
   document.querySelectorAll('#sb-asm .sb-tok').forEach(b=>b.classList.add(ok?'s-ok':'s-warn'));
   // If wrong, show the correct order below
-  let expHtml=q.exp;
+  let expHtml=esc(q.exp);
   if(!ok){
-    expHtml=`<strong>${result.reason}</strong><br><span style="opacity:.85">Correct: <em>${q.correct.join(' ').replace(/\s+,/g,',')}</em></span><br>${q.exp}`;
+    expHtml=`<strong>${result.reason}</strong><br><span style="opacity:.85">Correct: <em>${esc(q.correct.join(' ').replace(/\s+,/g,','))}</em></span><br>${esc(q.exp)}`;
   }
   trackWrong(ok);
   showFb(ok,expHtml);
@@ -3144,11 +3147,11 @@ function showFb(ok,exp){
 }
 function teacherReveal(type,q,opts){
   const qopts=q.opts||opts||[];let label='';
-  if(type==='mc4'||type==='classify'||type==='yesno'||type==='correct')label=`${t('rev_correct_answer')}<strong>${qopts[q.a]}</strong>`;
-  else if(type==='mc2'){const o=q.opts||opts;label=`${t('rev_correct')}<strong>${q.a===0?t('ver_a'):t('ver_b')}</strong> — ${(o[q.a]||'').substring(0,55)}...`;}
-  else if(type==='wordbank')label=`${t('rev_correct_word')}<strong>${q.a}</strong>`;
-  else if(type==='spot')label=`${t('rev_error_in')}<strong>"${q.segments[q.a]}"</strong>${t('rev_should_be')}<em>${q.correction}</em>`;
-  else if(type==='builder')label=`${t('rev_correct_order')}<strong>${q.correct.join(' ').replace(/\s+,/g,',')}</strong>`;
+  if(type==='mc4'||type==='classify'||type==='yesno'||type==='correct')label=`${t('rev_correct_answer')}<strong>${esc(qopts[q.a])}</strong>`;
+  else if(type==='mc2'){const o=q.opts||opts;label=`${t('rev_correct')}<strong>${q.a===0?t('ver_a'):t('ver_b')}</strong> — ${esc((o[q.a]||'').substring(0,55))}...`;}
+  else if(type==='wordbank')label=`${t('rev_correct_word')}<strong>${esc(q.a)}</strong>`;
+  else if(type==='spot')label=`${t('rev_error_in')}<strong>"${esc(q.segments[q.a])}"</strong>${t('rev_should_be')}<em>${esc(q.correction)}</em>`;
+  else if(type==='builder')label=`${t('rev_correct_order')}<strong>${esc(q.correct.join(' ').replace(/\s+,/g,','))}</strong>`;
   document.querySelector('.t-answer-reveal')?.remove();
   const el=document.createElement('div');el.className='t-answer-reveal';el.innerHTML='📋 &nbsp;'+label;
   const card=document.getElementById('qcard');if(card){const inst=card.querySelector('.q-inst');if(inst)inst.insertAdjacentElement('beforebegin',el);}
@@ -5418,10 +5421,10 @@ var LUDUS_MEDIA = { introVideo:"", soundtrack:"", title:"Hogwarts Grammar Academ
 <!-- ═══════════════ /LUDUS UNIFIED LAYER v2 ═══════════════ -->
 
 
-<!-- LUDUS STANDARD BLOCK START v1.16.13 -->
+<!-- LUDUS STANDARD BLOCK START v1.16.15 -->
 <link rel="stylesheet" href="../runtime/ludus-engine-badge.css" data-ludus-shared-style="badge">
-<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.13"></script>
-<!-- LUDUS STANDARD BLOCK END v1.16.13 -->
+<script src="../runtime/ludus-engine-runtime.js" data-ludus-shared-runtime="1.16.15"></script>
+<!-- LUDUS STANDARD BLOCK END v1.16.15 -->
 
 </body>
 </html>

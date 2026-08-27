@@ -1,0 +1,44 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "frostline-detective",
+  "appVersion": "1.16.15",
+  "generatedAt": "2026-08-27T07:49:22.788Z",
+  "sourceFile": "orient-express.html",
+  "status": "draft",
+  "builderCompatible": false,
+  "title": {
+    "cs": "Vražda v Zimním expresu",
+    "en": "The Frostline Express",
+    "officialCs": "Vražda v Orient expresu",
+    "officialEn": "Murder on the Orient Express"
+  },
+  "mechanicId": "detective",
+  "flowModel": "roomsCluesAccusation",
+  "supportedExerciseTypes": [
+    "mcq",
+    "trueFalse",
+    "wordBank",
+    "classify"
+  ],
+  "capabilities": {
+    "hasMap": false,
+    "hasStations": true,
+    "hasBoss": false,
+    "hasClues": true,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}
