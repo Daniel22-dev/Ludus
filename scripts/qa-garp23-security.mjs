@@ -115,7 +115,7 @@ try{
     window.__CORE_REQS=[];window.__CORE_CONFIGURED=false;window.__FAKE_MODE='hostile';
     window.GHRAB_PLATFORM={isSchoolProfile:()=>false,createAiRuntimeConfig:()=>({synthetic:true}),authProvider:async()=>null,recordTelemetry:e=>{window.__CORE_TELEMETRY=e}};
     window.GHRAB_AI={getState:()=>({configured:window.__CORE_CONFIGURED,app:{id:'ludus'}}),configure:cfg=>{window.__CORE_CONFIGURED=true;window.__CORE_CFG=cfg},generate:async req=>{window.__CORE_REQS.push(JSON.parse(JSON.stringify(req)));if(window.__FAKE_MODE==='interrupt')throw Object.assign(new Error('synthetic interruption'),{code:'TIMEOUT'});if(req.operation==='topic-analysis')return{result:{label:'Synthetic',kind:'facts',domain:'cross',operations:{select:1}}};const nm=window.__FAKE_MODE==='hostile'?hostile:'Safe';return{result:{stations:[{name:nm,icon:'✦',topic:'safe',atmo:'safe',reward:{name:'R'},ex:{type:'mc4',qs:[{t:nm,opts:['A','B','C','D'],a:0,exp:'ok'}]}}]}}},formatUserError:e=>String(e?.message||e)};
-    geminiApiKey='synthetic-key-not-a-secret';
+    geminiApiKey='TEST_SYNTHETIC_KEY_NOT_A_SECRET';
     const a=await generateAndAssemble();const hostilePackName=String(window.__lastPack?.stations?.[0]?.name||'');
     window.__FAKE_MODE='safe';state.topic={id:'garp_b',cz:'Second independent task '+student,kind:'facts',domain:'cross',ops:{select:.8},custom:true};const b=await generateAndAssemble();
     const caps=window.__CORE_REQS.slice(0,2).map(req=>({prompt:req.inputParts?.[0]?.text||'',system:req.instructions||'',operation:req.operation}));

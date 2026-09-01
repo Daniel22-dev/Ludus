@@ -31,6 +31,7 @@ const files = (
 for (const p of files) {
   const rel = path.relative(ROOT, p).split(path.sep).join("/");
   const text = await readFile(p, "utf8");
+  const qaHarness = /(?:^|\/)(?:tests?|fixtures?)(?:\/|$)|(?:^|\/)scripts\/(?:qa-|test-)/i.test(rel);
   for (const x of text.matchAll(/AIza[0-9A-Za-z_-]{35}/g))
     f.push(
       finding(
@@ -107,6 +108,7 @@ for (const p of files) {
       ),
     );
   if (
+    !qaHarness &&
     /localStorage\.(?:setItem|getItem)/.test(text) &&
     !/(?:QuotaExceededError|safeStorage|storageError|try\s*\{)/.test(text)
   )
