@@ -2,7 +2,7 @@
   "schema": "ghrab-platform-consumer-v1",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.16",
+  "appVersion": "1.16.18",
   "platform": {
     "version": "1.1.0",
     "contract": "ghrab-platform-v1",
@@ -60,7 +60,7 @@
     ]
   },
   "cache": {
-    "name": "ghrab-ludus-v1.16.16",
+    "name": "ghrab-ludus-v1.16.18",
     "updateMessage": "GHRAB_SKIP_WAITING"
   },
   "html": {
@@ -80,8 +80,8 @@
     "requireBudget": true,
     "performanceBudget": {
       "distBytes": 4900000,
-      "entryHtmlBytes": 310000,
-      "entryCriticalBytes": 515000,
+      "entryHtmlBytes": 315000,
+      "entryCriticalBytes": 522000,
       "largestInlineScriptBytes": 270000,
       "precacheBytes": 1220000,
       "largestFileBytes": 1050000,

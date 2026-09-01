@@ -1,6 +1,6 @@
 {
   "name": "ludus",
-  "version": "1.16.16",
+  "version": "1.16.18",
   "description": "LUDUS — dílna výukových her (builder + samostatné enginy)",
   "type": "module",
   "scripts": {
@@ -44,7 +44,10 @@
     "qa:xss": "node scripts/qa-p5-xss-sinks.mjs",
     "qa:lock": "node scripts/qa-p5-lock.mjs",
     "pretest:reporter": "npm run build",
-    "qa:garp": "node scripts/qa-garp-security.mjs"
+    "qa:garp": "node scripts/qa-garp-security.mjs",
+    "qa:garp23": "node scripts/qa-garp23-security.mjs",
+    "qa:garp23:critical": "node scripts/qa-garp23-critical.mjs",
+    "qa:garp23:privacy": "node scripts/qa-garp23-privacy-lifecycle.mjs"
   },
   "engines": {
     "node": ">=18"

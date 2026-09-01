@@ -1,8 +1,25 @@
-## 1.16.16 — 2026-08-27
+## 1.16.18 — GARP 2.3 opravné kolo po Claude B, kandidát pro druhou kontrolu (2026-09-01)
 
-- Hotfix synchronizuje `sharedAccessVersion` s aktuální podepsanou konfigurací AI Studia, aby se aplikace po bezpečnostní rotaci nezamykala kvůli `configuration-version-mismatch`.
-- Opraven build přístupové brány: `access-gate.css` se nyní skutečně vloží do výsledného `dist/index.html` i když zdrojový JavaScript obsahuje text selektoru používaný při exportu her.
-- Pedagogické funkce a datové formáty se nemění.
+- Odstraněny produkční AI testovací háčky a legacy přímý bypass; QA nyní nahrazuje AI vrstvu pouze uvnitř izolovaného testovacího harnessu.
+- Původní filename přílohy je v AI Core wrapperu vždy nahrazen generickým `material`; handoff import používá stejné strukturální limity jako souborový import.
+- Přidán `LUDUSPrivacy.endWork()` a tab/session izolace herního jména, postupu a výsledků; staré persistentní engine klíče jsou před načtením herního kódu odstraněny.
+- Datový manifest eviduje legacy engine namespaces a pravdivě odkazuje na implementovaný privacy mechanismus.
+- CSP se při buildu vkládá do HTML standardního i school-server profilu; `frame-src` výslovně povoluje interní blob preview.
+- Service worker již nepředcachuje deployment konfigurace, které runtime záměrně obchází.
+- Export her vkládá privacy/shared runtime přímo do výsledného HTML, aby ochrana nebyla závislá na vedlejším souboru.
+- Kandidát zůstává GARP AMBER a je určen k druhé nezávislé kontrole Claude; reálná studentská data jsou nadále zakázána.
+
+## 1.16.17 — GARP 2.3 bezpečnostní kandidát, kolo 1 (2026-09-01)
+
+- Odstraněno zbytečné kopírování podepsaného přístupového oprávnění do globálního `window`; po úspěšném guardu se publikuje pouze netajný stav `granted`.
+- AI prompt assembly odděluje systémové instrukce od nedůvěryhodných témat/importů/příloh, přidává explicitní untrusted-data hranice a defense-in-depth pravidla v GHRAB AI Core.
+- Importované a AI-generované stanice procházejí jedním centrálním normalizátorem s allowlisty, limity a odstraňováním řídicích/bidi znaků.
+- AI EGRESS INSPECTION ověřuje testovací request payload: osobní údaje blokuje preflight a původní název přílohy se do requestu nepřenáší.
+- Přidány GARP 2.3 regresní a kritické testy včetně bezpečných negativních kontrol.
+- Kandidát je do nezávislé kontroly a uzavření browser/privacy položek omezen na syntetická data; stav není produkční schválení.
+
+### Historická poznámka k 1.16.17 před auditním přebuildem
+- Předchozí pracovní hotfix synchronizoval `sharedAccessVersion` a opravil vložení `access-gate.css`; tyto opravy jsou v kandidátu zachovány.
 
 ## 1.16.15 — GARP bezpečnostní kandidát, kolo 2 (2026-08-27)
 - Opraven potvrzený HIGH nález z Claude kola 1: nedůvěryhodné hodnoty herního obsahu se na dotčených cestách v enginech Chronos, Hogwarts, LOTR a Laughworks již nevkládají jako aktivní HTML.

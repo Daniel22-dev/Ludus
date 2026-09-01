@@ -1,0 +1,14 @@
+GARP 2.3 C1 - RT-00 DATA MAP & SCOPE (aktualizace po opravách)
+
+ARCHITEKTURA: HYBRID.
+Builder: učitelský topic/import/worksheet -> normalizace/strukturální validace -> trusted policy + explicitní untrusted data block -> GHRAB AI Core -> strukturovaný výstup -> normalizeStations -> preview/export.
+AI egress: textový task/topic/world + volitelné media bytes/MIME; filename je hardcoded generic 'material'; jméno/e-mail/internal user id/localStorage/diagnostika nejsou součástí testovaného request assembly. Textový e-mail canary je preflight-blocked. Obsah PDF/obrázku není klientsky OCR/PII-inspektován, proto jsou povolena pouze syntetická data.
+Builder storage: canonical ghrab.ludus.* preference a session-only provider key; endWork je umí odstranit. Starý persistent key je migrován/odstraněn.
+Engine storage od 1.16.18: engine-owned identity/progress/results/image namespaces jsou před engine code redirectovány z legacy localStorage API do per-tab sessionStorage. Staré persistentní engine hodnoty jsou scrubbed bez importu do nové session. endWork čistí owned local/session keys. Unrelated storage zůstává.
+Cache Storage/SW: statické PWA artefakty v ghrab-ludus-v1.16.18; privacy runtime je precached. Deployment/runtime/API paths nejsou precached v CORE_ASSETS a fetch handler je bypassuje.
+Export: builder odstraňuje deployment access gate, vkládá GAME_CONTENT/LUDUS_CONTENT, privacy + shared runtime inlinuje do samostatného HTML a media inlinuje podle varianty. Browser storage není serializováno do exportu.
+Import: file import i Studio handoff vstupují přes studioValidateImportTree a následně normalizeStations.
+Reporter: technické reporty mají sanitizer; exact post-fix local-http reporter browser path je v tomto prostředí blocked by managed URLBlocklist.
+IndexedDB: aktivní aplikační data path nenalezena.
+Backend: school-server profil prepared-not-connected; server-side retention/live authorization není v tomto ZIPu ověřena.
+Provider retention: NOT TESTED.

@@ -1,0 +1,19 @@
+GARP 2.3 C1 - FINAL RELEASE PROVENANCE
+date=2026-09-01
+app=LUDUS
+version=1.16.18
+commit_hash=NEDOSTUPNY (candidate source had no .git metadata)
+src_index_sha256=a84edbc4cb57f298c1c86cf4e24591a4dc8cba2da5562b897340bc4e553ba890
+ai_core_integration_sha256=5f315eade0212662930c6c713f9e6997b4059eacd78dd7b5b4869c8a1d5c17f8
+privacy_runtime_sha256=2485870d47a12590a374eebe07a8d786c7f0fd4abc8fe8028076eb37c20934df
+data_manifest_sha256=7dd049f101af7706e52bd60bb49c174d7d558e0368a2513c6b8e40cbb15a1990
+sw_sha256=a47286f465b3ab917e7f3fa80b98fcacb353560537998be83e83bdb697f85b9e
+dist_static_csp_meta_count=13
+dist_school_csp_meta_count=13
+dist_production_test_hook_hits=0
+dist_student_canary_hits=0
+dist_aired_canary_hits=0
+secret_like_file_hits=0
+github_actions_uses_count=21
+github_actions_unpinned_count=0
+release_acceptance=security-candidate-amber;currentUseApproved=false

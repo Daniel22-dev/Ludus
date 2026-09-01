@@ -1,0 +1,363 @@
+=== LOCAL/SESSION STORAGE SURFACES ===
+engines/manifest.json:109:        "storage": "localStorage",
+engines/manifest.json:205:        "storage": "localStorage",
+engines/manifest.json:304:        "storage": "localStorage",
+engines/manifest.json:397:        "storage": "localStorage",
+engines/manifest.json:492:        "storage": "localStorage",
+engines/manifest.json:584:        "storage": "localStorage",
+engines/manifest.json:676:        "storage": "localStorage",
+engines/manifest.json:767:        "storage": "localStorage",
+engines/manifest.json:859:        "storage": "localStorage",
+engines/manifest.json:953:        "storage": "localStorage",
+engines/manifest.json:1171:        "storage": "localStorage",
+engines/manifest.json:1266:        "storage": "localStorage",
+runtime/ludus-engine-runtime.js:187:  function setLanguage(lang,opts){currentLang=lang==='en'?'en':'cs';try{localStorage.setItem('ludus_ui_lang',currentLang);}catch(e){}applyNative(currentLang);applyStandardLabels();translateChrome(currentLang);[50,250,800].forEach(function(delay){setTimeout(function(){applyNative(currentLang);applyStandardLabels();translateChrome(currentLang);},delay);});if(!(opts&&opts.silent)){try{document.dispatchEvent(new CustomEvent('ludus:languagechange',{detail:{lang:currentLang}}));}catch(e){}}return currentLang;}
+runtime/ludus-engine-runtime.js:190:  function enableTeacher(on){document.body.classList.toggle('teacher',!!on);document.body.classList.toggle('ludus-teacher-mode',!!on);try{if(typeof window.enableTeacher==='function'&&on)window.enableTeacher();}catch(e){}try{if(typeof window.setTeacher==='function')window.setTeacher(!!on);}catch(e){}try{if(typeof window.syncTeacherUI==='function')window.syncTeacherUI();}catch(e){}try{if(window.G)window.G.teacher=!!on;}catch(e){}try{if(window.S)window.S.teacher=!!on;}catch(e){}try{sessionStorage.setItem('ludusTeacherMode',on?'1':'0');}catch(e){}}
+runtime/ludus-engine-runtime.js:198:  function boot(){var b=ensureBadge();ensureLangSwitch();wireTripleTap(b);['#logo','.brandtap','.brand','.logo'].forEach(function(sel){qsa(sel).forEach(wireTripleTap);});ensureDock();var forced=false;try{forced=/[?&]teacher=1\b/.test(location.search)||/[#&?]teacher=1\b/.test(location.hash)||sessionStorage.getItem('ludusTeacherMode')==='1';}catch(e){}if(forced)enableTeacher(true);var wanted=contentLang();try{var saved=localStorage.getItem('ludus_ui_lang');if(!window.LUDUS_CONTENT&&!window.GAME_CONTENT&&(saved==='cs'||saved==='en'))wanted=saved;}catch(e){}setLanguage(wanted,{silent:true});mo=new MutationObserver(function(){if(translating||translatePending)return;translatePending=true;var schedule=window.requestAnimationFrame||function(cb){return setTimeout(cb,16);};schedule(function(){translatePending=false;translateChrome(currentLang);});});mo.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['title','aria-label','placeholder','alt']});window.LUDUS_STANDARD={version:VERSION,enableTeacher:enableTeacher,collectReport:collectReport,downloadReport:downloadReport,copyReport:copyReport,setLanguage:setLanguage,getLanguage:function(){return currentLang;}};window.LUDUS_I18N={version:'ludus-i18n-v1.1',setLanguage:setLanguage,getLanguage:function(){return currentLang;},translateString:translateString,languages:['cs','en']};}
+scripts/qa-garp23-security.mjs:63:add('secret.session-only-key',src.includes('sessionStorage.setItem(G_KEY_SESSION_SK')&&src.includes('localStorage.removeItem(G_KEY_SK)'));
+scripts/qa-garp23-security.mjs:79:const prelude=`<script>window.__GARP_XSS__=0;window.__LUDUS_TEST_ERRORS__=[];addEventListener('error',e=>window.__LUDUS_TEST_ERRORS__.push(String(e.error?.stack||e.message||'error')));addEventListener('unhandledrejection',e=>window.__LUDUS_TEST_ERRORS__.push(String(e.reason?.stack||e.reason||'rejection')));const __mkStore=()=>{const m=new Map();return{get length(){return m.size},key:i=>Array.from(m.keys())[i]??null,getItem:k=>m.has(String(k))?m.get(String(k)):null,setItem:(k,v)=>m.set(String(k),String(v)),removeItem:k=>m.delete(String(k)),clear:()=>m.clear()}};try{Object.defineProperty(window,'localStorage',{value:__mkStore(),configurable:true});Object.defineProperty(window,'sessionStorage',{value:__mkStore(),configurable:true})}catch{};window.fetch=async()=>({ok:false,status:404,text:async()=>'',json:async()=>({}),blob:async()=>new Blob([])});window.matchMedia=window.matchMedia||(()=>({matches:false,addEventListener(){},removeEventListener(){}}));window.alert=()=>{};window.confirm=()=>true;window.prompt=()=>'';window.scrollTo=()=>{};Element.prototype.scrollIntoView=Element.prototype.scrollIntoView||function(){};URL.createObjectURL=()=> 'blob:test';URL.revokeObjectURL=()=>{};try{Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{}},configurable:true})}catch{};try{Object.defineProperty(navigator,'serviceWorker',{value:{register:async()=>({})},configurable:true})}catch{};window.ResizeObserver=window.ResizeObserver||class{observe(){}unobserve(){}disconnect(){}};window.AudioContext=class{constructor(){this.destination={};this.currentTime=0}createOscillator(){return{connect(){},start(){},stop(){},frequency:{setValueAtTime(){}},type:''}}createGain(){return{connect(){},gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}}}}};window.webkitAudioContext=window.AudioContext;HTMLMediaElement.prototype.play=async function(){};<\/script>`;
+scripts/qa-garp23-security.mjs:146:  const eng=await session.client.eval(`(()=>{try{G.name=${JSON.stringify(studentCanary)};G.house='gryffindor';renderMap();openStation(0)}catch(e){}let before='',after='not-checked',key='';try{key=window.LUDUS_PROGRESS?.key||'';window.LUDUS_PROGRESS?.saveProgress?.();before=key?(localStorage.getItem(key)||''):'';window.LUDUS_PROGRESS?.clearProgress?.();after=key?localStorage.getItem(key):null}catch(e){after='error'}return{xss:window.__GARP_XSS__,liveImg:!!document.querySelector('img[data-garp-xss]'),bodyHasLiteral:document.body.textContent.includes(${JSON.stringify(studentCanary)}),progressApi:!!window.LUDUS_PROGRESS,progressSaved:before.includes(${JSON.stringify(studentCanary)}),progressCleared:after===null,errors:window.__LUDUS_TEST_ERRORS__||[]}})()`);
+scripts/qa-core.mjs:242:    try { Object.defineProperty(window, "localStorage", { configurable: true, value: makeStorage() }); } catch {}
+scripts/qa-core.mjs:243:    try { Object.defineProperty(window, "sessionStorage", { configurable: true, value: makeStorage() }); } catch {}
+scripts/validate.mjs:450:  need(src.includes('Trvalé ukládání klíče bylo v P1 odstraněno') && !src.includes('localStorage.setItem(G_KEY_SK'), 'src/index.html: klíč poskytovatele nesmí být trvale ukládán');
+scripts/apply-ghrab-platform.mjs:210:  sw += `\n/* GHRAB_PLATFORM_P3_START */\nconst GHRAB_PLATFORM_P3_ASSETS=${JSON.stringify(platformAssets)};\nself.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(${JSON.stringify(consumer.cache.name)});const results=await Promise.allSettled(GHRAB_PLATFORM_P3_ASSETS.map(asset=>cache.add(asset)));const failed=results.filter(item=>item.status==='rejected');if(failed.length)throw new Error('GHRAB Platform P3 precache selhal: '+failed.length);})()));\n${hasUpdateProtocol ? '' : "self.addEventListener('message',event=>{if(event.data?.type==='GHRAB_SKIP_WAITING')self.skipWaiting();});\n"}/* GHRAB_PLATFORM_P3_END */\n`;
+scripts/ghrab-platform-conformance.mjs:139:const localStorage = new FakeStorage();
+scripts/ghrab-platform-conformance.mjs:140:const sessionStorage = new FakeStorage();
+scripts/ghrab-platform-conformance.mjs:147:const sampleStore = sample.store === 'session' ? sessionStorage : localStorage;
+scripts/ghrab-platform-conformance.mjs:160:  localStorage, sessionStorage, Storage: FakeStorage, MutationObserver: class { observe() {} disconnect() {} },
+engines/hogwarts.html:1356:function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(progressPayload()));}catch(_e){}}
+engines/hogwarts.html:1358:  const r=localStorage.getItem(SAVE_KEY);if(!r)return false;
+engines/hogwarts.html:1363:function readProgressData(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?JSON.parse(raw):null;}catch(_e){return null;}}
+engines/hogwarts.html:1371:function clearProgress(){try{localStorage.removeItem(SAVE_KEY);}catch(_e){}return true;}
+engines/hogwarts.html:1372:function installLudusProgressApi(){const api={version:'ludus-progress-api-v1',storage:'localStorage',key:SAVE_KEY,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary,hasProgress:hasProgress};window.LUDUS_PROGRESS=api;window.LUDUS_ENGINE_API=Object.assign({},window.LUDUS_ENGINE_API||window.LUDUS_ENGINE||{}, {manifest:LUDUS_GAME_MANIFEST,exerciseSupport:EXERCISE_SUPPORT,themeVariants:THEME_VARIANTS,adapt:adaptLudusContentToGame,validate:validateLudusContentForGame,selfTest:selfTestGame,progress:api,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary});if(window.LUDUS_ENGINE)window.LUDUS_ENGINE.progress=api;}
+scripts/qa-security.mjs:110:    /localStorage\.(?:setItem|getItem)/.test(text) &&
+scripts/qa-security.mjs:118:        `V ${rel} není poblíž statický důkaz ošetření selhání localStorage.`,
+scripts/qa-p3-axe.mjs:136:const memory = `<script>(()=>{class M{constructor(){this.m=new Map()}get length(){return this.m.size}key(i){return [...this.m.keys()][i]??null}getItem(k){return this.m.has(String(k))?this.m.get(String(k)):null}setItem(k,v){this.m.set(String(k),String(v))}removeItem(k){this.m.delete(String(k))}clear(){this.m.clear()}};Object.defineProperty(window,'localStorage',{value:new M(),configurable:true});Object.defineProperty(window,'sessionStorage',{value:new M(),configurable:true});window.matchMedia=window.matchMedia||(()=>({matches:false,addEventListener(){},removeEventListener(){}}));})();<\/script>`;
+scripts/qa-p3-browser.mjs:17:const memory=`<script>(()=>{class M{constructor(){this.m=new Map()}get length(){return this.m.size}key(i){return [...this.m.keys()][i]??null}getItem(k){return this.m.has(String(k))?this.m.get(String(k)):null}setItem(k,v){this.m.set(String(k),String(v))}removeItem(k){this.m.delete(String(k))}clear(){this.m.clear()}};Object.defineProperty(window,'localStorage',{value:new M(),configurable:true});Object.defineProperty(window,'sessionStorage',{value:new M(),configurable:true});window.matchMedia=window.matchMedia||(()=>({matches:false,addEventListener(){},removeEventListener(){}}));})();<\/script>`;
+scripts/qa-visual.mjs:340:          !/Failed to read the 'localStorage' property.*Access is denied/i.test(
+scripts/qa-p5-acceptance.mjs:11:if(consumer.appId==='lesson-hub'){need(acceptance.localPilot?.enabled===true,'lesson-hub.local-pilot','enabled');need(acceptance.localPilot?.primaryStorage==='IndexedDB','lesson-hub.indexeddb',acceptance.localPilot?.primaryStorage||'missing');const t=fs.existsSync(path.join(root,'src/config/data-manifest.json'))?fs.readFileSync(path.join(root,'src/config/data-manifest.json'),'utf8'):'';need(/indexedDB/i.test(t),'lesson-hub.data-manifest-indexeddb','src/config/data-manifest.json')}
+engines/jumanji.html:16:  ║    localStorage; SVG kresba je fallback, když je slot prázdný.        ║
+engines/jumanji.html:551:      <div class="tnote">Obrázek se uloží do tohoto zařízení (localStorage) a engine ho oživí. Když je slot prázdný, použije se kreslená SVG verze.</div>
+engines/jumanji.html:921:  try{ localStorage.setItem("jumanji_snd", on?"1":"0"); }catch(e){}
+engines/jumanji.html:1084:   10) OBRÁZKOVÉ SLOTY (učitel nahraje → animace → localStorage; SVG fallback)
+engines/jumanji.html:1092:function getSlotImg(name){ try{ return localStorage.getItem(slotKey(name)); }catch(e){ return null; } }
+engines/jumanji.html:1093:function setSlotImg(name,data){ try{ if(data) localStorage.setItem(slotKey(name),data); else localStorage.removeItem(slotKey(name)); }catch(e){} }
+engines/jumanji.html:1601:  try{ localStorage.setItem(STORE_KEY, JSON.stringify(snapshot())); }catch(e){}
+engines/jumanji.html:1604:  try{ const raw=localStorage.getItem(STORE_KEY); if(!raw) return null; const d=JSON.parse(raw);
+engines/jumanji.html:1608:function clearProgress(){ try{ localStorage.removeItem(STORE_KEY); }catch(e){} }
+engines/jumanji.html:1723:/* uploader obrázků: učitel nahraje z galerie → dataURL → localStorage */
+engines/jumanji.html:1822:  try{ const sp=localStorage.getItem("jumanji_snd"); if(sp==="0"){ SND=false; } }catch(e){}
+src/ai-core-integration.js:10:function ludusApplyServerKeyPolicy(){if(!ludusSchoolMode())return;window.GHRAB_PLATFORM.enforceLocalKeyPolicy({localStorageKeys:[G_KEY_SK],sessionStorageKeys:[G_KEY_SESSION_SK],onRemoved:()=>{geminiApiKey='';geminiKeyScope='server';}});const input=$('#keyInput');if(input){input.value='';input.disabled=true;input.placeholder='Klíč spravuje školní server'}for(const button of document.querySelectorAll('[onclick*="Key"],#keyPanel button'))if(/relaci|trvale|smaz/i.test(button.textContent||''))button.hidden=true;const badge=$('#keyBadge');if(badge){badge.textContent='AI: školní server';badge.className='kbadge on'}try{renderModelSeg()}catch{}}
+public/sw.js:40:    const cache = await caches.open(LUDUS_CACHE);
+public/sw.js:53:    const keys = await caches.keys();
+public/sw.js:56:      .map((key) => caches.delete(key)));
+public/sw.js:62:  const cache = await caches.open(LUDUS_CACHE);
+public/sw.js:80:  const cache = await caches.open(LUDUS_CACHE);
+engines/chronos.html:1117:  try{var d=localStorage.getItem(imgKey(slot));if(d){IMG[slot]=d;applyImage(slot);}}catch(e){}
+engines/chronos.html:1129:  try{localStorage.setItem(imgKey(slot),dataURL);}catch(e){console.warn('Obrázek se nevešel do úložiště',e);}
+engines/chronos.html:1132:function clearImage(slot){IMG[slot]=null;try{localStorage.removeItem(imgKey(slot));}catch(e){}applyImage(slot);}
+engines/chronos.html:1153:function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(progressPayload()));}catch(e){}}
+engines/chronos.html:1154:function readProgressData(){try{var r=localStorage.getItem(SAVE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
+engines/chronos.html:1161:function clearProgress(){try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+engines/chronos.html:1170:  window.LUDUS_PROGRESS={version:LUDUS_PROGRESS_API_VERSION,storage:'localStorage',key:SAVE_KEY,
+public/manual/index.html:133:let state={tour:[],checks:[]};try{state=Object.assign(state,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(_){ }
+public/manual/index.html:134:function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(_){ } updateProgress()}
+public/manual/index.html:157:const THEME='ghrab-manual-theme';try{document.documentElement.dataset.theme=localStorage.getItem(THEME)||'dark'}catch(_){ }themeBtn.onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem(THEME,n)}catch(_){ }};
+engines/indiana-jones.html:22:  ║    s Ken Burns animací + pozadí bosse; localStorage; SVG fallback.║
+engines/indiana-jones.html:732:      Přepnutí: učitelský panel · ?skin=safe · uloženo v localStorage.       ── */
+engines/indiana-jones.html:971:/* ── ukládání postupu (localStorage; bez něj tiše degraduje – funguje na nasazené stránce) ── */
+engines/indiana-jones.html:973:function safeGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+engines/indiana-jones.html:974:function safeSet(k,v){ try{ window.localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+engines/indiana-jones.html:975:function safeDel(k){ try{ window.localStorage.removeItem(k); }catch(e){} }
+engines/indiana-jones.html:1777:  // V2: fotka učitele (localStorage) překryje SVG scénu; SVG zůstává jako fallback pod ní
+engines/indiana-jones.html:2284:   V2-A) OBRÁZKOVÉ SLOTY — fotky učitele v localStorage (SVG = fallback)
+engines/indiana-jones.html:2286:   vešly do kvóty localStorage. Klíč: prefix + id světa / "boss".
+engines/indiana-jones.html:2316:   UI se překreslí; volba se pamatuje v localStorage a přes ?skin=)
+engines/indiana-jones.html:2385:  note.textContent="Fotka nahradí SVG scénu světa (Ken Burns) / pozadí souboje. Ukládá se jen do tohoto zařízení (localStorage), zmenšeno na 1280 px.";
+public/config/data-manifest.json:20:      "kind": "localStorage",
+public/config/data-manifest.json:31:      "kind": "sessionStorage",
+public/config/data-manifest.json:41:      "kind": "localStorage",
+public/config/data-manifest.json:52:      "kind": "sessionStorage",
+src/index.html:1604:function loadKey(){let s='',p='';try{s=sessionStorage.getItem(G_KEY_SESSION_SK)||'';}catch(_){}try{p=localStorage.getItem(G_KEY_SK)||'';}catch(_){}if(!s&&p){s=p;try{sessionStorage.setItem(G_KEY_SESSION_SK,p);}catch(_){}}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey=cleanKey(s);geminiKeyScope=s?'session':'';updateKeyUI();}
+src/index.html:1605:function loadModel(){let s='';try{s=localStorage.getItem(G_MODEL_SK)||'';}catch(_){}s=String(s||'').toLowerCase();if(['gemini-2.5-pro','gemini-2.5-flash','gemini-3.1-flash','gemini-3.5-flash','gemini-flash-latest'].includes(s))s=G_MODEL_DEFAULT;if(['gemini-2.5-flash-lite','gemini-3.1-flash-lite'].includes(s))s='gemini-3.5-flash-lite';geminiModel=isValidModel(s)?s:G_MODEL_DEFAULT;try{localStorage.setItem(G_MODEL_SK,geminiModel);}catch(_){}}
+src/index.html:1606:function useKeySession(){const k=cleanKey($('#keyInput').value);try{k?sessionStorage.setItem(G_KEY_SESSION_SK,k):sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}geminiApiKey=k;geminiKeyScope=k?'session':'';updateKeyUI();toast(k?"Klíč uložen jen pro tuto relaci ✓":"Klíč pro relaci smazán.");}
+src/index.html:1607:function useKeyPersistent(){useKeySession();try{localStorage.removeItem(G_KEY_SK);}catch(_){}if(geminiApiKey)toast('Klíč je z bezpečnostních důvodů uložen jen pro tuto relaci ✓');return true;}
+src/index.html:1608:function clearKeyAll(){try{sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey="";geminiKeyScope="";const ti=$('#keyInput');if(ti)ti.value="";updateKeyUI();toast("Klíč smazán.");}
+src/index.html:1609:function setModel(n){const v=String(n||"").trim().toLowerCase();geminiModel=isValidModel(v)?v:G_MODEL_DEFAULT;try{localStorage.setItem(G_MODEL_SK,geminiModel);}catch(_){}renderModelSeg();}
+src/index.html:1622:function persistLangs(){try{localStorage.setItem(G_LANG_SK,JSON.stringify({ui:state.uiLang,content:state.contentLang,support:state.supportLang}));}catch(_){}}
+src/index.html:1623:function loadLangs(){let o={};try{o=JSON.parse(localStorage.getItem(G_LANG_SK)||"{}")||{};}catch(_){}
+src/index.html:2513:  try{localStorage.setItem(SOUND_SK,state.sound?'on':'off');}catch(_){}
+src/index.html:2516:(function initSound(){let s='';try{s=localStorage.getItem(SOUND_SK)||'';}catch(_){}
+src/index.html:2526:  try{localStorage.setItem(THEME_SK,light?'light':'dark');}catch(_){}
+src/index.html:2529:(function initTheme(){let m='';try{m=localStorage.getItem(THEME_SK)||'';}catch(_){}
+src/index.html:2893:function studioGet(k){try{return localStorage.getItem(k)}catch(e){console.warn('AI Studio bridge: čtení úložiště selhalo',e);return null}}
+src/index.html:2895:function studioSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){console.warn('AI Studio bridge: zápis do úložiště selhal',e);return false}}
+src/index.html:2896:function studioRemove(k){try{localStorage.removeItem(k)}catch(e){console.warn('AI Studio bridge: odstranění z úložiště selhalo',e)}}
+src/index.html:3100:  const d=$('#introDone'); if(d) d.onclick=()=>{try{localStorage.setItem(INTRO_SK,'true');}catch(_){}modalClose();toast('Návod se příště neotevře — najdeš ho dole jako „Návod“.');};
+src/index.html:3104:  let seen=''; try{seen=localStorage.getItem(INTRO_SK)||'';}catch(_){}
+src/index.html:3174:  add(C.gen,'AI běží přes společný GHRAB AI Core', ()=>typeof window.GHRAB_AI==='object'&&callGemini.toString().includes('GHRAB_AI.generate')&&useKeySession.toString().includes('sessionStorage'), 'Core 1.0.0 · gateway/direct');
+engines/orient-express.html:808:try{ Object.assign(IMAGES, JSON.parse(localStorage.getItem(IMG_KEY)||"{}")); }catch(e){}
+engines/orient-express.html:809:function saveImages(){ try{ localStorage.setItem(IMG_KEY, JSON.stringify(IMAGES)); }catch(e){} }
+engines/orient-express.html:835:function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+engines/orient-express.html:836:function loadSave(){ try{ return JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); }catch(e){ return null; } }
+engines/orient-express.html:837:function wipe(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} S=blankState(); applySkin(); }
+engines/star-wars.html:22:  ║    s Ken Burns animací + pozadí bosse; localStorage; SVG fallback.║
+engines/star-wars.html:721:      Přepnutí: učitelský panel · ?skin=safe · uloženo v localStorage.       ── */
+engines/star-wars.html:930:/* ── ukládání postupu (localStorage; bez něj tiše degraduje – funguje na nasazené stránce) ── */
+engines/star-wars.html:932:function safeGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+engines/star-wars.html:933:function safeSet(k,v){ try{ window.localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+engines/star-wars.html:934:function safeDel(k){ try{ window.localStorage.removeItem(k); }catch(e){} }
+engines/star-wars.html:1683:  // V2: fotka učitele (localStorage) překryje SVG scénu; SVG zůstává jako fallback pod ní
+engines/star-wars.html:2165:   V2-A) OBRÁZKOVÉ SLOTY — fotky učitele v localStorage (SVG = fallback)
+engines/star-wars.html:2167:   vešly do kvóty localStorage. Klíč: prefix + id světa / "boss".
+engines/star-wars.html:2197:   UI se překreslí; volba se pamatuje v localStorage a přes ?skin=)
+engines/star-wars.html:2266:  note.textContent="Fotka nahradí SVG scénu světa (Ken Burns) / pozadí souboje. Ukládá se jen do tohoto zařízení (localStorage), zmenšeno na 1280 px.";
+engines/laughworks.html:446:  localStorage.setItem(GAME_SAVE_KEY,JSON.stringify(snap)); return true;
+engines/laughworks.html:449:  const r=localStorage.getItem(GAME_SAVE_KEY); if(!r) return null;
+engines/laughworks.html:452:function clearGame(){ try{ localStorage.removeItem(GAME_SAVE_KEY); }catch(e){} }
+engines/laughworks.html:463:function lsGet(k){ try{return localStorage.getItem(SK+k);}catch(e){return null;} }
+engines/laughworks.html:464:function lsSet(k,v){ try{localStorage.setItem(SK+k,v);}catch(e){} }
+engines/laughworks.html:465:function lsDel(k){ try{localStorage.removeItem(SK+k);}catch(e){} }
+engines/dnd.html:1399:/* ── ukládání postupu (localStorage; bez něj tiše degraduje – funguje na nasazené stránce) ── */
+engines/dnd.html:1415:function safeGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+engines/dnd.html:1416:function safeSet(k,v){ try{ window.localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+engines/dnd.html:1417:function safeDel(k){ try{ window.localStorage.removeItem(k); }catch(e){} }
+engines/dnd.html:1833:function installLudusProgressApi(){const api={version:LUDUS_PROGRESS_API_VERSION,storage:'localStorage',key:STORE_KEY,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary,hasProgress:hasProgress};window.LUDUS_PROGRESS=api;window.LUDUS_ENGINE_API=Object.assign({},window.LUDUS_ENGINE_API||{}, {progress:api,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary});}
+engines/stranger-things.html:19:  • Save/resume (localStorage), teacher mód (3× ťuk na logo / ?teacher=1),
+engines/stranger-things.html:945:function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+engines/stranger-things.html:946:function loadState(){ try{ const r=localStorage.getItem(SAVE_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+engines/stranger-things.html:947:function clearState(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+engines/stranger-things.html:1598:function loadImages(){ try{ const r=localStorage.getItem(IMG_KEY); if(r) Object.assign(IMAGES, JSON.parse(r)); }catch(e){} }
+engines/stranger-things.html:1599:function saveImages(){ try{ localStorage.setItem(IMG_KEY, JSON.stringify(IMAGES)); return true; }catch(e){ return false; } }
+engines/stranger-things.html:1600:function clearImages(){ IMAGES.hero=""; IMAGES.creature=""; IMAGES.roomBg=""; try{ localStorage.removeItem(IMG_KEY); }catch(e){} render(); }
+engines/matrix.html:832:function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
+engines/matrix.html:836:function loadState(){ try{ const r=localStorage.getItem(SAVE_KEY); if(!r) return null;
+engines/matrix.html:838:function clearSave(){ try{ localStorage.removeItem(SAVE_KEY); }catch(e){} }
+engines/matrix.html:864:  try{ localStorage.setItem(SND_KEY, on?"1":"0"); }catch(e){} }
+engines/matrix.html:865:function loadSoundPref(){ try{ return localStorage.getItem(SND_KEY)==="1"; }catch(e){ return false; } }
+engines/matrix.html:880:function loadImages(){ try{ const r=localStorage.getItem(IMG_KEY); if(r) IMAGES=JSON.parse(r)||{}; }catch(e){ IMAGES={}; }
+engines/matrix.html:882:function saveImages(){ try{ localStorage.setItem(IMG_KEY, JSON.stringify(IMAGES)); }catch(e){}
+engines/lotr.html:938:function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(progressPayload()));}catch(e){}}
+engines/lotr.html:943:function readProgressData(){try{const d=localStorage.getItem(SAVE_KEY);return d?JSON.parse(d):null;}catch(e){return null;}}
+engines/lotr.html:952:function clearProgress(){try{localStorage.removeItem(SAVE_KEY);}catch(e){}return true;}
+engines/lotr.html:953:function installLudusProgressApi(){const api={version:LUDUS_PROGRESS_API_VERSION,storage:'localStorage',key:SAVE_KEY,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary,hasProgress:hasProgress};window.LUDUS_PROGRESS=api;window.LUDUS_ENGINE_API=Object.assign({},window.LUDUS_ENGINE_API||{}, {progress:api,saveProgress:saveProgress,loadProgress:loadProgress,resumeProgress:resumeProgress,clearProgress:clearProgress,getProgressSummary:getProgressSummary});}
+
+=== NETWORK/AI EGRESS SURFACES ===
+runtime/ludus-engine-runtime.js:247:      const response = await fetch(contentPackUrl, { cache: 'no-store' });
+scripts/qa-garp23-critical.mjs:17:add('ai.topic-data-only',src.includes("callGemini(ludusAiDataBlock({task:'topic-analysis',topic:text}), sys"));
+scripts/qa-p4-a11y.mjs:13:async function waitJson(url){for(let i=0;i<600;i++){try{const r=await fetch(url);if(r.ok)return await r.json();}catch{}await sleep(50)}throw new Error('Chromium debug timeout');}
+scripts/qa-p4-a11y.mjs:36:async function target(){const r=await fetch(`${base}/json/new?about:blank`,{method:'PUT'});if(!r.ok)throw new Error(`target ${r.status}`);return r.json()}
+scripts/qa-p4-a11y.mjs:37:async function close(id){try{await fetch(`${base}/json/close/${encodeURIComponent(id)}`)}catch{}}
+scripts/qa-p3-reflow.mjs:25:    try { const response = await fetch(url); if (response.ok) return await response.json(); } catch {}
+scripts/qa-p3-reflow.mjs:140:  const response = await fetch(`${debugBase}/json/new?about:blank`, { method: 'PUT' });
+scripts/qa-p3-reflow.mjs:146:  try { await fetch(`${debugBase}/json/close/${encodeURIComponent(targetId)}`); } catch {}
+scripts/qa-garp23-security.mjs:77:async function waitJson(url){for(let i=0;i<160;i++){try{const r=await fetch(url);if(r.ok)return r.json()}catch{}await sleep(50)}throw new Error('chromium debug timeout')}
+scripts/qa-garp23-security.mjs:105:    let interrupted=false;window.__TEST_MOCK_GEMINI=async()=>{throw Object.assign(new Error('synthetic interruption'),{code:'TIMEOUT'})};try{await callGemini(ludusAiDataBlock({task:'retry-test',topic:'A'}),LUDUS_AI_SAFETY_RULES,{__legacyTest:true,operation:'topic-analysis'})}catch{interrupted=true}
+scripts/qa-garp23-security.mjs:106:    window.__TEST_MOCK_GEMINI=async({prompt,system})=>{window.__RETRY={prompt,system};return{label:'B',kind:'facts',domain:'cross',operations:{select:1}}};await callGemini(ludusAiDataBlock({task:'retry-test',topic:'B'}),LUDUS_AI_SAFETY_RULES,{__legacyTest:true,operation:'topic-analysis'});
+scripts/qa-garp23-security.mjs:111:    const coreTopic=await callGemini(ludusAiDataBlock({task:'topic-analysis',topic:student}),LUDUS_AI_SAFETY_RULES,{operation:'topic-analysis',workflowId:'garp-core-topic'});
+scripts/qa-garp23-security.mjs:112:    const reqCountBeforeBlocked=window.__CORE_REQS.length;let piiBlocked=false;try{await callGemini(ludusAiDataBlock({task:'topic-analysis',topic:${JSON.stringify(studentEmail)}}),LUDUS_AI_SAFETY_RULES,{operation:'topic-analysis',workflowId:'garp-core-pii'})}catch(e){piiBlocked=e?.code==='PREFLIGHT_BLOCKED'}
+scripts/validate.mjs:34:      const response = await fetch(url);
+scripts/validate.mjs:445:  need(src.includes("fetch(eng.engine,{cache:'no-cache'})"), 'src/index.html: engine se neověřuje proti aktuální cache');
+scripts/qa-p5-axe-runtime.mjs:28:async function waitJson(url){for(let i=0;i<400;i++){try{const r=await fetch(url);if(r.ok)return await r.json()}catch{}await sleep(50)}throw new Error('Chromium debug timeout')}
+scripts/qa-p5-axe-runtime.mjs:29:async function waitPageTarget(port){for(let i=0;i<400;i++){try{const r=await fetch(`http://127.0.0.1:${port}/json`);if(r.ok){const targets=await r.json();const target=targets.find(t=>t.type==='page'&&t.webSocketDebuggerUrl);if(target)return target}}catch{}await sleep(50)}throw new Error('Chromium page target timeout')}
+scripts/qa-p5-runtime.mjs:118:  for (let i=0;i<400;i++) { try { const r=await fetch(url); if (r.ok) return await r.json(); } catch {} await sleep(50); }
+scripts/sync-ghrab-ai-core.mjs:52:  const response = await fetch(artifactUrl, { redirect: 'error', signal: AbortSignal.timeout(30000) });
+scripts/qa-p3-axe.mjs:48:    try { const response = await fetch(url); if (response.ok) return await response.json(); } catch {}
+scripts/qa-p3-browser.mjs:15:async function waitJson(url){for(let i=0;i<180;i++){try{const r=await fetch(url);if(r.ok)return await r.json();}catch{}await sleep(50);}throw new Error('Chromium debug timeout');}
+scripts/test-error-reporter.mjs:436:      const response = await fetch(url);
+scripts/test-error-reporter.mjs:445:    const response = await fetch(url);
+scripts/test-error-reporter.mjs:711:      await fetch('/http-failure');
+scripts/test-error-reporter.mjs:712:      try { await fetch('/network-failure'); } catch {}
+scripts/test-error-reporter.mjs:901:    const supportHits = await fetch(`${localBase}/__support-hits`).then((response) => response.json());
+scripts/test-error-reporter.mjs:903:    await fetch(`${localBase}/__support-mode?mode=404`);
+scripts/test-error-reporter.mjs:908:    await fetch(`${localBase}/__support-mode?mode=ok`);
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-conformance-1.0.0.js:59:            gatewayUrl: "/api/v1/ai/generate",
+src/ai-core-integration.js:9:callGemini=async function ludusCallThroughCore(prompt,system,opts={}){if(opts.__legacyTest===true||window.__TEST_USE_LEGACY_GEMINI__)return ludusLegacyCallGemini(prompt,system,opts);ludusEnsureAiCore();const operation=opts.operation||'game-content-generation';const registration=LUDUS_AI_OPERATIONS.operations[operation];if(!registration)throw mkErr('Neznámá AI operace: '+operation,'UNREGISTERED_OPERATION');const inputParts=[{type:'text',text:String(prompt||'')}];for(const media of(opts.media||[])){const mime=media.mime||'application/octet-stream';inputParts.push({type:String(mime).startsWith('image/')?'image':'document',mimeType:mime,name:media.name||'material',source:{kind:'inline-base64',data:media.data}})}const joined=inputParts.filter(part=>part.type==='text').map(part=>part.text).join('\n');if(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/.test(joined)||/\b(?:\+?420\s*)?(?:\d[\s-]*){9}\b/.test(joined))throw mkErr('Zadání obsahuje možný osobní kontakt. Nahraď jej anonymním označením.','PREFLIGHT_BLOCKED');try{const response=await window.GHRAB_AI.generate({operation,modelProfile:operation==='topic-analysis'?'economy':'balanced',instructions:LUDUS_AI_CORE_SAFETY+'\n'+String(system||'')+'\nVrať pouze validní JSON bez markdownu.',inputParts,outputSchemaId:registration.outputSchemaId,options:{reasoningHint:operation==='topic-analysis'?'minimal':'medium',maxOutputTokensHint:registration.maxOutputTokensHint},privacy:{clientAnonymized:true,preflightPassed:true},usageContext:{expectedOutputs:1,userActions:1},workflowId:opts.workflowId});return response.result}catch(error){const message=window.GHRAB_AI?.formatUserError?.(error,'cs-CZ')||error?.message||'AI požadavek se nepodařilo dokončit.';const normalized=mkErr(message,error?.code||'AI_ERROR');normalized.status=error?.status;normalized.quota=['QUOTA_EXCEEDED','RATE_LIMITED','BUDGET_EXCEEDED'].includes(error?.code);throw normalized}};
+src/index.html:1489:  const res=await fetch(eng.engine,{cache:'no-cache'});
+src/index.html:1566:    const res=await fetch(ENGINE_BASE+'manifest.json',{cache:'no-cache'});
+src/index.html:1628:async function callGemini(prompt, system, opts){
+src/index.html:1633:    const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
+src/index.html:1640:      res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cleanKey(geminiApiKey)},body:JSON.stringify(body),signal:ctrl.signal});
+src/index.html:2482:    const obj=await callGemini(ludusAiDataBlock({task:'topic-analysis',topic:text}), sys, {maxTokens:512, temp:0.2, operation:'topic-analysis'});
+src/index.html:2664:        const response=await fetch(absolute,{cache:'no-cache'});
+src/index.html:2800:  const data=await callGemini(userMsg,sys,{maxTokens:8192,temp:0.7,media:ws?[{mime:ws.mime,data:ws.data}]:null,operation:'game-content-generation'});
+src/index.html:3174:  add(C.gen,'AI běží přes společný GHRAB AI Core', ()=>typeof window.GHRAB_AI==='object'&&callGemini.toString().includes('GHRAB_AI.generate')&&useKeySession.toString().includes('sessionStorage'), 'Core 1.0.0 · gateway/direct');
+public/access/error-reporter.js:16:    const response = await fetch(new URL("config/support.json", studioUrl), {
+public/access/error-reporter.js:228:    const response = await fetch(
+public/access/error-reporter.js:507:    const response = await fetch(url, { cache: "force-cache" });
+public/access/deployment-config.js:42:      fetch(url, { ...init, signal: controller.signal }),
+public/config/deployment.school-server.example.json:41:    "aiGenerate": "ai/generate",
+public/config/security-headers.json:6:    "contentSecurityPolicy": "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://generativelanguage.googleapis.com; media-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self'; manifest-src 'self'",
+public/config/deployment.json:42:    "aiGenerate": "ai/generate",
+public/config/deployment.school-server.json:41:    "aiGenerate": "ai/generate",
+public/sw.js:64:    const response = await fetch(request, { cache: 'no-store' });
+public/sw.js:83:  const response = await fetch(request);
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-1.0.0.js:68:      gatewayUrl: "/api/v1/ai/generate",
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-1.0.0.js:75:        endpointBase: "https://generativelanguage.googleapis.com/v1beta/models",
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-1.0.0.js:639:      return await global.fetch(url, { ...options, signal: controller.signal });
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-contract-v1.0.0.md:115:GHRAB_AI.generate(request)       // Promise<GhrabAiResponse>
+vendor/ghrab-ai-core-1.0.0/ghrab-ai-contract-v1.0.0.md:173:    gatewayUrl: "/api/v1/ai/generate",
+
+=== EXPORT/IMPORT SURFACES ===
+runtime/ludus-engine-runtime.js:10:    'Vlastník aplikace:':'Application owner:','Všechna práva vyhrazena.':'All rights reserved.','Celá obrazovka':'Fullscreen','Ukončit celou obrazovku':'Exit fullscreen','Zapnout zvuk':'Turn sound on','Vypnout zvuk':'Turn sound off','Zvuk':'Sound','Nahrát':'Upload','Zavřít panel':'Close panel','Zavřít':'Close','Hotovo':'Done','Smazat všechny':'Delete all','Smazat postup':'Reset progress','Začít znovu':'Start over','Zkusit znovu':'Try again','Pokračovat':'Continue','Nová výprava':'New quest','Pokračovat ve výpravě':'Resume quest','Přeskočit vše':'Skip all','Přeskočit cvičení':'Skip exercise','Přeskočit úlohu':'Skip task','přeskočit úlohu':'skip task','Zpět na hrad':'Back to the castle','Hrad':'Castle','Mapa':'Map','Správně':'Correct','Špatně':'Incorrect','Ověřit':'Check','Výsledek':'Result','Jméno hrdiny':'Hero name','JMÉNO HRDINY':'HERO NAME','OBTÍŽNOST VÝPRAVY':'QUEST DIFFICULTY','Nováček':'Beginner','Dobrodruh':'Adventurer','Hrdina':'Hero','chyb v souboji':'mistakes in battle','ZAHÁJIT VÝPRAVU':'BEGIN THE QUEST','VÝPRAVA ODVÁŽNÝCH':'QUEST OF THE BRAVE','Prozkoumej temnou kobku, přelstěte pasti a postavte se prastarému drakovi.':'Explore the dark dungeon, outsmart its traps and face the ancient dragon.','UČITELSKÝ NÁHLED':'TEACHER PREVIEW','Správné odpovědi vidíš přímo v úlohách (zlaté zvýraznění / předvyplněné). Panel je studentům skrytý.':'Correct answers are visible directly in the tasks. The panel remains hidden from students.','GALAKTICKÁ AKADEMIE · VÝCVIK RYTÍŘE':'GALACTIC ACADEMY · KNIGHT TRAINING','VÝCVIK MLADÉHO RYTÍŘE':'YOUNG KNIGHT TRAINING','JMÉNO KADETA':'CADET NAME','STUPEŇ VÝCVIKU':'TRAINING LEVEL','Učeň':'Apprentice','Rytíř':'Knight','Mistr':'Master','ZAHÁJIT VÝCVIK':'BEGIN TRAINING','Pokračovat ve výcviku':'Resume training','Nový výcvik':'New training','Projdi výcvikové světy, ovládni Sílu a postav se Temnému lordovi.':'Cross the training worlds, master the Force and face the Dark Lord.','SPOLEČNOST OBJEVITELŮ · VÝPRAVA ZA RELIKVIEMI':'EXPLORERS SOCIETY · RELIC EXPEDITION','VÝPRAVA ZA ZTRACENÝMI RELIKVIEMI':'QUEST FOR THE LOST RELICS','JMÉNO OBJEVITELE':'EXPLORER NAME','NÁROČNOST VÝPRAVY':'EXPEDITION DIFFICULTY','Legenda':'Legend','chyb ve finále':'mistakes in the finale','Projdi vykopávky, získej relikvie a postav se Strážci chrámu.':'Explore the excavation sites, recover the relics and face the Temple Guardian.','Hrát znovu':'Play again','Vstát a bojovat dál':'Stand up and fight on','Originál':'Original','Bezpečná verze':'Safe version','Čeština':'Czech','Angličtina':'English','KLEPNUTÍM VSTOUPÍŠ':'TAP TO ENTER','Přeskočit':'Skip','Skok na intro':'Jump to intro','Skok na mapu':'Jump to map','Skok na obvinění':'Jump to accusation','Skok na výsledek':'Jump to result','Přepnout skin':'Switch skin','Obrázky':'Images','Jazyk: EN':'Language: EN','Jazyk: CS':'Language: CS','Tvé jméno':'Your name','TVÉ JMÉNO':'YOUR NAME','Otevřít první dveře':'Open the first door','ANGLIČTINA · GRAMATIKA':'ENGLISH · GRAMMAR','KANYSTRY':'CANISTERS','REVIZE':'REVIEW','Revize':'Review','revize':'review','Žádný obsah. Builder nevložil LUDUS_CONTENT.':'No playable content was supplied by the builder.',
+runtime/ludus-engine-runtime.js:143:  function contentLang(){var c=window.LUDUS_CONTENT||window.GAME_CONTENT||{},m=c.meta||{},l=c.lang||{};var v=c.uiLang||l.ui||m.uiLang||(typeof m.lang==='string'?m.lang:'');return v==='en'?'en':'cs';}
+runtime/ludus-engine-runtime.js:180:    try{if(typeof state!=='undefined'&&state&&Object.prototype.hasOwnProperty.call(state,'lang')){state.lang=target;if(typeof LUDUS_CONTENT!=='undefined'&&typeof __ludusCoerceV2==='function'&&typeof DATA!=='undefined')DATA=__ludusCoerceV2(LUDUS_CONTENT);if(typeof render==='function')render();}}catch(e){}
+runtime/ludus-engine-runtime.js:195:  function downloadReport(){var text=collectReport(),blob=new Blob([text],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ludus-teacher-report-'+new Date().toISOString().slice(0,10)+'.txt';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);}
+runtime/ludus-engine-runtime.js:197:  function ensureDock(){if(qs('#ludusStandardTeacherDock'))return;var d=document.createElement('div');d.id='ludusStandardTeacherDock';d.innerHTML='<span class="lstd-title"></span><button type="button" data-lstd="map"></button><button type="button" data-lstd="skip"></button><button type="button" data-lstd="boss"></button><button type="button" data-lstd="report"></button><button type="button" data-lstd="copy"></button><button type="button" data-lstd="off"></button><span class="lstd-note"></span>';document.body.appendChild(d);d.addEventListener('click',function(e){var a=e.target&&e.target.getAttribute('data-lstd');if(!a)return;if(a==='map')clickFirst(['#tp-map','#tpMap','[data-act="map"]','#mapBtn','#continue-btn','#startBtn','#start']);if(a==='skip')clickFirst(['#skip-btn','#fin-skip','.skipbtn','[data-act="skip"]','#tpSkip','.teacher-skip']);if(a==='boss')clickFirst(['#tp-boss','#bossBtn','[data-act="boss"]','#finBtn','#finalBtn']);if(a==='report')downloadReport();if(a==='copy')copyReport();if(a==='off')enableTeacher(false);});}
+runtime/ludus-engine-runtime.js:198:  function boot(){var b=ensureBadge();ensureLangSwitch();wireTripleTap(b);['#logo','.brandtap','.brand','.logo'].forEach(function(sel){qsa(sel).forEach(wireTripleTap);});ensureDock();var forced=false;try{forced=/[?&]teacher=1\b/.test(location.search)||/[#&?]teacher=1\b/.test(location.hash)||sessionStorage.getItem('ludusTeacherMode')==='1';}catch(e){}if(forced)enableTeacher(true);var wanted=contentLang();try{var saved=localStorage.getItem('ludus_ui_lang');if(!window.LUDUS_CONTENT&&!window.GAME_CONTENT&&(saved==='cs'||saved==='en'))wanted=saved;}catch(e){}setLanguage(wanted,{silent:true});mo=new MutationObserver(function(){if(translating||translatePending)return;translatePending=true;var schedule=window.requestAnimationFrame||function(cb){return setTimeout(cb,16);};schedule(function(){translatePending=false;translateChrome(currentLang);});});mo.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['title','aria-label','placeholder','alt']});window.LUDUS_STANDARD={version:VERSION,enableTeacher:enableTeacher,collectReport:collectReport,downloadReport:downloadReport,copyReport:copyReport,setLanguage:setLanguage,getLanguage:function(){return currentLang;}};window.LUDUS_I18N={version:'ludus-i18n-v1.1',setLanguage:setLanguage,getLanguage:function(){return currentLang;},translateString:translateString,languages:['cs','en']};}
+scripts/qa-garp23-critical.mjs:20:add('import.material-central-normalizer',/studioImportMaterial[\s\S]*normalizeStations\(rawStations/.test(src));
+scripts/qa-garp23-critical.mjs:21:add('import.content-central-normalizer',/studioImportContent[\s\S]*normalizeStations\(rawStations/.test(src));
+scripts/qa-garp23-security.mjs:58:add('import.single-normalizer.material',/studioImportMaterial[\s\S]*normalizeStations\(rawStations/.test(src));
+scripts/qa-garp23-security.mjs:59:add('import.single-normalizer.content',/studioImportContent[\s\S]*normalizeStations\(rawStations/.test(src));
+scripts/qa-garp23-security.mjs:79:const prelude=`<script>window.__GARP_XSS__=0;window.__LUDUS_TEST_ERRORS__=[];addEventListener('error',e=>window.__LUDUS_TEST_ERRORS__.push(String(e.error?.stack||e.message||'error')));addEventListener('unhandledrejection',e=>window.__LUDUS_TEST_ERRORS__.push(String(e.reason?.stack||e.reason||'rejection')));const __mkStore=()=>{const m=new Map();return{get length(){return m.size},key:i=>Array.from(m.keys())[i]??null,getItem:k=>m.has(String(k))?m.get(String(k)):null,setItem:(k,v)=>m.set(String(k),String(v)),removeItem:k=>m.delete(String(k)),clear:()=>m.clear()}};try{Object.defineProperty(window,'localStorage',{value:__mkStore(),configurable:true});Object.defineProperty(window,'sessionStorage',{value:__mkStore(),configurable:true})}catch{};window.fetch=async()=>({ok:false,status:404,text:async()=>'',json:async()=>({}),blob:async()=>new Blob([])});window.matchMedia=window.matchMedia||(()=>({matches:false,addEventListener(){},removeEventListener(){}}));window.alert=()=>{};window.confirm=()=>true;window.prompt=()=>'';window.scrollTo=()=>{};Element.prototype.scrollIntoView=Element.prototype.scrollIntoView||function(){};URL.createObjectURL=()=> 'blob:test';URL.revokeObjectURL=()=>{};try{Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{}},configurable:true})}catch{};try{Object.defineProperty(navigator,'serviceWorker',{value:{register:async()=>({})},configurable:true})}catch{};window.ResizeObserver=window.ResizeObserver||class{observe(){}unobserve(){}disconnect(){}};window.AudioContext=class{constructor(){this.destination={};this.currentTime=0}createOscillator(){return{connect(){},start(){},stop(){},frequency:{setValueAtTime(){}},type:''}}createGain(){return{connect(){},gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}}}}};window.webkitAudioContext=window.AudioContext;HTMLMediaElement.prototype.play=async function(){};<\/script>`;
+scripts/qa-garp23-security.mjs:94:    try{await studioReadFile({size:80,text:async()=>'{"schemaVersion":"ludus-content-v2","__proto__":{"polluted":true}}'})}catch(e){importPrototypeRejected=/zakázaný strukturální klíč/i.test(String(e?.message||e))}
+scripts/qa-garp23-security.mjs:95:    let deep={schemaVersion:'ludus-content-v2'};let cursor=deep;for(let i=0;i<36;i++){cursor.child={};cursor=cursor.child}try{await studioReadFile({size:1000,text:async()=>JSON.stringify(deep)})}catch(e){importDepthRejected=/příliš hluboce/i.test(String(e?.message||e))}
+scripts/qa-garp23-security.mjs:96:    try{await studioReadFile({size:STUDIO_IMPORT_MAX_BYTES+1,text:async()=>{oversizeReadCalled=true;return '{}'}})}catch(e){importOversizeRejected=/příliš velký/i.test(String(e?.message||e))}
+scripts/qa-garp23-security.mjs:143:  const injection=`<script>window.GAME_CONTENT=${JSON.stringify(payload).replace(/</g,'\\u003c')};window.LUDUS_CONTENT=null;window.__GARP_XSS__=0;<\/script>`;
+engines/manifest.json:101:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:120:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:197:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:216:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:288:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:315:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:389:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:408:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:668:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:687:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:759:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:778:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:851:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:870:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+engines/manifest.json:1218:        "adapter": "Pouze náhled: obsah je zatím napevno v HTML a chybí adaptér na LUDUS_CONTENT v2.",
+engines/manifest.json:1225:      "builderCompatibilityNote": "Pouze náhled: obsah je zatím napevno v HTML a chybí adaptér na LUDUS_CONTENT v2."
+engines/manifest.json:1315:        "adapter": "ověřený adaptér na obsah z dílny (LUDUS_CONTENT v2 nebo kompatibilní GAME_CONTENT v1)",
+engines/manifest.json:1322:      "builderCompatibilityNote": "Přijímá obsah vytvořený dílnou přes LUDUS_CONTENT v2 nebo bezpečný zpětný GAME_CONTENT v1."
+src/index.html:477:      <button class="btn ghost" id="copyContent">Kopírovat LUDUS_CONTENT</button>
+src/index.html:478:      <button class="btn ghost" id="studioImport">⇄ Import z AI Studia</button>
+src/index.html:479:      <input id="studioImportFile" type="file" accept="application/json,.json" hidden>
+src/index.html:1353:const DEFAULT_READY_CONTRACT={manifest:'vložený v HTML enginu',supportedExerciseTypes:'deklarováno v manifestu enginu',i18n:'vložené v HTML enginu',themeVariants:'official + safe vložené v HTML enginu',adapter:'adaptér na LUDUS_CONTENT v2 vložený (přijímá i v1)',contentV2:'LUDUS posílá v2 vedle GAME_CONTENT v1',flowModel:'deklarováno v manifestu',capabilities:'deklarováno v manifestu',progressApi:'ludus-progress-api-v1: saveProgress/loadProgress/resumeProgress/clearProgress/getProgressSummary'};
+src/index.html:1427:  return READY_CONTRACT.map(k=>({key:k,label:({manifest:'manifest v HTML hře',supportedExerciseTypes:'podporované typy cvičení',i18n:'I18N slovník',themeVariants:'official/unofficial tematické balíčky',adapter:'adaptér na LUDUS_CONTENT v2',contentV2:'příjem LUDUS_CONTENT v2',flowModel:'flowModel',capabilities:'capabilities',progressApi:'save/load/resume API'})[k]||k,value:c[k]||'nezjištěno'}));
+src/index.html:1935:const LUDUS_SCHEMA=1; // tvar obsahu = schema 1; v2 (LUDUS_CONTENT + adaptér) je odložené na retrofit enginu
+src/index.html:2409:function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result));r.onerror=()=>rej(new Error('Soubor se nepodařilo načíst.'));r.readAsDataURL(file);});}
+src/index.html:2552:  if(!engineCanBuild(eng)){toast('Tento rozpracovaný engine je zatím pouze náhled. Hratelný HTML export je zablokován, dokud engine bezpečně nepřijme LUDUS_CONTENT z dílny. Obsah, recept, třídní soutěž a lesson pack vytvořit můžeš.');return null;}
+src/index.html:2582:/* ===== LUDUS_CONTENT v2 (manuál 02) — KANONICKÝ tvar obsahu, zatím emitovaný VEDLE v1 =====
+src/index.html:2584:   window.LUDUS_CONTENT (v2) je čistě aditivní wrapper pro budoucí engine s adaptérem
+src/index.html:2587:   jména polí. Přejmenování (LUDUS_CONTENT jako jediný zdroj) je stále odložené. */
+src/index.html:2639:    const reader=new FileReader();
+src/index.html:2692:    contentScript.textContent='window.GAME_CONTENT='+safeJson(pack)+';window.LUDUS_CONTENT='+safeJson(contentV2)+';window.LUDUS_CONTENT_VERSION=2;';
+src/index.html:2810:function downloadGame(){
+src/index.html:2811:  const blob=new Blob([window.__lastGame],{type:'text/html'});
+src/index.html:2812:  const url=URL.createObjectURL(blob);
+src/index.html:2813:  const a=document.createElement('a');a.href=url;a.download=window.__lastGameName;
+src/index.html:2825:      downloadGame();recordLudusTelemetry('game','success');beep(760,.12,'triangle');
+src/index.html:2836:  downloadGame();beep(740,.12,'triangle');
+src/index.html:2843:    '<iframe id="game" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="Bezpečný náhled hry"></iframe>'+
+src/index.html:2849:  const blob=new Blob([wrapper],{type:'text/html'});
+src/index.html:2850:  const url=URL.createObjectURL(blob);
+src/index.html:2862:  if(!window.__lastContentV2){toast('Nejdřív vygeneruj obsah nebo ukázku — LUDUS_CONTENT vzniká až při sestavení.');return;}
+src/index.html:2863:  try{await navigator.clipboard.writeText(JSON.stringify(window.__lastContentV2,null,2));toast('LUDUS_CONTENT v2 zkopírován do schránky.');}
+src/index.html:2872:  dlBlob(html,'lvdvs-trida-'+slug(world+'-'+topic)+'.html');
+src/index.html:2881:  dlBlob(html,'lvdvs-lesson-pack-'+slug((window.__lastWorld||'svet')+'-'+(window.__lastTopic||'tema'))+'.html');
+src/index.html:2891:/* ---- AI Studio GHRAB: přímý import GHRAB Material v1 / LUDUS_CONTENT v2 ---- */
+src/index.html:2908:async function studioImportMaterial(m){
+src/index.html:2924:async function studioImportContent(v2){
+src/index.html:2925:  if(!v2||v2.schemaVersion!=='ludus-content-v2')throw new Error('Soubor není LUDUS_CONTENT v2.');
+src/index.html:2932:  let pack={schema:1,meta:{teacher:'',sourceMaterialId:cleanExternalText(v2.meta&&v2.meta.sourceMaterialId||'',120)},houses:defaultTeams(sk),stations};pack=packMeta(pack,sk,world,false,state.topic.cz,false);window.__spec={schemaVersion:'1.0',source:'AI Studio GHRAB',title:state.topic.cz};refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(pack.meta.sourceMaterialId);toast('LUDUS_CONTENT v2 načten: '+stations.length+' stanic.');
+src/index.html:2952:async function studioReadFile(file){
+src/index.html:2958:  if(data.schema==='ghrab-material-v1')return studioImportMaterial(data);
+src/index.html:2959:  if(data.schemaVersion==='ludus-content-v2'||data.kind==='ludus.content')return studioImportContent(data);
+src/index.html:2962:$('#studioImport').onclick=()=>$('#studioImportFile').click();
+src/index.html:2963:$('#studioImportFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;try{await studioReadFile(f)}catch(err){toast(err.message||String(err))}};
+src/index.html:2964:function runStudioHandoff(){if(new URLSearchParams(location.search).get('studioHandoff')!=='1')return;const p=studioTake();if(p){window.__studioReturnUrl=p.studioUrl||'';setTimeout(()=>studioImportMaterial(p.material).catch(err=>toast(err.message||String(err))),350)}}
+src/index.html:2987:function dlBlob(html,name){const b=new Blob([html],{type:'text/html;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);}
+src/index.html:3177:  add(C.gen,'Obsah: v1 (GAME_CONTENT) i v2 (LUDUS_CONTENT) se injektují', ()=>{const t=injectAndStore.toString();return LUDUS_SCHEMA===1&&t.includes('window.GAME_CONTENT')&&t.includes('window.LUDUS_CONTENT')&&typeof toContentV2==='function';}, 'v2 aditivně vedle v1');
+src/index.html:3180:  add(C.brand,'Brand/safe režim je viditelný v kroku Obsah a promítá se do promptu i LUDUS_CONTENT', ()=>typeof setThemeMode==='function'&&gameSettingsMarkup.toString().includes('data-theme-mode')&&generateAndAssemble.toString().includes('REŽIM NÁZVOSLOVÍ')&&toContentV2.toString().includes('publication'), 'brandovaná školní / neoficiální');
+scripts/validate.mjs:86:window.fetch = async () => ({ ok: false, status: 404, text: async () => '', json: async () => ({}), blob: async () => new Blob([]) });
+scripts/validate.mjs:93:URL.createObjectURL = () => 'blob:ludus-test';
+scripts/validate.mjs:213:      window.fetch = async (url) => ({ ok: true, status: 200, blob: async () => new Blob([String(url)], { type: 'video/mp4' }) });
+scripts/validate.mjs:387:  need(/collectReport|downloadReport/.test(sharedRuntime), 'runtime: chybí report export');
+scripts/test-error-reporter.mjs:120:  check('ZIP má po vytvoření přímý odkaz download', reporter.includes('download.download = info.file.name') && reporter.includes('download.dataset.reportDownload = "zip"'));
+scripts/test-error-reporter.mjs:554:  const downloadDir = mkdtempSync(join(tmpdir(), `ghrab-browser-downloads-${process.pid}-`));
+scripts/test-error-reporter.mjs:574:    await client.call('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: downloadDir, eventsEnabled: true });
+scripts/test-error-reporter.mjs:739:    await waitFor(client, 'document.querySelector(".ghrab-report-final a[data-report-download=zip]") && document.querySelector(".ghrab-report-mail-step")?.hidden === true', 'ZIP se nepřipravil do samostatného kroku', 400);
+scripts/test-error-reporter.mjs:742:      const download = root.querySelector('a[data-report-download=zip]');
+scripts/test-error-reporter.mjs:746:        downloadName: download.download,
+scripts/test-error-reporter.mjs:754:    check('Gmail zůstává skrytý, dokud uživatel nestáhne ZIP', staged.mailHidden && staged.downloadName.endsWith('.zip'));
+scripts/test-error-reporter.mjs:757:    const firstDownloadSnapshot = zipDownloadSnapshot(downloadDir);
+scripts/test-error-reporter.mjs:758:    const downloadBox = await client.evaluate(`(() => {
+scripts/test-error-reporter.mjs:759:      const link = document.querySelector('#ghrab-error-reporter a[data-report-download=zip]');
+scripts/test-error-reporter.mjs:764:    await client.call('Input.dispatchMouseEvent', { type: 'mousePressed', x: downloadBox.x, y: downloadBox.y, button: 'left', clickCount: 1 });
+scripts/test-error-reporter.mjs:765:    await client.call('Input.dispatchMouseEvent', { type: 'mouseReleased', x: downloadBox.x, y: downloadBox.y, button: 'left', clickCount: 1 });
+scripts/test-error-reporter.mjs:767:    const firstDownload = await waitForZipDownload(downloadDir, firstDownloadSnapshot, 'Chromium fyzicky nestáhl první ZIP');
+scripts/test-error-reporter.mjs:849:    await waitFor(client, 'document.querySelector("#ghrab-error-reporter a[data-report-download=zip]")', 'Druhý ZIP se nepřipravil', 400);
+scripts/test-error-reporter.mjs:850:    const secondDownloadSnapshot = zipDownloadSnapshot(downloadDir);
+scripts/test-error-reporter.mjs:852:      const link = document.querySelector('#ghrab-error-reporter a[data-report-download=zip]');
+scripts/test-error-reporter.mjs:859:    const secondDownload = await waitForZipDownload(downloadDir, secondDownloadSnapshot, 'Chromium fyzicky nestáhl druhý ZIP');
+scripts/test-error-reporter.mjs:956:    rmSync(downloadDir, { recursive: true, force: true, maxRetries: 4, retryDelay: 100 });
+engines/matrix.html:10:  Kontrakt: čte window.LUDUS_CONTENT (v2, schema 2); fallback window.GAME_CONTENT (v1); fallback vestavěný SAMPLE.
+engines/matrix.html:573:   SKINY — mění JEN chrome, názvy a atmosféru; výukový obsah je z LUDUS_CONTENT.
+engines/matrix.html:670:   Skutečný obsah dodá builder přes window.LUDUS_CONTENT (schema 2).
+engines/matrix.html:820:let CONTENT = normalizeContent(window.LUDUS_CONTENT || window.GAME_CONTENT || SAMPLE);
+engines/matrix.html:896:  const img=new Image(), url=URL.createObjectURL(file);
+engines/dnd.html:11:  ║  • Fallback obsah je v STATIONS/BOSS; LUDUS vkládá LUDUS_CONTENT.   ║
+engines/dnd.html:632:   • LUDUS vkládá window.LUDUS_CONTENT v2; starší window.GAME_CONTENT zůstává podporováno.
+engines/dnd.html:680:    "Obsah se vkládá jako window.LUDUS_CONTENT před spuštěním enginu."
+engines/dnd.html:738:let CURRENT_UI_LANG = ((window.LUDUS_CONTENT&&((window.LUDUS_CONTENT.uiLang)||(window.LUDUS_CONTENT.lang&&window.LUDUS_CONTENT.lang.ui)||(window.LUDUS_CONTENT.meta&&window.LUDUS_CONTENT.meta.uiLang)))==="en"?"en":"cs");
+engines/dnd.html:950:   LUDUS interop: builder (LUDUS_CONTENT v2 / starší GAME_CONTENT v1) posílá
+engines/dnd.html:1064:  if(!content || typeof content !== "object") throw new Error("LUDUS_CONTENT musí být objekt.");
+engines/dnd.html:1350:/* LUDUS content hook: builder vloží window.LUDUS_CONTENT v2.
+engines/dnd.html:1352:/* LUDUS content hook: builder vkládá window.LUDUS_CONTENT v2 (případně starší
+engines/dnd.html:1361:  const primary = window.LUDUS_CONTENT || window.GAME_CONTENT;
+engines/dnd.html:1362:  const secondary = (primary === window.LUDUS_CONTENT) ? window.GAME_CONTENT : null;
+engines/dnd.html:1366:    window.LUDUS_CONTENT_ERROR = e;
+engines/dnd.html:1371:      window.LUDUS_CONTENT_ERROR2 = e2;
+engines/lotr.html:676:   • LUDUS vkládá window.LUDUS_CONTENT v2; starší GAME_CONTENT v1 je podporován.
+engines/lotr.html:702:  exportNotes:['Hotový export nesmí obsahovat API key.','Veřejný export má používat brandMode=safe.','Obsah se vkládá jako window.LUDUS_CONTENT před spuštěním enginu.']
+engines/lotr.html:864:  if(!content||typeof content!=='object')throw new Error('LUDUS_CONTENT musí být objekt.');
+engines/lotr.html:928:  const primary=window.LUDUS_CONTENT||window.GAME_CONTENT;
+engines/lotr.html:929:  const secondary=(primary===window.LUDUS_CONTENT)?window.GAME_CONTENT:null;
+engines/lotr.html:931:  catch(e){window.LUDUS_CONTENT_ERROR=e;console.warn('LUDUS obsah (primární) odmítnut, zkouším záložní zdroj:',e); try{ if(!tryApply(secondary))applyThemeVariant('official'); }catch(e2){window.LUDUS_CONTENT_ERROR2=e2;console.warn('LUDUS obsah nelze použít, spouštím ukázku:',e2);applyThemeVariant('official');}}
+engines/orient-express.html:547:   OBSAH HRY — window.LUDUS_CONTENT (schema 2, dialekt A)
+engines/orient-express.html:551:window.LUDUS_CONTENT = window.LUDUS_CONTENT || {
+engines/orient-express.html:743:let UI_LANG=((window.LUDUS_CONTENT&&((window.LUDUS_CONTENT.uiLang)||(window.LUDUS_CONTENT.lang&&window.LUDUS_CONTENT.lang.ui)||(window.LUDUS_CONTENT.meta&&window.LUDUS_CONTENT.meta.uiLang)))==="en"?"en":"cs");
+engines/orient-express.html:794:const C = window.LUDUS_CONTENT;
+engines/orient-express.html:811:  const r = new FileReader();
+engines/laughworks.html:301:/* ---------- DEFAULT CONTENT (LUDUS_CONTENT v2, Dialect A) ---------- */
+engines/laughworks.html:302:const DEFAULT_LUDUS_CONTENT = {
+engines/laughworks.html:362:const LUDUS_CONTENT = window.LUDUS_CONTENT || window.GAME_CONTENT || DEFAULT_LUDUS_CONTENT;
+engines/laughworks.html:433:let DATA=__ludusCoerceV2(LUDUS_CONTENT);
+engines/laughworks.html:491:  const fr=new FileReader();
+engines/laughworks.html:934:  $("#tpanel").querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{ state.lang=b.dataset.lang; DATA=__ludusCoerceV2(LUDUS_CONTENT); buildTeacherPanel(); render(); }));
+engines/hogwarts.html:888:const LUDUS_CONTENT_SCHEMA=2;
+engines/hogwarts.html:893:    'Added LUDUS_CONTENT v2 adapter + validator with safe fallback.',
+engines/hogwarts.html:920:  contentSchema:LUDUS_CONTENT_SCHEMA,
+engines/hogwarts.html:950:    ludusContentGlobal:'LUDUS_CONTENT'
+engines/hogwarts.html:1138:  if(schema&&Number(String(schema).split('.')[0])>LUDUS_CONTENT_SCHEMA)warnings.push('Content schema is newer than this engine. Attempting best-effort load.');
+engines/hogwarts.html:1197:  pack._ludus={schema:LUDUS_CONTENT_SCHEMA,validation:report,manifest:LUDUS_GAME_MANIFEST};
+engines/hogwarts.html:1203:  const lc=window.LUDUS_CONTENT;
+engines/hogwarts.html:1204:  if(lc&&Number(lc.schema||0)===LUDUS_CONTENT_SCHEMA){
+engines/hogwarts.html:1225:  const lt=(window.LUDUS_CONTENT&&window.LUDUS_CONTENT.theme)||{};
+engines/indiana-jones.html:2294:    const rd=new FileReader();
+engines/jumanji.html:11:  ║  • Obsah vkládá builder jako window.LUDUS_CONTENT v2 (Dialekt A/B).   ║
+engines/jumanji.html:592:    "Obsah se vkládá jako window.LUDUS_CONTENT před spuštěním enginu."
+engines/jumanji.html:754:   4) UKÁZKOVÝ OBSAH (fallback; reálný obsah dodá LUDUS_CONTENT)
+engines/jumanji.html:1746:    const r=new FileReader();
+engines/jumanji.html:1777:   21) NAČTENÍ OBSAHU (LUDUS_CONTENT v2 / GAME_CONTENT v1 → model)
+engines/jumanji.html:1781:  let raw = (typeof window!=="undefined" && (window.LUDUS_CONTENT||window.GAME_CONTENT)) || DEMO;
+engines/chronos.html:14:  LUDUS vkládá window.LUDUS_CONTENT (v2) před spuštěním; podporován i GAME_CONTENT (v1).
+engines/chronos.html:587:  exportNotes:['Hotový export nesmí obsahovat API key.','Veřejný export má používat brandMode=safe.','Obsah se vkládá jako window.LUDUS_CONTENT před spuštěním enginu.']
+engines/chronos.html:853:  if(!content||typeof content!=='object')throw new Error('LUDUS_CONTENT musí být objekt.');
+engines/chronos.html:945:  var primary=window.LUDUS_CONTENT||window.GAME_CONTENT;
+engines/chronos.html:946:  var secondary=(primary===window.LUDUS_CONTENT)?window.GAME_CONTENT:null;
+engines/chronos.html:950:    window.LUDUS_CONTENT_ERROR=e; console.warn('[LUDUS] Primární obsah odmítnut, zkouším záložní:',e&&e.message);
+engines/chronos.html:952:    catch(e2){ window.LUDUS_CONTENT_ERROR2=e2; console.warn('[LUDUS] Spouštím demo:',e2&&e2.message); try{tryApply(DEMO_CONTENT);}catch(_){}}
+engines/chronos.html:1134:  var fr=new FileReader();
+engines/stranger-things.html:13:  • Kontrakt: window.LUDUS_CONTENT (v2, schema 2) → fallback window.GAME_CONTENT
+engines/stranger-things.html:694:   SKINY — mění JEN chrome a názvy, nikdy výukový obsah (ten je z LUDUS_CONTENT)
+engines/stranger-things.html:764:    no_content:"Žádný obsah. Builder nevložil LUDUS_CONTENT.",
+engines/stranger-things.html:786:    no_content:"No content. The builder did not inject LUDUS_CONTENT.",
+engines/stranger-things.html:896:  return normContent(window.LUDUS_CONTENT) || normContent(window.GAME_CONTENT) || normContent(SAMPLE);
+engines/stranger-things.html:1113:  // meta z LUDUS_CONTENT nebo ?skin= pro testování.
+engines/stranger-things.html:1612:    const fr=new FileReader();
+engines/stranger-things.html:1736:window.LUDUS_LOAD=function(content){ window.LUDUS_CONTENT=content; clearState(); S=null;
+engines/star-wars.html:2175:    const rd=new FileReader();

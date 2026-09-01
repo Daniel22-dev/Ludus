@@ -1,0 +1,135 @@
+GARP 2.3 C1 - PC-01 PATH COVERAGE / DUPLICATE ENTRY POINTS
+UTC 2026-09-01T08:53:38Z
+
+[B-01 AI hooks / bypass paths]
+Production hook hits (expected 0):
+callGemini callers/wrapper:
+src/index.html:1631:async function callGemini(){
+src/index.html:2455:    const obj=await callGemini(ludusAiDataBlock({task:'topic-analysis',topic:text}), sys, {maxTokens:512, temp:0.2, operation:'topic-analysis'});
+src/index.html:2789:  const data=await callGemini(userMsg,sys,{maxTokens:8192,temp:0.7,media:ws?[{mime:ws.mime,data:ws.data}]:null,operation:'game-content-generation'});
+Direct provider URL in app-level source (expected 0):
+
+[B-02/B-03/B-04 privacy/storage paths]
+Privacy loaders:
+engines/matrix.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/indiana-jones.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+src/index.html:399:  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="builder"></script>
+engines/orient-express.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/chronos.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/laughworks.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/jumanji.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/dnd.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/lotr.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/star-wars.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/stranger-things.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+engines/hogwarts.html:4:<script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.18" data-ludus-privacy-scope="engine"></script>
+Storage call surface per engine:
+engines/chronos.html local=7 session=
+engines/dnd.html local=5 session=
+engines/hogwarts.html local=5 session=
+engines/indiana-jones.html local=11 session=
+engines/jumanji.html local=11 session=
+engines/laughworks.html local=6 session=
+engines/lotr.html local=4 session=
+engines/matrix.html local=7 session=
+engines/orient-express.html local=5 session=
+engines/star-wars.html local=11 session=
+engines/stranger-things.html local=7 session=
+Progress manifest storage declarations:
+109:        "storage": "sessionStorage-via-LUDUSPrivacy",
+206:        "storage": "sessionStorage-via-LUDUSPrivacy",
+306:        "storage": "sessionStorage-via-LUDUSPrivacy",
+400:        "storage": "sessionStorage-via-LUDUSPrivacy",
+496:        "storage": "sessionStorage-via-LUDUSPrivacy",
+589:        "storage": "sessionStorage-via-LUDUSPrivacy",
+682:        "storage": "sessionStorage-via-LUDUSPrivacy",
+774:        "storage": "sessionStorage-via-LUDUSPrivacy",
+867:        "storage": "sessionStorage-via-LUDUSPrivacy",
+962:        "storage": "sessionStorage-via-LUDUSPrivacy",
+1181:        "storage": "sessionStorage-via-LUDUSPrivacy",
+1277:        "storage": "sessionStorage-via-LUDUSPrivacy",
+endWork consumers:
+public/config/data-manifest.json:106:    "control": "LUDUSPrivacy.endWork()"
+public/config/data-manifest.json:111:    "control": "LUDUSPrivacy.endWork()",
+src/index.html:493:        <button class="foot-link" id="endWork" type="button" title="Smaže lokální data LUDUS z tohoto zařízení">Ukončit práci</button>
+src/index.html:2962:  window.LUDUSPrivacy.endWork({reload:true});
+runtime/ludus-engine-badge.css:3:  #ludusBadge:active,#ludusLangSwitch:active,#ludusEndWork:active{transform:scale(.96)}
+runtime/ludus-engine-badge.css:6:  #ludusEndWork{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(150px + env(safe-area-inset-left));z-index:2147483000;height:34px;min-width:42px;padding:0 10px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(94,26,26,.86);color:#fff;font:900 15px/1 system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(10px);cursor:pointer}
+runtime/ludus-engine-badge.css:7:  #ludusEndWork:hover{background:rgba(132,38,38,.94)}
+runtime/ludus-engine-badge.css:8:  #ludusLangSwitch:focus-visible,#ludusBadge:focus-visible,#ludusEndWork:focus-visible,#ludusStandardTeacherDock button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+runtime/ludus-engine-badge.css:15:  @media(max-width:520px){#ludusBadge{top:8px;left:8px}#ludusLangSwitch{top:8px;left:80px}#ludusEndWork{top:8px;left:140px}#ludusStandardTeacherDock{left:8px;right:8px;bottom:8px;max-height:42vh;overflow:auto}}
+runtime/ludus-engine-badge.css:17:  #ludusBadge, #ludusLangSwitch, #ludusEndWork, #ludusStandardTeacherDock, #ludusStandardTeacherDock * {
+runtime/ludus-engine-runtime.js:190:  function ensureEndWork(){var b=qs('#ludusEndWork');if(!b){b=document.createElement('button');b.type='button';b.id='ludusEndWork';b.textContent='↪';document.body.appendChild(b);}b.title=currentLang==='en'?'End work and clear local LUDUS data':'Ukončit práci a smazat lokální data LUDUS';b.setAttribute('aria-label',b.title);b.onclick=function(){var msg=currentLang==='en'?'End work and clear local LUDUS data on this device?':'Ukončit práci a smazat lokální data LUDUS na tomto zařízení?';if(!window.confirm(msg))return;if(window.LUDUSPrivacy?.endWork)window.LUDUSPrivacy.endWork({reload:true});};return b;}
+
+[B-06 import duplicate entry points]
+2888:function studioTake(){const v2=window.GHRAB_PLATFORM?.bridge?.take?.({target:'ludus',maxBytes:500000});if(v2)return v2;const p=studioParse(STUDIO_HANDOFF_KEY,null);if(!p||p.schema!=='ghrab-handoff-v1'||p.target!=='ludus'||!studioValidMaterial(p.material))return null;if(Date.parse(p.expiresAt||'')<Date.now()){studioRemove(STUDIO_HANDOFF_KEY);return null}studioRemove(STUDIO_HANDOFF_KEY);return p}
+2897:async function studioImportMaterial(m){
+2914:async function studioImportContent(v2){
+2943:async function studioReadFile(file){
+2949:  if(data.schema==='ghrab-material-v1')return studioImportMaterial(data);
+2950:  if(data.schemaVersion==='ludus-content-v2'||data.kind==='ludus.content')return studioImportContent(data);
+2954:$('#studioImportFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;try{await studioReadFile(f)}catch(err){toast(err.message||String(err))}};
+2955:function runStudioHandoff(){if(new URLSearchParams(location.search).get('studioHandoff')!=='1')return;const p=studioTake();if(p){window.__studioReturnUrl=p.studioUrl||'';setTimeout(()=>studioImportMaterial(p.material).catch(err=>toast(err.message||String(err))),350)}}
+
+[B-07 attachment metadata path]
+src/ai-core-integration.js:8:callGemini=async function ludusCallThroughCore(prompt,system,opts={}){ludusEnsureAiCore();const operation=opts.operation||'game-content-generation';const registration=LUDUS_AI_OPERATIONS.operations[operation];if(!registration)throw mkErr('Neznámá AI operace: '+operation,'UNREGISTERED_OPERATION');const inputParts=[{type:'text',text:String(prompt||'')}];for(const media of(opts.media||[])){const mime=media.mime||'application/octet-stream';inputParts.push({type:String(mime).startsWith('image/')?'image':'document',mimeType:mime,name:'material',source:{kind:'inline-base64',data:media.data}})}const joined=inputParts.filter(part=>part.type==='text').map(part=>part.text).join('\n');if(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/.test(joined)||/\b(?:\+?420\s*)?(?:\d[\s-]*){9}\b/.test(joined))throw mkErr('Zadání obsahuje možný osobní kontakt. Nahraď jej anonymním označením.','PREFLIGHT_BLOCKED');try{const response=await window.GHRAB_AI.generate({operation,modelProfile:operation==='topic-analysis'?'economy':'balanced',instructions:LUDUS_AI_CORE_SAFETY+'\n'+String(system||'')+'\nVrať pouze validní JSON bez markdownu.',inputParts,outputSchemaId:registration.outputSchemaId,options:{reasoningHint:operation==='topic-analysis'?'minimal':'medium',maxOutputTokensHint:registration.maxOutputTokensHint},privacy:{clientAnonymized:false,preflightPassed:true},usageContext:{expectedOutputs:1,userActions:1},workflowId:opts.workflowId});return response.result}catch(error){const code=error?.code==='INVALID_OUTPUT'?'BAD_JSON':(error?.code||'AI_ERROR');const message=code==='BAD_JSON'?'Model nevrátil platný JSON. Zkus generování zopakovat.':(window.GHRAB_AI?.formatUserError?.(error,'cs-CZ')||error?.message||'AI požadavek se nepodařilo dokončit.');const normalized=mkErr(message,code);normalized.status=error?.status;normalized.quota=['QUOTA_EXCEEDED','RATE_LIMITED','BUDGET_EXCEEDED'].includes(error?.code);throw normalized}};
+
+[B-05 CSP delivery paths]
+scripts/build-school-profile.mjs:51:const schoolCsp = String(securityHeaders.schoolServerProfile?.headers?.['Content-Security-Policy'] || '');
+scripts/build-school-profile.mjs:55:  if (/http-equiv=["']Content-Security-Policy["']/i.test(html)) {
+scripts/build-school-profile.mjs:56:    html = html.replace(/<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/i, `<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="school-server">`);
+scripts/build-school-profile.mjs:58:    html = html.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="school-server">`);
+public/config/security-headers.json:11:      "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; media-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'",
+scripts/build.mjs:165:function injectCspMeta(file, policy) {
+scripts/build.mjs:168:  source = source.replace(/\s*<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '');
+scripts/build.mjs:170:  source = source.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="static">`);
+scripts/build.mjs:174:  injectCspMeta(file, SECURITY_HEADERS.staticProfile.contentSecurityPolicy);
+static CSP metas=13
+school CSP metas=13
+
+[B-08 service worker runtime config]
+const CORE_ASSETS = [
+  "./index.html",
+  "./manifest.webmanifest",
+  "./access/access-gate.css",
+  "./access/deployment-config.js",
+  "./access/reporter-bootstrap.js",
+  "./access/error-reporter.js",
+  "./access/error-reporter.css",
+  "./access/error-reporter-adapter.js",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/icon-maskable-512.png",
+  "./engines/manifest.json",
+  "./config/brand-manifest.json",
+  "./config/platform-manifest.json",
+  "./assets/brand/school-logo.png",
+  "./ghrab-platform.consumer.json",
+  "./runtime/ludus-engine-runtime.js",
+  "./runtime/ludus-privacy.js",
+  "./runtime/ludus-engine-badge.css",
+  "./runtime/ludus-engine-controls.css",
+  "./content/engine-index.json"
+];
+Runtime bypass:
+86:function isRuntimeRequest(url, scopePath) {
+89:    relative === 'config/deployment.json' ||
+90:    relative === 'config/deployment.school-server-p0.json' ||
+91:    relative === 'config/deployment.school-server.example.json' ||
+101:  if (!url.pathname.startsWith(scopePath) || request.cache === 'no-store' || isRuntimeRequest(url, scopePath)) return;
+
+[Export / SIM-08 path]
+2593:function stripDeploymentAccessGate(source){
+2618:async function inlineLudusMedia(parsed,engineUrl,variant){
+2650:async function inlineLudusRuntimeScripts(parsed,engineUrl){
+2665:async function injectAndStore(pack,world){
+2676:    const exportEngine=stripDeploymentAccessGate(engine);
+2682:    await inlineLudusRuntimeScripts(parsed,eng.engine);
+2683:    await inlineLudusMedia(parsed,eng.engine,contentV2.theme&&contentV2.theme.variant);
+2698:  await injectAndStore(pack,p.world);
+2795:  await injectAndStore(pack,p.world);
+2912:  refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(m.id);toast('Materiál z AI Studia načten: '+tasks.length+' úloh. Hra, třídní soutěž i lesson pack jsou připraveny.');
+2923:  let pack={schema:1,meta:{teacher:'',sourceMaterialId:cleanExternalText(v2.meta&&v2.meta.sourceMaterialId||'',120)},houses:defaultTeams(sk),stations};pack=packMeta(pack,sk,world,false,state.topic.cz,false);window.__spec={schemaVersion:'1.0',source:'AI Studio GHRAB',title:state.topic.cz};refresh();renderStage();renderCore();updateSteps();await injectAndStore(pack,world);go(2);studioRecord(pack.meta.sourceMaterialId);toast('LUDUS_CONTENT v2 načten: '+stations.length+' stanic.');
+3175:  add(C.gen,'Obsah: v1 (GAME_CONTENT) i v2 (LUDUS_CONTENT) se injektují', ()=>{const t=injectAndStore.toString();return LUDUS_SCHEMA===1&&t.includes('window.GAME_CONTENT')&&t.includes('window.LUDUS_CONTENT')&&typeof toContentV2==='function';}, 'v2 aditivně vedle v1');
+
+PC-01 STATUS: PASS for enumerated fixed code paths; full local-http A/B/SW/export browser behavior remains environment-blocked and is delegated to second Claude verification.

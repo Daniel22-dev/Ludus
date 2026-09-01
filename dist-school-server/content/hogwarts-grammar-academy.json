@@ -1,0 +1,44 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "hogwarts-grammar-academy",
+  "appVersion": "1.16.18",
+  "generatedAt": "2026-09-01T08:55:53.995Z",
+  "sourceFile": "hogwarts.html",
+  "status": "ready",
+  "builderCompatible": true,
+  "title": {
+    "cs": "Akademie Arkána",
+    "en": "Arcanum Academy",
+    "officialCs": "Hogwarts Grammar Academy",
+    "officialEn": "Hogwarts Grammar Academy"
+  },
+  "mechanicId": "academy",
+  "flowModel": "mapStationsFinalChallenge",
+  "supportedExerciseTypes": [
+    "mcq",
+    "trueFalse",
+    "classify",
+    "wordBank"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": true,
+    "hasClues": false,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasSaveLoadResume": true,
+    "hasFinalChallenge": false,
+    "hasInventory": false
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}

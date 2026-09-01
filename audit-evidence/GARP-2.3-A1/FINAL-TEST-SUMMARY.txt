@@ -1,0 +1,33 @@
+LUDUS 1.16.17 - GARP 2.3 Phase A local evidence summary
+Date: 2026-09-01
+Synthetic data only.
+
+PASS:
+- npm test: PASS
+- build:school-server: PASS
+- qa:platform: PASS
+- qa:quality: 102/102 PASS
+- qa:browser: PASS
+- qa:xss: PASS inventory (explicit limitation: inventory is not proof of every sink)
+- qa:media: PASS
+- qa:lock: PASS
+- qa:garp legacy gate: 49/49 PASS
+- qa:garp23 local security: 37/37 PASS
+- qa:garp23:critical: 9/9 PASS
+- reporter static/regression: 53 PASS / 0 FAIL; browser portion NOT_READY
+
+EXPECTED ENVIRONMENT LIMITATION / NOT TESTED:
+- qa:runtime / qa:p5 local-http runtime: blocked by managed Chromium policy, net::ERR_BLOCKED_BY_ADMINISTRATOR.
+- Full browser Back/Restore/Multi-tab/Service Worker update and local-http reporter/axe runtime therefore not established here.
+- External central Access Guard implementation is not vendored in this application ZIP.
+- Live provider/model AI-RED behavior was not executed; structural prompt-boundary campaign only.
+
+AI-RED STRUCTURAL CAMPAIGN:
+- 24 attempts, 4 mutation families, all remained in untrusted user-data layer.
+- This is wiring/boundary evidence only, not live-model behavioral PASS.
+
+NEGATIVE CONTROLS:
+- Critical auth/topic boundary disposable weakening: EXPECTED FAIL, then clean PASS.
+- Attachment original-filename egress disposable weakening: EXPECTED FAIL.
+- Synthetic credential-like artifact: EXPECTED FAIL.
+- Clean qa:garp23 after negative controls: PASS 37/37.

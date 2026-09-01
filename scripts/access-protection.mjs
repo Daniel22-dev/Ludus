@@ -75,11 +75,10 @@ async function boot(){
     const deployment=await deploymentModule.loadDeploymentConfig({appId:APP_ID});
     const urls=deploymentModule.deploymentUrls(deployment);studioUrl=urls.studioUrl;
     const {protectApp}=await import(urls.guardUrl);
-    let grantedPermit=null;
-    document.addEventListener('ghrab:app-access-granted',event=>{grantedPermit=event.detail?.permit||null;},{once:true});
     const allowed=await protectApp(APP_ID,{studioUrl,errorReporter:false});
     if(!allowed)return;
-    window.__GHRAB_STUDIO_ACCESS__=Object.freeze({appId:APP_ID,permit:grantedPermit});
+    // Do not duplicate signed authorization material into a globally readable window property.
+    window.__GHRAB_STUDIO_ACCESS__=Object.freeze({appId:APP_ID,granted:true});
     void startLocalReporter('ludus:granted');
     unlockProtectedScripts();
   }catch(error){console.error('AI Studio access bootstrap failed',error);showBootstrapFailure();void startLocalReporter('ludus:bootstrap-failure');}

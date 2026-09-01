@@ -74,7 +74,7 @@ if (!transformedSentinel.includes('i<base.length') || !transformedSentinel.inclu
 }
 function qaAccessBootstrap(relative) {
   if (relative === 'access-bootstrap.js') {
-    return `document.documentElement.dataset.ghrabAccess='granted';window.__GHRAB_STUDIO_ACCESS__={permit:{role:'admin',apps:['${consumer.appId}'],localDevelopment:true}};import('./app.js').catch(e=>{console.error(e);window.__GHRAB_QA_BOOT_ERROR__=String(e?.stack||e)});`;
+    return `document.documentElement.dataset.ghrabAccess='granted';window.__GHRAB_STUDIO_ACCESS__={appId:'${consumer.appId}',granted:true};import('./app.js').catch(e=>{console.error(e);window.__GHRAB_QA_BOOT_ERROR__=String(e?.stack||e)});`;
   }
   return null;
 }
@@ -174,7 +174,7 @@ try {
       client.clearEvents();
       await client.call('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<=390,screenWidth:width,screenHeight:900});
       if (!pageLoaded) {
-        await client.call('Page.navigate',{url});
+        const navResult=await client.call('Page.navigate',{url}); if(navResult?.errorText) throw new Error(`Runtime navigation failed: ${rel}: ${navResult.errorText}`);
         let ready=false;
         for(let i=0;i<240;i++){ready=Boolean(await client.eval("document.readyState==='complete'&&window.__GHRAB_QA_RUNTIME__===true"));if(ready)break;await sleep(50);}
         if(!ready)throw new Error(`Runtime page timeout: ${rel}`);

@@ -26,6 +26,7 @@ const fail = (message) => { console.error(`ERROR: ${message}`); process.exit(1);
 const sha = (file) => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 const writeJson = (file, value) => fs.writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+const SECURITY_HEADERS = readJson(path.join(ROOT, 'public', 'config', 'security-headers.json'));
 
 for (const file of [
   SRC_INDEX,
@@ -159,6 +160,19 @@ writeJson(path.join(contentDir, 'engine-index.json'), {
   generatedAt: buildTime,
   engines: contentIndex.sort((a, b) => a.engineId.localeCompare(b.engineId)),
 });
+
+
+function injectCspMeta(file, policy) {
+  let source = fs.readFileSync(file, 'utf8');
+  if (!/<head\b[^>]*>/i.test(source)) return;
+  source = source.replace(/\s*<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '');
+  const escaped = String(policy || '').replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+  source = source.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="static">`);
+  fs.writeFileSync(file, source, 'utf8');
+}
+for (const file of (function walkHtml(dir){const out=[];for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const target=path.join(dir,entry.name);if(entry.isDirectory())out.push(...walkHtml(target));else if(entry.isFile()&&entry.name.toLowerCase().endsWith('.html'))out.push(target);}return out;})(DIST)) {
+  injectCspMeta(file, SECURITY_HEADERS.staticProfile.contentSecurityPolicy);
+}
 
 const operations = readJson(path.join(DIST, 'ai-operations.json'));
 if (operations.appId !== APP_ID || operations.appVersion !== appVersion || operations.coreVersion !== CORE_VERSION || operations.operations.length !== 2) fail('Invalid ai-operations.json.');

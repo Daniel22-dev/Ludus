@@ -1,0 +1,10 @@
+GARP 2.3 C1 - FINAL CANARY / ARTIFACT SWEEP
+student canary: GARP-STUDENT-CANARY-LUDUS-C1-FINAL-20260901
+AI canary: GARP-AIRED-CANARY-LUDUS-C1-FINAL-20260901
+dist student-canary hits=0
+dist AI-canary hits=0
+production test-hook hits=0
+CSP static HTML count=13
+CSP school HTML count=13
+qa:garp23 secret scan: see qa-results/garp23-local-security.json -> secret.scan.no-known-credentials PASS (0 credential-like file hits).
+Expected canary locations: qa-results/audit evidence only; no runtime dist hit.

@@ -1,0 +1,16 @@
+GARP 2.3 C1 - VYPOŘÁDÁNÍ CLAUDE FÁZE B
+
+B-01 MEDIUM - POTVRZENO. Produkční __TEST_MOCK_GEMINI a __TEST_USE_LEGACY_GEMINI__ byly skutečné bypass/interception hooks. OPRAVENO: produkční legacy síťová cesta odstraněna; callGemini fail-closed do načtení AI Core; test double existuje pouze uvnitř QA harnessu. Negative control: ai.production-no-test-hooks správně FAIL.
+B-02 MEDIUM - POTVRZENO. Manifest deklaroval neexistující endWork(). OPRAVENO: runtime/ludus-privacy.js implementuje LUDUSPrivacy.endWork(); builder i všechny enginy mají explicitní UI; manifest odkazuje na skutečnou funkci. Negative control: privacy.shared-device-isolation správně FAIL po vypnutí izolace.
+B-03 MEDIUM - POTVRZENO. Storage inventura byla neúplná. OPRAVENO: data-manifest obsahuje legacy namespace/klíče; engines/manifest deklaruje efektivní session-scoped progress.
+B-04 MEDIUM - POTVRZENO. Claude runtime prokázal A->B expozici přes localStorage. OPRAVENO návrhem: engine-owned identity/progress je před engine kódem transparentně přesměrován do sessionStorage konkrétní browsing context; staré persistentní engine klíče se před čtením scrubují; canonical builder preference se při startu enginu nemažou; endWork maže LUDUS-owned session/local klíče. Deterministický A/B storage-equivalent 28/28 PASS. Skutečný post-fix local-http browser retest je v tomto prostředí blokován a musí jej zopakovat Claude 2.
+B-05 LOW-INFO - POTVRZENO. CSP JSON nebyl na GitHub Pages sám o sobě enforcement. OPRAVENO: build vkládá meta CSP do všech HTML; navíc frame-src doplněn o blob:, protože preview používá blob iframe. School-server build dostává school CSP meta jako defense-in-depth; budoucí server má CSP dodat hlavičkou (frame-ancestors v meta není považován za náhradu server headeru).
+B-06 LOW - POTVRZENO. Handoff import obcházel studioValidateImportTree. OPRAVENO: studioImportMaterial i studioImportContent validují strukturální limity na vstupu. Runtime handoff-depth regression PASS; negative control správně FAIL.
+B-07 INFO - POTVRZENO jako nepřesně silná formulace Fáze A. AI Core wrapper původně používal media.name fallback. OPRAVENO defense-in-depth: wrapper vždy posílá name:'material'. Negative control správně FAIL.
+B-08 INFO - POTVRZENO. Deployment config byl zbytečně precachován, přestože fetch bypass fungoval. OPRAVENO: deployment config varianty odstraněny z CORE_ASSETS; runtime bypass zachován.
+
+Žádný B-01 až B-08 nebyl zamítnut jako false positive. Závažnost B-05/B-07/B-08 zůstává INFO/LOW charakter, ale technický popis byl správný.
+
+NOVÝ NÁLEZ C-01 / LOW / OPRAVENO: po skutečném doručení CSP by původní frame-src 'self' blokoval blob preview iframe. Doplněno frame-src 'self' blob: v static i school policy.
+NOVÝ NÁLEZ C-02 / INFO / OPRAVENO: privacy runtime by při příliš širokém engine scrubu mohl smazat canonical builder preference ghrab.ludus.*. Engine isolation byla zúžena na skutečné engine namespaces; endWork zůstává app-wide.
+NOVÝ NÁLEZ C-03 / INFO / OPRAVENO: nový privacy runtime zvýšil entryCriticalBytes nad starý budget. Budget transparentně posunut 515000 -> 522000; final qa:quality 102/102. Privacy runtime přidán do SW precache.

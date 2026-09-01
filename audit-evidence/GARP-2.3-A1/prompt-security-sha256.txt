@@ -1,0 +1,7 @@
+SHA-256 prompt/security assembly source:
+b7257518780dfeeb1cd93a9307d3468ed6f5de5a082efd6a5a7dcd8c1fe3e074  src/index.html
+29e06ddcd8d37db6d8474aa2b49f0573133ae8f1f0aab825e67a557108614db6  src/ai-core-integration.js
+3b78e4d3febb6874ca6b04a7cf75f5f375c25d887d0da015b094558602080549  scripts/access-protection.mjs
+6226d91f81eeb52e1da0c7cbdfd1b7ef79b0926a960b00ce8db92df9857d25ed  public/sw.js
+75a21ed701526d31b5382c6865eefbbfa6d9b8ba8a6299a59dd3a380e85543ee  public/config/deployment.json
+94610d674a5ec6dd55699cee1d12a27b782bd2cb171b7f9f52ee254642589a67  public/config/release-acceptance.json

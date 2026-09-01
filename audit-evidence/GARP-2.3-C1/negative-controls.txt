@@ -1,0 +1,7 @@
+GARP 2.3 C1 - NEGATIVE CONTROLS
+1. Production AI hook reintroduced in disposable copy -> expected FAIL ai.production-no-test-hooks -> observed FAIL -> disposable copy deleted.
+2. media.name fallback reintroduced in disposable AI wrapper -> expected FAIL ai.attachment-name-hardcoded -> observed FAIL -> deleted.
+3. studioImportMaterial structural validation removed in disposable copy -> expected FAIL import.handoff-structural-validation -> observed FAIL -> deleted.
+4. engineIsolation disabled in disposable privacy runtime -> expected FAIL privacy.shared-device-isolation -> observed FAIL -> deleted.
+5. Clean candidate after negative controls -> qa:garp23:critical 13/13 PASS.
+No weakened copy is included in candidate.

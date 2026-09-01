@@ -1,0 +1,45 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "roll-and-quest",
+  "appVersion": "1.16.18",
+  "generatedAt": "2026-09-01T08:55:53.995Z",
+  "sourceFile": "dnd.html",
+  "status": "draft",
+  "builderCompatible": true,
+  "title": {
+    "cs": "Kostka osudu",
+    "en": "Roll & Quest",
+    "officialCs": "Dungeons & Dragons — Kostka osudu",
+    "officialEn": "Dungeons & Dragons — Roll & Quest"
+  },
+  "mechanicId": "quest",
+  "flowModel": "mapStationsFinalChallenge",
+  "supportedExerciseTypes": [
+    "mcq",
+    "typeAnswer",
+    "order",
+    "match",
+    "listen"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": true,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasClues": false,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}

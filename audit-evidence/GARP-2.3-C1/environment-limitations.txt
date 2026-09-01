@@ -1,0 +1,7 @@
+GARP 2.3 C1 - ENVIRONMENT LIMITATIONS
+- /usr/bin/chromium is governed by /etc/chromium/policies/managed/000_policy_merge.json with URLBlocklist ["*"].
+- qa:runtime on 1.16.18 therefore fails navigation with net::ERR_BLOCKED_BY_ADMINISTRATOR; this is NOT counted as product FAIL or PASS.
+- test:reporter: 53 static/regression PASS / 0 FAIL; browser section NOT_READY due same URLBlocklist.
+- qa:axe: NOT_READY in Phase C because node_modules axe-core 4.12.1 is not installed in the audit runtime; the candidate itself intentionally excludes node_modules. Claude Phase B had 26 real axe scans on 1.16.17, but exact 1.16.18 must be rerun in Claude 2.
+- Full post-fix local-http SIM-03/04/07/08 and browser RT-14/17/20 must be repeated by Claude 2. Phase C supplies deterministic privacy/storage-equivalent evidence 28/28, not a fake browser PASS.
+- External central Access Guard implementation, live model/provider, live school server, GitHub live Pages, and organizational key-custody/MFA/branch settings are not contained in this ZIP.

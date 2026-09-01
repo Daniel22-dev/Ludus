@@ -1,0 +1,8 @@
+Final canary artifact sweep, 2026-09-01
+Canary: GARP-STUDENT-CANARY-LUDUS-A-FINAL-20260901
+AI-RED canary: GARP-AIRED-CANARY-LUDUS-A-FINAL-20260901
+
+dist + dist-school-server student canary hits: 0
+src/public/engines/runtime/scripts/vendor student canary hits: 0
+qa-results + audit-evidence student canary hits: 1 (expected audit report evidence)
+dist + dist-school-server AI-RED canary hits: 0

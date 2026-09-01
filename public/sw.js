@@ -1,6 +1,6 @@
 const GHRAB_SW_CONTRACT='ghrab-service-worker-v1';
 /* GHRAB service-worker contract v1 · update activation is user-controlled. */
-const LUDUS_CACHE = "ghrab-ludus-v1.16.16";
+const LUDUS_CACHE = "ghrab-ludus-v1.16.18";
 const CACHE_PREFIXES = ["ghrab-ludus-v", "ludus-pwa-"];
 const CORE_ASSETS = [
   "./index.html",
@@ -11,9 +11,6 @@ const CORE_ASSETS = [
   "./access/error-reporter.js",
   "./access/error-reporter.css",
   "./access/error-reporter-adapter.js",
-  "./config/deployment.json",
-  "./config/deployment.school-server-p0.json",
-  "./config/deployment.school-server.example.json",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
@@ -23,6 +20,7 @@ const CORE_ASSETS = [
   "./assets/brand/school-logo.png",
   "./ghrab-platform.consumer.json",
   "./runtime/ludus-engine-runtime.js",
+  "./runtime/ludus-privacy.js",
   "./runtime/ludus-engine-badge.css",
   "./runtime/ludus-engine-controls.css",
   "./content/engine-index.json"

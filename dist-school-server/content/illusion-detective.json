@@ -1,0 +1,43 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "illusion-detective",
+  "appVersion": "1.16.18",
+  "generatedAt": "2026-09-01T08:55:53.995Z",
+  "sourceFile": "matrix.html",
+  "status": "draft",
+  "builderCompatible": false,
+  "title": {
+    "cs": "Případ Simulakrum",
+    "en": "The Simulacrum Case",
+    "officialCs": "Matrix: Anomálie",
+    "officialEn": "Matrix: Anomaly"
+  },
+  "mechanicId": "detective",
+  "flowModel": "scenesEvidenceAccusation",
+  "supportedExerciseTypes": [
+    "mcq",
+    "trueFalse",
+    "wordBank"
+  ],
+  "capabilities": {
+    "hasMap": false,
+    "hasStations": true,
+    "hasBoss": false,
+    "hasClues": true,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}

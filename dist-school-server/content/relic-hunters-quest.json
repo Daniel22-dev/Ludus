@@ -1,0 +1,45 @@
+{
+  "schema": "ludus-engine-content-pack-v1",
+  "engineId": "relic-hunters-quest",
+  "appVersion": "1.16.18",
+  "generatedAt": "2026-09-01T08:55:53.995Z",
+  "sourceFile": "indiana-jones.html",
+  "status": "draft",
+  "builderCompatible": false,
+  "title": {
+    "cs": "Lovci relikvií",
+    "en": "Relic Hunters",
+    "officialCs": "Indiana Jones — Lovci relikvií",
+    "officialEn": "Indiana Jones — Relic Hunters"
+  },
+  "mechanicId": "quest",
+  "flowModel": "mapStationsFinalChallenge",
+  "supportedExerciseTypes": [
+    "mcq",
+    "typeAnswer",
+    "order",
+    "match",
+    "listen"
+  ],
+  "capabilities": {
+    "hasMap": true,
+    "hasStations": true,
+    "hasBoss": true,
+    "hasFinalChallenge": true,
+    "hasInventory": false,
+    "hasClues": false,
+    "hasFinalCode": false,
+    "hasLeaderboard": false,
+    "hasSimulation": false,
+    "hasSaveLoadResume": true
+  },
+  "uiLanguages": [
+    "cs",
+    "en"
+  ],
+  "contentLanguages": [
+    "cs",
+    "en"
+  ],
+  "mediaProfile": "unofficial"
+}

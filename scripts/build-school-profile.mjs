@@ -46,6 +46,20 @@ for (const manifestPath of files.filter((file) => file.endsWith(`${path.sep}mani
   writeJson(manifestPath, manifest);
 }
 
+
+const securityHeaders = readJson(path.join(root, 'public', 'config', 'security-headers.json'));
+const schoolCsp = String(securityHeaders.schoolServerProfile?.headers?.['Content-Security-Policy'] || '');
+for (const htmlFile of files.filter((file) => file.toLowerCase().endsWith('.html'))) {
+  let html = fs.readFileSync(htmlFile, 'utf8');
+  const escaped = schoolCsp.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+  if (/http-equiv=["']Content-Security-Policy["']/i.test(html)) {
+    html = html.replace(/<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/i, `<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="school-server">`);
+  } else {
+    html = html.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="school-server">`);
+  }
+  fs.writeFileSync(htmlFile, html, 'utf8');
+}
+
 const deployment = readJson(path.join(path.dirname(schoolProfiles[0]), "deployment.json"));
 if (!deployment.appId || deployment.profile !== "school-server" || deployment.authMode !== "server-session") {
   throw new Error("Aktivní school-server deployment kontrakt není úplný.");
