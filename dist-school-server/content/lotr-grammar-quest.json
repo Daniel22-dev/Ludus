@@ -1,8 +1,8 @@
 {
   "schema": "ludus-engine-content-pack-v1",
   "engineId": "lotr-grammar-quest",
-  "appVersion": "1.16.18",
-  "generatedAt": "2026-09-01T08:55:53.995Z",
+  "appVersion": "1.16.19",
+  "generatedAt": "2026-09-05T19:38:42.960Z",
   "sourceFile": "lotr.html",
   "status": "draft",
   "builderCompatible": true,

@@ -1,0 +1,10 @@
+Dependency/environment evidence
+
+Chromium managed policy observed:
+URLBlocklist: ["*"]
+This blocks local HTTP Page.navigate used by qa:runtime/qa:reflow and live service-worker flows.
+
+Offline dependency restoration:
+npm ci --offline --ignore-scripts --no-fund --no-audit
+=> ENOTCACHED for https://registry.npmjs.org/xmlchars/-/xmlchars-2.2.0.tgz
+Therefore local Playwright/axe dependencies cannot be completed from the available cache. Missing-environment tests are marked NOT TESTED, never PASS.

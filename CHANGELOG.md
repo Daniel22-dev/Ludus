@@ -1,3 +1,12 @@
+## 1.16.19 — GHRAB Platform 1.1.2 ecosystem wave candidate (2026-09-05)
+
+- Migrována přesná vendorizovaná GHRAB Platform 1.1.2 a requiredRange zvýšen na `>=1.1.2 <2.0.0`.
+- Přidán `ghrab-suite-session-v1` lifecycle handler s replay, per-tab generation baseline, verified cleanupem, write-quarantine a fail-closed ACK.
+- Data manifest PC-01 byl srovnán se skutečnými storage writery včetně engine progress/images, Gemini credentialů, manuálu a lifecycle tombstones.
+- Platforma se nyní injektuje i do engine HTML; builder načítá privacy runtime před odemčením chráněných skriptů bez navýšení performance budgetu.
+- Přidán suite-session regresní test s open-child, delayed-open, multi-tab, BFCache/pageshow, fail-closed canary a povinnou negativní kontrolou.
+- Kandidát zůstává pouze pro koordinovanou ecosystem release wave a nezávislou kontrolu; E-01 není považován za uzavřený pro celý ekosystém.
+
 ## 1.16.18 — GARP 2.3 opravné kolo po Claude B, kandidát pro druhou kontrolu (2026-09-01)
 
 - Odstraněny produkční AI testovací háčky a legacy přímý bypass; QA nyní nahrazuje AI vrstvu pouze uvnitř izolovaného testovacího harnessu.

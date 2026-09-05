@@ -1,0 +1,577 @@
+{
+  "schema": "ghrab-pc01-suite-session-audit-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.19",
+  "platformVersion": "1.1.2",
+  "generatedAt": "2026-09-05T19:35:01.088Z",
+  "sourceScope": [
+    "src/index.html",
+    "runtime/ludus-privacy.js",
+    "runtime/ludus-engine-runtime.js",
+    "engines/*.html",
+    "public/config/data-manifest.json"
+  ],
+  "inventory": {
+    "localStorageOwnedClearOnEndWork": [
+      "ghrab.ludus.*",
+      "ludus_*",
+      "ludus.*",
+      "chronos_*",
+      "jumanji_*",
+      "hga_v2",
+      "laughworks_save_v1",
+      "kostka_osudu_save_v1",
+      "lotr_quest_v1",
+      "relic_hunter_*",
+      "hvezdni_rytiri_*",
+      "ludus_gemini_key",
+      "ghrab.ludus.gemini_key"
+    ],
+    "localStorageOwnedExcludedFromCleanup": [
+      "ghrab.ludus.suite-session-seen.v1",
+      "ghrab.ludus.suite-session-status.v1",
+      "ghrab.ludus.migration.p2-storage-namespace-v1.done",
+      "ghrab.ludus.suite-session-seen.v1",
+      "ghrab.ludus.suite-session-status.v1",
+      "ghrab.ludus.migration.p2-storage-namespace-v1.done",
+      "ghrab-manual-progress-ludus-*",
+      "ghrab-manual-theme"
+    ],
+    "sessionStorageOwnedClearOnEndWork": [
+      "ghrab.ludus.*",
+      "ludus_*",
+      "ludus.*",
+      "chronos_*",
+      "jumanji_*",
+      "hga_v2",
+      "laughworks_save_v1",
+      "kostka_osudu_save_v1",
+      "lotr_quest_v1",
+      "relic_hunter_*",
+      "hvezdni_rytiri_*",
+      "ludusTeacherMode",
+      "ludus_gemini_key_session",
+      "ghrab.ludus.gemini_key_session"
+    ],
+    "sessionStorageOwnedExcludedFromCleanup": [
+      "ghrab.ludus.suite-session-tab-seen.v1",
+      "ghrab.ludus.suite-session-tab-seen.v1"
+    ],
+    "sharedStateNotOwnedByLudus": [
+      {
+        "kind": "localStorage",
+        "key": "ghrab.platform.suite-session-generation.v1",
+        "owner": "GHRAB Platform",
+        "ludusAccess": "read/listen-only"
+      },
+      {
+        "kind": "localStorage",
+        "key": "ghrab.platform.handoff.v2",
+        "owner": "GHRAB Platform/Studio bridge",
+        "ludusAccess": "through bridge contract only"
+      },
+      {
+        "kind": "localStorage",
+        "key": "ghrab.handoff.v1",
+        "owner": "legacy Studio bridge",
+        "ludusAccess": "legacy bridge compatibility only"
+      },
+      {
+        "kind": "localStorage",
+        "key": "ghrab.pilot.events.v2",
+        "owner": "AI Studio",
+        "ludusAccess": "legacy bridge event compatibility only"
+      }
+    ],
+    "indexedDB": "no application writer found",
+    "cacheStorage": "service-worker/static application cache only; clearOnEndWork=false",
+    "aiPromptDebug": "no persistence writer found",
+    "exportImport": "explicit user action; export does not serialize browser storage",
+    "suiteSession": {
+      "contract": "ghrab-suite-session-v1",
+      "generationKey": "ghrab.platform.suite-session-generation.v1",
+      "platformAcknowledgementKey": "ghrab.ludus.suite-session-seen.v1",
+      "childStatusKey": "ghrab.ludus.suite-session-status.v1",
+      "tabSeenKey": "ghrab.ludus.suite-session-tab-seen.v1",
+      "ownership": {
+        "generationKey": "platform-global-read-only-for-ludus",
+        "platformAcknowledgementKey": "platform",
+        "childStatusKey": "ludus",
+        "tabSeenKey": "ludus"
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "pc01.manifest.local.ludus_gemini_model",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_langs",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_sound",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_theme",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_intro_done",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_ui_lang",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.hga_v2",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.laughworks_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus.laughworks.img.poster",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.kostka_osudu_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.lotr_quest_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_case_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_case_snd",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_case_imgs_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_frostline_save",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_frostline_images",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_escape_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.ludus_escape_imgs",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.chronos_demo",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.chronos_demo_img_cover",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.jumanji_arena_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.jumanji_snd",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.jumanji_img_board",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.relic_hunter_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.relic_hunter_mute_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.relic_hunter_skin_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.relic_hunter_img_v1_map",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.hvezdni_rytiri_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.hvezdni_rytiri_mute_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.hvezdni_rytiri_skin_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.local.hvezdni_rytiri_img_v1_map",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludusTeacherMode",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.hga_v2",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.laughworks_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus.laughworks.img.poster",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.kostka_osudu_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.lotr_quest_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_case_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_case_snd",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_case_imgs_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_frostline_save",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_frostline_images",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_escape_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.ludus_escape_imgs",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.chronos_demo",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.chronos_demo_img_cover",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.jumanji_arena_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.jumanji_snd",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.jumanji_img_board",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.relic_hunter_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.relic_hunter_mute_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.relic_hunter_skin_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.relic_hunter_img_v1_map",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.hvezdni_rytiri_save_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.hvezdni_rytiri_mute_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.hvezdni_rytiri_skin_v1",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.manifest.session.hvezdni_rytiri_img_v1_map",
+      "ok": true,
+      "detail": "[\"ghrab.ludus.*\",\"ludus_*\",\"ludus.*\",\"chronos_*\",\"jumanji_*\",\"hga_v2\",\"laughworks_save_v1\",\"kostka_osudu_save_v1\",\"lotr_quest_v1\",\"relic_hunter_*\",\"hvezdni_rytiri_*\",\"ludusTeacherMode\"]"
+    },
+    {
+      "id": "pc01.credentials.local.ludus_gemini_key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.credentials.local.ghrab.ludus.gemini_key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.credentials.session.ludus_gemini_key_session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.credentials.session.ghrab.ludus.gemini_key_session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.cache.noncontent-not-cleared",
+      "ok": true,
+      "detail": "{\"kind\":\"cacheStorage\",\"category\":\"application-cache\",\"patterns\":[\"ghrab-ludus-v*\",\"ludus*\"],\"sensitivity\":\"non-content-cache\",\"authority\":\"client\",\"clearOnEndWork\":false}"
+    },
+    {
+      "id": "pc01.manual.nonpersonal-not-cleared",
+      "ok": true,
+      "detail": "{\"kind\":\"localStorage\",\"category\":\"nonpersonal-settings\",\"patterns\":[\"ghrab-manual-progress-ludus-*\",\"ghrab-manual-theme\"],\"sensitivity\":\"non-content-settings\",\"authority\":\"client\",\"clearOnEndWork\":false,\"purpose\":\"Interactive manual completion state and theme; contains no student/work content.\"}"
+    },
+    {
+      "id": "pc01.lifecycle.local-not-cleared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.lifecycle.session-not-cleared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.suite.generation-read-only",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.suite.platform-ack-owner",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.shared.handoff-v2-not-owned",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.shared.handoff-v1-not-owned",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.shared.pilot-events-not-owned",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.verified-delete",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.fail-closed-handler",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.no-manual-platform-ack",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.no-global-generation-write",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.builder-credential-writer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.builder-settings-writers",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.engine-teacher-session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.no-indexeddb-writer",
+      "ok": true,
+      "detail": "No application IndexedDB writer found in builder/runtime/engines."
+    },
+    {
+      "id": "pc01.runtime.cache-content-writer-absent",
+      "ok": true,
+      "detail": "Application runtime does not write user content to Cache Storage; service worker cache is static/app cache."
+    },
+    {
+      "id": "pc01.runtime.export-not-storage-dump",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.runtime.prompt-debug-not-persisted",
+      "ok": true,
+      "detail": "No AI prompt/debug storage writer found."
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.privacy-runtime.stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pc01.engine.count",
+      "ok": true,
+      "detail": "11"
+    }
+  ],
+  "summary": {
+    "total": 93,
+    "passed": 93,
+    "failed": 0
+  },
+  "status": "passed"
+}

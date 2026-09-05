@@ -1,0 +1,184 @@
+{
+  "schema": "ghrab-garp23-privacy-lifecycle-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.19",
+  "mode": "deterministic-browser-storage-equivalent",
+  "syntheticCanaries": {
+    "A": "GARP-STUDENT-CANARY-LUDUS-C1-A",
+    "B": "GARP-STUDENT-CANARY-LUDUS-C1-B"
+  },
+  "checks": [
+    {
+      "id": "privacy.legacy-player-scrubbed-before-engine",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "privacy.builder-canonical-preference-preserved-on-engine-load",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "privacy.engine-isolation-enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "privacy.a-not-persistent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "privacy.a-session-only",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim03-new-session-no-a",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim04-concurrent-tabs-a-still-a",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim04-concurrent-tabs-b-still-b",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim04-shared-persistent-store-has-no-player",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt20-endwork-clears-a-exact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt20-endwork-clears-a-dynamic",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt20-endwork-keeps-unrelated-session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt20-endwork-keeps-unrelated-local",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt17-endwork-a-does-not-delete-b-session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "rt17-reopen-no-a-or-b",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim08-export-inlines-privacy-runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sim08-export-does-not-serialize-browser-storage",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "engine-privacy-early:chronos.html",
+      "ok": true,
+      "detail": "199/35119"
+    },
+    {
+      "id": "engine-privacy-early:dnd.html",
+      "ok": true,
+      "detail": "199/39934"
+    },
+    {
+      "id": "engine-privacy-early:hogwarts.html",
+      "ok": true,
+      "detail": "199/49371"
+    },
+    {
+      "id": "engine-privacy-early:indiana-jones.html",
+      "ok": true,
+      "detail": "199/47568"
+    },
+    {
+      "id": "engine-privacy-early:jumanji.html",
+      "ok": true,
+      "detail": "199/35519"
+    },
+    {
+      "id": "engine-privacy-early:laughworks.html",
+      "ok": true,
+      "detail": "199/19791"
+    },
+    {
+      "id": "engine-privacy-early:lotr.html",
+      "ok": true,
+      "detail": "199/34894"
+    },
+    {
+      "id": "engine-privacy-early:matrix.html",
+      "ok": true,
+      "detail": "199/32804"
+    },
+    {
+      "id": "engine-privacy-early:orient-express.html",
+      "ok": true,
+      "detail": "199/33090"
+    },
+    {
+      "id": "engine-privacy-early:star-wars.html",
+      "ok": true,
+      "detail": "199/46421"
+    },
+    {
+      "id": "engine-privacy-early:stranger-things.html",
+      "ok": true,
+      "detail": "199/40149"
+    }
+  ],
+  "total": 28,
+  "passed": 28,
+  "failed": 0,
+  "evidence": {
+    "a": {
+      "local": [
+        [
+          "ghrab.ludus.theme",
+          "dark"
+        ]
+      ],
+      "session": [
+        [
+          "ghrab.ludus.suite-session-tab-seen.v1",
+          "@none"
+        ],
+        [
+          "hga_v2",
+          "{\"name\":\"GARP-STUDENT-CANARY-LUDUS-C1-A\",\"score\":1}"
+        ],
+        [
+          "ludus_dynamic_progress",
+          "GARP-STUDENT-CANARY-LUDUS-C1-A"
+        ]
+      ]
+    }
+  },
+  "status": "passed",
+  "limitations": [
+    "This Platform 1.1.2 wave environment cannot navigate local HTTP because Chromium has managed URLBlocklist=[\"*\"].",
+    "Independent Claude review must repeat A/B/new-tab/restart/multi-tab/export-open in an unblocked real browser."
+  ]
+}

@@ -1,0 +1,17 @@
+test	exit	classification	reason
+qa-p5-composite	1	NOT_TESTED	stops at managed-browser local-http runtime gate
+qa-runtime	1	NOT_TESTED	managed Chromium URLBlocklist blocks local HTTP
+qa-reflow	1	NOT_TESTED	same local-http runtime harness blocked by managed URLBlocklist
+qa-axe	0	NOT_TESTED	axe-core 4.12.1 unavailable in local dependency environment
+qa-critical	1	NOT_TESTED	Playwright package unavailable; dependency install blocked
+qa-visual	1	NOT_TESTED	Playwright package unavailable; dependency install blocked
+qa-xss-after-p5	0	PASS	static XSS regression
+qa-quality-after-p5	0	PASS	quality/performance budgets
+qa-browser-after-p5	0	PASS	real Chromium in-memory CDP harness
+qa-pc01-after-p5	0	PASS	PC-01 manifest/runtime conformance
+qa-suite-session-after-p5	0	PASS	exact Platform 1.1.2 deterministic lifecycle harness
+qa-media-after-p5	0	PASS	media provenance
+p5-release-direct	1	NOT_READY	runtime local-http report not passed; environment limitation
+p5-acceptance-direct	1	NOT_READY	runtime local-http acceptance remains unverified
+qa-report	0	NOT_READY	full visual/critical/release evidence unavailable in environment
+qa-lock	0	PASS	lock/package integrity

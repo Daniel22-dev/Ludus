@@ -1,0 +1,255 @@
+{
+  "schema": "ghrab-garp-security-gate-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.19",
+  "total": 49,
+  "passed": 49,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "version.package",
+      "ok": true,
+      "detail": "1.16.19"
+    },
+    {
+      "id": "build.standard.exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "access-gate.stylesheet-injected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "build.school.exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.standard.failure-mode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.failure-mode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.standard.profile",
+      "ok": true,
+      "detail": "github-pages"
+    },
+    {
+      "id": "deployment.standard.auth",
+      "ok": true,
+      "detail": "signed-permit"
+    },
+    {
+      "id": "deployment.standard.local-key-explicit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.profile",
+      "ok": true,
+      "detail": "school-server"
+    },
+    {
+      "id": "deployment.school.auth",
+      "ok": true,
+      "detail": "server-session"
+    },
+    {
+      "id": "deployment.school.ai-transport",
+      "ok": true,
+      "detail": "school-gateway"
+    },
+    {
+      "id": "deployment.school.local-keys-disabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.server-authoritative",
+      "ok": true,
+      "detail": "server-authoritative"
+    },
+    {
+      "id": "deployment.school.offline-disabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.fail-closed-stale",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.same-origin-only",
+      "ok": true,
+      "detail": "[\"self\"]"
+    },
+    {
+      "id": "deployment.school.no-p0-profile",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.build-info-local-key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "deployment.school.build-info-failure-mode",
+      "ok": true,
+      "detail": "fail-closed"
+    },
+    {
+      "id": "import.max-bytes",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.max-depth",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.max-nodes",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.prototype-guard",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.size-before-read",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.envelope-checksum",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "import.schema-whitelist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "preview.no-window-open",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "preview.noopener",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sw.deployment-runtime-bypass",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "sw.no-store-bypass",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "source.no-eval",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "source.no-new-function",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "csp.no-unsafe-eval",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "csp.school-connect-self",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "csp.inline-exception-documented",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "preview.sandbox-wrapper",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "preview.sandbox-srcdoc",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "preview.sandbox-scripts",
+      "ok": true,
+      "detail": "allow-scripts allow-forms allow-modals allow-downloads"
+    },
+    {
+      "id": "preview.sandbox-no-same-origin",
+      "ok": true,
+      "detail": "allow-scripts allow-forms allow-modals allow-downloads"
+    },
+    {
+      "id": "xss.chronos-content-escaped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "xss.chronos-intro-escaped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "xss.hogwarts-content-escaped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "xss.lotr-content-escaped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "xss.laughworks-content-escaped",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "actions.present",
+      "ok": true,
+      "detail": "21"
+    },
+    {
+      "id": "actions.sha-pinned",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "actions.no-moving-major",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "actions.allowlist",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

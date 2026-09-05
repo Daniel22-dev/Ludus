@@ -65,6 +65,7 @@ if (!html.includes(marker)) fail('AI integration marker is missing.');
 html = html.replace(marker, `${integration}\n;\n${marker}`);
 html = html.replace(/(<html[^>]*>)/i, `$1\n<!-- BUILD: ${buildTime} -->`);
 html = protectHtmlForStudio(html, APP_ID, 0);
+html = html.replace(/\s*<script\b[^>]*type="application\/ghrab-protected"[^>]*data-ludus-privacy-runtime[^>]*><\/script>\s*/i, '\n');
 fs.writeFileSync(path.join(DIST, 'index.html'), html, 'utf8');
 
 if (fs.existsSync(PUBLIC_DIR)) fs.cpSync(PUBLIC_DIR, DIST, { recursive: true });

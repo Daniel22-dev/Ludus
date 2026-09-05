@@ -2,11 +2,11 @@
   "schema": "ghrab-platform-consumer-v1",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.18",
+  "appVersion": "1.16.19",
   "platform": {
-    "version": "1.1.0",
+    "version": "1.1.2",
     "contract": "ghrab-platform-v1",
-    "requiredRange": ">=1.1.0 <2.0.0",
+    "requiredRange": ">=1.1.2 <2.0.0",
     "compatibilityWindow": [
       "1.1.x",
       "1.2.x"
@@ -60,13 +60,11 @@
     ]
   },
   "cache": {
-    "name": "ghrab-ludus-v1.16.18",
+    "name": "ghrab-ludus-v1.16.19",
     "updateMessage": "GHRAB_SKIP_WAITING"
   },
   "html": {
-    "exclude": [
-      "engines/"
-    ],
+    "exclude": [],
     "noFooter": [
       "engines/",
       "tests/"
@@ -152,5 +150,12 @@
         "safe": "unofficial"
       }
     }
+  },
+  "suiteSession": {
+    "contract": "ghrab-suite-session-v1",
+    "required": true,
+    "cleanupControl": "LUDUSPrivacy.handleSuiteSessionEnd()",
+    "acknowledgement": "platform-owned-after-successful-handler",
+    "failClosed": true
   }
 }

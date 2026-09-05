@@ -52,6 +52,8 @@ export function protectHtmlForStudio(source, appId = 'ludus', relativeDepth = 0)
   const bootstrap = `<script type="module" data-ghrab-access-bootstrap>
 const APP_ID=${JSON.stringify(appId)};
 const ACCESS_BASE=${JSON.stringify(accessBase)};
+const PRIVACY_URL=${JSON.stringify(`${rootPrefix}runtime/ludus-privacy.js`)};
+const LOAD_PRIVACY_BEFORE_UNLOCK=${relativeDepth === 0 ? 'true' : 'false'};
 let studioUrl='/AI-Studio-GHRAB/';
 function showBootstrapFailure(){
   document.documentElement.dataset.ghrabAccess='denied';
@@ -63,6 +65,15 @@ function startLocalReporter(context){
   return import(ACCESS_BASE+'reporter-bootstrap.js')
     .then(module=>module.startReporterBestEffort('./error-reporter-adapter.js',{context}))
     .catch(error=>{console.warn('Reportér LUDUS nebyl načten; aplikace pokračuje.',error);return null;});
+}
+async function ensurePrivacyRuntime(){
+  if(window.LUDUSPrivacy)return true;
+  await new Promise((resolve,reject)=>{
+    const node=document.createElement('script');node.src=PRIVACY_URL;node.dataset.ludusPrivacyRuntime='1.16.19';node.dataset.ludusPrivacyScope='builder';node.async=false;
+    node.onload=()=>resolve(true);node.onerror=()=>reject(new Error('LUDUS privacy runtime failed to load.'));document.head.append(node);
+  });
+  if(!window.LUDUSPrivacy)throw new Error('LUDUS privacy runtime unavailable after load.');
+  return true;
 }
 function unlockProtectedScripts(){
   const helper=window.GHRAB_PLATFORM?.unlockProtectedScripts;
@@ -80,6 +91,7 @@ async function boot(){
     // Do not duplicate signed authorization material into a globally readable window property.
     window.__GHRAB_STUDIO_ACCESS__=Object.freeze({appId:APP_ID,granted:true});
     void startLocalReporter('ludus:granted');
+    if(LOAD_PRIVACY_BEFORE_UNLOCK)await ensurePrivacyRuntime();
     unlockProtectedScripts();
   }catch(error){console.error('AI Studio access bootstrap failed',error);showBootstrapFailure();void startLocalReporter('ludus:bootstrap-failure');}
 }

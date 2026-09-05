@@ -1,0 +1,800 @@
+{
+  "application": "LUDUS",
+  "appId": "ludus",
+  "version": "1.16.19",
+  "qaStandard": "GHRAB-QA-1.0.2",
+  "date": "2026-09-05T19:35:01.677Z",
+  "commit": null,
+  "buildSha256": "1e7f7f898969c11810653c722c6d5a630fbbe655b55eee7ec405aff5633bec5e",
+  "gates": [
+    {
+      "name": "project",
+      "status": "FAIL",
+      "findings": [
+        {
+          "gate": "project",
+          "severity": "BLOCKER",
+          "code": "REQUIRED_GATE_MISSING",
+          "message": "Povinná brána project nemá výsledek z aktuálního průchodu.",
+          "evidence": ""
+        }
+      ],
+      "details": {}
+    },
+    {
+      "name": "technical",
+      "status": "PASS",
+      "findings": [],
+      "details": {
+        "packageVersion": "1.16.19",
+        "node": "v22.16.0",
+        "filesChecked": 203
+      }
+    },
+    {
+      "name": "security",
+      "status": "PASS",
+      "findings": [],
+      "details": {
+        "filesChecked": 139,
+        "projectValidator": null
+      }
+    },
+    {
+      "name": "pwa",
+      "status": "PASS",
+      "findings": [],
+      "details": {
+        "targets": 1
+      }
+    },
+    {
+      "name": "combinatorial",
+      "status": "PASS",
+      "findings": [],
+      "details": {
+        "parameters": 4,
+        "parameterValues": {
+          "engine": [
+            "stranger-things",
+            "chronos",
+            "dnd",
+            "hogwarts",
+            "indiana-jones",
+            "jumanji",
+            "laughworks",
+            "lotr",
+            "matrix",
+            "orient-express",
+            "star-wars"
+          ],
+          "stage": [
+            "intro",
+            "start",
+            "play",
+            "finish",
+            "restart"
+          ],
+          "content": [
+            "short",
+            "long",
+            "image",
+            "audio-video"
+          ],
+          "device": [
+            "mobile",
+            "tablet",
+            "desktop"
+          ]
+        },
+        "theoreticalCombinations": 660,
+        "executedScenarios": 55,
+        "pairwisePairs": 179,
+        "coveredPairs": 179,
+        "pairwiseCoveragePercent": 100,
+        "criticalTriples": [
+          {
+            "engine": "stranger-things",
+            "stage": "start",
+            "device": "mobile"
+          },
+          {
+            "engine": "indiana-jones",
+            "content": "long",
+            "device": "mobile"
+          },
+          {
+            "engine": "indiana-jones",
+            "stage": "restart",
+            "content": "image"
+          }
+        ],
+        "fixedScenarios": [
+          {
+            "engine": "stranger-things",
+            "stage": "intro",
+            "content": "short",
+            "device": "desktop"
+          }
+        ],
+        "matrix": [
+          {
+            "id": "PW-001",
+            "status": "PASS",
+            "parameters": {
+              "engine": "stranger-things",
+              "stage": "intro",
+              "content": "short",
+              "device": "desktop"
+            },
+            "evidence": "engine=stranger-things; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=desktop"
+          },
+          {
+            "id": "PW-002",
+            "status": "PASS",
+            "parameters": {
+              "engine": "stranger-things",
+              "stage": "start",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=stranger-things; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=short; device=mobile"
+          },
+          {
+            "id": "PW-003",
+            "status": "PASS",
+            "parameters": {
+              "engine": "indiana-jones",
+              "stage": "intro",
+              "content": "long",
+              "device": "mobile"
+            },
+            "evidence": "engine=indiana-jones; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=long; device=mobile"
+          },
+          {
+            "id": "PW-004",
+            "status": "PASS",
+            "parameters": {
+              "engine": "indiana-jones",
+              "stage": "restart",
+              "content": "image",
+              "device": "mobile"
+            },
+            "evidence": "engine=indiana-jones; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=image; device=mobile"
+          },
+          {
+            "id": "PW-005",
+            "status": "PASS",
+            "parameters": {
+              "engine": "stranger-things",
+              "stage": "play",
+              "content": "long",
+              "device": "tablet"
+            },
+            "evidence": "engine=stranger-things; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=long; device=tablet"
+          },
+          {
+            "id": "PW-006",
+            "status": "PASS",
+            "parameters": {
+              "engine": "chronos",
+              "stage": "intro",
+              "content": "image",
+              "device": "tablet"
+            },
+            "evidence": "engine=chronos; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=image; device=tablet"
+          },
+          {
+            "id": "PW-007",
+            "status": "PASS",
+            "parameters": {
+              "engine": "chronos",
+              "stage": "start",
+              "content": "long",
+              "device": "desktop"
+            },
+            "evidence": "engine=chronos; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=desktop"
+          },
+          {
+            "id": "PW-008",
+            "status": "PASS",
+            "parameters": {
+              "engine": "chronos",
+              "stage": "play",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=chronos; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-009",
+            "status": "PASS",
+            "parameters": {
+              "engine": "dnd",
+              "stage": "start",
+              "content": "audio-video",
+              "device": "tablet"
+            },
+            "evidence": "engine=dnd; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=audio-video; device=tablet"
+          },
+          {
+            "id": "PW-010",
+            "status": "PASS",
+            "parameters": {
+              "engine": "dnd",
+              "stage": "play",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=dnd; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=image; device=desktop"
+          },
+          {
+            "id": "PW-011",
+            "status": "PASS",
+            "parameters": {
+              "engine": "hogwarts",
+              "stage": "finish",
+              "content": "short",
+              "device": "tablet"
+            },
+            "evidence": "engine=hogwarts; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=short; device=tablet"
+          },
+          {
+            "id": "PW-012",
+            "status": "PASS",
+            "parameters": {
+              "engine": "hogwarts",
+              "stage": "restart",
+              "content": "audio-video",
+              "device": "desktop"
+            },
+            "evidence": "engine=hogwarts; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=audio-video; device=desktop"
+          },
+          {
+            "id": "PW-013",
+            "status": "PASS",
+            "parameters": {
+              "engine": "dnd",
+              "stage": "finish",
+              "content": "long",
+              "device": "mobile"
+            },
+            "evidence": "engine=dnd; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=long; device=mobile"
+          },
+          {
+            "id": "PW-014",
+            "status": "PASS",
+            "parameters": {
+              "engine": "indiana-jones",
+              "stage": "finish",
+              "content": "audio-video",
+              "device": "desktop"
+            },
+            "evidence": "engine=indiana-jones; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=audio-video; device=desktop"
+          },
+          {
+            "id": "PW-015",
+            "status": "PASS",
+            "parameters": {
+              "engine": "jumanji",
+              "stage": "restart",
+              "content": "short",
+              "device": "tablet"
+            },
+            "evidence": "engine=jumanji; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=tablet"
+          },
+          {
+            "id": "PW-016",
+            "status": "PASS",
+            "parameters": {
+              "engine": "hogwarts",
+              "stage": "start",
+              "content": "image",
+              "device": "mobile"
+            },
+            "evidence": "engine=hogwarts; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=image; device=mobile"
+          },
+          {
+            "id": "PW-017",
+            "status": "PASS",
+            "parameters": {
+              "engine": "indiana-jones",
+              "stage": "play",
+              "content": "short",
+              "device": "tablet"
+            },
+            "evidence": "engine=indiana-jones; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=short; device=tablet"
+          },
+          {
+            "id": "PW-018",
+            "status": "PASS",
+            "parameters": {
+              "engine": "jumanji",
+              "stage": "intro",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=jumanji; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-019",
+            "status": "PASS",
+            "parameters": {
+              "engine": "jumanji",
+              "stage": "finish",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=jumanji; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=image; device=desktop"
+          },
+          {
+            "id": "PW-020",
+            "status": "PASS",
+            "parameters": {
+              "engine": "laughworks",
+              "stage": "restart",
+              "content": "long",
+              "device": "mobile"
+            },
+            "evidence": "engine=laughworks; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=long; device=mobile"
+          },
+          {
+            "id": "PW-021",
+            "status": "PASS",
+            "parameters": {
+              "engine": "laughworks",
+              "stage": "intro",
+              "content": "short",
+              "device": "tablet"
+            },
+            "evidence": "engine=laughworks; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=tablet"
+          },
+          {
+            "id": "PW-022",
+            "status": "PASS",
+            "parameters": {
+              "engine": "laughworks",
+              "stage": "start",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=laughworks; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=image; device=desktop"
+          },
+          {
+            "id": "PW-023",
+            "status": "PASS",
+            "parameters": {
+              "engine": "lotr",
+              "stage": "intro",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=lotr; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=mobile"
+          },
+          {
+            "id": "PW-024",
+            "status": "PASS",
+            "parameters": {
+              "engine": "lotr",
+              "stage": "start",
+              "content": "long",
+              "device": "tablet"
+            },
+            "evidence": "engine=lotr; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=tablet"
+          },
+          {
+            "id": "PW-025",
+            "status": "PASS",
+            "parameters": {
+              "engine": "lotr",
+              "stage": "play",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=lotr; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=image; device=desktop"
+          },
+          {
+            "id": "PW-026",
+            "status": "PASS",
+            "parameters": {
+              "engine": "matrix",
+              "stage": "intro",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=matrix; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=mobile"
+          },
+          {
+            "id": "PW-027",
+            "status": "PASS",
+            "parameters": {
+              "engine": "matrix",
+              "stage": "start",
+              "content": "long",
+              "device": "tablet"
+            },
+            "evidence": "engine=matrix; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=tablet"
+          },
+          {
+            "id": "PW-028",
+            "status": "PASS",
+            "parameters": {
+              "engine": "matrix",
+              "stage": "play",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=matrix; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=image; device=desktop"
+          },
+          {
+            "id": "PW-029",
+            "status": "PASS",
+            "parameters": {
+              "engine": "orient-express",
+              "stage": "intro",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=orient-express; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=mobile"
+          },
+          {
+            "id": "PW-030",
+            "status": "PASS",
+            "parameters": {
+              "engine": "orient-express",
+              "stage": "start",
+              "content": "long",
+              "device": "tablet"
+            },
+            "evidence": "engine=orient-express; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=tablet"
+          },
+          {
+            "id": "PW-031",
+            "status": "PASS",
+            "parameters": {
+              "engine": "orient-express",
+              "stage": "play",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=orient-express; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=image; device=desktop"
+          },
+          {
+            "id": "PW-032",
+            "status": "PASS",
+            "parameters": {
+              "engine": "star-wars",
+              "stage": "intro",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=star-wars; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=mobile"
+          },
+          {
+            "id": "PW-033",
+            "status": "PASS",
+            "parameters": {
+              "engine": "star-wars",
+              "stage": "start",
+              "content": "long",
+              "device": "tablet"
+            },
+            "evidence": "engine=star-wars; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=tablet"
+          },
+          {
+            "id": "PW-034",
+            "status": "PASS",
+            "parameters": {
+              "engine": "star-wars",
+              "stage": "play",
+              "content": "image",
+              "device": "desktop"
+            },
+            "evidence": "engine=star-wars; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=image; device=desktop"
+          },
+          {
+            "id": "PW-035",
+            "status": "PASS",
+            "parameters": {
+              "engine": "stranger-things",
+              "stage": "finish",
+              "content": "image",
+              "device": "mobile"
+            },
+            "evidence": "engine=stranger-things; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=image; device=mobile"
+          },
+          {
+            "id": "PW-036",
+            "status": "PASS",
+            "parameters": {
+              "engine": "stranger-things",
+              "stage": "restart",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=stranger-things; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-037",
+            "status": "PASS",
+            "parameters": {
+              "engine": "chronos",
+              "stage": "finish",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=chronos; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=short; device=mobile"
+          },
+          {
+            "id": "PW-038",
+            "status": "PASS",
+            "parameters": {
+              "engine": "dnd",
+              "stage": "intro",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=dnd; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=short; device=mobile"
+          },
+          {
+            "id": "PW-039",
+            "status": "PASS",
+            "parameters": {
+              "engine": "hogwarts",
+              "stage": "intro",
+              "content": "long",
+              "device": "mobile"
+            },
+            "evidence": "engine=hogwarts; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=intro; content=long; device=mobile"
+          },
+          {
+            "id": "PW-040",
+            "status": "PASS",
+            "parameters": {
+              "engine": "jumanji",
+              "stage": "start",
+              "content": "long",
+              "device": "mobile"
+            },
+            "evidence": "engine=jumanji; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=long; device=mobile"
+          },
+          {
+            "id": "PW-041",
+            "status": "PASS",
+            "parameters": {
+              "engine": "laughworks",
+              "stage": "play",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=laughworks; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-042",
+            "status": "PASS",
+            "parameters": {
+              "engine": "lotr",
+              "stage": "finish",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=lotr; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-043",
+            "status": "PASS",
+            "parameters": {
+              "engine": "matrix",
+              "stage": "finish",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=matrix; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-044",
+            "status": "PASS",
+            "parameters": {
+              "engine": "orient-express",
+              "stage": "finish",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=orient-express; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-045",
+            "status": "PASS",
+            "parameters": {
+              "engine": "star-wars",
+              "stage": "finish",
+              "content": "audio-video",
+              "device": "mobile"
+            },
+            "evidence": "engine=star-wars; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=audio-video; device=mobile"
+          },
+          {
+            "id": "PW-046",
+            "status": "PASS",
+            "parameters": {
+              "engine": "chronos",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=chronos; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          },
+          {
+            "id": "PW-047",
+            "status": "PASS",
+            "parameters": {
+              "engine": "dnd",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=dnd; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          },
+          {
+            "id": "PW-048",
+            "status": "PASS",
+            "parameters": {
+              "engine": "hogwarts",
+              "stage": "play",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=hogwarts; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=short; device=mobile"
+          },
+          {
+            "id": "PW-049",
+            "status": "PASS",
+            "parameters": {
+              "engine": "indiana-jones",
+              "stage": "start",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=indiana-jones; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=start; content=short; device=mobile"
+          },
+          {
+            "id": "PW-050",
+            "status": "PASS",
+            "parameters": {
+              "engine": "jumanji",
+              "stage": "play",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=jumanji; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=play; content=short; device=mobile"
+          },
+          {
+            "id": "PW-051",
+            "status": "PASS",
+            "parameters": {
+              "engine": "laughworks",
+              "stage": "finish",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=laughworks; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=finish; content=short; device=mobile"
+          },
+          {
+            "id": "PW-052",
+            "status": "PASS",
+            "parameters": {
+              "engine": "lotr",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=lotr; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          },
+          {
+            "id": "PW-053",
+            "status": "PASS",
+            "parameters": {
+              "engine": "matrix",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=matrix; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          },
+          {
+            "id": "PW-054",
+            "status": "PASS",
+            "parameters": {
+              "engine": "orient-express",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=orient-express; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          },
+          {
+            "id": "PW-055",
+            "status": "PASS",
+            "parameters": {
+              "engine": "star-wars",
+              "stage": "restart",
+              "content": "short",
+              "device": "mobile"
+            },
+            "evidence": "engine=star-wars; boot=true; tokenSafe=true; standard=true; expectedVersion=1.16.19; stage=restart; content=short; device=mobile"
+          }
+        ],
+        "limitations": [
+          "Každý engine je navíc otevřen v Chromium galerii; pairwise validátor kontroluje jeho konkrétní chráněný export a společné regresní invarianty."
+        ]
+      }
+    },
+    {
+      "name": "visual",
+      "status": "FAIL",
+      "findings": [
+        {
+          "gate": "visual",
+          "severity": "BLOCKER",
+          "code": "REQUIRED_GATE_MISSING",
+          "message": "Povinná brána visual nemá výsledek z aktuálního průchodu.",
+          "evidence": ""
+        }
+      ],
+      "details": {}
+    },
+    {
+      "name": "critical",
+      "status": "FAIL",
+      "findings": [
+        {
+          "gate": "critical",
+          "severity": "BLOCKER",
+          "code": "REQUIRED_GATE_MISSING",
+          "message": "Povinná brána critical nemá výsledek z aktuálního průchodu.",
+          "evidence": ""
+        }
+      ],
+      "details": {}
+    }
+  ],
+  "counts": {
+    "PASS": 4,
+    "WARN": 0,
+    "FAIL": 3
+  },
+  "blockerAndMajor": [
+    {
+      "gate": "project",
+      "severity": "BLOCKER",
+      "code": "REQUIRED_GATE_MISSING",
+      "message": "Povinná brána project nemá výsledek z aktuálního průchodu.",
+      "evidence": ""
+    },
+    {
+      "gate": "visual",
+      "severity": "BLOCKER",
+      "code": "REQUIRED_GATE_MISSING",
+      "message": "Povinná brána visual nemá výsledek z aktuálního průchodu.",
+      "evidence": ""
+    },
+    {
+      "gate": "critical",
+      "severity": "BLOCKER",
+      "code": "REQUIRED_GATE_MISSING",
+      "message": "Povinná brána critical nemá výsledek z aktuálního průchodu.",
+      "evidence": ""
+    }
+  ],
+  "minor": [],
+  "skipped": [],
+  "manualApproval": {
+    "present": false,
+    "valid": false,
+    "manualVisualReview": false,
+    "deployedSmokeTest": false,
+    "reviewer": null
+  },
+  "automaticVerdict": "NOT_READY",
+  "verdict": "NOT_READY"
+}

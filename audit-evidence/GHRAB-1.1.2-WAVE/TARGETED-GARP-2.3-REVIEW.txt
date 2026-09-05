@@ -1,0 +1,45 @@
+TARGETED GARP 2.3 REVIEW - Platform 1.1.2 migration
+Synthetic data only. No real student data used.
+
+Local automated evidence:
+- qa:garp23:critical PASS
+- qa:garp23:privacy PASS: privacy lifecycle 28/28 + suite-session 27/27
+- qa:garp23 PASS 48/48 (fresh canary id 8d0643dc0a41 in final recorded run)
+- qa:garp legacy gate PASS 49/49
+- qa:security PASS, qa:xss PASS, secret-pattern scan inside GARP 2.3 PASS
+
+Relevant SIM status for this release-wave candidate:
+SIM-03 Browser Back / Restore / Reopen:
+- deterministic stale-context/pageshow + delayed-open/reload suite behavior PASS
+- unblocked real browser Back/Forward/session restore NOT TESTED because managed Chromium URLBlocklist blocks local-http runtime
+- overall release evidence: NOT TESTED for final live-browser portion
+
+SIM-04 Multi-Tab State Collision:
+- exact Platform/privacy deterministic two-context test PASS; per-tab session canary is cleared even after another tab writes the shared app ACK; write quarantine prevents resurrection
+- independent live-browser two-tab repeat requested before ecosystem GREEN
+
+SIM-07 Service Worker Update / Recovery:
+- static PWA gate PASS; precache contains application assets, not dynamic student content
+- live old-release -> new-release SW update/recovery drill NOT TESTED because local-http navigation is blocked
+
+SIM-08 Export -> Reimport -> Second User:
+- export storage-dump negative assertion PASS; import validation/canary security checks PASS
+- complete live export A -> reimport/open -> user B workflow NOT TESTED
+
+AIR / RT-09:
+- LUDUS is AI-enabled.
+- structural prompt-boundary campaign PASS across 24 synthetic variants/four mutation families in qa:garp23; hostile AI output rendering, cross-task no-context carry, interrupted/retry handling, PII preflight and attachment-name minimization are also tested in the local in-memory harness.
+- actual external Gemini provider/model behavioral AIR campaign was NOT TESTED: no real credential/provider call was used in this migration run. Under GARP 2.3 this prevents RED TEAM GREEN for an AI-enabled release.
+- no AI prompt/debug persistence writer was found; Gemini credential cleanup is part of PC-01/suite cleanup.
+
+Gate disposition for this candidate:
+SECURITY GATE: GREEN for locally executed changed-surface checks (does not imply production approval)
+PRIVACY GATE: AMBER (live SIM-03/SIM-08 and ecosystem-wide E-01 closure pending)
+RED TEAM GATE: AMBER (provider-bound behavioral AIR evidence and some live simulations pending)
+RELEASE INTEGRITY GATE: AMBER (P5 runtime/axe/Playwright/live SW evidence blocked by environment; independent review pending)
+OVERALL: AMBER
+
+Required notice:
+REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT
+TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY
+E-01 NENÍ UZAVŘEN EKOSYSTÉMOVĚ, dokud nejsou migrovány a společně otestovány všechny relevantní child aplikace.

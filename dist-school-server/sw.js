@@ -1,6 +1,6 @@
 const GHRAB_SW_CONTRACT='ghrab-service-worker-v1';
 /* GHRAB service-worker contract v1 · update activation is user-controlled. */
-const LUDUS_CACHE = "ghrab-ludus-v1.16.18";
+const LUDUS_CACHE = "ghrab-ludus-v1.16.19";
 const CACHE_PREFIXES = ["ghrab-ludus-v", "ludus-pwa-"];
 const CORE_ASSETS = [
   "./index.html",
@@ -25,9 +25,7 @@ const CORE_ASSETS = [
   "./runtime/ludus-engine-controls.css",
   "./content/engine-index.json"
 ];
-const OPTIONAL_ASSETS = [
-  "./manual/index.html"
-];
+const OPTIONAL_ASSETS = [];
 
 self.addEventListener('message', (event) => {
   if (['GHRAB_SKIP_WAITING', 'SKIP_WAITING'].includes(event.data?.type)) self.skipWaiting();
@@ -100,7 +98,7 @@ self.addEventListener('fetch', (event) => {
   const scopePath = new URL('./', self.location.href).pathname;
   if (!url.pathname.startsWith(scopePath) || request.cache === 'no-store' || isRuntimeRequest(url, scopePath)) return;
   if (request.mode === 'navigate') {
-    const fallback = url.pathname.includes('/manual/') ? './manual/index.html' : './index.html';
+    const fallback = url.pathname.includes('/manual/') ? 'manual/index.html' : './index.html';
     event.respondWith(networkFirst(request, fallback));
     return;
   }
@@ -112,6 +110,6 @@ self.addEventListener('fetch', (event) => {
 });
 
 /* GHRAB_PLATFORM_P3_START */
-const GHRAB_PLATFORM_P3_ASSETS=["./ghrab/ghrab-platform.js","./ghrab/ghrab-platform.css","./ghrab/ghrab-artifact-envelope-v1.schema.json","./ghrab/ghrab-app-registry-v2.schema.json","./ghrab/ghrab-platform-manifest-1.1.0.json","./assets/brand/school-logo.png","./ghrab-platform.consumer.json"];
-self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open("ghrab-ludus-v1.16.18");const results=await Promise.allSettled(GHRAB_PLATFORM_P3_ASSETS.map(asset=>cache.add(asset)));const failed=results.filter(item=>item.status==='rejected');if(failed.length)throw new Error('GHRAB Platform P3 precache selhal: '+failed.length);})()));
+const GHRAB_PLATFORM_P3_ASSETS=["./ghrab/ghrab-platform.js","./ghrab/ghrab-platform.css","./ghrab/ghrab-artifact-envelope-v1.schema.json","./ghrab/ghrab-app-registry-v2.schema.json","./ghrab/ghrab-platform-manifest-1.1.2.json","./assets/brand/school-logo.png","./ghrab-platform.consumer.json"];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open("ghrab-ludus-v1.16.19");const results=await Promise.allSettled(GHRAB_PLATFORM_P3_ASSETS.map(asset=>cache.add(asset)));const failed=results.filter(item=>item.status==='rejected');if(failed.length)throw new Error('GHRAB Platform P3 precache selhal: '+failed.length);})()));
 /* GHRAB_PLATFORM_P3_END */

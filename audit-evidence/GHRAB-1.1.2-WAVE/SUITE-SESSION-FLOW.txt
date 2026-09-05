@@ -1,0 +1,42 @@
+LUDUS suite-session cleanup flow (ghrab-suite-session-v1)
+
+1. Signal source
+- GHRAB Platform 1.1.2 owns/writes ghrab.platform.suite-session-generation.v1.
+- LUDUS subscribes through GHRAB_PLATFORM.session.onEnd(...,{replay:true}).
+- LUDUS also reconciles generation on storage, pageshow, focus and visible transitions so a sibling tab/shared ACK cannot make a stale tab skip cleanup.
+
+2. Signal seen
+- child writes ghrab.ludus.suite-session-status.v1 stage=signal-seen.
+- failure to persist status enters quarantine and returns ok:false.
+
+3. Quarantine + cleanup
+- writes/reads to clear-owned keys are quarantined for the ended generation, preventing stale autosave/BFCache code from restoring old data.
+- localStorage and sessionStorage owned targets are enumerated, deleted and verified.
+
+4. Failure path
+- any storage enumerate/delete/residual check failure returns ok:false.
+- stage cleanup-failed is attempted and document state is marked failed.
+- Platform handler result is failure, therefore Platform must not write the app ACK.
+
+5. Success path
+- per-tab generation marker is persisted.
+- child writes stage=cleanup-complete only after verified cleanup.
+- handler returns ok:true.
+- exact Platform 1.1.2 then writes its Platform-owned app ACK ghrab.ludus.suite-session-seen.v1.
+- child asynchronously observes the Platform ACK and advances child status to stage=acknowledged; only then may reload occur.
+
+6. Idempotency/replay
+- same tab/generation becomes idempotent through tabSeen.
+- delayed-open Platform replay cleans stale persistent data.
+- a genuinely new browsing context opened after a fully completed generation does not repeatedly delete a clean state.
+
+F-02 acknowledgement status separation:
+- suite signal exists: global generation key
+- LUDUS saw signal: child status stage=signal-seen
+- LUDUS cleanup complete: child status stage=cleanup-complete + completion timestamp
+- Platform ACK exists: Platform-owned app ACK; child status can then become acknowledged
+Local mechanism is compatible and does not patch global Platform.
+Central proof/aggregation that every child in the suite acknowledged remains an ecosystem follow-up for AI Studio/coordinator.
+
+F-03 trust boundary:
+LUDUS does not write the global suite tombstone and does not write another app's ACK. However same-origin localStorage cannot cryptographically stop a compromised sibling app/XSS from writing global lifecycle state or spoofing another app ACK. This is inherent ecosystem debt and needs a central/origin-isolation/trusted-coordinator design if stronger trust is required.

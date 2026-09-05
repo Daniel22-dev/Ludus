@@ -1,6 +1,6 @@
 {
   "name": "ludus",
-  "version": "1.16.18",
+  "version": "1.16.19",
   "description": "LUDUS — dílna výukových her (builder + samostatné enginy)",
   "type": "module",
   "scripts": {
@@ -35,8 +35,8 @@
     "qa:a11y": "node scripts/qa-p5-runtime.mjs",
     "qa:p4": "npm run qa:p5",
     "qa:p4:ci": "npm run qa:p5:ci",
-    "qa:p5": "npm run qa:lock && npm run build && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:media && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
-    "qa:p5:ci": "npm run qa:lock && npm run build && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
+    "qa:p5": "npm run qa:lock && npm run build && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
+    "qa:p5:ci": "npm run qa:lock && npm run build && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
     "test:p5": "npm run qa:p5",
     "build:unofficial": "LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs",
     "qa:runtime": "node scripts/qa-p5-runtime.mjs",
@@ -47,7 +47,9 @@
     "qa:garp": "node scripts/qa-garp-security.mjs",
     "qa:garp23": "node scripts/qa-garp23-security.mjs",
     "qa:garp23:critical": "node scripts/qa-garp23-critical.mjs",
-    "qa:garp23:privacy": "node scripts/qa-garp23-privacy-lifecycle.mjs"
+    "qa:garp23:privacy": "node scripts/qa-garp23-privacy-lifecycle.mjs && node scripts/qa-suite-session.mjs",
+    "qa:suite-session": "node scripts/qa-suite-session.mjs",
+    "qa:pc01": "node scripts/qa-pc01-suite-session.mjs"
   },
   "engines": {
     "node": ">=18"

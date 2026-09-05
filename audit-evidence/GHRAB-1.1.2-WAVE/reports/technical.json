@@ -1,0 +1,10 @@
+{
+  "name": "technical",
+  "status": "PASS",
+  "findings": [],
+  "details": {
+    "packageVersion": "1.16.19",
+    "node": "v22.16.0",
+    "filesChecked": 203
+  }
+}

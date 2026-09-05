@@ -1,0 +1,9 @@
+{
+  "name": "security",
+  "status": "PASS",
+  "findings": [],
+  "details": {
+    "filesChecked": 139,
+    "projectValidator": null
+  }
+}

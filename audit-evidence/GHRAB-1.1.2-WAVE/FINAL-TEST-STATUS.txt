@@ -1,0 +1,50 @@
+FINAL TEST STATUS - LUDUS 1.16.19 / Platform 1.1.2
+
+PASS
+- npm test: PASS (11 engines; validation OK; optional owner-controlled Hogwarts media warnings only)
+- npm run qa:platform: PASS 154/154
+- npm run qa:quality: PASS 102/102, warnings 0
+  entryCriticalBytes 517939 <= 522000
+  precacheBytes 1184529 <= 1220000
+  budgets were NOT increased
+- npm run qa:pc01: PASS 93/93
+- npm run qa:suite-session: PASS 27/27
+- npm run qa:security: PASS, 0 findings
+- npm run qa:pwa: PASS, 0 findings
+- npm run qa:xss: PASS, no regression (known unsafe-inline compatibility limitation remains documented)
+- npm run qa:garp23:critical: PASS
+- npm run qa:garp23:privacy: PASS (28/28 privacy lifecycle + 27/27 suite session)
+- npm run qa:garp23: PASS 48/48, synthetic canary only
+- npm run qa:garp: PASS 49/49
+- npm run qa:browser: PASS, real Chromium in-memory/CDP harness
+- npm run qa:media: PASS
+- npm run qa:technical: PASS, 0 findings
+- npm run qa:combinatorial: PASS, 55/660 selected pairwise scenarios, pairwise 100%
+- npm run qa:lock: PASS, 4 direct dependencies / 44 locked packages
+- npm run test:reporter: static/report checks PASS 53/53; browser reporter part separately NOT TESTED due URLBlocklist
+- npm run build:school-server: PASS
+
+MANDATORY NEGATIVE CONTROL
+- Disposable copy of runtime/ludus-privacy.js replaces suite onEnd cleanup handler with unconditional success.
+- Same open-child test then demonstrates expected FAIL semantics: synthetic canary remains while Platform ACK can be written.
+- Disposable mutation is removed.
+- Clean source rerun PASS 27/27.
+- This proves the suite regression would detect a disabled/bypassed cleanup handler.
+
+NOT TESTED / ENVIRONMENT LIMITATION
+- npm run qa:runtime: NOT TESTED; Chromium Page.navigate -> net::ERR_BLOCKED_BY_ADMINISTRATOR. Managed policy has URLBlocklist ["*"].
+- npm run qa:reflow / qa:a11y runtime path: NOT TESTED for same local-http block.
+- npm run qa:axe: NOT TESTED; report status not-ready-environment, axe-core 4.12.1 not installed locally.
+- npm run qa:critical: NOT TESTED; Playwright package unavailable.
+- npm run qa:visual: NOT TESTED; Playwright package unavailable.
+- npm ci --offline: environment cannot restore dependencies because xmlchars 2.2.0 tarball is not cached (ENOTCACHED). A bounded online npm-ci attempt also could not complete in the managed environment.
+- full external-provider Gemini AIR behavior: NOT TESTED; no real secret/provider request was used.
+- live service-worker update/recovery (SIM-07): NOT TESTED.
+- complete live export->reimport->second-user (SIM-08): NOT TESTED.
+
+RELEASE GATES
+- npm run qa:p5 composite: NOT READY; stops at qa:runtime due managed URLBlocklist.
+- direct P5 release certification: 42/43, status FAILED/NOT READY solely because qa-p5-runtime-report.json is absent after environment-blocked runtime navigation.
+- direct P5 acceptance: 17/19, NOT READY because runtime report is absent and P5 release report is not passed.
+- qa:report: NOT_READY.
+These are not promoted to PASS and are not interpreted as a demonstrated application security failure.

@@ -1,0 +1,62 @@
+PC-01 PATH COVERAGE / STORAGE OWNERSHIP - LUDUS 1.16.19
+Platform: GHRAB Platform 1.1.2
+Scope searched: src/index.html, runtime/*.js, engines/*.html, public/manual, service worker, consumer/data manifests, build/QA scripts.
+Search classes: localStorage, sessionStorage, IndexedDB/IDB, Cache Storage, credentials/API keys, AI prompt/debug persistence, Studio handoff, autosave/recovery/backup, export/import, privacy/endWork.
+Automated conformance: npm run qa:pc01 -> 93/93 PASS.
+
+1) localStorage - LUDUS-owned, clearOnEndWork=true
+- canonical prefix: ghrab.ludus.* (except lifecycle exclusions below)
+- legacy/builder: ludus_*, ludus.*
+- engine/storage families: chronos_*, jumanji_*, relic_hunter_*, hvezdni_rytiri_*
+- exact engine keys: hga_v2; laughworks_save_v1; kostka_osudu_save_v1; lotr_quest_v1; ludus_case_save_v1; ludus_case_snd; ludus_case_imgs_v1; ludus_frostline_save; ludus_frostline_images; ludus_escape_v1; ludus_escape_imgs
+- builder settings covered by ludus_*: ludus_gemini_model; ludus_langs; ludus_sound; ludus_theme; ludus_intro_done; ludus_ui_lang
+- migration backup under ghrab.ludus.* remains deliberately clearable because it can contain old sensitive values.
+
+2) sessionStorage - LUDUS-owned, clearOnEndWork=true
+- same engine/canonical families as above
+- ludusTeacherMode
+- Gemini session credential (see credentials)
+- engine localStorage API is intercepted in engine scope and sensitive player/progress/image keys are redirected to sessionStorage; stale persistent engine keys are scrubbed before engine execution.
+
+3) credentials/API keys
+- legacy local: ludus_gemini_key; canonical cleanup compatibility: ghrab.ludus.gemini_key
+- current session: ludus_gemini_key_session; canonical cleanup compatibility: ghrab.ludus.gemini_key_session
+- builder migrates a legacy persistent key to session and removes the local copy.
+- suite/endWork cleanup includes both credential paths.
+
+4) security lifecycle metadata - intentionally NOT cleared
+- global generation: ghrab.platform.suite-session-generation.v1 (Platform-owned; LUDUS read/listen only)
+- Platform LUDUS ACK: ghrab.ludus.suite-session-seen.v1 (Platform-owned)
+- child status: ghrab.ludus.suite-session-status.v1 (LUDUS-owned audit status)
+- per-tab baseline: ghrab.ludus.suite-session-tab-seen.v1 (LUDUS-owned session control)
+- migration marker: ghrab.ludus.migration.p2-storage-namespace-v1.done
+These controls are excluded from content cleanup to preserve lifecycle replay/idempotency.
+
+5) nonpersonal settings - intentionally NOT cleared
+- ghrab-manual-progress-ludus-*
+- ghrab-manual-theme
+Manifest marks these as non-content manual state, clearOnEndWork=false.
+
+6) IndexedDB
+No application IndexedDB writer was found in builder/runtime/engines. qa:pc01 verifies this scope.
+
+7) Cache Storage / service worker
+Application Cache Storage is static/application cache only; no user/student content writer was found. Manifest clearOnEndWork=false. Live SW update/recovery remains a separate SIM-07 runtime test requirement.
+
+8) AI prompt/debug persistence
+No localStorage/sessionStorage writer for AI prompt/debug contents was found. AI requests are assembled/transmitted at request time. GARP structural AI tests verify untrusted-data boundaries. Credentials are covered above.
+
+9) Studio handoff / shared state NOT owned by LUDUS
+- ghrab.platform.handoff.v2: Platform/Studio bridge contract
+- ghrab.handoff.v1: legacy Studio bridge compatibility
+- ghrab.pilot.events.v2: AI Studio legacy pilot event state
+LUDUS must not blindly erase these namespaces during child cleanup. The manifest lists them as sharedStateNotOwnedByLudus.
+
+10) export/import
+Exports are explicit user actions. Automated privacy test verifies browser storage is not serialized wholesale. Imports have structural/size/prototype validation. Full SIM-08 export->reimport->second-user live-browser drill remains NOT TESTED in this environment.
+
+11) autosave/recovery/backup
+Engine progress/save/image writers are the storage paths listed above and are covered by the privacy policy. No separate builder content autosave writer was found. Platform migration backup is covered as noted above.
+
+12) cleanup implementation
+LUDUSPrivacy.clearStoreVerified() enumerates owned targets, deletes, verifies each removal, then checks for residual matching keys. Storage enumerate/delete/verify errors produce cleanup failure. endWork() and suite handler no longer swallow such failure as success.

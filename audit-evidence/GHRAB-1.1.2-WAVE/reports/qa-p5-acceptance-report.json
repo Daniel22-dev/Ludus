@@ -1,0 +1,92 @@
+{
+  "schema": "ghrab-p5-acceptance-result-v2",
+  "appId": "ludus",
+  "appVersion": "1.16.19",
+  "stage": "P5-R2",
+  "summary": {
+    "total": 19,
+    "passed": 17,
+    "failed": 2
+  },
+  "status": "failed",
+  "passed": [
+    {
+      "id": "acceptance.source",
+      "detail": "release-acceptance.json"
+    },
+    {
+      "id": "acceptance.schema",
+      "detail": "ghrab-release-acceptance-v1"
+    },
+    {
+      "id": "acceptance.stage",
+      "detail": "P5"
+    },
+    {
+      "id": "acceptance.appId",
+      "detail": "ludus"
+    },
+    {
+      "id": "acceptance.version",
+      "detail": "1.16.19 vs 1.16.19"
+    },
+    {
+      "id": "acceptance.server-optional",
+      "detail": "false"
+    },
+    {
+      "id": "acceptance.server-status",
+      "detail": "prepared-not-connected"
+    },
+    {
+      "id": "acceptance.github-pending",
+      "detail": "not-yet-uploaded"
+    },
+    {
+      "id": "file.dist/config/release-acceptance.json",
+      "detail": "dist/config/release-acceptance.json"
+    },
+    {
+      "id": "file.dist/qa-p3-browser-report.json",
+      "detail": "dist/qa-p3-browser-report.json"
+    },
+    {
+      "id": "status.dist/qa-p3-browser-report.json",
+      "detail": "passed"
+    },
+    {
+      "id": "file.dist/qa-p5-release-report.json",
+      "detail": "dist/qa-p5-release-report.json"
+    },
+    {
+      "id": "source.no-secret-files",
+      "detail": ""
+    },
+    {
+      "id": "ludus.official-mode",
+      "detail": "registry"
+    },
+    {
+      "id": "ludus.unofficial-mode",
+      "detail": "registry"
+    },
+    {
+      "id": "ludus.public-default",
+      "detail": "unofficial"
+    },
+    {
+      "id": "ludus.private-official-build",
+      "detail": "package.json"
+    }
+  ],
+  "failed": [
+    {
+      "id": "file.dist/qa-p5-runtime-report.json",
+      "detail": "dist/qa-p5-runtime-report.json"
+    },
+    {
+      "id": "status.dist/qa-p5-release-report.json",
+      "detail": "failed"
+    }
+  ]
+}

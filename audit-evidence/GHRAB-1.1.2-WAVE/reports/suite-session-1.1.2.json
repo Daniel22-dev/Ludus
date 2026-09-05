@@ -1,0 +1,262 @@
+{
+  "schema": "ghrab-suite-session-qa-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.19",
+  "platformVersion": "1.1.2",
+  "contract": "ghrab-suite-session-v1",
+  "syntheticCanary": "GARP-STUDENT-CANARY-LUDUS-SUITE-112",
+  "generatedAt": "2026-09-05T19:35:01.383Z",
+  "checks": [
+    {
+      "id": "suite.open.signal-created",
+      "ok": true,
+      "detail": "1788636901213-qxfcz2vq"
+    },
+    {
+      "id": "suite.open.local-cleared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.open.session-cleared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.open.ack-after-cleanup",
+      "ok": true,
+      "detail": "1788636901213-qxfcz2vq / acknowledged"
+    },
+    {
+      "id": "suite.open.child-status-distinguishable",
+      "ok": true,
+      "detail": "{\"schema\":\"ghrab-suite-session-child-ack-v1\",\"contract\":\"ghrab-suite-session-v1\",\"appId\":\"ludus\",\"appVersion\":\"1.16.19\",\"generation\":\"1788636901213-qxfcz2vq\",\"stage\":\"acknowledged\",\"scope\":\"builder\",\"updatedAt\":\"2026-09-05T19:35:01.213Z\",\"signalSeenAt\":\"2026-09-05T19:35:01.213Z\",\"reason\":\"qa-open-child\",\"replay\":false,\"cleanupCompletedAt\":\"2026-09-05T19:35:01.214Z\",\"localCount\":2,\"sessionCount\":1,\"failures\":[],\"acknowledgedAt\":\"2026-09-05T19:35:01.216Z\"}"
+    },
+    {
+      "id": "suite.open.write-quarantine",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.delayed.pending-replayed",
+      "ok": true,
+      "detail": "1788636901231-8eh1fae0 / 1788636901231-8eh1fae0"
+    },
+    {
+      "id": "suite.delayed.cleanup",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.delayed.reload-no-repeat",
+      "ok": true,
+      "detail": "2026-09-05T19:35:01.232Z / 2026-09-05T19:35:01.232Z"
+    },
+    {
+      "id": "suite.delayed.tab-seen-persists",
+      "ok": true,
+      "detail": "1788636901231-8eh1fae0"
+    },
+    {
+      "id": "suite.multitab.a-acknowledged",
+      "ok": true,
+      "detail": "1788636901283-n6919uan"
+    },
+    {
+      "id": "suite.multitab.a-session-cleared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.multitab.b-session-cleared-despite-shared-ack",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.multitab.b-tab-seen",
+      "ok": true,
+      "detail": "1788636901283-n6919uan"
+    },
+    {
+      "id": "suite.multitab.no-resurrection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.bfcache.helper-acked",
+      "ok": true,
+      "detail": "1788636901316-rsuk1fvh"
+    },
+    {
+      "id": "suite.bfcache.pageshow-cleans-stale",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.bfcache.stale-tab-seen",
+      "ok": true,
+      "detail": "1788636901316-rsuk1fvh"
+    },
+    {
+      "id": "suite.failclosed.residual-really-present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.failclosed.no-false-ack",
+      "ok": true,
+      "detail": " / 1788636901349-ewajirgf"
+    },
+    {
+      "id": "suite.failclosed.status-failed",
+      "ok": true,
+      "detail": "{\"schema\":\"ghrab-suite-session-child-ack-v1\",\"contract\":\"ghrab-suite-session-v1\",\"appId\":\"ludus\",\"appVersion\":\"1.16.19\",\"generation\":\"1788636901349-ewajirgf\",\"stage\":\"cleanup-failed\",\"scope\":\"builder\",\"updatedAt\":\"2026-09-05T19:35:01.349Z\",\"signalSeenAt\":\"2026-09-05T19:35:01.349Z\",\"reason\":\"qa-fail-closed\",\"replay\":false,\"cleanupAttemptedAt\":\"2026-09-05T19:35:01.349Z\",\"failures\":[\"localStorage:ghrab.ludus.fail-canary:synthetic-remove-failure:ghrab.ludus.fail-canary\",\"localStorage:ghrab.ludus.fail-canary:residual\"],\"localCount\":1,\"sessionCount\":1}"
+    },
+    {
+      "id": "suite.failclosed.quarantine-active",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.negative-control.same-test-fails",
+      "ok": true,
+      "detail": "sameTestWouldPass=false"
+    },
+    {
+      "id": "suite.negative-control.demonstrates-false-ack-risk",
+      "ok": true,
+      "detail": "residual=true ack=true"
+    },
+    {
+      "id": "suite.f03.no-global-generation-write",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.f03.no-other-app-ack-write",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "suite.platform.exact-contract",
+      "ok": true,
+      "detail": "1.1.2/ghrab-suite-session-v1"
+    }
+  ],
+  "summary": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0
+  },
+  "evidence": {
+    "open": {
+      "generation": "1788636901213-qxfcz2vq",
+      "status": {
+        "schema": "ghrab-suite-session-child-ack-v1",
+        "contract": "ghrab-suite-session-v1",
+        "appId": "ludus",
+        "appVersion": "1.16.19",
+        "generation": "1788636901213-qxfcz2vq",
+        "stage": "acknowledged",
+        "scope": "builder",
+        "updatedAt": "2026-09-05T19:35:01.213Z",
+        "signalSeenAt": "2026-09-05T19:35:01.213Z",
+        "reason": "qa-open-child",
+        "replay": false,
+        "cleanupCompletedAt": "2026-09-05T19:35:01.214Z",
+        "localCount": 2,
+        "sessionCount": 1,
+        "failures": [],
+        "acknowledgedAt": "2026-09-05T19:35:01.216Z"
+      },
+      "reloads": 1
+    },
+    "delayed": {
+      "generation": "1788636901231-8eh1fae0",
+      "statusBeforeReload": {
+        "schema": "ghrab-suite-session-child-ack-v1",
+        "contract": "ghrab-suite-session-v1",
+        "appId": "ludus",
+        "appVersion": "1.16.19",
+        "generation": "1788636901231-8eh1fae0",
+        "stage": "acknowledged",
+        "scope": "builder",
+        "updatedAt": "2026-09-05T19:35:01.232Z",
+        "signalSeenAt": "2026-09-05T19:35:01.232Z",
+        "reason": "pending-suite-end",
+        "replay": true,
+        "cleanupCompletedAt": "2026-09-05T19:35:01.232Z",
+        "localCount": 2,
+        "sessionCount": 0,
+        "failures": [],
+        "acknowledgedAt": "2026-09-05T19:35:01.232Z"
+      },
+      "statusAfterReload": {
+        "schema": "ghrab-suite-session-child-ack-v1",
+        "contract": "ghrab-suite-session-v1",
+        "appId": "ludus",
+        "appVersion": "1.16.19",
+        "generation": "1788636901231-8eh1fae0",
+        "stage": "acknowledged",
+        "scope": "builder",
+        "updatedAt": "2026-09-05T19:35:01.232Z",
+        "signalSeenAt": "2026-09-05T19:35:01.232Z",
+        "reason": "pending-suite-end",
+        "replay": true,
+        "cleanupCompletedAt": "2026-09-05T19:35:01.232Z",
+        "localCount": 2,
+        "sessionCount": 0,
+        "failures": [],
+        "acknowledgedAt": "2026-09-05T19:35:01.232Z"
+      },
+      "reloadCleanupRuns": 0
+    },
+    "multitab": {
+      "generation": "1788636901283-n6919uan",
+      "ackAfterA": "1788636901283-n6919uan",
+      "aTab": "1788636901283-n6919uan",
+      "bTab": "1788636901283-n6919uan"
+    },
+    "bfcache": {
+      "generation": "1788636901316-rsuk1fvh",
+      "helperCleanupRuns": 1
+    },
+    "failClosed": {
+      "generation": "1788636901349-ewajirgf",
+      "status": {
+        "schema": "ghrab-suite-session-child-ack-v1",
+        "contract": "ghrab-suite-session-v1",
+        "appId": "ludus",
+        "appVersion": "1.16.19",
+        "generation": "1788636901349-ewajirgf",
+        "stage": "cleanup-failed",
+        "scope": "builder",
+        "updatedAt": "2026-09-05T19:35:01.349Z",
+        "signalSeenAt": "2026-09-05T19:35:01.349Z",
+        "reason": "qa-fail-closed",
+        "replay": false,
+        "cleanupAttemptedAt": "2026-09-05T19:35:01.349Z",
+        "failures": [
+          "localStorage:ghrab.ludus.fail-canary:synthetic-remove-failure:ghrab.ludus.fail-canary",
+          "localStorage:ghrab.ludus.fail-canary:residual"
+        ],
+        "localCount": 1,
+        "sessionCount": 1
+      },
+      "residual": "GARP-STUDENT-CANARY-LUDUS-SUITE-112"
+    },
+    "negativeControl": {
+      "mutation": "suite onEnd handler replaced by unconditional success in disposable copy",
+      "sourceSha256": "32581c51782d3d8a70c2d8bc4c5655f94db63cf1d0d22a917bf1842dcd9ab2a2",
+      "mutatedSha256": "3267c30cc1453d631b26c8e38f9dc79d94d7272f34e05340c54924fcbdd34d07",
+      "sameTestWouldPass": false,
+      "residualCanary": true,
+      "acknowledged": true
+    }
+  },
+  "status": "passed",
+  "limitations": [
+    "Deterministic VM harness exercises the exact vendored Platform 1.1.2 and LUDUS privacy runtime. Real-browser coverage is reported separately by qa:browser/qa:runtime and environment-limited tests must not be promoted to PASS.",
+    "Same-origin trust cannot cryptographically prevent another compromised first-party app/XSS from writing the global tombstone or another app ACK; this remains an ecosystem trust-boundary follow-up."
+  ]
+}

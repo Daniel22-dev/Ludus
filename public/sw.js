@@ -1,6 +1,6 @@
 const GHRAB_SW_CONTRACT='ghrab-service-worker-v1';
 /* GHRAB service-worker contract v1 · update activation is user-controlled. */
-const LUDUS_CACHE = "ghrab-ludus-v1.16.18";
+const LUDUS_CACHE = "ghrab-ludus-v1.16.19";
 const CACHE_PREFIXES = ["ghrab-ludus-v", "ludus-pwa-"];
 const CORE_ASSETS = [
   "./index.html",
@@ -25,9 +25,7 @@ const CORE_ASSETS = [
   "./runtime/ludus-engine-controls.css",
   "./content/engine-index.json"
 ];
-const OPTIONAL_ASSETS = [
-  "./manual/index.html"
-];
+const OPTIONAL_ASSETS = [];
 
 self.addEventListener('message', (event) => {
   if (['GHRAB_SKIP_WAITING', 'SKIP_WAITING'].includes(event.data?.type)) self.skipWaiting();
@@ -100,7 +98,7 @@ self.addEventListener('fetch', (event) => {
   const scopePath = new URL('./', self.location.href).pathname;
   if (!url.pathname.startsWith(scopePath) || request.cache === 'no-store' || isRuntimeRequest(url, scopePath)) return;
   if (request.mode === 'navigate') {
-    const fallback = url.pathname.includes('/manual/') ? './manual/index.html' : './index.html';
+    const fallback = url.pathname.includes('/manual/') ? 'manual/index.html' : './index.html';
     event.respondWith(networkFirst(request, fallback));
     return;
   }

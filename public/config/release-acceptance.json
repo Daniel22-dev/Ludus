@@ -2,8 +2,8 @@
   "schema": "ghrab-release-acceptance-v1",
   "stage": "P5",
   "appId": "ludus",
-  "appVersion": "1.16.18",
-  "releaseStatus": "security-candidate-amber",
+  "appVersion": "1.16.19",
+  "releaseStatus": "platform-1.1.2-wave-candidate-amber",
   "primaryRuntime": {
     "mode": "standalone-github-pages",
     "serverRequired": false,
@@ -53,13 +53,13 @@
     "required": true,
     "scriptsExecuted": true,
     "transport": "mixed-in-memory-CDP; local-http blocked-by-managed-URLBlocklist",
-    "note": "Phase C 1.16.18: qa:browser PASS and GARP 2.3 in-memory browser harness PASS; deterministic A/B privacy lifecycle 28/28 PASS. Full local-http runtime/axe/SW/back-restore on the exact fixed candidate is blocked by managed Chromium URLBlocklist and must be repeated by Claude 2 in an unblocked browser."
+    "note": "Platform 1.1.2 release-wave candidate: qa:browser in-memory Chromium PASS; deterministic privacy lifecycle and exact-vendor suite-session harness PASS, including open-child, delayed replay, multi-tab, BFCache/pageshow, fail-closed and mandatory negative control. Local-http runtime, live service-worker update/recovery, axe and Playwright visual/critical flows remain NOT TESTED in this managed environment and require independent repeat in an unblocked browser."
   },
   "garp": {
     "version": "2.3",
-    "round": "C-1 / candidate-for-Claude-2",
+    "round": "Platform-1.1.2-wave / candidate-for-independent-Claude",
     "studentData": "synthetic-only",
-    "independentReview": "round-1-completed; exact-1.16.18-candidate-pending-second-review",
+    "independentReview": "pending",
     "overall": "AMBER"
   }
 }

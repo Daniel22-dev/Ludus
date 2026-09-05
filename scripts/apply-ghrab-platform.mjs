@@ -228,7 +228,8 @@ const integrationManifest = {
   artifactContracts: consumer.artifact,
   storagePrefix: `ghrab.${consumer.appId}.`,
   cacheName: consumer.cache.name,
-  capabilities: ['ghrab-platform-v1','canonical-branding','theme-contract-v1','storage-namespace-v1','artifact-envelope-v1','sw-contract-v1','a11y-contract-v1','performance-budget-v1','lazy-modules-v1'],
+  capabilities: ['ghrab-platform-v1','ghrab-suite-session-v1','canonical-branding','theme-contract-v1','storage-namespace-v1','artifact-envelope-v1','sw-contract-v1','a11y-contract-v1','performance-budget-v1','lazy-modules-v1'],
+  suiteSession: { contract: 'ghrab-suite-session-v1', generationKey: 'ghrab.platform.suite-session-generation.v1', acknowledgementKey: `ghrab.${consumer.appId}.suite-session-seen.v1` },
   quality: consumer.quality,
   artifacts: release.artifacts,
 };

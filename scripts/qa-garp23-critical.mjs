@@ -23,7 +23,7 @@ add('ai.attachment-name-hardcoded',/name:'material'/.test(ai)&&!ai.includes("nam
 add('import.material-central-normalizer',/studioImportMaterial[\s\S]*normalizeStations\(rawStations/.test(src));
 add('import.content-central-normalizer',/studioImportContent[\s\S]*normalizeStations\(rawStations/.test(src));
 add('import.handoff-structural-validation',/async function studioImportMaterial\(m\)\{\s*m=studioValidateImportTree\(m\)/.test(src)&&/async function studioImportContent\(v2\)\{\s*v2=studioValidateImportTree\(v2\)/.test(src));
-add('privacy.shared-device-isolation',privacy.includes('function installEngineSessionIsolation()')&&privacy.includes('const engineIsolation=installEngineSessionIsolation();')&&privacy.includes('function endWork(options={})'));
+add('privacy.shared-device-isolation',privacy.includes('function installStoragePolicy()')&&privacy.includes('function clearStoreVerified(')&&privacy.includes('async function handleSuiteSessionEnd(')&&privacy.includes('function endWork(options={})'));
 
 const failed=checks.filter(x=>!x.ok);
 console.log(JSON.stringify({schema:'ghrab-garp23-critical-v1',target:path.basename(root),total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks},null,2));

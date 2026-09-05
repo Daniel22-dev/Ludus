@@ -1,8 +1,8 @@
 {
   "schema": "ghrab-data-manifest-v1",
   "appId": "ludus",
-  "appVersion": "1.16.18",
-  "manifestVersion": 4,
+  "appVersion": "1.16.19",
+  "manifestVersion": 5,
   "dataCategories": [
     "settings",
     "application-content",
@@ -28,13 +28,19 @@
         "hga_v2",
         "laughworks_save_v1",
         "kostka_osudu_save_v1",
+        "lotr_quest_v1",
         "relic_hunter_*",
         "hvezdni_rytiri_*"
+      ],
+      "excludePatterns": [
+        "ghrab.ludus.suite-session-seen.v1",
+        "ghrab.ludus.suite-session-status.v1",
+        "ghrab.ludus.migration.p2-storage-namespace-v1.done"
       ],
       "sensitivity": "potentially-personal",
       "authority": "client",
       "clearOnEndWork": true,
-      "purpose": "builder preferences plus legacy engine keys retained only as cleanup targets; engine player/progress writes are redirected to sessionStorage in 1.16.18"
+      "purpose": "Builder settings and all legacy/canonical LUDUS content namespaces. Platform migration backup remains in scope and is deleted because it may contain the same sensitive legacy values."
     },
     {
       "kind": "sessionStorage",
@@ -43,34 +49,83 @@
         "ghrab.ludus.*",
         "ludus_*",
         "ludus.*",
+        "chronos_*",
+        "jumanji_*",
+        "hga_v2",
+        "laughworks_save_v1",
+        "kostka_osudu_save_v1",
+        "lotr_quest_v1",
+        "relic_hunter_*",
+        "hvezdni_rytiri_*",
         "ludusTeacherMode"
+      ],
+      "excludePatterns": [
+        "ghrab.ludus.suite-session-tab-seen.v1"
       ],
       "sensitivity": "confidential",
       "authority": "client",
       "clearOnEndWork": true,
-      "purpose": "tab-scoped engine identity/progress and session UI state"
+      "purpose": "Tab-scoped engine identity/progress, uploaded engine images and session UI state."
     },
     {
       "kind": "localStorage",
       "category": "credential",
       "patterns": [
-        "ghrab.ludus.gemini_key",
-        "ghrab.ludus.gemini_key_session"
+        "ludus_gemini_key",
+        "ghrab.ludus.gemini_key"
       ],
       "sensitivity": "secret",
       "authority": "client-direct-mode-only",
-      "clearOnEndWork": true
+      "clearOnEndWork": true,
+      "purpose": "Legacy persistent Gemini key is migration/cleanup-only; current UI moves it to session and removes the persistent copy."
     },
     {
       "kind": "sessionStorage",
       "category": "credential",
       "patterns": [
-        "ghrab.ludus.gemini_key",
+        "ludus_gemini_key_session",
         "ghrab.ludus.gemini_key_session"
       ],
       "sensitivity": "secret",
       "authority": "client-direct-mode-only",
-      "clearOnEndWork": true
+      "clearOnEndWork": true,
+      "purpose": "Session-only Gemini credential used for direct provider mode."
+    },
+    {
+      "kind": "localStorage",
+      "category": "nonpersonal-settings",
+      "patterns": [
+        "ghrab-manual-progress-ludus-*",
+        "ghrab-manual-theme"
+      ],
+      "sensitivity": "non-content-settings",
+      "authority": "client",
+      "clearOnEndWork": false,
+      "purpose": "Interactive manual completion state and theme; contains no student/work content."
+    },
+    {
+      "kind": "localStorage",
+      "category": "security-lifecycle-control",
+      "patterns": [
+        "ghrab.ludus.suite-session-seen.v1",
+        "ghrab.ludus.suite-session-status.v1",
+        "ghrab.ludus.migration.p2-storage-namespace-v1.done"
+      ],
+      "sensitivity": "security-metadata",
+      "authority": "platform-or-child-as-declared",
+      "clearOnEndWork": false,
+      "purpose": "Platform ACK, child audit status and storage migration tombstone required to make replay/idempotency safe."
+    },
+    {
+      "kind": "sessionStorage",
+      "category": "security-lifecycle-control",
+      "patterns": [
+        "ghrab.ludus.suite-session-tab-seen.v1"
+      ],
+      "sensitivity": "security-metadata",
+      "authority": "child",
+      "clearOnEndWork": false,
+      "purpose": "Per-browsing-context generation baseline used to catch suspended/BFCache/multi-tab contexts after suite end."
     },
     {
       "kind": "cacheStorage",
@@ -103,14 +158,19 @@
   "deletion": {
     "supported": true,
     "clientVerified": true,
-    "control": "LUDUSPrivacy.endWork()"
+    "control": "LUDUSPrivacy.endWork()",
+    "suiteControl": "LUDUSPrivacy.handleSuiteSessionEnd()",
+    "acknowledgeOnlyAfterVerifiedCleanup": true
   },
   "sharedDevice": {
     "supported": true,
     "defaultInSchoolProfile": true,
     "control": "LUDUSPrivacy.endWork()",
+    "suiteSessionContract": "ghrab-suite-session-v1",
     "isolation": "engine player identity/progress is tab/session scoped; legacy persistent engine keys are scrubbed before engine execution",
-    "simultaneousTabs": "isolated by sessionStorage per browsing context"
+    "simultaneousTabs": "per-tab suite generation baseline plus write quarantine prevents stale tabs/BFCache from restoring old content",
+    "replay": "platform pending replay plus child pageshow/focus/storage reconciliation",
+    "failClosed": true
   },
   "storageNamespace": {
     "schema": "ghrab-storage-namespace-v1",
@@ -127,5 +187,44 @@
     ],
     "acceptsLegacyJson": true,
     "checksumRequiredForEnvelope": true
-  }
+  },
+  "sessionLifecycle": {
+    "contract": "ghrab-suite-session-v1",
+    "generationKey": "ghrab.platform.suite-session-generation.v1",
+    "platformAcknowledgementKey": "ghrab.ludus.suite-session-seen.v1",
+    "childStatusKey": "ghrab.ludus.suite-session-status.v1",
+    "tabSeenKey": "ghrab.ludus.suite-session-tab-seen.v1",
+    "ownership": {
+      "generationKey": "platform-global-read-only-for-ludus",
+      "platformAcknowledgementKey": "platform",
+      "childStatusKey": "ludus",
+      "tabSeenKey": "ludus"
+    }
+  },
+  "sharedStateNotOwnedByLudus": [
+    {
+      "kind": "localStorage",
+      "key": "ghrab.platform.suite-session-generation.v1",
+      "owner": "GHRAB Platform",
+      "ludusAccess": "read/listen-only"
+    },
+    {
+      "kind": "localStorage",
+      "key": "ghrab.platform.handoff.v2",
+      "owner": "GHRAB Platform/Studio bridge",
+      "ludusAccess": "through bridge contract only"
+    },
+    {
+      "kind": "localStorage",
+      "key": "ghrab.handoff.v1",
+      "owner": "legacy Studio bridge",
+      "ludusAccess": "legacy bridge compatibility only"
+    },
+    {
+      "kind": "localStorage",
+      "key": "ghrab.pilot.events.v2",
+      "owner": "AI Studio",
+      "ludusAccess": "legacy bridge event compatibility only"
+    }
+  ]
 }

@@ -168,7 +168,8 @@ try {
   const api = context.GHRAB_PLATFORM;
   check(api?.version === consumer.platform.version && api?.contract === consumer.platform.contract, 'runtime identity');
   check(api.satisfies('1.0.0', consumer.platform.requiredRange) === false, 'runtime previous platform rejected');
-  check(api.satisfies('1.1.0', consumer.platform.requiredRange) === true, 'runtime current accepted');
+  check(api.satisfies('1.1.1', consumer.platform.requiredRange) === false, 'runtime pre-1.1.2 rejected');
+  check(api.satisfies('1.1.2', consumer.platform.requiredRange) === true, 'runtime current accepted');
   check(api.satisfies('1.2.0', consumer.platform.requiredRange) === true, 'runtime n+1 accepted');
   check(api.satisfies('2.0.0', consumer.platform.requiredRange) === false, 'runtime major rejected');
   check(sampleStore.getItem(legacyKey) === 'original-value', 'storage alias reads migrated value');
@@ -200,6 +201,15 @@ try {
   check(api.performance?.contract === consumer.quality.performanceContract, 'performance runtime contract');
   check(api.modules?.contract === consumer.quality.moduleContract, 'lazy module runtime contract');
   check(typeof api.modules?.loadScript === 'function', 'lazy script loader available');
+  check(api.session?.contract === 'ghrab-suite-session-v1', 'suite-session runtime contract');
+  check(api.session?.generationKey === 'ghrab.platform.suite-session-generation.v1', 'suite-session generation key');
+  let suiteHandled = false;
+  api.session.onEnd(() => { suiteHandled = true; return { ok: true }; }, { replay: false });
+  const suiteEnd = api.session.end({ reason: 'conformance' });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  check(suiteEnd?.ok === true && Boolean(suiteEnd.generation), 'suite-session end signal');
+  check(suiteHandled === true, 'suite-session handler invoked');
+  check(api.session.seen() === suiteEnd.generation, 'suite-session ACK after successful handler');
 } catch (error) {
   check(false, 'runtime conformance', error?.stack || error);
 }
