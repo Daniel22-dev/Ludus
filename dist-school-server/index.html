@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.19" data-ghrab-access="checking" data-ghrab-platform-contract="ghrab-platform-v1" data-theme="dark" data-theme-preference="system">
-<!-- BUILD: 2026-09-05T19:38:42.960Z -->
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.20" data-ghrab-access="checking" data-ghrab-platform-contract="ghrab-platform-v1" data-theme="dark" data-theme-preference="system">
+<!-- BUILD: 2026-09-06T12:08:24.805Z -->
 <head>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; media-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'" data-ghrab-csp-profile="school-server">
 <meta charset="UTF-8">
@@ -403,7 +403,7 @@ a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacit
 
     <!-- GHRAB Platform 1.1.2 · generated -->
     <link rel="stylesheet" href="./ghrab/ghrab-platform.css" data-ghrab-platform-style>
-    <script id="ghrab-platform-config" type="application/json">{"appId":"ludus","appName":"LUDUS","appVersion":"1.16.19","requiredPlatformRange":">=1.1.2 \u003c2.0.0","platformContract":"ghrab-platform-v1","brandVersion":"1.0.0","autoFooter":true,"theme":{"supported":["light","dark","system"],"default":"system","systemFallback":"dark"},"storageMigration":{"id":"p2-storage-namespace-v1","backup":"full","mappings":[{"legacyPrefix":"ludus_","canonicalPrefix":"ghrab.ludus."},{"legacyPrefix":"ludus.","canonicalPrefix":"ghrab.ludus."}]},"bridgeMaxBytes":500000,"artifactContract":"ghrab-artifact-envelope-v1","quality":{"schema":"ghrab-quality-consumer-v1","accessibilityContract":"ghrab-a11y-v1","performanceContract":"ghrab-performance-v1","moduleContract":"ghrab-lazy-modules-v1","requireBudget":true,"performanceBudget":{"distBytes":4900000,"entryHtmlBytes":315000,"entryCriticalBytes":522000,"largestInlineScriptBytes":270000,"precacheBytes":1220000,"largestFileBytes":1050000,"duplicateLargeBytes":50000},"modules":{"required":["runtime/ludus-engine-runtime.js","content/engine-index.json"],"contentPacks":["content/engine-index.json"]},"referenceProfile":{"cpuSlowdown":4,"viewport":"1366x768","memoryClassGb":4,"viewportWidths":[1280,390,320]},"stage":"P5","a11yContract":"ghrab-a11y-v1","media":{"contract":"ludus-media-rights-records-v1","defaultProfile":"safe","officialReleaseFailClosed":true},"requireRuntimeBudget":true,"runtimeBudget":{"maxDomNodes":1000,"maxRenderReadyMs":2500,"maxJsHeapUsedBytes":8000000,"maxLayoutDurationMs":1800,"maxTaskDurationMs":2500},"finalRelease":true,"cleanInstallRequired":true,"a11yGate":"ghrab-p5-runtime-a11y-v2","releaseGate":"ghrab-p5-release-v2","runtimeAudit":{"scriptsExecuted":true,"transport":"local-http","dialogStates":true,"viewports":[1280,390,320]}}}</script>
+    <script id="ghrab-platform-config" type="application/json">{"appId":"ludus","appName":"LUDUS","appVersion":"1.16.20","requiredPlatformRange":">=1.1.2 \u003c2.0.0","platformContract":"ghrab-platform-v1","brandVersion":"1.0.0","autoFooter":true,"theme":{"supported":["light","dark","system"],"default":"system","systemFallback":"dark"},"storageMigration":{"id":"p2-storage-namespace-v1","backup":"full","mappings":[{"legacyPrefix":"ludus_","canonicalPrefix":"ghrab.ludus."},{"legacyPrefix":"ludus.","canonicalPrefix":"ghrab.ludus."}]},"bridgeMaxBytes":500000,"artifactContract":"ghrab-artifact-envelope-v1","quality":{"schema":"ghrab-quality-consumer-v1","accessibilityContract":"ghrab-a11y-v1","performanceContract":"ghrab-performance-v1","moduleContract":"ghrab-lazy-modules-v1","requireBudget":true,"performanceBudget":{"distBytes":4900000,"entryHtmlBytes":315000,"entryCriticalBytes":522000,"largestInlineScriptBytes":270000,"precacheBytes":1220000,"largestFileBytes":1050000,"duplicateLargeBytes":50000},"modules":{"required":["runtime/ludus-engine-runtime.js","content/engine-index.json"],"contentPacks":["content/engine-index.json"]},"referenceProfile":{"cpuSlowdown":4,"viewport":"1366x768","memoryClassGb":4,"viewportWidths":[1280,390,320]},"stage":"P5","a11yContract":"ghrab-a11y-v1","media":{"contract":"ludus-media-rights-records-v1","defaultProfile":"safe","officialReleaseFailClosed":true},"requireRuntimeBudget":true,"runtimeBudget":{"maxDomNodes":1000,"maxRenderReadyMs":2500,"maxJsHeapUsedBytes":8000000,"maxLayoutDurationMs":1800,"maxTaskDurationMs":2500},"finalRelease":true,"cleanInstallRequired":true,"a11yGate":"ghrab-p5-runtime-a11y-v2","releaseGate":"ghrab-p5-release-v2","runtimeAudit":{"scriptsExecuted":true,"transport":"local-http","dialogStates":true,"viewports":[1280,390,320]}}}</script>
     <script defer src="./ghrab/ghrab-platform.js" data-ghrab-platform-loader></script>
   </head>
 <body>
@@ -4072,10 +4072,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.16.19';
+const APP_VERSION='1.16.20';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
-  '1.16.19 · GARP opravné kolo: odstraněny produkční AI test hooks, přidána session izolace herního postupu, endWork, sjednocená importní validace a skutečně doručovaná CSP.',
+  '1.16.20 · Platform 1.1.2 wave: zdrojový Studio manifest je srovnán s runtime/consumer metadaty; suite-session cleanup a PC-01 ownership se nemění.',
   '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',
   '1.16.13 · CI hotfix: GitHub Actions instalují připnuté Playwright Chromium a nastaví CHROMIUM_PATH před npm test; validace pořadí kroků brání opakování chyby.',
   '1.16.12 · Sjednocený reportér: skutečné dvoukrokové stažení diagnostického ZIPu, ruční přiložení do Gmailu a bezpečně skryté pomocné video.',
@@ -4241,7 +4241,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#infoModal').cla
 {const fv=$('#footVersion');if(fv)fv.textContent='v'+APP_VERSION;}
 
 /* ===================== GHRAB AI CORE 1.0.0 · LUDUS P1 ===================== */
-const LUDUS_AI_APP=Object.freeze({id:'ludus',version:'1.16.19'});
+const LUDUS_AI_APP=Object.freeze({id:'ludus',version:'1.16.20'});
 const LUDUS_AI_SCHEMAS=Object.freeze({'ludus.topic-analysis.v1':{type:'object',additionalProperties:false,required:['label','kind','domain','operations'],properties:{label:{type:'string'},kind:{type:'string'},domain:{type:'string'},operations:{type:'object'}}},'ludus.content-pack.v1':{type:'object',additionalProperties:false,required:['stations'],properties:{stations:{type:'array'}}}});
 const LUDUS_AI_OPERATIONS=Object.freeze({schema:'ghrab-ai-operations-v1',appId:LUDUS_AI_APP.id,operations:Object.freeze({'topic-analysis':{outputSchemaId:'ludus.topic-analysis.v1',defaultModelProfile:'economy',allowedModelProfiles:['economy','balanced'],inputTypes:['text'],streaming:false,requiredCapabilities:[],expectedOutputs:1,maxOutputTokensHint:8192},'game-content-generation':{outputSchemaId:'ludus.content-pack.v1',defaultModelProfile:'balanced',allowedModelProfiles:['balanced','quality'],inputTypes:['text','image','document'],streaming:false,requiredCapabilities:[],expectedOutputs:1,maxOutputTokensHint:32768}})});
 function ludusSchoolMode(){return Boolean(window.GHRAB_PLATFORM?.isSchoolProfile?.())}
@@ -4293,7 +4293,7 @@ function startLocalReporter(context){
 async function ensurePrivacyRuntime(){
   if(window.LUDUSPrivacy)return true;
   await new Promise((resolve,reject)=>{
-    const node=document.createElement('script');node.src=PRIVACY_URL;node.dataset.ludusPrivacyRuntime='1.16.19';node.dataset.ludusPrivacyScope='builder';node.async=false;
+    const node=document.createElement('script');node.src=PRIVACY_URL;node.dataset.ludusPrivacyRuntime='1.16.20';node.dataset.ludusPrivacyScope='builder';node.async=false;
     node.onload=()=>resolve(true);node.onerror=()=>reject(new Error('LUDUS privacy runtime failed to load.'));document.head.append(node);
   });
   if(!window.LUDUSPrivacy)throw new Error('LUDUS privacy runtime unavailable after load.');

@@ -1,7 +1,7 @@
 {
   "schema": "ghrab-platform-app-integration-v1",
   "appId": "ludus",
-  "appVersion": "1.16.19",
+  "appVersion": "1.16.20",
   "contract": "ghrab-platform-v1",
   "requiredPlatformRange": ">=1.1.2 <2.0.0",
   "platformVersion": "1.1.2",
@@ -25,7 +25,7 @@
     ]
   },
   "storagePrefix": "ghrab.ludus.",
-  "cacheName": "ghrab-ludus-v1.16.19",
+  "cacheName": "ghrab-ludus-v1.16.20",
   "capabilities": [
     "ghrab-platform-v1",
     "ghrab-suite-session-v1",

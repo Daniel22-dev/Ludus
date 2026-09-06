@@ -1,8 +1,8 @@
 {
   "schema": "ludus-engine-content-pack-v1",
   "engineId": "relic-hunters-quest",
-  "appVersion": "1.16.19",
-  "generatedAt": "2026-09-05T19:38:42.960Z",
+  "appVersion": "1.16.20",
+  "generatedAt": "2026-09-06T12:08:24.805Z",
   "sourceFile": "indiana-jones.html",
   "status": "draft",
   "builderCompatible": false,

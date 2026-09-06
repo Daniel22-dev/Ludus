@@ -2,7 +2,7 @@
   "schema": "ghrab-release-acceptance-v1",
   "stage": "P5",
   "appId": "ludus",
-  "appVersion": "1.16.19",
+  "appVersion": "1.16.20",
   "releaseStatus": "platform-1.1.2-wave-candidate-amber",
   "primaryRuntime": {
     "mode": "standalone-github-pages",

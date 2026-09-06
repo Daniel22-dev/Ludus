@@ -37,7 +37,7 @@ for(const key of expectedSession)add(`pc01.manifest.session.${key}`,covered(sess
 for(const key of ['ludus_gemini_key','ghrab.ludus.gemini_key'])add(`pc01.credentials.local.${key}`,covered(localCredential,key));
 for(const key of ['ludus_gemini_key_session','ghrab.ludus.gemini_key_session'])add(`pc01.credentials.session.${key}`,covered(sessionCredential,key));
 add('pc01.cache.noncontent-not-cleared',cache?.clearOnEndWork===false,JSON.stringify(cache||{}));
-add('pc01.manual.nonpersonal-not-cleared',manual?.clearOnEndWork===false&&match('ghrab-manual-progress-ludus-1.16.19',manual.patterns||[])&&match('ghrab-manual-theme',manual.patterns||[]),JSON.stringify(manual||{}));
+add('pc01.manual.nonpersonal-not-cleared',manual?.clearOnEndWork===false&&match('ghrab-manual-progress-ludus-1.16.20',manual.patterns||[])&&match('ghrab-manual-theme',manual.patterns||[]),JSON.stringify(manual||{}));
 add('pc01.lifecycle.local-not-cleared',localLifecycle?.clearOnEndWork===false&&['ghrab.ludus.suite-session-seen.v1','ghrab.ludus.suite-session-status.v1','ghrab.ludus.migration.p2-storage-namespace-v1.done'].every(k=>match(k,localLifecycle.patterns||[])));
 add('pc01.lifecycle.session-not-cleared',sessionLifecycle?.clearOnEndWork===false&&match('ghrab.ludus.suite-session-tab-seen.v1',sessionLifecycle?.patterns||[]));
 add('pc01.suite.generation-read-only',manifest.sessionLifecycle?.ownership?.generationKey==='platform-global-read-only-for-ludus');

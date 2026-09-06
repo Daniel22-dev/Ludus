@@ -1,4 +1,4 @@
-/* LUDUS shared engine controls 1.16.19 */
+/* LUDUS shared engine controls 1.16.20 */
 #ludusBadge{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));z-index:2147483000;min-width:58px;height:34px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:900 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.12em;color:#fff;background:rgba(12,16,28,.82);border:1px solid rgba(255,255,255,.28);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(10px);cursor:pointer;user-select:none}
   #ludusBadge:active,#ludusLangSwitch:active,#ludusEndWork:active{transform:scale(.96)}
   #ludusLangSwitch{position:fixed;top:calc(14px + env(safe-area-inset-top));left:calc(88px + env(safe-area-inset-left));z-index:2147483000;height:34px;min-width:52px;padding:0 10px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(12,16,28,.82);color:#fff;font:800 11px/1 system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(10px);cursor:pointer}

@@ -1,3 +1,9 @@
+## 1.16.20 — Platform 1.1.2 Studio manifest alignment (2026-09-06)
+
+- Zdrojový Studio manifest byl srovnán s reálnou Platformou 1.1.2 a rozsahem `>=1.1.2 <2.0.0`.
+- Cache v šabloně je navázána na `__APP_VERSION__`, takže source fallback AI Studia nepřevezme zastaralou verzi.
+- Produkční suite-session cleanup, PC-01 storage ownership ani AI Core chování se nemění.
+
 ## 1.16.19 — GHRAB Platform 1.1.2 ecosystem wave candidate (2026-09-05)
 
 - Migrována přesná vendorizovaná GHRAB Platform 1.1.2 a requiredRange zvýšen na `>=1.1.2 <2.0.0`.

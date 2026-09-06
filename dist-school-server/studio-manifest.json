@@ -5,7 +5,7 @@
     "cs": "LUDUS",
     "en": "LUDUS"
   },
-  "version": "1.16.19",
+  "version": "1.16.20",
   "status": {
     "cs": "Ověřováno v pilotu",
     "en": "Being validated in pilot"
@@ -41,16 +41,17 @@
     "ghrab-platform-v1",
     "canonical-branding",
     "storage-namespace-v1",
-    "artifact-envelope-v1"
+    "artifact-envelope-v1",
+    "suite-session-lifecycle-v1"
   ],
   "compatibility": {
     "studioMinVersion": "0.5.1",
     "materialSchema": "ghrab-material-v1",
     "studioBridge": "2.0",
     "platformContract": "ghrab-platform-v1",
-    "platformRange": ">=1.0.0 <2.0.0"
+    "platformRange": ">=1.1.2 <2.0.0"
   },
-  "publishedAt": "2026-09-05T19:38:42.960Z",
+  "publishedAt": "2026-09-06T12:08:24.805Z",
   "aiCore": {
     "schema": "ghrab-ai-app-integration-v1",
     "status": "integrated-p1",
@@ -83,7 +84,7 @@
     "accessibilityContract": "ghrab-a11y-v1",
     "performanceContract": "ghrab-performance-v1",
     "moduleContract": "ghrab-lazy-modules-v1",
-    "cacheName": "ghrab-ludus-v1.16.19"
+    "cacheName": "ghrab-ludus-v1.16.20"
   },
   "deploymentProfile": "school-server",
   "serverReadyPhase": "P3"
