@@ -1,7 +1,7 @@
 {
   "schema": "ghrab-data-manifest-v1",
   "appId": "ludus",
-  "appVersion": "1.16.20",
+  "appVersion": "1.16.23",
   "manifestVersion": 5,
   "dataCategories": [
     "settings",

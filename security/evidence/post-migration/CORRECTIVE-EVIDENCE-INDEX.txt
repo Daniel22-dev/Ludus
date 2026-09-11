@@ -1,0 +1,79 @@
+LUDUS 1.16.22 / GARP 2.5.1 SHIELD Prompt C corrective evidence index
+Date: 2026-09-11
+
+LU-N1 – CONFIRMED / FIXED
+- Canonical N5 lineage upgraded to LU-N2-HOTFIX and copied byte-for-byte into security/garp25/tools.
+- Tool selftest: final-gates/hotfix-selftest.txt (72/72 PASS).
+- Final static PREP chain: final-gates/garp25-prep-static.txt.
+- SW mutations: sw-mutations/summary.tsv.
+
+LU-N2 – CONFIRMED / FIXED IN CANONICAL TOOL
+- Before/after P4 reproduction: sw-mutations/LU-N2-before-after-P3-summary.txt.
+- P4/P4b/P4c are permanent selftests in the canonical hotfix; 72/72 PASS.
+- Cache API resolution is call-site/lexical and unresolved writes do not silently PASS.
+
+LU-N3 – CONFIRMED / FIXED
+- Corrected source/deployment SBOM generation and independent verifier.
+- Evidence: sbom-negative/old-vs-new-summary.txt, sbom-negative/top-level-name-mutation.txt, sbom-negative/nested-name-mutation.txt, final-gates/source-sbom-independent-verify.txt.
+- Source and deployment SBOMs are external evidence entries in evidence manifest v2 and deployment SBOM SHA-256 is cross-linked from RI.
+
+LU-N4 – CONFIRMED / FIXED
+- Canonical source/deployment scanner uses exact synthetic-token allowlist only, scans all occurrences/binary/CSS/SVG and expands OOXML.
+- S1-S11/L1-L4: secret-negative/summary.tsv; final clean scan: final-gates/source-secret-scan.txt.
+
+LU-N5 – CONFIRMED / FIXED
+- AI boundary inventory includes security headers, deployment config, school build and AI conformance boundaries.
+- Connect-src before/after: ai-fingerprint-negative/summary.txt.
+- Current fingerprint: ../ai-assurance-fingerprint.json.
+- Full-gate preflight additionally detected public/config/release-acceptance.json as an AI/release-boundary candidate; it was added to the authoritative inventory rather than weakening the detector.
+
+LU-N6 – CONFIRMED / LOCALLY FIXED, ECOSYSTEM DEBT REMAINS
+- AI Core sync candidate execution is isolated in read-only job; write/PR job does not execute downloaded code; persist-credentials false; npm ci --ignore-scripts.
+- Static CI policy: ci-policy/ci-policy-before-after.json.
+- Remaining upstream signed AI Core release-manifest trust root is documented debt in SECURITY-EXCEPTIONS.txt.
+
+LU-N7 – CONFIRMED / FIXED
+- Least privilege by CI job, ubuntu-24.04, exact Node, Pages/id-token writes only deploy job, validation read-only, installs --ignore-scripts.
+- Evidence: ci-policy/ci-policy-before-after.json and ci-policy/action-pins-final.json.
+
+LU-N8 – CONFIRMED / FIXED
+- P5 release requires status === "passed".
+- Old/new failed-browser negative: qa-release-negative/summary.txt.
+
+LU-N9 – CONFIRMED / FIXED
+- Exact deterministic build-input source snapshot: ../source-snapshot/LUDUS-1.16.22-BUILD-INPUTS.zip plus SOURCE-SNAPSHOT-POLICY.txt.
+
+LU-N10 – CONFIRMED / SCOPE MADE EXPLICIT
+- GitHub Pages is explicitly OUTSIDE RI-PREP in SHIELD-STATUS.json, DEPLOYMENT-SECURITY.txt, ASSURANCE-STATUS.txt and SECURITY-EXCEPTIONS.txt.
+- Static Pages artifact is not falsely presented as signed/registered RI-PREP.
+
+LU-N11 – CONFIRMED / FIXED
+- Evidence manifest v2 covers complete security/evidence including pre-migration GH-10 evidence and AI fingerprint, plus external security-critical-assets.json and both corrected SBOMs.
+
+LU-N12 – CONFIRMED / FIXED
+- Platform P3 injection list is checked/filtered against security-critical-assets; SW checker runs postbuild for both profiles.
+- Old/new ghrab-platform re-add negative: build-negative/summary.txt.
+
+LU-N13 – CONFIRMED / FIXED
+- Provenance source.revision is baseline df1cc5bb8efff81eba9f9e1045fe1602d2fb53b7 and carries explicit corrective delta + exact source snapshot identity.
+- Evidence: build-provenance.json and build-provenance-verify.txt.
+
+LU-N14 – CONFIRMED / FIXED FOR PREP
+- Public PREP trust-root entry includes notBefore/notAfter.
+- Active/expired negative: key-validity/active-key-pass.txt and key-validity/expired-key-reject.txt.
+- Final full unified gate output is intentionally stored outside security/evidence because the gate itself verifies the frozen evidence manifest; embedding its own output would be circular.
+
+REBUILD EQUIVALENCE
+- rebuild-equivalence/summary.txt: two fixed-time school-server builds produce identical artifactDigest.
+
+FINAL REGRESSION
+- regression-final/FINAL-REGRESSION-SUMMARY.txt.
+
+NOT TESTED / OPEN
+- fresh completed npm dependency install and online SCA (current attempt exceeded execution window);
+- unrestricted served DAST/security headers/live SW lifecycle;
+- live-model behavioral AIR;
+- actual school-server SHIELD-LIVE/RI-LIVE, Integrity Service, alerting/watchdog;
+- organization production signing-key custody/rotation/recovery;
+- upstream signed GHRAB AI Core release manifest;
+- factual correctness of AI-generated educational content remains teacher-reviewed residual risk.

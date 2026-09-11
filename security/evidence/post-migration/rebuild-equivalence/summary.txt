@@ -1,0 +1,6 @@
+LUDUS 1.16.22 final deterministic school-server rebuild equivalence
+Source snapshot SHA-256=d87b0360f84087bcb671ce4bbdbfd912d03b6ff1c5ced967144d76377177de51
+GHRAB_BUILD_TIME=2026-09-11T10:00:00.000Z
+Rebuild 1 fileCount=90 artifactDigest=508b1e6b79e27a379a7b6e7032a5e10d72493a69fc473439ea589b64073cfbcf
+Rebuild 2 fileCount=90 artifactDigest=508b1e6b79e27a379a7b6e7032a5e10d72493a69fc473439ea589b64073cfbcf
+Equivalent=PASS

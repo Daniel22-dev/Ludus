@@ -1,0 +1,21 @@
+
+> ludus@1.16.23 garp25:p5-certification-controls
+> node scripts/qa-garp25-p5-certification-controls.mjs
+
+FAIL: LU-N15 positive control: valid reports must pass P5 certification
+{
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "axeRequired": false,
+  "summary": {
+    "total": 44,
+    "passed": 42,
+    "failed": 2
+  },
+  "status": "failed",
+  "failed": [
+    "report.runtime.exists",
+    "report.axe.passed"
+  ]
+}
+

@@ -1,5 +1,5 @@
 (function(){
-  var VERSION='1.16.20', currentLang='cs', translating=false, mo=null, translatePending=false;
+  var VERSION='1.16.23', currentLang='cs', translating=false, mo=null, translatePending=false;
   var textSources=new WeakMap(), attrSources=new WeakMap(), htmlSources=new WeakMap();
   var titleRecord={source:document.title,last:document.title,sourceLang:'cs'};
   var COPY={

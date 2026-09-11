@@ -1,0 +1,47 @@
+LUDUS 1.16.23 - CORRECTIVE EVIDENCE INDEX
+Date: 2026-09-11
+Scope: LU-N15..LU-N19 corrective round; synthetic/non-production evidence only.
+
+Authoritative inputs
+- Claude Prompt E audit: OVERENI-KANDIDATA-ludus-1.16.22-2026-09-11.txt
+- Corrective assignment: 00-ZADANI-GPT-LUDUS-1.16.23.txt
+
+Identity
+- exact build-input snapshot: security/evidence/source-snapshot/LUDUS-1.16.23-BUILD-INPUTS.zip
+- build-input snapshot SHA-256: 371b4f2723f2ea400894dea0b37944b9415005e3568ce3246b65953c051a52ee
+- delivered school payload artifact: LUDUS-1_16_23-SCHOOL-PAYLOAD.zip
+- school payload SHA-256: 72aa7bdfb857c7a95a6c19e1d3c329c39b669b2efcbf5b9e7b50de0821b9206d
+- preliminary/final expected artifactDigest over 90 payload files: beac73a51a35e63664014994271ce86117b8dd2d3544247d6f189de6fe6b9053
+
+LU-N15
+- runner-evidence/regression2/qa-quality.txt
+- runner-evidence/p5/p5-cert-controls-synthetic.txt
+- runner-evidence/p5/full-qa-p5-ci.txt + .exit
+- positive synthetic P5 certification PASS; browser-failed and quality-failed negative controls DENY.
+- full qa:p5:ci in this managed runner reaches browser PASS, then local HTTP runtime navigation is blocked by Chromium policy ERR_BLOCKED_BY_ADMINISTRATOR; full chain therefore NOT TESTED, not falsely GREEN.
+
+LU-N16
+- runner-evidence/regression2/ai-core-sync-patch.txt
+- synthetic new AI Core directory is staged into a cached binary patch, applies to a clean checkout, and post-apply build passes.
+
+LU-N17
+- runner-evidence/negative/LU-N17-G2.txt
+- runner-evidence/negative/LU-N17-G5.txt
+- runner-evidence/negative/LU-N17-G7.txt
+- runner-evidence/negative/LU-N17-clean-recovery.txt
+- canonical GARP selftest also includes widened boundary negatives.
+
+LU-N18
+- runner-evidence/negative/LU-N18-L6-general-zip.txt
+- runner-evidence/negative/LU-N18-S14-zip-file-root.txt
+- canonical GARP selftest covers ZIP/OOXML/binary/CSS/SVG archive and raw-byte cases.
+
+LU-N19
+- exact school payload ZIP is a delivered artifact and is the provenance subject.
+- build-provenance.json + build-provenance-verify.txt prove its SHA-256 and source snapshot binding.
+- final independent reproduction is reported outside this closed manifest to avoid circular evidence mutation.
+
+Environment limitations
+- current fresh npm ci / online SCA: NOT TESTED in this runner because install did not complete within the bounded attempt; prior Claude 1.16.22 result is historical evidence only.
+- full qa:p5:ci: NOT TESTED due managed Chromium local HTTP policy at qa:runtime.
+- DAST/served headers, live-model AIR, school-server SHIELD-LIVE/RI-LIVE, production signing-key custody and branch protection remain outside this PREP run.

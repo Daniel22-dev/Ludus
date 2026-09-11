@@ -1,0 +1,24 @@
+GARP 2.5.1 – AI RESOURCE BUDGET
+Application: LUDUS 1.16.23
+
+Global browser/Core controls
+- max request bytes: 18 MiB
+- max single part: 14 MiB
+- request timeout: 45,000 ms
+- gatewayMaxRetries: Core default 0 unless an authoritative deployment config changes it
+- automatic provider fallback: disabled by GHRAB AI Core runtime normalizer
+- streaming: false for both registered operations
+- cancellation: GHRAB AI Core supports request signal/AbortController; app UI does not claim end-to-end school-gateway cancellation until LIVE verification
+- browser credential: direct mode session-only; school profile disallows local provider keys
+
+Operation | Max request/context | Max output | Max provider requests/workflow | Concurrency | Timeout | Retry | Blast radius
+Topic analysis | 18 MiB request / 14 MiB part; text only | 8,192 token hint | 3 declared | UI workflow; no authoritative server per-user concurrency in PREP | 45 s | no automatic gateway retry by default | one teacher action
+Game content generation | 18 MiB request / 14 MiB part; text/image/document | 32,768 token hint | 3 declared | UI workflow; no authoritative server per-user concurrency in PREP | 45 s | no automatic gateway retry by default | one teacher game-generation workflow
+
+SHIELD-LIVE requirements before school production
+- authenticated per-user/per-app rate and body limits at gateway;
+- maximum concurrent requests and bounded queue;
+- provider/model allowlist outside browser-controlled input;
+- per-user/app budget accounting and abuse alerting without logging student prompt/output content by default;
+- fail closed when authorization/budget service is unavailable;
+- validate cancellation propagation client -> gateway -> provider where supported.

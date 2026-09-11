@@ -1,0 +1,22 @@
+
+> ludus@1.16.22 qa:media
+> node scripts/qa-media-provenance.mjs
+
+PASS: public default is unofficial
+PASS: rights default is unofficial
+PASS: standard dist uses unofficial profile
+PASS: standard dist marked public-safe
+PASS: shared runtime exists
+PASS: content pack count 11
+INFO: private source not bundled hogwarts-intro-owner-approved
+PASS: publicRelease false hogwarts-intro-owner-approved
+PASS: public dist excludes hogwarts-intro-owner-approved
+INFO: private source not bundled hogwarts-soundtrack-owner-approved
+PASS: publicRelease false hogwarts-soundtrack-owner-approved
+PASS: public dist excludes hogwarts-soundtrack-owner-approved
+PASS: public dist has no official audio/video (0)
+{
+  "schema": "ludus-media-provenance-result-v2",
+  "profile": "unofficial",
+  "packagedMedia": []
+}

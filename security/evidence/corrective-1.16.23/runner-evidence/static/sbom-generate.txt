@@ -1,0 +1,5 @@
+
+> ludus@1.16.23 garp25:sbom
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json
+
+PASS: CycloneDX 1.7 SBOM vytvořen: /mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/sbom/ludus-1.16.23.cdx.json (44 komponent).

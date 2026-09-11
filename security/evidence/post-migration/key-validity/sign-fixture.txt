@@ -1,0 +1,4 @@
+{
+  "signature": "/mnt/data/ludus_11622/tmpkeys/key-window-fixture.sig",
+  "algorithm": "Ed25519"
+}

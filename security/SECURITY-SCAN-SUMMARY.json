@@ -1,0 +1,54 @@
+{
+  "schema": "ghrab-security-scan-summary-v1",
+  "appId": "ludus",
+  "version": "1.16.23",
+  "date": "2026-09-10",
+  "sast": {
+    "status": "PASS-PARTIAL",
+    "evidence": [
+      "qa:security 0 findings",
+      "GARP 49/49",
+      "GARP 2.3 48/48",
+      "qa:xss PASS"
+    ],
+    "externalScanner": "NOT TESTED"
+  },
+  "sca": {
+    "status": "AMBER",
+    "lockPackages": 44,
+    "cycloneDxComponents": 44,
+    "npmAuditOffline": {
+      "exit": 0,
+      "vulnerabilityEntries": 0,
+      "freshness": "NOT GUARANTEED"
+    },
+    "cleanNpmCi": "NOT TESTED to completion: xmlchars 2.2.0 ENOTCACHED",
+    "freshOnlineAdvisories": "NOT TESTED"
+  },
+  "secrets": {
+    "status": "PASS",
+    "source": "PASS",
+    "deployment": "PASS",
+    "shnc01": "PASS",
+    "shnc04": "PASS"
+  },
+  "dast": {
+    "status": "NOT TESTED",
+    "reason": "managed Chromium blocks local HTTP with ERR_BLOCKED_BY_ADMINISTRATOR"
+  },
+  "browserHeaders": {
+    "status": "NOT TESTED served",
+    "staticConfiguration": "present"
+  },
+  "vendoredConsistency": {
+    "status": "PASS",
+    "checkedCopies": 4,
+    "drift": 0
+  },
+  "sbom": {
+    "status": "PASS",
+    "format": "CycloneDX",
+    "specVersion": "1.7",
+    "components": 44
+  }
+}

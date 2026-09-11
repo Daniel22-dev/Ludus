@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "mode": "deployment",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/L2",
+  "errors": [
+    "secret-pattern:assets/key.txt:pgp-private-key-block"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n4-secret-scan"
+}

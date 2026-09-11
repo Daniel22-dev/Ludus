@@ -1,0 +1,77 @@
+======================================================================
+ZADÁNÍ — OPRAVNÉ KOLO LUDUS 1.16.23
+GARP 2.5.1 SHIELD · role A (ChatGPT/Codex)
+======================================================================
+Připravil: Claude (role B) pro Daniela, 2026-09-11
+Řídicí prompt: PROMPTY/C-CHATGPT-OPRAVNE-KOLO.txt z přiloženého nástroje.
+Toto zadání ho doplňuje o nálezy z kontroly 1.16.22.
+Produkční release approval: NE. Reálná studentská data: NE.
+
+1. VSTUPY (ověř SHA256SUMS.txt)
+  LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT.zip
+    SHA-256 80ac6464a5957bd5f9179e09a76af6b2455affb01ccede418bc647c35b267da4
+  GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N2-HOTFIX.zip
+    SHA-256 efe015f36c29d8eba866dad5a27d81cd71c50bee069b077e9c1cbf0d11333f79
+    aktuální kanonický nástroj (16 nástrojů, selftest 72/72)
+  OVERENI-KANDIDATA-ludus-1.16.22-2026-09-11.txt
+    SHA-256 e47ca1cdc34ea171ff1fe9f4551c906e2cdd06a8554d6c0f0906dfeff0f14edd
+    nálezy LU-N15 až LU-N19 s reprodukcí
+  PREDANI-LUDUS-1_16_22-GARP2_5-SHIELD.txt
+    SHA-256 7b2e76430a0ad6650fbfbc470e9069bc621f698aeaf05ea415dc586807f3d8c8
+
+2. PRAVIDLA KOLA
+- Postup podle Promptu C: každý nález ověř a zařaď s důkazem.
+- Rozsah je malý a delta: pedagogická logika, enginy, prompty a AI
+  instrukce beze změny (kromě čísla verze).
+- Každá oprava potřebuje POZITIVNÍ kontrolu (správný stav projde)
+  i NEGATIVNÍ kontrolu (vadný stav selže). Právě chybějící pozitivní
+  kontrola způsobila LU-N15.
+- Plný řetězec npm run qa:p5:ci musí projít. Pokud v prostředí není
+  Chromium, prokaž pozitivní kontrolu certifikace na sadě validních
+  reportů a plný řetězec výslovně uveď jako NOT TESTED — Claude ho spustí.
+- Pouze syntetická data. Žádné produkční schválení.
+
+3. ÚKOLY
+Blokující:
+A) LU-N15 — P5 certifikace
+   Report kvality (qa-p3-quality.mjs -> dist/quality-report.json) nemá
+   pole status, takže striktní kontrola report.quality.passed selže
+   vždy. Doplň status (passed/failed podle výsledku), nebo pro report
+   kvality použij vlastní striktní podmínku. Nesmí se vrátit
+   alternativní podmínka přes summary.failed pro ostatní reporty.
+   Kontroly: validní sada reportů -> exit 0; report prohlížeče
+   se stavem failed -> exit 1; report kvality s failed > 0 -> exit 1.
+B) LU-N16 — synchronizace AI Core
+   V read-only jobu nahraď export:
+     git add -A -- vendor ghrab-ai-core.consumer.json scripts/sync-ghrab-ai-core.mjs
+     git diff --cached --binary -- vendor ghrab-ai-core.consumer.json scripts/sync-ghrab-ai-core.mjs
+   Přidej kontrolu, která v kopii repozitáře simuluje novou verzi jádra
+   (nový adresář vendor/ghrab-ai-core-<verze>/) a ověří, že patch nové
+   soubory obsahuje a po git apply v čistém checkoutu projde build.
+
+Doporučené v témže kole (kanonický nástroj -> nový hotfix ZIP):
+C) LU-N17 — detektor driftu (verify-ai-assurance-fingerprint.mjs):
+   přidat tokeny endpointů providera (generativelanguage,
+   generateContent a obecně známé AI API) a kořeny engines/, runtime/,
+   public/, scripts/. Kontroly: G2, G5, G7 z protokolu musí selhat.
+D) LU-N18 — skenery tajemství: rozbalovat obecné ZIP archivy
+   (s limitem velikosti a hloubky). Kontroly S14 a L6 musí selhat.
+E) LU-N19 — subjekt provenance = dodaný deployment ZIP (nebo payload
+   ZIP přiložit), aby šla brána zopakovat 10/10 z dodaných souborů.
+F) INFO — do kanonického selftestu přidat negativní kontroly pro nové
+   schopnosti skeneru (OOXML, binární bajty, CSS/SVG) a pro detektor
+   driftu; snímek zdrojů bez security-evidence-manifest.json.
+   Pokud měníš kanonický nástroj, dodej GARP-2.5.1-ZAVEDENI-TOOLING-R2-
+   LU-N17-N19-HOTFIX.zip kumulativní k LU-N2, se SHA256SUMS
+   a changelogem, a použij ho v kandidátovi.
+
+4. VÝSTUPY
+1. LUDUS-1_16_23-GARP2_5-SHIELD-KANDIDAT.zip (zdroj + evidence + snímek)
+2. LUDUS-1_16_23-GARP2_5-SHIELD-DEPLOYMENT.zip
+3. nový hotfix ZIP nástroje, pokud se nástroj měnil
+4. PREDANI-LUDUS-1_16_23-GARP2_5-SHIELD.txt — SHA-256 všech výstupů,
+   stav LU-N15 až LU-N19, výsledek plného qa:p5:ci (nebo NOT TESTED
+   s důvodem), výstup jednotné brány s počtem kroků, NOT TESTED,
+   pět gate a OVERALL.
+Claude v dalším kroku dostane tytéž soubory bajt po bajtu.
+======================================================================

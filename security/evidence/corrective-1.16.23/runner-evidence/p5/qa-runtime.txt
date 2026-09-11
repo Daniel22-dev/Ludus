@@ -1,0 +1,13 @@
+
+> ludus@1.16.23 qa:runtime
+> node scripts/qa-p5-runtime.mjs
+
+[runtime] index.html @ 1280px
+file:///mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/scripts/qa-p5-runtime.mjs:177
+        const navResult=await client.call('Page.navigate',{url}); if(navResult?.errorText) throw new Error(`Runtime navigation failed: ${rel}: ${navResult.errorText}`);
+                                                                                                 ^
+
+Error: Runtime navigation failed: index.html: net::ERR_BLOCKED_BY_ADMINISTRATOR
+    at file:///mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/scripts/qa-p5-runtime.mjs:177:98
+
+Node.js v22.16.0

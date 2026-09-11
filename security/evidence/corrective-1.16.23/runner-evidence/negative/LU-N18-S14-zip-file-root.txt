@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "mode": "deployment",
+  "root": "/tmp/tmp.JR5RQQiLb7/archive.zip",
+  "errors": [
+    "scan-error:ENOTDIR: not a directory, scandir '/tmp/tmp.JR5RQQiLb7/archive.zip'"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}

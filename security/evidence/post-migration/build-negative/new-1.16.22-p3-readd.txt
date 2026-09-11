@@ -1,0 +1,20 @@
+
+> ludus@1.16.22 build:school-server
+> npm run build:unofficial && node scripts/build-school-profile.mjs && npm run garp25:sw:school
+
+
+> ludus@1.16.22 build:unofficial
+> LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs
+
+LUDUS 1.16.22: Core 1.0.0 SHA-256 OK; 2 operations; 11 engines; profile unofficial; builder 302.6 kB
+file:///tmp/tmp.kWvDRR4Wmf/scripts/apply-ghrab-platform.mjs:219
+  if (blockedPlatformAssets.length) throw new Error(`GHRAB Platform P3 seznam obsahuje security-critical asset: ${blockedPlatformAssets.join(', ')}`);
+                                          ^
+
+Error: GHRAB Platform P3 seznam obsahuje security-critical asset: ./ghrab/ghrab-platform.js
+    at file:///tmp/tmp.kWvDRR4Wmf/scripts/apply-ghrab-platform.mjs:219:43
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async file:///tmp/tmp.kWvDRR4Wmf/scripts/build.mjs:195:1
+
+Node.js v22.16.0

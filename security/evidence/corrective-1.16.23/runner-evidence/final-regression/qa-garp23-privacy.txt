@@ -1,0 +1,22 @@
+
+> ludus@1.16.23 qa:garp23:privacy
+> node scripts/qa-garp23-privacy-lifecycle.mjs && node scripts/qa-suite-session.mjs
+
+{
+  "schema": "ghrab-garp23-privacy-lifecycle-v1",
+  "total": 28,
+  "passed": 28,
+  "failed": 0,
+  "status": "passed"
+}
+{
+  "schema": "ghrab-suite-session-qa-v1",
+  "appVersion": "1.16.23",
+  "platformVersion": "1.1.2",
+  "summary": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0
+  },
+  "status": "passed"
+}

@@ -1,0 +1,6 @@
+{
+  "status": "VERIFIED",
+  "algorithm": "Ed25519",
+  "keyId": "prep-ludus-1.16.22-20260911",
+  "keyStatus": "active"
+}

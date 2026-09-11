@@ -1,0 +1,29 @@
+GARP 2.5.1 – BINARY / LEGAL INVENTORY
+Application: LUDUS 1.16.23
+Date: 2026-09-10
+
+Public/school deployment binary asset hashes:
+300396a48cc36d8c2abda0aea673273d4d985476ba88fb0430630ef89ac86770  public/assets/brand/school-logo.png
+9b5a8b230c90b2ae3f582bd4493c23f11a2fbc886e67715ad0cd5493bfd256d5  public/icons/apple-touch-icon.png
+28d132396b26ad52d382c422d931f4d9307bc02db70a418842c5c09e59ef1e07  public/icons/icon-128.png
+9b5a8b230c90b2ae3f582bd4493c23f11a2fbc886e67715ad0cd5493bfd256d5  public/icons/icon-180.png
+cb66d4fe4d640db4c68816d851e5b0ee7beb8a3110814c3c097020c1a874ce4d  public/icons/icon-192.png
+29e2fd811ceb554450ed2b535e4a39391a0502fcc66627b6413369ec03d1bab3  public/icons/icon-32.png
+38b2df85ab57e13269641ccce6dc73b35a0b3be2e87abba958e59e6d360d6008  public/icons/icon-48.png
+f922e61b5acc2c6c1a55d206990016ab00ab28733d7b18c22e4ef5160c0025e4  public/icons/icon-512.png
+3639bfba8bbfb4a874a3c0d19f66169cbb167b4ed94ad965c45699dd7ad17528  public/icons/icon-72.png
+abf2710b303146d94d07b4a91d083d7688cb31922d6dcf1edabf07a432078f06  public/icons/icon-96.png
+ebcb968c7e28a8d1117e53d9637f94e230ab8fa73fd3e31c28525289f8e4e565  public/icons/icon-maskable-512.png
+8691ae900d6e467c28ffcf0ee6a86178068aad44a6ff7447dfbe8823bb2da578  docs/manualy/00_Rozcestnik_LUDUS_manualy.docx
+7b246c5c90f85d4bf9584741fbad92d0b10a4e23975db69437e7015a21e144ee  docs/manualy/01_LUDUS_architektura_a_enginy.docx
+ea9c5aa5310f0b21788c73331b042114611fc8c1ea545f79243f5cab977f982c  docs/manualy/02_Format_hry_a_manifest.docx
+629d4083341fe2850f7a6b34b1c8d15d931568d22bd2b88b6f81c01c6b8a4637  docs/manualy/03_Struktura_jednoho_HTML_enginu.docx
+ce89d72c318937021c89d477c60d8629a8502f9d5f0d585d6f2ffddbd79c65b3  docs/manualy/04_Typy_cviceni_a_validace.docx
+8241b22c4bd2123b39d1144f9915afd2c36cf14784071d5696ab4269bb5e4e0e  docs/manualy/05_Jazyky_branding_safe_official_export.docx
+b05ddfa1995ea05e270a49f14d4ca18d11b6ab544a46712ac951e0d9674ddaa4  docs/manualy/06_Roadmap_migrace_a_testovani.docx
+12e9c91691eb099f94291ad377c98e1f012b26e60d9fd33c67f3a04ea4f4acf9  docs/manualy/07_Model_mechanik_a_hernich_konceptu.docx
+
+Media policy:
+- public/unofficial build excludes the two owner-supplied-unverified Hogwarts official media records; qa:media PASS confirms no official audio/video in public dist.
+- media/rights-records.json is a technical release policy record, not an independent legal determination.
+- independent distribution-right attestation for school logo/icons/manual binary assets was not supplied in this Prompt D input: NOT TESTED / owner confirmation required.

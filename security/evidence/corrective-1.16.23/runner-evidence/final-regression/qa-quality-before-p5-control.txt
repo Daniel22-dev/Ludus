@@ -1,0 +1,593 @@
+
+> ludus@1.16.23 qa:quality
+> node scripts/qa-p3-quality.mjs
+
+{
+  "schema": "ghrab-p3-quality-result-v1",
+  "status": "passed",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "contracts": {
+    "accessibility": "ghrab-a11y-v1",
+    "performance": "ghrab-performance-v1",
+    "modules": "ghrab-lazy-modules-v1"
+  },
+  "metrics": {
+    "schema": "ghrab-performance-report-v1",
+    "appId": "ludus",
+    "appVersion": "1.16.23",
+    "platformVersion": "1.1.2",
+    "measuredAt": "2026-09-11T14:16:02.548Z",
+    "distBytes": 3499971,
+    "jsBytes": 194844,
+    "cssBytes": 30804,
+    "htmlBytes": 2097173,
+    "fileCount": 92,
+    "fullHtmlCount": 13,
+    "entryHtmlBytes": 311962,
+    "entryCriticalBytes": 517906,
+    "largestInlineScriptBytes": 267355,
+    "precacheBytes": 1092326,
+    "precacheAssetCount": 21,
+    "largestFileBytes": 361995,
+    "largestFilePath": "engines/hogwarts.html",
+    "duplicateLargeBytes": 36902
+  },
+  "budget": {
+    "distBytes": 4900000,
+    "entryHtmlBytes": 315000,
+    "entryCriticalBytes": 522000,
+    "largestInlineScriptBytes": 270000,
+    "precacheBytes": 1220000,
+    "largestFileBytes": 1050000,
+    "duplicateLargeBytes": 50000
+  },
+  "precacheAssets": [
+    "access/access-gate.css",
+    "access/error-reporter-adapter.js",
+    "access/error-reporter.css",
+    "access/error-reporter.js",
+    "access/reporter-bootstrap.js",
+    "assets/brand/school-logo.png",
+    "config/brand-manifest.json",
+    "content/engine-index.json",
+    "engines/manifest.json",
+    "ghrab/ghrab-app-registry-v2.schema.json",
+    "ghrab/ghrab-artifact-envelope-v1.schema.json",
+    "ghrab/ghrab-platform-manifest-1.1.2.json",
+    "ghrab/ghrab-platform.css",
+    "icons/icon-192.png",
+    "icons/icon-512.png",
+    "icons/icon-maskable-512.png",
+    "index.html",
+    "manifest.webmanifest",
+    "runtime/ludus-engine-badge.css",
+    "runtime/ludus-engine-controls.css",
+    "runtime/ludus-engine-runtime.js"
+  ],
+  "duplicateGroups": [
+    [
+      "icons/apple-touch-icon.png",
+      "icons/icon-180.png"
+    ]
+  ],
+  "checks": [
+    {
+      "id": "dist.exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "platform.version",
+      "ok": true,
+      "detail": "1.1.2"
+    },
+    {
+      "id": "contract.a11y",
+      "ok": true,
+      "detail": "ghrab-a11y-v1"
+    },
+    {
+      "id": "contract.performance",
+      "ok": true,
+      "detail": "ghrab-performance-v1"
+    },
+    {
+      "id": "contract.modules",
+      "ok": true,
+      "detail": "ghrab-lazy-modules-v1"
+    },
+    {
+      "id": "platform.runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "platform.styles",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.reduced-motion",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.focus-visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.skip-link",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.html-documents",
+      "ok": true,
+      "detail": "13"
+    },
+    {
+      "id": "a11y.lang:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/chronos.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/dnd.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/hogwarts.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/indiana-jones.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/jumanji.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/laughworks.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/lotr.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/matrix.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/orient-express.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/star-wars.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/stranger-things.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:index.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:manual/index.html",
+      "ok": true,
+      "detail": "platform=1; engine=0"
+    },
+    {
+      "id": "module.exists:runtime/ludus-engine-runtime.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.referenced:runtime/ludus-engine-runtime.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.exists:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.referenced:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.content-pack:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "budget.distBytes",
+      "ok": true,
+      "detail": "3499971 <= 4900000"
+    },
+    {
+      "id": "budget.entryHtmlBytes",
+      "ok": true,
+      "detail": "311962 <= 315000"
+    },
+    {
+      "id": "budget.entryCriticalBytes",
+      "ok": true,
+      "detail": "517906 <= 522000"
+    },
+    {
+      "id": "budget.largestInlineScriptBytes",
+      "ok": true,
+      "detail": "267355 <= 270000"
+    },
+    {
+      "id": "budget.precacheBytes",
+      "ok": true,
+      "detail": "1092326 <= 1220000"
+    },
+    {
+      "id": "budget.largestFileBytes",
+      "ok": true,
+      "detail": "361995 <= 1050000"
+    },
+    {
+      "id": "budget.duplicateLargeBytes",
+      "ok": true,
+      "detail": "36902 <= 50000"
+    },
+    {
+      "id": "budget.minimum-count",
+      "ok": true,
+      "detail": "7"
+    }
+  ],
+  "warnings": [],
+  "summary": {
+    "total": 102,
+    "passed": 102,
+    "failed": 0,
+    "warnings": 0
+  }
+}

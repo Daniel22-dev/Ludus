@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/S10",
+  "errors": [
+    "secret-pattern:src/icon.svg:google-api-key"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n4-secret-scan"
+}

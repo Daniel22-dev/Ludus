@@ -1,0 +1,15 @@
+
+> ludus@1.16.23 qa:suite-session
+> node scripts/qa-suite-session.mjs
+
+{
+  "schema": "ghrab-suite-session-qa-v1",
+  "appVersion": "1.16.23",
+  "platformVersion": "1.1.2",
+  "summary": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0
+  },
+  "status": "passed"
+}

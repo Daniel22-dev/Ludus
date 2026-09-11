@@ -1,0 +1,11 @@
+
+> ludus@1.16.23 garp25:ai-resource
+> node scripts/qa-garp25-ai-resource.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-07",
+  "expected": "PAYLOAD_TOO_LARGE",
+  "observed": "PAYLOAD_TOO_LARGE",
+  "networkCalls": 0
+}

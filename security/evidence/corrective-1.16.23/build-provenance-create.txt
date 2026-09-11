@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "output": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/evidence/corrective-1.16.23/build-provenance.json",
+  "subjectSha256": "72aa7bdfb857c7a95a6c19e1d3c329c39b669b2efcbf5b9e7b50de0821b9206d"
+}

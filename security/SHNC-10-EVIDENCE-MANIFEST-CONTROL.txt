@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "size:action-pins.json",
+    "sha256:action-pins.json"
+  ]
+}
+
+expected_failure_exit=1
+authoritative_evidence_unchanged=yes
+{
+  "status": "PASS",
+  "files": 117
+}

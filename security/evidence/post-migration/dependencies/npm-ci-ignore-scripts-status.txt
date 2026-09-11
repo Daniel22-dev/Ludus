@@ -1,0 +1,5 @@
+2026-09-11 corrective run
+Command intent: npm ci --ignore-scripts
+Result: NOT TESTED / incomplete in this execution environment.
+The install did not complete within the 120-second execution window. No successful install or fresh advisory/SCA result is claimed.
+Any partial node_modules created during the attempt was terminated/removed before packaging.

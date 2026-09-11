@@ -1,0 +1,23 @@
+GARP 2.5.1 – KEY CUSTODY AND RECOVERY
+Application: LUDUS 1.16.23
+Date: 2026-09-11
+
+PREP RULES
+- No production private signing key is created, stored or requested by this candidate.
+- PREP/negative tests may use one disposable Ed25519 keypair outside repository, source ZIP and deployment ZIP.
+- The retained public PREP trust-root entry is explicitly non-production and MUST contain keyId, algorithm, status, notBefore and notAfter.
+- Verification MUST fail closed for unknown, revoked, not-yet-valid or expired keys.
+- PREP validity windows are short-lived test metadata; extending/changing them does not authorize production.
+- Disposable private key MUST be deleted after signing and negative controls, before final handoff.
+
+LIVE REQUIREMENTS
+- organization-owned Ed25519 private key in restricted secret/HSM-equivalent custody outside source and deployment;
+- documented keyId, owner role, approval/dual-control model as adopted by school IT, rotation and revocation process;
+- public trust root distributed independently to verifier/Integrity Service/Studio;
+- authoritative release registry with rollback denial;
+- incident procedure: revoke key, stop releases, rotate keyId, re-sign approved build, invalidate old registry entries, verify clients reject revoked key;
+- backup/recovery drill proving backups cannot silently reactivate revoked keys;
+- audit trail and alerting for signature/registry/integrity failures.
+
+PREP trust roots and registries are synthetic evidence only and MUST NOT be copied into school production unchanged.
+RI-14 PRODUCTION CUSTODY/ROTATION/RECOVERY: NOT TESTED / AMBER.

@@ -1,0 +1,586 @@
+{
+  "status": "FAIL",
+  "serviceWorker": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/sw-mutations/N21.sw.js",
+  "criticalListSource": "/mnt/data/ludus_11622/work/app/security/security-critical-assets.json",
+  "precachedEntries": 21,
+  "precacheSources": [
+    {
+      "source": "map-add:GHRAB_PLATFORM_P3_ASSETS",
+      "entries": [
+        "./ghrab/ghrab-platform.css",
+        "./ghrab/ghrab-artifact-envelope-v1.schema.json",
+        "./ghrab/ghrab-app-registry-v2.schema.json",
+        "./ghrab/ghrab-platform-manifest-1.1.2.json",
+        "./assets/brand/school-logo.png"
+      ]
+    },
+    {
+      "source": "addAll:expression",
+      "entries": [
+        "./index.html",
+        "./manifest.webmanifest",
+        "./access/access-gate.css",
+        "./access/reporter-bootstrap.js",
+        "./access/error-reporter.js",
+        "./access/error-reporter.css",
+        "./access/error-reporter-adapter.js",
+        "./icons/icon-192.png",
+        "./icons/icon-512.png",
+        "./icons/icon-maskable-512.png",
+        "./engines/manifest.json",
+        "./config/brand-manifest.json",
+        "./assets/brand/school-logo.png",
+        "./runtime/ludus-engine-runtime.js",
+        "./runtime/ludus-engine-badge.css",
+        "./runtime/ludus-engine-controls.css",
+        "./content/engine-index.json"
+      ]
+    }
+  ],
+  "unresolvedCacheWrites": [],
+  "cacheFirstDetected": true,
+  "structuralNetworkOnlyGuard": true,
+  "structuralGuard": {
+    "pass": true,
+    "condition": "isSecurityCriticalRequest(url, scopePath)",
+    "preGuardRespondWith": false,
+    "hasRespondWithNetworkOnly": true,
+    "hasReturn": true,
+    "branchBeforeCacheFirst": true
+  },
+  "behavioralGuard": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "assets/app.js",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "manual/index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      }
+    ],
+    "falseNegatives": [],
+    "falsePositives": []
+  },
+  "fetchHandlerRegistrations": {
+    "addEventListenerCount": 1,
+    "onfetchAssignments": 0,
+    "total": 1,
+    "invalidFetchHandlers": 0,
+    "topLevelEffects": [],
+    "error": null,
+    "pass": true
+  },
+  "fetchRouteBehavior": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "preGuardPolicy": {
+      "requestAllowed": [
+        "method",
+        "url"
+      ],
+      "eventAllowed": [
+        "request"
+      ],
+      "urlAllowed": [
+        "origin",
+        "pathname"
+      ],
+      "rule": "Exactly one fetch handler registration is permitted. Before the guard, routing-sensitive reads and all network/cache/respondWith effects are fail-closed. After a positive guard, the critical branch may read only event.respondWith and must produce exactly one total route effect: networkOnlyNoStore."
+    },
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      }
+    ],
+    "failed": []
+  },
+  "networkOnlySink": {
+    "status": "FAIL",
+    "error": null,
+    "fetchCalls": [
+      {
+        "sameRequest": true,
+        "options": null
+      }
+    ],
+    "cacheCalls": [],
+    "cacheWrites": [],
+    "resultObserved": true
+  },
+  "criticalAssetsInDeployment": [
+    "access/deployment-config.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js"
+  ],
+  "authoritativeCriticalAssets": [
+    "access/deployment-config.js",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "release-integrity.json",
+    "release-integrity.sig",
+    "integrity-status",
+    "integrity-status.json"
+  ],
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue": "networkOnlyNoStore neprokazuje fetch s cache:no-store bez Cache API",
+      "detail": {
+        "status": "FAIL",
+        "error": null,
+        "fetchCalls": [
+          {
+            "sameRequest": true,
+            "options": null
+          }
+        ],
+        "cacheCalls": [],
+        "cacheWrites": [],
+        "resultObserved": true
+      }
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "access/deployment-config.js"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "ai-operations.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "config/deployment.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "config/deployment.school-server.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "config/platform-manifest.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "config/release-acceptance.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "ghrab/ghrab-platform.js"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "ghrab-platform.consumer.json"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "security-critical asset nema strukturani isSecurityCriticalRequest -> networkOnlyNoStore vyjimku pred cache-first",
+      "detail": "runtime/ludus-privacy.js"
+    }
+  ],
+  "checkerRevision": "garp-2.5.1-r4-minimal-critical-branch-hotfix",
+  "note": "Static bounded Cache API analysis plus bounded behavioral evaluation of service-worker registration, isSecurityCriticalRequest, the complete unique fetch handler, and networkOnlyNoStore. PASS requires exactly one dynamically observed fetch handler registration; no pre-guard routing-sensitive read or network/cache/respondWith side effect; after a positive guard no Request/URL/FetchEvent read except event.respondWith; exactly one total routing/network/cache effect (networkOnlyNoStore); and a sink that performs exactly one fetch with cache:no-store and zero Cache API accesses. Does not replace SIM-07 or live revocation tests."
+}

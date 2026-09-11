@@ -1,0 +1,5 @@
+
+> ludus@1.16.23 garp25:sbom:deploy:check
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23-deployment.cdx.json --deploy --check
+
+PASS: SBOM snapshot current: /mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/sbom/ludus-1.16.23-deployment.cdx.json

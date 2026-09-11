@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "secret-pattern:assets/key.txt:pgp-private-key-block"
+  ],
+  "info": []
+}

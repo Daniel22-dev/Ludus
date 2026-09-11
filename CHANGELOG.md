@@ -1,3 +1,23 @@
+## 1.16.23 — 2026-09-11 — GARP 2.5.1 SHIELD corrective candidate, kolo LU-N15 až LU-N19
+- Opraven LU-N15: quality report nyní nese striktní `status` a P5 certifikace má pozitivní i dvě negativní kontroly.
+- Opraven LU-N16: AI Core sync exportuje staged binary patch včetně nových untracked vendor souborů; samostatná kontrola simuluje novou verzi jádra, `git apply` a následný build.
+- Zesílen kanonický GARP tooling pro LU-N17/LU-N18: širší AI-boundary drift detekce a bounded recursive scan obecných ZIP/OOXML archivů.
+- LU-N19: reprodukovatelný provenance subject je dodáván jako samostatný payload ZIP pro opakovatelnou 10/10 PREP bránu.
+- Pedagogická logika, enginy, prompty a AI instrukce se věcně nemění; mění se pouze release/security/build/CI vrstva a číslo verze.
+
+## 1.16.22 — 2026-09-11 — GARP 2.5.1 SHIELD corrective candidate
+- Opravné kolo LU-N1 až LU-N14 podle nezávislé kontroly 1.16.21.
+- Bez věcné změny pedagogické logiky, enginů, promptů a AI instrukcí.
+
+## 1.16.21 — GARP 2.5.1 SHIELD-PREP (2026-09-10)
+
+- Přidána kumulativní GARP 2.5.1 TOOLING-R2 assurance vrstva, CycloneDX 1.7 SBOM, AI-boundary fingerprint, evidence manifest a release-integrity tooling.
+- Service worker už neukládá bezpečnostně kritické deployment/platform/privacy assety do Cache API; kritické cesty jsou obslouženy network-only/no-store před cache-first větví.
+- `ghrab-platform.js`, `ghrab-platform.consumer.json`, `access/deployment-config.js`, `runtime/ludus-privacy.js` a kritické config/RI cesty jsou součástí autoritativního security-critical seznamu.
+- Build respektuje `GHRAB_BUILD_TIME`, takže PREP lze reprodukovat; dva school-server buildy se shodným timestampem mají identický GARP artifactDigest.
+- Source a deployment jsou odděleny; `dist-school-server/` se negeneruje do source kandidáta a je předáván jako samostatný deployment artefakt.
+- Funkční AI prompt/provider/model boundary se tímto kolem nemění; kandidát zůstává AMBER do nezávislého Prompt E review a SHIELD-LIVE na skutečném školním serveru.
+
 ## 1.16.20 — Platform 1.1.2 Studio manifest alignment (2026-09-06)
 
 - Zdrojový Studio manifest byl srovnán s reálnou Platformou 1.1.2 a rozsahem `>=1.1.2 <2.0.0`.

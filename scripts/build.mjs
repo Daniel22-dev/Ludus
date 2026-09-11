@@ -52,7 +52,10 @@ for (const record of rights.records || []) {
 
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST_ENGINES, { recursive: true });
-const buildTime = new Date().toISOString();
+const requestedBuildTime = String(process.env.GHRAB_BUILD_TIME || '').trim();
+const parsedBuildTime = requestedBuildTime ? Date.parse(requestedBuildTime) : NaN;
+if (requestedBuildTime && Number.isNaN(parsedBuildTime)) fail('GHRAB_BUILD_TIME musí být platný ISO-8601 čas.');
+const buildTime = requestedBuildTime ? new Date(parsedBuildTime).toISOString() : new Date().toISOString();
 const appVersion = readJson(path.join(ROOT, 'package.json')).version;
 const coreJs = fs.readFileSync(path.join(CORE_DIR, CORE_FILE), 'utf8');
 const integration = fs.readFileSync(path.join(ROOT, 'src', 'ai-core-integration.js'), 'utf8');

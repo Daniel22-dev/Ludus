@@ -1,0 +1,10 @@
+
+> ludus@1.16.23 garp25:action-pins
+> node scripts/check-action-pins.mjs
+
+{
+  "status": "PASS",
+  "workflowFiles": 7,
+  "externalUses": 24,
+  "findings": []
+}

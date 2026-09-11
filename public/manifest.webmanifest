@@ -68,7 +68,7 @@
     }
   ],
   "id": "/Ludus/",
-  "version": "1.16.20",
+  "version": "1.16.23",
   "ghrab_platform": {
     "contract": "ghrab-platform-v1",
     "version": "1.1.2",
@@ -76,7 +76,7 @@
     "brand_version": "1.0.0",
     "theme_contract": "ghrab-theme-v1",
     "sw_contract": "ghrab-sw-v1",
-    "cache_name": "ghrab-ludus-v1.16.20",
+    "cache_name": "ghrab-ludus-v1.16.23",
     "platform_version": "1.1.2",
     "suite_session_contract": "ghrab-suite-session-v1"
   }

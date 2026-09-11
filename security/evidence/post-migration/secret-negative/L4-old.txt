@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/L4",
+  "info": [
+    "INFO-binary-not-scanned:docs/manual.docx"
+  ]
+}

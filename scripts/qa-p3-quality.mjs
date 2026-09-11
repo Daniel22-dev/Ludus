@@ -161,6 +161,7 @@ if (quality.requireBudget === true) check(Object.keys(budget).length >= 5, 'budg
 
 const result = {
   schema: 'ghrab-p3-quality-result-v1',
+  status: checks.some((item) => !item.ok) ? 'failed' : 'passed',
   appId: consumer.appId,
   appVersion: consumer.appVersion,
   contracts: {

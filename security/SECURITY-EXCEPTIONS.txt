@@ -1,0 +1,57 @@
+GARP 2.5.1 – SECURITY EXCEPTIONS / DEBT REGISTER
+Application: LUDUS 1.16.23
+Date: 2026-09-11
+
+EX-01 – CSP unsafe-inline compatibility
+Severity: MEDIUM debt
+Scope: current builder/engine compatibility.
+Reason: removing unsafe-inline requires a dedicated nonce/hash or external-module refactor across engines.
+Compensating controls: same-origin policy, output normalization/XSS regression, sandboxed preview, no arbitrary model tool/action execution.
+Closure trigger: dedicated CSP refactor plus full browser regression and served-header verification.
+Status: OPEN / PREP debt.
+
+EX-02 – fresh dependency install / online SCA unavailable
+Severity: assurance gap
+Scope: current vulnerability freshness for npm dependencies/dev dependencies.
+Observed 2026-09-11: npm ci --ignore-scripts did not complete within the 120-second execution window in this environment; partial node_modules was removed. No successful fresh advisory resolution is claimed.
+Compensating controls: exact package-lock, qa:lock PASS, corrected CycloneDX 1.7 SBOM with independent lockfile verification, pinned GitHub Actions, install policy --ignore-scripts.
+Closure trigger: protected CI/independent reviewer completes clean npm ci --ignore-scripts plus fresh vulnerability/advisory scan.
+Status: NOT TESTED, not a vulnerability finding and not a PASS.
+
+EX-03 – full served DAST/security headers/live browser lifecycle
+Severity: assurance gap
+Scope: served security headers, live SW update/revocation, full DAST and browser-only behavior.
+Reason: the current managed browser environment does not provide a trustworthy unrestricted local/staging path for those checks; prior managed runs have produced policy blocks. Corrective 1.16.23 does not manufacture a PASS from that limitation.
+Compensating controls: static/VM/in-memory regression, strict P5 report semantics, SW fail-closed checker, XSS/PWA/media/security suites.
+Closure trigger: Prompt E/CI/staging in an unrestricted browser plus served-header/DAST verification.
+Status: NOT TESTED.
+
+EX-04 – SHIELD-LIVE / RI-LIVE not deployed
+Severity: release gate condition
+Scope: actual school VM/container/reverse proxy/session/gateway/trust service/production key custody.
+Reason: school server is not connected in this phase.
+Compensating controls: PREP build contracts, signed disposable PREP fixture, anti-rollback registry, evidence/provenance/SBOM cross-links.
+Closure trigger: Prompt F/G on actual school server with organization key/trust registry/integrity service.
+Status: NOT TESTED; blocks production GREEN.
+
+EX-05 – upstream GHRAB AI Core release-manifest signature
+Severity: ecosystem supply-chain assurance gap
+Scope: sync-ghrab-ai-core origin authenticity.
+Current remediation: downloaded candidate code is validated only in a read-only job; write/PR creation is a separate job; checkout credentials are not persisted; Actions are pinned; npm install uses --ignore-scripts.
+Remaining debt: the upstream AI Core release manifest itself is not yet signed by a pinned ecosystem trust root.
+Closure trigger: ecosystem-level signed AI Core release manifest + verifier before candidate execution/sync.
+Status: OPEN ecosystem debt.
+
+EX-06 – GitHub Pages static distribution outside RI-PREP
+Severity: distribution/release-integrity scope gap
+Scope: current static Pages artifact.
+Current controls: normal QA, SW/security-critical checks and deployment leak scans.
+Limitation: Pages is not signed/registered by the school-server RI-PREP ceremony.
+Closure trigger: sign/register the static artifact or retire that channel when the school-server profile becomes authoritative.
+Status: EXPLICITLY OUTSIDE RI-PREP.
+
+EX-07 – educational truthfulness
+Severity: product/AI residual risk
+Scope: generated teaching content can be factually wrong despite valid schema/security behavior.
+Compensating controls: teacher review before classroom use; schema/security controls protect structure and boundaries, not factual correctness.
+Status: OPEN residual risk.

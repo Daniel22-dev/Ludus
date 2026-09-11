@@ -1,0 +1,123 @@
+{
+  "schema": "ghrab-ai-assurance-fingerprint-v2",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "coreVersion": "1.0.0",
+  "algorithm": "SHA-256",
+  "aggregate": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "inventory": "security/ai-boundary-files.json",
+  "providerBoundary": "deployment-profile-and-egress-controlled",
+  "files": [
+    {
+      "path": "ghrab-ai-core.consumer.json",
+      "size": 320,
+      "sha256": "a0d4502b164e6cbe424b5d3be5e69a4926544134db877fdaefde1e4b40b06760"
+    },
+    {
+      "path": "public/access/deployment-config.js",
+      "size": 10151,
+      "sha256": "a1f678d6cabf0dd3d49af557cab8b83a05291149f497423431e0de09881aac16"
+    },
+    {
+      "path": "public/access/error-reporter.js",
+      "size": 74834,
+      "sha256": "db0a22f9934d3dd62db4a1ca3c7dcbbde509eea1db1f5b209765684da6aec1ec"
+    },
+    {
+      "path": "public/ai-operations.json",
+      "size": 1049,
+      "sha256": "1c921ae54af9963ceda30dc636ea36e11e1828122eb614a83dcbe70333f27664"
+    },
+    {
+      "path": "public/config/data-manifest.json",
+      "size": 7132,
+      "sha256": "b23a8510cd06f5c4383144ae76830bb247cd93c5aed66b4673fd6719fcf32333"
+    },
+    {
+      "path": "public/config/deployment.json",
+      "size": 1812,
+      "sha256": "75a21ed701526d31b5382c6865eefbbfa6d9b8ba8a6299a59dd3a380e85543ee"
+    },
+    {
+      "path": "public/config/deployment.school-server-p0.json",
+      "size": 1487,
+      "sha256": "117e4f27efc8cfebeb1effc144bb447412dd0a8ade5e6b0db0b5279805149609"
+    },
+    {
+      "path": "public/config/deployment.school-server.example.json",
+      "size": 1780,
+      "sha256": "73f3bb412532bda7bb477a183ffb3543575e99dfbd46f4d5791947835031faba"
+    },
+    {
+      "path": "public/config/deployment.school-server.json",
+      "size": 1791,
+      "sha256": "33267e551deb572e85651466219e09c5e6b07dbfcff9a64acbc4802ee4734d84"
+    },
+    {
+      "path": "public/config/release-acceptance.json",
+      "size": 2332,
+      "sha256": "dbe183150adffa2a6199af1ac6fe752bfedae5fae022a2fe4d93af673825cbb7"
+    },
+    {
+      "path": "public/config/security-headers.json",
+      "size": 1939,
+      "sha256": "a1e4a0cc32bf1bf58a63709dd9decc8d30ec69aeb571f73b0fb50b45879fe535"
+    },
+    {
+      "path": "scripts/build-school-profile.mjs",
+      "size": 6132,
+      "sha256": "20a6ea94e131e153b72a0fdff176e4f806b0a458c5094b6be908ffbdb19fcdfe"
+    },
+    {
+      "path": "scripts/qa-garp-security.mjs",
+      "size": 9341,
+      "sha256": "34ad7b2607053994ffb147518854cd0a428f1a9ee3014352fe3c7b972ba5d369"
+    },
+    {
+      "path": "scripts/qa-garp23-critical.mjs",
+      "size": 2650,
+      "sha256": "003847ccf27131a61e1893dfc0ecb60b8cf75e3cffd75bee7cee03b76c623aee"
+    },
+    {
+      "path": "scripts/qa-garp23-security.mjs",
+      "size": 25668,
+      "sha256": "5f1c8176f6e3e0b280a2e46ce721910c6df3c54a07d8d750c78afbb4c3759212"
+    },
+    {
+      "path": "scripts/qa-garp25-ai-resource.mjs",
+      "size": 2314,
+      "sha256": "71f8bc8f14b8579ae826531e2ce859443bb84f96ec01825d4acc49fb3e1d7256"
+    },
+    {
+      "path": "src/ai-core-integration.js",
+      "size": 5215,
+      "sha256": "f8306c2c195123f377db3b56a9d1c32b0e0222b7da5268552ee13cce41c04a7f"
+    },
+    {
+      "path": "src/index.html",
+      "size": 252338,
+      "sha256": "c0fcf1634411063af4939e33d43f223c01d78c2dd42296120b7b60e0ac5d65ba"
+    },
+    {
+      "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-conformance-1.0.0.js",
+      "size": 14197,
+      "sha256": "7707811e4d2e3975a4f90b6d672321ef185e77f71649fdb755f6467da5d4c3b7"
+    },
+    {
+      "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-contract-v1.0.0.md",
+      "size": 22111,
+      "sha256": "6add0ac005d3b2defea8f6a8d722f53244bc5d2d866115d48506182875529ed9"
+    },
+    {
+      "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-1.0.0.js",
+      "size": 48405,
+      "sha256": "81acb93e1f17646ab2b58b3744fce38a6ed5c779e8d5e9cba2ae797816ecec44"
+    },
+    {
+      "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-manifest-1.0.0.json",
+      "size": 392,
+      "sha256": "fc006c3e500495965188c1d385f5ecfd9a7b8967fd86d792883c649fd21ce9b8"
+    }
+  ],
+  "invalidationRule": "Any byte change to an inventoried AI/egress/runtime boundary or any newly detected untracked boundary candidate invalidates inherited AIR evidence. Provider/model/system instruction, connect-src, deployment transport, conformance or school-profile changes require review/retest."
+}

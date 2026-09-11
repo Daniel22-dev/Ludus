@@ -1,0 +1,18 @@
+LUDUS 1.16.22 final corrective regression summary
+npm test: PASS
+qa:garp: PASS 49/49 after exact allowlist update for pinned actions/download-artifact introduced by least-privilege workflow split
+qa:garp23:critical: PASS 13/13
+qa:garp23:privacy: PASS 27/27
+qa:pc01: PASS 93/93
+qa:suite-session: PASS 27/27
+qa:quality: PASS 102/102
+verify:platform: PASS 154/154
+qa:security: PASS
+qa:pwa: PASS
+qa:technical: PASS
+qa:combinatorial: PASS 55/660 selected, pairwise 100%
+qa:xss: PASS
+qa:media: PASS
+qa:lock: PASS
+reporter static/unit: PASS 53/53; browser-only reporter path NOT TESTED in managed browser environment
+GARP 2.5.1 hotfix selftest: PASS 72/72

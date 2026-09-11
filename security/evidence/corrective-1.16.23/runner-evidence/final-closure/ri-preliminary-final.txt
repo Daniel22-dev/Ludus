@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "output": "/mnt/data/ludus_11623/work/ri-preliminary-final.json",
+  "files": 90,
+  "artifactDigest": "beac73a51a35e63664014994271ce86117b8dd2d3544247d6f189de6fe6b9053"
+}

@@ -2,8 +2,8 @@
   "schema": "ghrab-release-acceptance-v1",
   "stage": "P5",
   "appId": "ludus",
-  "appVersion": "1.16.20",
-  "releaseStatus": "platform-1.1.2-wave-candidate-amber",
+  "appVersion": "1.16.23",
+  "releaseStatus": "garp-2.5.1-shield-prep-source-candidate-pending-independent-review",
   "primaryRuntime": {
     "mode": "standalone-github-pages",
     "serverRequired": false,
@@ -25,7 +25,8 @@
     "status": "prepared-not-connected",
     "requiredForP5": false,
     "runtimeBuildIncluded": true,
-    "liveValidationPending": true
+    "liveValidationPending": true,
+    "shieldLiveStatus": "NOT TESTED"
   },
   "accessibility": {
     "automatedOpenFindingsAllowed": 0,
@@ -53,13 +54,18 @@
     "required": true,
     "scriptsExecuted": true,
     "transport": "mixed-in-memory-CDP; local-http blocked-by-managed-URLBlocklist",
-    "note": "Platform 1.1.2 release-wave candidate: qa:browser in-memory Chromium PASS; deterministic privacy lifecycle and exact-vendor suite-session harness PASS, including open-child, delayed replay, multi-tab, BFCache/pageshow, fail-closed and mandatory negative control. Local-http runtime, live service-worker update/recovery, axe and Playwright visual/critical flows remain NOT TESTED in this managed environment and require independent repeat in an unblocked browser."
+    "note": "GARP 2.5.1 SHIELD-PREP delta: local/static/browser-in-memory controls are revalidated where available. Managed Chromium blocks local-http navigation with net::ERR_BLOCKED_BY_ADMINISTRATOR, so served runtime/DAST/reflow/axe and live service-worker revocation remain NOT TESTED here."
   },
   "garp": {
-    "version": "2.3",
-    "round": "Platform-1.1.2-wave / candidate-for-independent-Claude",
+    "version": "2.5.1",
+    "toolingRevision": "R2",
+    "round": "SHIELD-PREP / candidate-for-independent-Claude-Prompt-E",
     "studentData": "synthetic-only",
     "independentReview": "pending",
+    "shieldPrep": "AMBER",
+    "shieldLive": "NOT TESTED",
+    "riPrep": "in-progress-local-disposable-key-only",
+    "riLive": "NOT TESTED",
     "overall": "AMBER"
   }
 }

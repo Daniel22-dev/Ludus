@@ -1,0 +1,125 @@
+
+> ludus@1.16.23 qa:xss
+> node scripts/qa-p5-xss-sinks.mjs
+
+{
+  "schema": "ghrab-p5-xss-sink-audit-v1",
+  "appId": "ludus",
+  "counts": {
+    "innerHTML": 300,
+    "insertAdjacentHTML": 3,
+    "outerHTML": 0,
+    "documentWrite": 0,
+    "eval": 0,
+    "newFunction": 0
+  },
+  "baseline": {
+    "innerHTML": 300,
+    "insertAdjacentHTML": 3,
+    "outerHTML": 0,
+    "documentWrite": 0,
+    "eval": 0,
+    "newFunction": 0
+  },
+  "csp": {
+    "staticUnsafeInlineScript": true,
+    "staticUnsafeInlineStyle": true,
+    "schoolUnsafeInlineScript": true,
+    "schoolUnsafeInlineStyle": true,
+    "unsafeEval": false,
+    "exceptionDocumented": true
+  },
+  "evidence": [
+    {
+      "file": "src/index.html",
+      "kind": "innerHTML",
+      "count": 28
+    },
+    {
+      "file": "public/access/error-reporter.js",
+      "kind": "innerHTML",
+      "count": 2
+    },
+    {
+      "file": "public/manual/index.html",
+      "kind": "innerHTML",
+      "count": 4
+    },
+    {
+      "file": "engines/chronos.html",
+      "kind": "innerHTML",
+      "count": 32
+    },
+    {
+      "file": "engines/dnd.html",
+      "kind": "innerHTML",
+      "count": 27
+    },
+    {
+      "file": "engines/hogwarts.html",
+      "kind": "innerHTML",
+      "count": 28
+    },
+    {
+      "file": "engines/hogwarts.html",
+      "kind": "insertAdjacentHTML",
+      "count": 1
+    },
+    {
+      "file": "engines/indiana-jones.html",
+      "kind": "innerHTML",
+      "count": 31
+    },
+    {
+      "file": "engines/jumanji.html",
+      "kind": "innerHTML",
+      "count": 19
+    },
+    {
+      "file": "engines/laughworks.html",
+      "kind": "innerHTML",
+      "count": 16
+    },
+    {
+      "file": "engines/lotr.html",
+      "kind": "innerHTML",
+      "count": 25
+    },
+    {
+      "file": "engines/matrix.html",
+      "kind": "innerHTML",
+      "count": 14
+    },
+    {
+      "file": "engines/orient-express.html",
+      "kind": "innerHTML",
+      "count": 21
+    },
+    {
+      "file": "engines/star-wars.html",
+      "kind": "innerHTML",
+      "count": 30
+    },
+    {
+      "file": "engines/stranger-things.html",
+      "kind": "innerHTML",
+      "count": 21
+    },
+    {
+      "file": "engines/stranger-things.html",
+      "kind": "insertAdjacentHTML",
+      "count": 2
+    },
+    {
+      "file": "runtime/ludus-engine-runtime.js",
+      "kind": "innerHTML",
+      "count": 2
+    }
+  ],
+  "limitations": [
+    "This is a regression inventory, not proof that every HTML sink is safe.",
+    "unsafe-inline remains a known compatibility exception until a dedicated nonce/hash or external-module CSP refactor is validated across all engines."
+  ],
+  "failures": [],
+  "status": "passed"
+}

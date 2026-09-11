@@ -1,0 +1,10 @@
+
+> ludus@1.16.23 garp25:logging-canary
+> node scripts/qa-garp25-logging-canary.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-08",
+  "sanitized": true,
+  "output": "[e-mail odstraněn] | Bearer [token odstraněn] | api_key=[odstraněno] | access_token=[odstraněno] | prompt=[obsah odstraněn] | student data=[obsah odstraněn]"
+}

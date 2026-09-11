@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "expected": 3,
+  "actual": 3,
+  "errors": [
+    "name:node_modules/parent/node_modules/nested:parent:nested"
+  ]
+}

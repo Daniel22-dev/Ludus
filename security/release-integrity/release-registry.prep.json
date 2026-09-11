@@ -1,0 +1,18 @@
+{
+  "schema": "ghrab-release-registry-v1",
+  "updatedAt": "2026-09-11T14:00:00.000Z",
+  "purpose": "synthetic PREP registry; not production approval",
+  "apps": [
+    {
+      "appId": "ludus",
+      "approvedVersion": "1.16.23",
+      "artifactDigest": "beac73a51a35e63664014994271ce86117b8dd2d3544247d6f189de6fe6b9053",
+      "keyId": "prep-ludus-1.16.23-20260911",
+      "approvedAt": "2026-09-11T14:00:00.000Z",
+      "status": "approved",
+      "history": [
+        {"version":"1.16.22","artifactDigest":"508b1e6b79e27a379a7b6e7032a5e10d72493a69fc473439ea589b64073cfbcf"}
+      ]
+    }
+  ]
+}

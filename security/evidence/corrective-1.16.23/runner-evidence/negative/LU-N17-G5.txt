@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "inventory-drift-untracked:engines/lu-n17-g5.html"
+  ],
+  "files": 22,
+  "aggregate": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "expected": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "inventory": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/ai-boundary-files.json",
+  "detectedCandidates": 20,
+  "untracked": [
+    "engines/lu-n17-g5.html"
+  ],
+  "inventoryEntriesNotDetectorMatched": [
+    "ghrab-ai-core.consumer.json",
+    "public/ai-operations.json",
+    "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-manifest-1.0.0.json"
+  ],
+  "verifierRevision": "garp-2.5.1-lu-n17-ai-inventory-drift-hotfix"
+}

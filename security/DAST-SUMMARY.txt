@@ -1,0 +1,17 @@
+GARP 2.5.1 – DAST / SERVED BROWSER SUMMARY
+Application: LUDUS 1.16.23
+Date: 2026-09-10
+
+Status: NOT TESTED as a complete served DAST/security-header exercise.
+Reason: managed Chromium policy blocks the local HTTP test pages with net::ERR_BLOCKED_BY_ADMINISTRATOR.
+Consequences:
+- served header removal SHNC-11: NOT TESTED;
+- full local-http runtime/reflow behavior: NOT TESTED;
+- browser reporter behavior: NOT READY for the same policy reason;
+- live service-worker update/revocation scenario: NOT TESTED.
+
+Available compensating PREP evidence:
+- in-memory browser QA PASS;
+- GARP 2.5.1 service-worker structural checker PASS;
+- static CSP/security-header configuration is present;
+- qa:xss PASS structural/regression scope.

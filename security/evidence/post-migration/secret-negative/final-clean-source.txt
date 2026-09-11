@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11622/work/app",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n4-secret-scan"
+}

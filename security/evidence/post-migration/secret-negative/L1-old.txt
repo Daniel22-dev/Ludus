@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "secret-pattern:config/key.json:jwk-private-key"
+  ],
+  "info": []
+}

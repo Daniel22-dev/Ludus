@@ -1,0 +1,648 @@
+
+> ludus@1.16.23 garp25:prep-static
+> npm run garp25:selftest && npm run garp25:sbom:check && npm run garp25:sbom:verify && npm run garp25:ai-evidence:check && npm run garp25:ai-evidence:verify && npm run garp25:source-scan && npm run garp25:action-pins && npm run garp25:ai-resource && npm run garp25:logging-canary && npm run garp25:sw && npm run garp25:leaks && npm run garp25:ai-core-sync-patch
+
+
+> ludus@1.16.23 garp25:selftest
+> node security/garp25/tools/selftest-garp251.mjs
+
+{
+  "status": "PASS",
+  "checks": 81,
+  "passed": 81,
+  "failed": []
+}
+
+> ludus@1.16.23 garp25:sbom:check
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json --check
+
+PASS: SBOM snapshot current: /mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/sbom/ludus-1.16.23.cdx.json
+
+> ludus@1.16.23 garp25:sbom:verify
+> node scripts/verify-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json
+
+{
+  "status": "PASS",
+  "expected": 44,
+  "actual": 44,
+  "nodeModulesCrossCheck": 0
+}
+
+> ludus@1.16.23 garp25:ai-evidence:check
+> node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json --check
+
+PASS: AI assurance fingerprint current: 01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790
+
+> ludus@1.16.23 garp25:ai-evidence:verify
+> node security/garp25/tools/verify-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json security/ai-boundary-files.json .
+
+{
+  "status": "PASS",
+  "errors": [],
+  "files": 22,
+  "aggregate": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "expected": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "inventory": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/ai-boundary-files.json",
+  "detectedCandidates": 19,
+  "untracked": [],
+  "inventoryEntriesNotDetectorMatched": [
+    "ghrab-ai-core.consumer.json",
+    "public/ai-operations.json",
+    "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-manifest-1.0.0.json"
+  ],
+  "verifierRevision": "garp-2.5.1-lu-n17-ai-inventory-drift-hotfix"
+}
+
+> ludus@1.16.23 garp25:source-scan
+> node scripts/garp25-source-scan.mjs
+
+{
+  "status": "PASS",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}
+
+> ludus@1.16.23 garp25:action-pins
+> node scripts/check-action-pins.mjs
+
+{
+  "status": "PASS",
+  "workflowFiles": 7,
+  "externalUses": 24,
+  "findings": []
+}
+
+> ludus@1.16.23 garp25:ai-resource
+> node scripts/qa-garp25-ai-resource.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-07",
+  "expected": "PAYLOAD_TOO_LARGE",
+  "observed": "PAYLOAD_TOO_LARGE",
+  "networkCalls": 0
+}
+
+> ludus@1.16.23 garp25:logging-canary
+> node scripts/qa-garp25-logging-canary.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-08",
+  "sanitized": true,
+  "output": "[e-mail odstraněn] | Bearer [token odstraněn] | api_key=[odstraněno] | access_token=[odstraněno] | prompt=[obsah odstraněn] | student data=[obsah odstraněn]"
+}
+
+> ludus@1.16.23 garp25:sw
+> node security/garp25/tools/check-sw-security-freeze.mjs dist/sw.js dist security/security-critical-assets.json
+
+{
+  "status": "PASS",
+  "serviceWorker": "dist/sw.js",
+  "criticalListSource": "security/security-critical-assets.json",
+  "precachedEntries": 21,
+  "precacheSources": [
+    {
+      "source": "map-add:GHRAB_PLATFORM_P3_ASSETS",
+      "entries": [
+        "./ghrab/ghrab-platform.css",
+        "./ghrab/ghrab-artifact-envelope-v1.schema.json",
+        "./ghrab/ghrab-app-registry-v2.schema.json",
+        "./ghrab/ghrab-platform-manifest-1.1.2.json",
+        "./assets/brand/school-logo.png"
+      ]
+    },
+    {
+      "source": "addAll:expression",
+      "entries": [
+        "./index.html",
+        "./manifest.webmanifest",
+        "./access/access-gate.css",
+        "./access/reporter-bootstrap.js",
+        "./access/error-reporter.js",
+        "./access/error-reporter.css",
+        "./access/error-reporter-adapter.js",
+        "./icons/icon-192.png",
+        "./icons/icon-512.png",
+        "./icons/icon-maskable-512.png",
+        "./engines/manifest.json",
+        "./config/brand-manifest.json",
+        "./assets/brand/school-logo.png",
+        "./runtime/ludus-engine-runtime.js",
+        "./runtime/ludus-engine-badge.css",
+        "./runtime/ludus-engine-controls.css",
+        "./content/engine-index.json"
+      ]
+    }
+  ],
+  "unresolvedCacheWrites": [],
+  "cacheFirstDetected": true,
+  "structuralNetworkOnlyGuard": true,
+  "structuralGuard": {
+    "pass": true,
+    "condition": "isSecurityCriticalRequest(url, scopePath)",
+    "preGuardRespondWith": false,
+    "hasRespondWithNetworkOnly": true,
+    "hasReturn": true,
+    "branchBeforeCacheFirst": true
+  },
+  "behavioralGuard": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "assets/app.js",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "manual/index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      }
+    ],
+    "falseNegatives": [],
+    "falsePositives": []
+  },
+  "fetchHandlerRegistrations": {
+    "addEventListenerCount": 1,
+    "onfetchAssignments": 0,
+    "total": 1,
+    "invalidFetchHandlers": 0,
+    "topLevelEffects": [],
+    "error": null,
+    "pass": true
+  },
+  "fetchRouteBehavior": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "preGuardPolicy": {
+      "requestAllowed": [
+        "method",
+        "url"
+      ],
+      "eventAllowed": [
+        "request"
+      ],
+      "urlAllowed": [
+        "origin",
+        "pathname"
+      ],
+      "rule": "Exactly one fetch handler registration is permitted. Before the guard, routing-sensitive reads and all network/cache/respondWith effects are fail-closed. After a positive guard, the critical branch may read only event.respondWith and must produce exactly one total route effect: networkOnlyNoStore."
+    },
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      }
+    ],
+    "failed": []
+  },
+  "networkOnlySink": {
+    "status": "PASS",
+    "error": null,
+    "fetchCalls": [
+      {
+        "sameRequest": true,
+        "options": {
+          "cache": "no-store"
+        }
+      }
+    ],
+    "cacheCalls": [],
+    "cacheWrites": [],
+    "resultObserved": true
+  },
+  "criticalAssetsInDeployment": [
+    "access/deployment-config.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js"
+  ],
+  "authoritativeCriticalAssets": [
+    "access/deployment-config.js",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "release-integrity.json",
+    "release-integrity.sig",
+    "integrity-status",
+    "integrity-status.json"
+  ],
+  "findings": [],
+  "checkerRevision": "garp-2.5.1-r4-minimal-critical-branch-hotfix",
+  "note": "Static bounded Cache API analysis plus bounded behavioral evaluation of service-worker registration, isSecurityCriticalRequest, the complete unique fetch handler, and networkOnlyNoStore. PASS requires exactly one dynamically observed fetch handler registration; no pre-guard routing-sensitive read or network/cache/respondWith side effect; after a positive guard no Request/URL/FetchEvent read except event.respondWith; exactly one total routing/network/cache effect (networkOnlyNoStore); and a sink that performs exactly one fetch with cache:no-store and zero Cache API accesses. Does not replace SIM-07 or live revocation tests."
+}
+
+> ludus@1.16.23 garp25:leaks
+> node security/garp25/tools/scan-deployment-leaks.mjs dist
+
+{
+  "status": "PASS",
+  "mode": "deployment",
+  "root": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/dist",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}
+
+> ludus@1.16.23 garp25:ai-core-sync-patch
+> node scripts/qa-garp25-ai-core-sync-patch.mjs
+
+{
+  "status": "PASS",
+  "newCoreDirCaptured": true,
+  "gitApply": true,
+  "buildAfterApply": true
+}

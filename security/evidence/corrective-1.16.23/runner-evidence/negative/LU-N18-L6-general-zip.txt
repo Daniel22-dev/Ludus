@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "mode": "deployment",
+  "root": "/tmp/tmp.JR5RQQiLb7/deploy",
+  "errors": [
+    "secret-pattern:archive.zip!secret.js:google-api-key"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}

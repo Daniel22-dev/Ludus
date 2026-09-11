@@ -1,0 +1,39 @@
+{
+  "old_1.16.21": {
+    "sync.persist_credentials_false": false,
+    "sync.npm_ci_ignore_scripts": false,
+    "sync.read_job_readonly": false,
+    "sync.separate_write_job": false,
+    "sync.write_job_no_npm_or_node": false,
+    "deploy.top_read": true,
+    "deploy.qa_readonly": false,
+    "deploy.deploy_pages_id_only": false,
+    "deploy.runner_pinned": false,
+    "deploy.node_exact": false,
+    "deploy.npm_ignore_scripts": true,
+    "validate.contents_read": false,
+    "validate.runner_pinned": false,
+    "validate.node_exact": false,
+    "validate.npm_ignore_scripts": false
+  },
+  "new_1.16.22": {
+    "sync.persist_credentials_false": true,
+    "sync.npm_ci_ignore_scripts": true,
+    "sync.read_job_readonly": true,
+    "sync.separate_write_job": true,
+    "sync.write_job_no_npm_or_node": true,
+    "deploy.top_read": true,
+    "deploy.qa_readonly": true,
+    "deploy.deploy_pages_id_only": true,
+    "deploy.runner_pinned": true,
+    "deploy.node_exact": true,
+    "deploy.npm_ignore_scripts": true,
+    "validate.contents_read": true,
+    "validate.runner_pinned": true,
+    "validate.node_exact": true,
+    "validate.npm_ignore_scripts": true
+  },
+  "old_passed": 2,
+  "new_passed": 15,
+  "total": 15
+}

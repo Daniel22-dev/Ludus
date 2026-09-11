@@ -1,0 +1,14 @@
+
+> ludus@1.16.23 qa:garp23
+> node scripts/qa-garp23-security.mjs
+
+{
+  "schema": "ghrab-garp23-local-security-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "canaryId": "83044cf4d197",
+  "total": 48,
+  "passed": 48,
+  "failed": 0,
+  "status": "passed"
+}

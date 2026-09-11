@@ -1,0 +1,10 @@
+
+> ludus@1.16.23 garp25:sbom:verify
+> node scripts/verify-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json
+
+{
+  "status": "PASS",
+  "expected": 44,
+  "actual": 44,
+  "nodeModulesCrossCheck": 0
+}

@@ -1,0 +1,5 @@
+GARP 2.5.1 SCA SUMMARY — LUDUS 1.16.23
+Date: 2026-09-11
+CycloneDX source inventory is generated from the exact lockfile and independently verified. Dependency set is unchanged from 1.16.22 apart from application version metadata.
+Fresh npm ci / online advisory scan in this ChatGPT runner: NOT TESTED — install did not complete within the bounded attempt.
+The prior independent 1.16.22 review reported npm ci exit 0 and npm audit 0, but that evidence is not relabeled as a fresh 1.16.23 scan.

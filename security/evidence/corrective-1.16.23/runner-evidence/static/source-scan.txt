@@ -1,0 +1,12 @@
+
+> ludus@1.16.23 garp25:source-scan
+> node scripts/garp25-source-scan.mjs
+
+{
+  "status": "PASS",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}

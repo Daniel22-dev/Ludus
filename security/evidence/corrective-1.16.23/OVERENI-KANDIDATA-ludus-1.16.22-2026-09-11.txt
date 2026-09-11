@@ -1,0 +1,293 @@
+======================================================================
+OVĚŘENÍ KANDIDÁTA — LUDUS 1.16.22 — GARP 2.5.1 SHIELD
+Nezávislá kontrola, PROMPT E, role B (Claude) — kolo 2
+======================================================================
+Datum: 2026-09-11
+Kontroloval: Claude, role B — nezávislý auditor, neopravuje
+Předmět: PREDANI-LUDUS-1_16_22-GARP2_5-SHIELD.txt, kandidát, deployment,
+         nástroj GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N2-HOTFIX
+Navazuje na: OVERENI-KANDIDATA-ludus-1.16.21-2026-09-11.txt (03f041c4…)
+Produkční release approval: NE
+Reálná studentská data v auditu: NE
+
+======================================================================
+0. VERDIKT
+======================================================================
+Opravné kolo je věcně poctivé a z velké části úspěšné. Z nálezů LU-N1
+až LU-N14 jsem nezávisle uzavřel 12. LU-N6 a LU-N8 jsou opravené
+v bezpečnostní logice, ale obě opravy zavedly novou funkční vadu:
+- LU-N15: zpřísněná P5 certifikace padá na každém běhu, protože report
+  kvality nemá pole status. Plný řetězec qa:p5:ci je proto červený
+  a v CI zablokuje nasazení na GitHub Pages;
+- LU-N16: rozdělený workflow synchronizace AI Core exportuje patch přes
+  git diff, který nové soubory jádra vůbec nezahrne.
+Obojí selhává bezpečně (fail-closed), žádná ochrana se neoslabila.
+Obojí ale znamená, že kandidát v dodané podobě neprojde vlastním CI.
+
+Klíčové výsledky kola:
+- LU-N2 opraveno v kanonickém nástroji: kromě P4 jsem zkusil 16 nových
+  variant kolize jmen — 7× FAIL, 9× AMBER, žádný tichý PASS;
+- všechny známé obchvaty SW kontroly zachyceny; dodaný SW je bajtově
+  moje ověřená oprava z minulého kola a v Chromiu se chová správně;
+- SBOM je nyní věcně správný (44/44 jmen, verzí, purl i SHA-512);
+- deployment je bajtově reprodukovatelný z kandidáta i z přiloženého
+  snímku zdrojů; podpis, registr i negativní kontroly drží.
+
+Doporučení: krátké opravné kolo 1.16.23 pro LU-N15 a LU-N16. Rozsah je
+malý (dvě lokální opravy + dvě pozitivní kontroly). Zbylé nálezy jsou
+LOW a mohou jít s ním.
+
+SECURITY AMBER · PRIVACY AMBER · RED TEAM AMBER ·
+RELEASE INTEGRITY AMBER (jádro RI-PREP drží, nezávisle reprodukováno) ·
+SHIELD ASSURANCE AMBER (SH-APP-09 nyní PASS) · OVERALL AMBER
+School-server production: NEPOVOLENO. Reálná studentská data: NE.
+
+Otevřené CRITICAL: 0 · HIGH: 1 (LU-N15, funkční, blokuje vydání,
+bezpečnostně neutrální) · MEDIUM: 1 (LU-N16) · LOW: 3 (LU-N17 až LU-N19)
+
+======================================================================
+1. VSTUPY A JEJICH SHA-256
+======================================================================
+  KANDIDAT.zip   80ac6464a5957bd5f9179e09a76af6b2455affb01ccede418bc647c35b267da4  SHODA
+  DEPLOYMENT.zip 09833ac3e78ec156240d252e9553009d86e22cf9d7e7b8d83ccaa889c1f54297  SHODA
+  NÁSTROJ LU-N2  efe015f36c29d8eba866dad5a27d81cd71c50bee069b077e9c1cbf0d11333f79  SHODA
+                 (nahráno pod názvem GARP-2_5_1-…; obsah totožný)
+  PREDANI txt    7b2e76430a0ad6650fbfbc470e9069bc621f698aeaf05ea415dc586807f3d8c8  (dopočteno)
+Kandidát 422 souborů bez dist/ a node_modules/; deployment 92 souborů
+(90 payload + RI json + sig). Bez symlinků a path traversal.
+Pozor: deployment ZIP má nově kořenový adresář
+LUDUS-1_16_22-GARP2_5-SHIELD-DEPLOYMENT/ (1.16.21 byl plochý).
+
+Nástroj: interní SHA256SUMS 90/90 OK (SHA souboru 42da2d7b… sedí),
+16 nástrojů, selftest 72/72 PASS. Proti N5 změněno 5 nástrojů + nový
+verify-assurance-links.mjs; adresář PROMPTY beze změny. Kopie
+v kandidátovi (security/garp25/tools) je s nástrojem bajtově shodná 16/16.
+
+======================================================================
+2. PROSTŘEDÍ A METODA
+======================================================================
+Node v22.22.2, npm 10.9.7, Python 3.12, Chromium 152 (z npm,
+nepinovaný CI build). Síť: npm registry. Nezávislý přepočet digestu
+(Python) a podpisu (vlastní Node kód), rebuild z kandidáta i ze
+snímku, mutace a negativní kontroly na jednorázových kopiích,
+behaviorální test SW ve skutečném prohlížeči.
+
+======================================================================
+3. RELEASE INTEGRITY A REPRODUKOVATELNOST
+======================================================================
+- artifactDigest 508b1e6b79e27a379a7b6e7032a5e10d72493a69fc473439ea589b64073cfbcf
+  nezávisle přepočten: 90/90, chybí 0, navíc 0, neshoda 0 — SHODA.
+- Podpis Ed25519 (vlastní kód): klíč prep-ludus-1.16.22-20260911,
+  platnost 2026-09-11 až 2026-10-11 — PODPIS PLATNÝ.
+- RI manifest nově váže buildProvenanceSha256, sbomSha256 (deployment
+  SBOM) i evidenceManifestSha256; hodnoty souhlasí se soubory.
+- npm ci --ignore-scripts proti živému registry: exit 0, 43 balíčků.
+  Uzavírá NOT TESTED č. 1 z předání. npm audit: 0 zranitelností.
+  Lockfile se proti 1.16.21 liší jen číslem verze.
+- Rebuild s GHRAB_BUILD_TIME=2026-09-11T10:00:00.000Z:
+  2× z kandidáta: shodné mezi sebou i s deploymentem;
+  1× ze snímku zdrojů: digest 508b1e6b… — SHODA.
+- Snímek zdrojů d87b0360…: 261 souborů, 260 bajtově shodných
+  s kandidátem; jediný rozdíl je security/security-evidence-manifest.json
+  (starší verze, viz INFO).
+- Negativní kontroly (nástroj LU-N2), všechny exit 1:
+  1 bajt v index.html -> TAMPERED; odebraný ludus-privacy.js -> missing;
+  změna verze v manifestu -> SIGNATURE_INVALID; klíč po notAfter ->
+  key-expired; podvržený digest v registru -> artifactDigest-mismatch.
+- Jednotná brána, můj běh se všemi dodanými vstupy:
+  GREEN, 9/9 kroků PASS, build-provenance vynechán.
+  Deset kroků nelze z dodaných souborů zopakovat — viz LU-N19.
+
+======================================================================
+4. STAV NÁLEZŮ LU-N1 AŽ LU-N14
+======================================================================
+LU-N1  UZAVŘENO. Aplikace používá nástroj LU-N2. Mutace N6, N14a,
+       N14b, N20a, N20b, N21 a P4 na SW 1.16.22: vše FAIL. SW 1.16.22 je
+       bajtově moje ověřená oprava (guard před request.cache,
+       integrity-status.json). Chromium: 0 kritických assetů v cache,
+       změna na serveru se projeví ihned, offline 11/11 fail-closed.
+LU-N2  UZAVŘENO. P4 -> CRITICAL. Nad rámec předání jsem zkusil 16 dalších
+       tvarů kolize jmen a zápisu do cache (forEach, for-of, function,
+       async blok, pojmenovaný callback, řetěz aliasů, fetch+put,
+       new Request, indexová smyčka, spread, destrukturace, druhý
+       parametr, alias cache, addAll(map), literál): 7× FAIL, 9× AMBER,
+       0× tichý PASS.
+LU-N3  UZAVŘENO. Source SBOM: 44 komponent, 44 unikátních purl, žádné
+       jméno „node_modules“, jména i verze 44/44 proti lockfile,
+       SHA-512 44/44 (velká písmena hex, CycloneDX je povoluje),
+       scope excluded 44/44. Deployment SBOM: platforma 1.1.2, reportér,
+       AI Core 1.0.0; všech 13 souborových hashů odpovídá skutečným
+       souborům. RI sbomSha256 váže deployment SBOM.
+LU-N4  UZAVŘENO se zbytkem. Zachyceno S0–S13 včetně JWK s mezerami
+       a OPENSSH; L0–L7 včetně PNG, komprimovaného DOCX a XLSX
+       a sourcemapy. Tiše projde klíč uvnitř obecného .zip (LU-N18).
+LU-N5  UZAVŘENO pro inventář: změna connect-src, release-acceptance.json
+       i deployment-config.js otisk zneplatní. Detektor driftu má ale
+       mezery (LU-N17).
+LU-N6  ČÁSTEČNĚ. Oprávnění a přihlašovací údaje v pořádku (read-only job
+       spouští stažený kód, write job jen aplikuje patch,
+       persist-credentials: false, --ignore-scripts). Nová funkční vada
+       LU-N16. Ekosystémový dluh (nepodepsaný manifest AI Core) správně
+       přiznán.
+LU-N7  UZAVŘENO. Oprávnění po jobech, pages/id-token jen v deploy,
+       ubuntu-24.04, Node 22.16.0, pinované actions, --ignore-scripts.
+LU-N8  UZAVŘENO v logice (status === 'passed'), ale se zavedenou
+       regresí LU-N15.
+LU-N9  UZAVŘENO. Snímek dodán a ověřen rebuildem.
+LU-N10 UZAVŘENO v minimálním rozsahu: GitHub Pages je jako mimo RI-PREP
+       uveden ve SHIELD-STATUS, DEPLOYMENT-SECURITY, ASSURANCE-STATUS
+       a SECURITY-EXCEPTIONS. Podpis statického buildu zůstává dluhem.
+LU-N11 UZAVŘENO. Evidence manifest v2: 157 souborů + 3 externí,
+       v security/evidence není nic mimo manifest, obsahuje snímek
+       i pre-migration důkaz GH-10.
+LU-N12 UZAVŘENO. Návrat ghrab-platform.js do P3 seznamu: npm run build
+       i build:school-server exit 1 s výslovnou chybou.
+LU-N13 UZAVŘENO. source.revision df1cc5bb… + popis delty +
+       releaseIntegrity.artifactDigest v provenance. Zbytek LU-N19.
+LU-N14 UZAVŘENO. notBefore/notAfter doplněny, key-expired funguje,
+       brána vypisuje vynechané kroky.
+Navíc: build školního profilu nově vynucuje aiTransport=school-gateway
+a zakazuje lokální klíče — uzavírá moji výhradu z minulého kola.
+
+======================================================================
+5. REGRESE
+======================================================================
+Vše exit 0: npm test (validace OK, 11 enginů, platforma 154/154) ·
+qa:garp 49/49 · qa:garp23 48/48 s prohlížečovým harnessem ·
+qa:garp23:critical 13/13 · privacy 27/27 · qa:pc01 93/93 ·
+suite-session 27/27 · qa:quality 102/102 · verify:platform 154/154 ·
+qa:security, qa:pwa, qa:technical 0 nálezů · qa:combinatorial 55/660 ·
+qa:xss, qa:media, qa:lock passed · garp25:prep-static PASS.
+qa:p5:ci: runtime (0 ve všech kategoriích) a axe (26 stavů, 0 porušení)
+prošly; certifikace qa-p5-release 49/50 FAIL -> řetězec FAIL (LU-N15).
+Předání plný řetězec qa:p5:ci neuvádí — v prostředí Prompt C chybělo
+Chromium, takže pozitivní běh nikdo neviděl.
+
+Delta 1.16.21 -> 1.16.22: 157 přidáno / 86 změněno / 116 odebráno
+(téměř vše security/evidence). Všech 19 pedagogických a runtime souborů
+(enginy, runtime, src, manuál, content) se liší jen číslem verze.
+Věcně změněny jen build/CI/security soubory — odpovídá předání.
+
+======================================================================
+6. NOVÉ NÁLEZY
+======================================================================
+
+LU-N15 — HIGH (funkční, blokuje vydání, bezpečnostně neutrální)
+         P5 certifikace po opravě LU-N8 vždy selže
+Popis: qa-p5-release.mjs nyní správně vyžaduje status === 'passed'.
+  Report kvality (dist/quality-report.json, generuje qa-p3-quality.mjs)
+  ale pole status nemá — neměl ho ani v 1.16.21. Kontrola
+  report.quality.passed proto selže při každém běhu.
+Důkaz: čistý běh qa:p5:ci na 1.16.22 -> qa-p5-release 49/50,
+  failed ["report.quality.passed"], exit 1.
+Dopad: deploy.yml (job qa-build) i validate.yml spouštějí qa:p5:ci ->
+  CI bude červené na každém pushi a nasazení na GitHub Pages se
+  nespustí. Negativní kontrola v evidenci („failed browser report ->
+  P5 fail“) nic nedokládá, protože selže každý běh.
+Doporučení: doplnit status do reportu kvality (passed/failed podle
+  výsledku), nebo ho v certifikaci hodnotit vlastní striktní podmínkou.
+  Přidat pozitivní kontrolu: validní sada reportů -> exit 0, a teprve
+  pak negativní kontroly.
+
+LU-N16 — MEDIUM — synchronizace AI Core vytvoří neúplný patch
+Popis: sync-ghrab-ai-core.mjs zapisuje novou verzi jádra do nového
+  adresáře vendor/ghrab-ai-core-<verze>/. Read-only job exportuje patch
+  příkazem git diff --binary -- vendor …, který nesledované soubory
+  nezahrne.
+Důkaz (simulace v kopii repozitáře): nová verze 1.0.1 -> patch obsahuje
+  jen ghrab-ai-core.consumer.json, soubor nového jádra 0×, adresář
+  zůstává jako untracked.
+Dopad: write job aplikuje patch bez nového jádra a vytvoří PR, který
+  odkazuje na neexistující soubory. Selže bezpečně (build/testy PR), ale
+  „ověřený“ tok v praxi nefunguje a svádí k ručnímu obcházení.
+  ci-policy-before-after.json kontroluje workflow jen staticky.
+Doporučení: v read-only jobu git add -A -- vendor
+  ghrab-ai-core.consumer.json scripts/sync-ghrab-ai-core.mjs a pak
+  git diff --cached --binary; přidat kontrolu, která simuluje novou
+  verzi jádra a ověří obsah patche.
+
+LU-N17 — LOW — detektor driftu AI hranice má mezery
+Popis: verify-ai-assurance-fingerprint.mjs hledá kandidáty jen v src/,
+  public/config/, public/access/ a vendor/*ai-core*; tokeny neobsahují
+  endpoint providera (generativelanguage, generateContent).
+Důkaz: tiše projde nový soubor v src/ jen s endpointem Gemini, volání
+  AI vložené do enginu a nový soubor v kořeni public/. Kontrola: nový
+  soubor v src/ se systemInstruction je zachycen.
+Zmírnění: ve školním profilu connect-src 'self'; ve statickém profilu
+  je však origin providera už povolen, takže nová AI cesta by prošla
+  bez nového posouzení.
+Doporučení: přidat tokeny endpointů a kořeny engines/, runtime/,
+  public/, scripts/.
+
+LU-N18 — LOW — obecné ZIP archivy se neskenují
+Popis: zdrojový i deployment skener rozbalují jen OOXML (docx/xlsx/pptx).
+  Klíč v obecném .zip projde tiše (S14, L6).
+Zmírnění: deployment žádný ZIP neobsahuje; jediný ZIP v kandidátovi je
+  snímek zdrojů a jeho obsah je shodný se skenovaným stromem.
+
+LU-N19 — LOW — krok build-provenance nelze zopakovat z dodaných souborů
+Popis: subjektem provenance je LUDUS-1.16.22-SCHOOL-PAYLOAD.zip
+  (5b51dff2…), který nebyl dodán a v kandidátovi není skript, který by
+  ho deterministicky vytvořil. S dodaným deployment ZIPem krok selže
+  (subject.sha256), bez něj je vynechán. „GREEN 10/10“ z předání tak
+  lze nezávisle zopakovat jen jako 9/9 + vynechaný krok.
+Zmírnění: provenance nese releaseIntegrity.artifactDigest a můj rebuild
+  vazbu na payload potvrzuje.
+Doporučení: subjekt provenance = dodaný deployment ZIP, nebo payload ZIP
+  přiložit.
+
+INFO
+- Selftest přibyl jen o P4/P4b/P4c (69 -> 72). Rozšíření skeneru
+  (OOXML, binární bajty, CSS/SVG) a detektor driftu tak podle počtu
+  kontrol nemají vlastní kanonickou negativní kontrolu.
+- Snímek zdrojů obsahuje starší security-evidence-manifest.json,
+  přestože SOURCE-SNAPSHOT-POLICY uvádí vyloučení evidence.
+- Deployment SBOM odkazuje soubory AI Core pod virtuální cestou
+  source-vendor/ (ve zdroji vendor/).
+- Kořenový adresář v deployment ZIPu je třeba zohlednit v postupu
+  nasazení a při ověřování RI.
+
+======================================================================
+7. OPRAVY VLASTNÍCH CHYB
+======================================================================
+1. První běh brány mi ukázal FAIL u vendored-consistency. Spustil jsem ji
+   nad nesestaveným kandidátem; nad sestaveným stromem je PASS.
+2. První porovnání hashů SBOM bylo citlivé na velikost písmen a vyšlo
+   0/44. Správně 44/44.
+3. První klasifikace delty použila starý soubor z minulého kola (výpis
+   se přerušil dřív, než se soubor přepsal). Zopakováno správně.
+
+======================================================================
+8. BRÁNY
+======================================================================
+SECURITY:          AMBER — žádné nové CRITICAL, SW i skenery zesíleny;
+                   DAST a servírované hlavičky NOT TESTED.
+PRIVACY:           AMBER — D2, žádná reálná data.
+RED TEAM:          AMBER — live-model rule platí.
+RELEASE INTEGRITY: AMBER — jádro nezávisle reprodukováno; LU-N19.
+SHIELD ASSURANCE:  AMBER — SH-APP-09 nyní PASS; LU-N15 blokuje P5.
+OVERALL:           AMBER
+School-server production: NEPOVOLENO. Reálná studentská data: NE.
+
+NOT TESTED beze změny: DAST a servírované hlavičky, aktualizace
+a revokace SW v živém prostředí, AIR proti produkčnímu modelu,
+SHIELD-LIVE/RI-LIVE, produkční klíče, podpis manifestu AI Core,
+branch protection, prohlížečová část reportéru.
+
+======================================================================
+9. DOPORUČENÍ PRO OPRAVNÉ KOLO 1.16.23
+======================================================================
+Blokující:
+1. LU-N15 — status v reportu kvality (nebo vlastní striktní podmínka);
+   pozitivní kontrola celé P5 certifikace; plný qa:p5:ci musí projít.
+2. LU-N16 — export patche přes git add -A + git diff --cached; kontrola
+   se simulovanou novou verzí jádra.
+Doporučené:
+3. LU-N17 — tokeny endpointů a širší kořeny detektoru driftu.
+4. LU-N18 — rozbalovat obecné ZIP archivy.
+5. LU-N19 — subjekt provenance = dodaný deployment ZIP.
+6. INFO — kanonické negativní kontroly pro nové schopnosti skeneru
+   a detektoru; snímek bez evidence manifestu.
+Pravidlo pro kolo: každá oprava s pozitivní i negativní kontrolou;
+plný qa:p5:ci s Chromiem uvést v předání.
+======================================================================

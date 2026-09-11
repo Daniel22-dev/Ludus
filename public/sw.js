@@ -1,12 +1,11 @@
 const GHRAB_SW_CONTRACT='ghrab-service-worker-v1';
 /* GHRAB service-worker contract v1 · update activation is user-controlled. */
-const LUDUS_CACHE = "ghrab-ludus-v1.16.20";
+const LUDUS_CACHE = "ghrab-ludus-v1.16.23";
 const CACHE_PREFIXES = ["ghrab-ludus-v", "ludus-pwa-"];
 const CORE_ASSETS = [
   "./index.html",
   "./manifest.webmanifest",
   "./access/access-gate.css",
-  "./access/deployment-config.js",
   "./access/reporter-bootstrap.js",
   "./access/error-reporter.js",
   "./access/error-reporter.css",
@@ -16,11 +15,8 @@ const CORE_ASSETS = [
   "./icons/icon-maskable-512.png",
   "./engines/manifest.json",
   "./config/brand-manifest.json",
-  "./config/platform-manifest.json",
   "./assets/brand/school-logo.png",
-  "./ghrab-platform.consumer.json",
   "./runtime/ludus-engine-runtime.js",
-  "./runtime/ludus-privacy.js",
   "./runtime/ludus-engine-badge.css",
   "./runtime/ludus-engine-controls.css",
   "./content/engine-index.json"
@@ -81,12 +77,28 @@ async function cacheFirst(request) {
   return response;
 }
 
-function isRuntimeRequest(url, scopePath) {
+async function networkOnlyNoStore(request) {
+  return fetch(request, { cache: 'no-store' });
+}
+
+function isSecurityCriticalRequest(url, scopePath) {
   const relative = url.pathname.slice(scopePath.length);
-  return relative === 'runtime-config.js' ||
+  return relative === 'access/deployment-config.js' ||
+    relative === 'ghrab/ghrab-platform.js' ||
+    relative === 'ghrab-platform.consumer.json' ||
+    relative === 'runtime/ludus-privacy.js' ||
+    relative === 'ai-operations.json' ||
     relative === 'config/deployment.json' ||
+    relative === 'config/deployment.school-server.json' ||
     relative === 'config/deployment.school-server-p0.json' ||
     relative === 'config/deployment.school-server.example.json' ||
+    relative === 'config/platform-manifest.json' ||
+    relative === 'config/release-acceptance.json' ||
+    relative === 'release-integrity.json' ||
+    relative === 'release-integrity.sig' ||
+    relative === 'integrity-status' ||
+    relative === 'integrity-status.json' ||
+    relative === 'runtime-config.js' ||
     /^(?:api|auth|session|health)(?:\/|$)/.test(relative);
 }
 
@@ -96,7 +108,12 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   const scopePath = new URL('./', self.location.href).pathname;
-  if (!url.pathname.startsWith(scopePath) || request.cache === 'no-store' || isRuntimeRequest(url, scopePath)) return;
+  if (!url.pathname.startsWith(scopePath)) return;
+  if (isSecurityCriticalRequest(url, scopePath)) {
+    event.respondWith(networkOnlyNoStore(request));
+    return;
+  }
+  if (request.cache === 'no-store') return;
   if (request.mode === 'navigate') {
     const fallback = url.pathname.includes('/manual/') ? 'manual/index.html' : './index.html';
     event.respondWith(networkFirst(request, fallback));

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "canonicalRoot": "..",
+  "components": [
+    {
+      "id": "platform",
+      "sha256": "199d03d9dc9263a9e74ed1f1102df0324f3b63e78704f1c70aeacec5feec530c"
+    },
+    {
+      "id": "error-reporter",
+      "sha256": "db0a22f9934d3dd62db4a1ca3c7dcbbde509eea1db1f5b209765684da6aec1ec"
+    }
+  ],
+  "checkedCopies": 4,
+  "drift": 0,
+  "findings": []
+}

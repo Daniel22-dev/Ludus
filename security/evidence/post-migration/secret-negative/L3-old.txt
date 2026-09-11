@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/L3",
+  "info": []
+}

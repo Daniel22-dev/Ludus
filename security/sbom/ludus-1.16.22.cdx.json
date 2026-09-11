@@ -1,0 +1,1411 @@
+{
+  "$schema": "https://cyclonedx.org/schema/bom-1.7.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "ludus",
+      "version": "1.16.22",
+      "purl": "pkg:npm/ludus@1.16.22",
+      "bom-ref": "pkg:npm/ludus@1.16.22?root=true"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "@asamuzakjp/css-color",
+      "version": "3.2.0",
+      "purl": "pkg:npm/%40asamuzakjp/css-color@3.2.0",
+      "bom-ref": "pkg:npm/%40asamuzakjp/css-color@3.2.0?path=node_modules%2F%40asamuzakjp%2Fcss-color",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2B503ACFCB52DD7B2608C33CEB1A16767EC591D9FD9BA45256DA1C52B25823066715592783F3EF904A16B4E5A63FE49C73AB1A6161D66586E7744117C65DB88F"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@asamuzakjp/css-color"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@csstools/color-helpers",
+      "version": "5.1.0",
+      "purl": "pkg:npm/%40csstools/color-helpers@5.1.0",
+      "bom-ref": "pkg:npm/%40csstools/color-helpers@5.1.0?path=node_modules%2F%40csstools%2Fcolor-helpers",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4B5D445D6272CB4333E5262F46663C9C96131457752C2355FBB717C80810B4E3AECDBE04B207EA0EE7CBFBD7ACC7BDBF78B86C45D199C1A95DBBF87E138B7804"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@csstools/color-helpers"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT-0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@csstools/css-calc",
+      "version": "2.1.4",
+      "purl": "pkg:npm/%40csstools/css-calc@2.1.4",
+      "bom-ref": "pkg:npm/%40csstools/css-calc@2.1.4?path=node_modules%2F%40csstools%2Fcss-calc",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "DCDF286A3FB48EE530FF51F76309830C95C281307580A53A1DCFDB079D36BBDCD1D2ADAF77BF3A5C91FD41FACA2048059599A1662ABA7A95E5E2B1EA873B0881"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@csstools/css-calc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@csstools/css-color-parser",
+      "version": "3.1.0",
+      "purl": "pkg:npm/%40csstools/css-color-parser@3.1.0",
+      "bom-ref": "pkg:npm/%40csstools/css-color-parser@3.1.0?path=node_modules%2F%40csstools%2Fcss-color-parser",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9DBB4AC21DDAEB1355229FD546E5D5EB8C932A76F52234C01048778ABCD2F8790A8C03982D318D6FDA6654D9ED67C8950477160C0D83A1FD10B4F80523505A4C"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@csstools/css-color-parser"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@csstools/css-parser-algorithms",
+      "version": "3.0.5",
+      "purl": "pkg:npm/%40csstools/css-parser-algorithms@3.0.5",
+      "bom-ref": "pkg:npm/%40csstools/css-parser-algorithms@3.0.5?path=node_modules%2F%40csstools%2Fcss-parser-algorithms",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0DA0DE5245D92A374686061A1CD25357DA55ED8F41DDBEB8E2308BB3D52973755E34683A2D6011013E8EF90FBF08EA3EDA083F6CCE6B869300B5FEF45AA7C175"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@csstools/css-parser-algorithms"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@csstools/css-tokenizer",
+      "version": "3.0.4",
+      "purl": "pkg:npm/%40csstools/css-tokenizer@3.0.4",
+      "bom-ref": "pkg:npm/%40csstools/css-tokenizer@3.0.4?path=node_modules%2F%40csstools%2Fcss-tokenizer",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "55DFFD1150E2BBA3CF26DF72021EABA193FA125D711EB76F2151A3C81B07474458C0D1E02FB1493F22085B87C0349346E85B7265FBE544FA4523864CFE5B9BBF"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/@csstools/css-tokenizer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "agent-base",
+      "version": "7.1.4",
+      "purl": "pkg:npm/agent-base@7.1.4",
+      "bom-ref": "pkg:npm/agent-base@7.1.4?path=node_modules%2Fagent-base",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "32703E613F1FC1F24F801C779BAD0C36A6A49B7D173A4C88A07D72EA1B9342F0B43F0646EE48BC35A70B05CACF6CDA28F2F119CBB269BA4EFE8CC3BE094A2F4D"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/agent-base"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "axe-core",
+      "version": "4.12.1",
+      "purl": "pkg:npm/axe-core@4.12.1",
+      "bom-ref": "pkg:npm/axe-core@4.12.1?path=node_modules%2Faxe-core",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "B3B8867F919A54CC441B410D37DC7EC53AFB1856426F564FFF5B804D4A4210AD97EFC9C30774706ED142A3DA4601FF6BBBE570A10E3AE0391A2C4791334F3024"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/axe-core"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "cssstyle",
+      "version": "4.6.0",
+      "purl": "pkg:npm/cssstyle@4.6.0",
+      "bom-ref": "pkg:npm/cssstyle@4.6.0?path=node_modules%2Fcssstyle",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "DB3FAB59DCDB6D266FEBFAE1B6FCEFA9E6501EB05AAA0A20AADF39B2A14D6DA6D93AE15B09515BF243DE12D66388A91BAE6DFDE62AE934A89878578B8909C53E"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/cssstyle"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "data-urls",
+      "version": "5.0.0",
+      "purl": "pkg:npm/data-urls@5.0.0",
+      "bom-ref": "pkg:npm/data-urls@5.0.0?path=node_modules%2Fdata-urls",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6583F95411EC85A0C08956718DB45570526973EE311A04F46CADEFCF2D472CDF234CEF7BE4711BB98CD925C1E84046392B56B4CFC61AC899325444DAD3C78D4E"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/data-urls"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "debug",
+      "version": "4.4.3",
+      "purl": "pkg:npm/debug@4.4.3",
+      "bom-ref": "pkg:npm/debug@4.4.3?path=node_modules%2Fdebug",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "446C305A7C10BE455F6AF295B76D8518BC3EC5849DCC04709B4AEEE83853540DEE994E6165CDBC57790EE2CB6062BCAB4E52E9BAF808F468A28E5B408CD6DCA8"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/debug"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "decimal.js",
+      "version": "10.6.0",
+      "purl": "pkg:npm/decimal.js@10.6.0",
+      "bom-ref": "pkg:npm/decimal.js@10.6.0?path=node_modules%2Fdecimal.js",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6298108884D6DC95C69EDCDD526C9447557CD761E7F13D58557842BBEC0EDCEA52E1E53D97861D0F7AA3CA229D57A9AF576F736A990C783DFDD145447F696452"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/decimal.js"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "entities",
+      "version": "6.0.1",
+      "purl": "pkg:npm/entities@6.0.1",
+      "bom-ref": "pkg:npm/entities@6.0.1?path=node_modules%2Fentities",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "68DF7B357585E805814DA85F54E22B07F352864CE2E47EC5F6BD6CF660F77038F82A8E5FDAA86156860C89B5C5EC694BBDE6FF0F68A859ACBC97123DED57A7DE"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/entities"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fsevents",
+      "version": "2.3.2",
+      "purl": "pkg:npm/fsevents@2.3.2",
+      "bom-ref": "pkg:npm/fsevents@2.3.2?path=node_modules%2Ffsevents",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "C62A8C411E3101E1D3B81F6E5A6F9F1517083A02813223813FE7978B24FB8EC8150AAD5B915CA0B74D28012A3007B11DB6938769A3E02ADF35D8FF5A6FE0C328"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/fsevents"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "html-encoding-sniffer",
+      "version": "4.0.0",
+      "purl": "pkg:npm/html-encoding-sniffer@4.0.0",
+      "bom-ref": "pkg:npm/html-encoding-sniffer@4.0.0?path=node_modules%2Fhtml-encoding-sniffer",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "636DA84EA214E2EB8F8047A67F3ECD0C9CFA39E29FD762ECBBE402FACDC156975AEB895388C602C86C20E648B8BC5C6433041D7990E5D9A759A2A520745B9381"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/html-encoding-sniffer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "http-proxy-agent",
+      "version": "7.0.2",
+      "purl": "pkg:npm/http-proxy-agent@7.0.2",
+      "bom-ref": "pkg:npm/http-proxy-agent@7.0.2?path=node_modules%2Fhttp-proxy-agent",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4F58240226180D6631DD5E419B2BBB1DC7DCBCBEE652B4D688CEB239F6B73C8A6156227F8053DBBE2750FAF7AA48E1DC8BF3F105C0DA6DE50D0B3A4E3832598A"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/http-proxy-agent"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "https-proxy-agent",
+      "version": "7.0.6",
+      "purl": "pkg:npm/https-proxy-agent@7.0.6",
+      "bom-ref": "pkg:npm/https-proxy-agent@7.0.6?path=node_modules%2Fhttps-proxy-agent",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "BCAF4FE7F8947DD97DE4023E255C94B88715B5DE287EFB6B3ABDC736D336CB10BD6E731B11DA77C74D4E8503678DBF082588B7F159531379815F071FBF2C2E4B"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/https-proxy-agent"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "iconv-lite",
+      "version": "0.6.3",
+      "purl": "pkg:npm/iconv-lite@0.6.3",
+      "bom-ref": "pkg:npm/iconv-lite@0.6.3?path=node_modules%2Ficonv-lite",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E1F0A4EFDC2C84C773329DAB1F4EAA5AB244E22A25A8B842507F8E8AE22053EF91074FBDE0D9432FCD5AB4EEC65F9E6E50AB9EA34B711CDB6F13223A0FB59D33"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/iconv-lite"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-potential-custom-element-name",
+      "version": "1.0.1",
+      "purl": "pkg:npm/is-potential-custom-element-name@1.0.1",
+      "bom-ref": "pkg:npm/is-potential-custom-element-name@1.0.1?path=node_modules%2Fis-potential-custom-element-name",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6C261E440DAB5626CA65DFACDBADB98069C617FB7B0D2A83B3874FEC2ACB0359BB8CA5B3EA9A6CD0BA582C937C43AE07B663CA27586B3779F33CD28510A39489"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/is-potential-custom-element-name"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "jsdom",
+      "version": "26.1.0",
+      "purl": "pkg:npm/jsdom@26.1.0",
+      "bom-ref": "pkg:npm/jsdom@26.1.0?path=node_modules%2Fjsdom",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0AF73D59487148C128E0C7044B73FBA0ADD069795D09F356A7BA65D8D35E8881650A82EBDE47EAF646F57F17ED8B093514B57B0AFA6F0DFA27C6DCD40DE48E3E"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/jsdom"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lru-cache",
+      "version": "10.4.3",
+      "purl": "pkg:npm/lru-cache@10.4.3",
+      "bom-ref": "pkg:npm/lru-cache@10.4.3?path=node_modules%2Flru-cache",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "24D03365C5EB0ADE365462EE633D337C0CC37C0BC9596E807D8943050C835790C2948DA6E6C0262BE3883BBB39F577EC46C587A74DA3009AD169D3D1193B7A49"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/lru-cache"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "ms",
+      "version": "2.1.3",
+      "purl": "pkg:npm/ms@2.1.3",
+      "bom-ref": "pkg:npm/ms@2.1.3?path=node_modules%2Fms",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "E85973B9B4CB646DC9D9AFCD542025784863CEAE68C601F268253DC985EF70BB2FA1568726AFECE715C8EBF5D73FAB73ED1F7100EB479D23BFB57B45DD645394"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/ms"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nwsapi",
+      "version": "2.2.24",
+      "purl": "pkg:npm/nwsapi@2.2.24",
+      "bom-ref": "pkg:npm/nwsapi@2.2.24?path=node_modules%2Fnwsapi",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ED84616778D2E392F0992093E1BDAC5451EDFD6BA8BDA92D0D4D3B42BB4E058D8F5EC92CB396BD8DF991F63A6DCAE9B05D24FEAC58EB9A9A4C635293FF29F7E4"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/nwsapi"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "parse5",
+      "version": "7.3.0",
+      "purl": "pkg:npm/parse5@7.3.0",
+      "bom-ref": "pkg:npm/parse5@7.3.0?path=node_modules%2Fparse5",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2089EF53B7DA6E5DF8AA68BD818F17395C61632332B87DB150DA5BDAAF3F63EEF9E762A57A3911BEABC3D7D9CCA145BFB901866EA36903A4EE7EEE452F905983"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/parse5"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "playwright",
+      "version": "1.61.1",
+      "purl": "pkg:npm/playwright@1.61.1",
+      "bom-ref": "pkg:npm/playwright@1.61.1?path=node_modules%2Fplaywright",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0D69D8E68DD86CB58AE06A2FB80570A6A2FED55C0635D506AD1AFEFBC8FC3ED410CEF01565420C8CA43DD1F63AF3DB042592416D9570D6B5DA38A4938AD9333D"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/playwright"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "playwright-core",
+      "version": "1.61.1",
+      "purl": "pkg:npm/playwright-core@1.61.1",
+      "bom-ref": "pkg:npm/playwright-core@1.61.1?path=node_modules%2Fplaywright-core",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "87B425B7A9B8444A76E6ABC876F6C3B55983E0BA955DFA51C61391BFD2F48F3113334E69E1FB8F27774ACAE4974310D26D79E64BBF470208BDE7CF65192A4B92"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/playwright-core"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "pngjs",
+      "version": "7.0.0",
+      "purl": "pkg:npm/pngjs@7.0.0",
+      "bom-ref": "pkg:npm/pngjs@7.0.0?path=node_modules%2Fpngjs",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2CA5AA589461B2DC98A3DA46BE0A2BFE2BE4DB0F787928C4DD1195BB32C696BDCD983F1B7FB45C606CDED6635D10744FE9344FEAB32E0C7939B78E219D3472A3"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/pngjs"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "punycode",
+      "version": "2.3.1",
+      "purl": "pkg:npm/punycode@2.3.1",
+      "bom-ref": "pkg:npm/punycode@2.3.1?path=node_modules%2Fpunycode",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "BD8B7B503D54F5683AD77F2C84BB4B3AF740BBEF03B02FE2945B44547707FB0C9D712A4D136D007D239DB9FE8C91115A84BE4563B5F5A14EE7295645B5FABC16"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/punycode"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rrweb-cssom",
+      "version": "0.8.0",
+      "purl": "pkg:npm/rrweb-cssom@0.8.0",
+      "bom-ref": "pkg:npm/rrweb-cssom@0.8.0?path=node_modules%2Frrweb-cssom",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "82EA25B50131FBD68C7F6803674B3AD84715F25B1747ED30F3DD794C2DC84DD9F662E7AE363740621FE57AFA54F6715AA02861F51512E5975032B29F54437DB7"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/rrweb-cssom"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "purl": "pkg:npm/safer-buffer@2.1.2",
+      "bom-ref": "pkg:npm/safer-buffer@2.1.2?path=node_modules%2Fsafer-buffer",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "619A372BCD920FB462CA2D04D4440FA232F3EE4A5EA6749023D2323DB1C78355D75DEBDBE5D248EEDA72376003C467106C71BBBDCC911E4D1C6F0A9C42B894B6"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/safer-buffer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "saxes",
+      "version": "6.0.0",
+      "purl": "pkg:npm/saxes@6.0.0",
+      "bom-ref": "pkg:npm/saxes@6.0.0?path=node_modules%2Fsaxes",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "C4083B48E9C486B9B9CC8DE9B8E38ACB2D4E31C32520965834963BC4B0704B37B452384F2E759F8F6185D84A53D239B368928858A1CBB1A4926A37F7E5B7189C"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/saxes"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "symbol-tree",
+      "version": "3.2.4",
+      "purl": "pkg:npm/symbol-tree@3.2.4",
+      "bom-ref": "pkg:npm/symbol-tree@3.2.4?path=node_modules%2Fsymbol-tree",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "F50364E4AC0317E06FCFE3F239B9264988C8E64B15518B635BB014DB6AF634A71F2C9717A7DEA1903594DFE5E774EB146FE010F5085FCDF093D8EF823564F94F"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/symbol-tree"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tldts",
+      "version": "6.1.86",
+      "purl": "pkg:npm/tldts@6.1.86",
+      "bom-ref": "pkg:npm/tldts@6.1.86?path=node_modules%2Ftldts",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "58C8BF390D9AC554DFFF292A09081788872DFA64900C5747D9F93084FC20130BC9D644B36518A29DBD331765DBF2EE3E3AA3C2866C88E8C12EE047B3349CFE15"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/tldts"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tldts-core",
+      "version": "6.1.86",
+      "purl": "pkg:npm/tldts-core@6.1.86",
+      "bom-ref": "pkg:npm/tldts-core@6.1.86?path=node_modules%2Ftldts-core",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "25EEA9EE9924F8A33332FD975CA98013731C9A894E40577190AC3447C11836BEEC10B5B8E89AA735E4D7F326CF89082F835CA60A817C2D7B397F315A66F24F4C"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/tldts-core"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tough-cookie",
+      "version": "5.1.2",
+      "purl": "pkg:npm/tough-cookie@5.1.2",
+      "bom-ref": "pkg:npm/tough-cookie@5.1.2?path=node_modules%2Ftough-cookie",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1550D8771B678F41BA426FC384D3D26FC26EE7D50B72EA77B6E2719056F92BC06FDA951720B6DFD3165653C3D7F0EBF5F4E5E58DB532BDE385C11330917CCEF8"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/tough-cookie"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tr46",
+      "version": "5.1.1",
+      "purl": "pkg:npm/tr46@5.1.1",
+      "bom-ref": "pkg:npm/tr46@5.1.1?path=node_modules%2Ftr46",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "85D1796608D3AA0027B4A924958C34474DCC1B6C7F6D2CD3B64C66211C3FB13355F185EC089D6D7CB017DB7961C611C99447F709108E086196C37BC8DC66923F"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/tr46"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "w3c-xmlserializer",
+      "version": "5.0.0",
+      "purl": "pkg:npm/w3c-xmlserializer@5.0.0",
+      "bom-ref": "pkg:npm/w3c-xmlserializer@5.0.0?path=node_modules%2Fw3c-xmlserializer",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "A3CAA086523C3591D4D652CFAE98B6F94ABB69B8781863E96003656A5CD6C725AD789382B2BFCFFA83C1038F5338BBB915364EE1DDC5F4C9D625F88CA3806498"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/w3c-xmlserializer"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "webidl-conversions",
+      "version": "7.0.0",
+      "purl": "pkg:npm/webidl-conversions@7.0.0",
+      "bom-ref": "pkg:npm/webidl-conversions@7.0.0?path=node_modules%2Fwebidl-conversions",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "57075D06E903CEEEF5A1F7C0411F7BE6E9C1206A9F299A4CFBC657EB24A4F27621568A39098699CB3B77601BD8B51B4EF9AA0696AC4F83F07CECD19567F7EEEA"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/webidl-conversions"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "whatwg-encoding",
+      "version": "3.1.1",
+      "purl": "pkg:npm/whatwg-encoding@3.1.1",
+      "bom-ref": "pkg:npm/whatwg-encoding@3.1.1?path=node_modules%2Fwhatwg-encoding",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "EAA37884974CC1F601B44DD80534C78687AE52B0C13D999B41AC5602A4802D5FCC7849D1E73D7177C50AB9DD910241683E4981FA1962D536529F28BCE31CF5BD"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/whatwg-encoding"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "whatwg-mimetype",
+      "version": "4.0.0",
+      "purl": "pkg:npm/whatwg-mimetype@4.0.0",
+      "bom-ref": "pkg:npm/whatwg-mimetype@4.0.0?path=node_modules%2Fwhatwg-mimetype",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "41A2B187478D222DA613DA76BC47737DA80E28709C8F5A49E7A1041C640E571A7CAFDFE2B332D4515EEFF3DC7D3B5A7F4FE3654CCE56EE35BAF9CCF816AD5856"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/whatwg-mimetype"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "whatwg-url",
+      "version": "14.2.0",
+      "purl": "pkg:npm/whatwg-url@14.2.0",
+      "bom-ref": "pkg:npm/whatwg-url@14.2.0?path=node_modules%2Fwhatwg-url",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0DEEF619D419CCD4D40410A1B17B9E4149CF283920FF9039CE9EE9143B90023E5416810DA62002534C250AFCE90069D3923FBE8A1A4AC0AC987B09FF5CD51B2B"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/whatwg-url"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "ws",
+      "version": "8.21.1",
+      "purl": "pkg:npm/ws@8.21.1",
+      "bom-ref": "pkg:npm/ws@8.21.1?path=node_modules%2Fws",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "FB43539D6EFB7C537F0E3422EA4FD2ABF62F9384A06A3C3BBAB5BC57E6AC8D79D1803B3D8321A475BEC4CE07E10388285EC44864A136F1FCC85C11C4CE1BA25B"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/ws"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "xml-name-validator",
+      "version": "5.0.0",
+      "purl": "pkg:npm/xml-name-validator@5.0.0",
+      "bom-ref": "pkg:npm/xml-name-validator@5.0.0?path=node_modules%2Fxml-name-validator",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "12F18AF042770E16877DB465113396012E693BD31921379AB87289C9BF30C9A8D47D051E9E4220D8CBCB0D36784FF4E021C9B71D4D1314181659BA00677D141E"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/xml-name-validator"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "xmlchars",
+      "version": "2.2.0",
+      "purl": "pkg:npm/xmlchars@2.2.0",
+      "bom-ref": "pkg:npm/xmlchars@2.2.0?path=node_modules%2Fxmlchars",
+      "scope": "excluded",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2599C328AF01D11083C3CE0535D0C022964AF89B89C3EB3B2F3F2792C23B488B94DD45C926C954B61B22FAE5815183B03C5C16ED6ECF44B45F50AA718ED8C50B"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ghrab:lockfilePath",
+          "value": "node_modules/xmlchars"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:npm/ludus@1.16.22?root=true",
+      "dependsOn": [
+        "pkg:npm/axe-core@4.12.1?path=node_modules%2Faxe-core",
+        "pkg:npm/jsdom@26.1.0?path=node_modules%2Fjsdom",
+        "pkg:npm/playwright@1.61.1?path=node_modules%2Fplaywright",
+        "pkg:npm/pngjs@7.0.0?path=node_modules%2Fpngjs"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40asamuzakjp/css-color@3.2.0?path=node_modules%2F%40asamuzakjp%2Fcss-color",
+      "dependsOn": [
+        "pkg:npm/%40csstools/css-calc@2.1.4?path=node_modules%2F%40csstools%2Fcss-calc",
+        "pkg:npm/%40csstools/css-color-parser@3.1.0?path=node_modules%2F%40csstools%2Fcss-color-parser",
+        "pkg:npm/%40csstools/css-parser-algorithms@3.0.5?path=node_modules%2F%40csstools%2Fcss-parser-algorithms",
+        "pkg:npm/%40csstools/css-tokenizer@3.0.4?path=node_modules%2F%40csstools%2Fcss-tokenizer",
+        "pkg:npm/lru-cache@10.4.3?path=node_modules%2Flru-cache"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40csstools/color-helpers@5.1.0?path=node_modules%2F%40csstools%2Fcolor-helpers",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40csstools/css-calc@2.1.4?path=node_modules%2F%40csstools%2Fcss-calc",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40csstools/css-color-parser@3.1.0?path=node_modules%2F%40csstools%2Fcss-color-parser",
+      "dependsOn": [
+        "pkg:npm/%40csstools/color-helpers@5.1.0?path=node_modules%2F%40csstools%2Fcolor-helpers",
+        "pkg:npm/%40csstools/css-calc@2.1.4?path=node_modules%2F%40csstools%2Fcss-calc"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40csstools/css-parser-algorithms@3.0.5?path=node_modules%2F%40csstools%2Fcss-parser-algorithms",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40csstools/css-tokenizer@3.0.4?path=node_modules%2F%40csstools%2Fcss-tokenizer",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/agent-base@7.1.4?path=node_modules%2Fagent-base",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/axe-core@4.12.1?path=node_modules%2Faxe-core",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/cssstyle@4.6.0?path=node_modules%2Fcssstyle",
+      "dependsOn": [
+        "pkg:npm/%40asamuzakjp/css-color@3.2.0?path=node_modules%2F%40asamuzakjp%2Fcss-color",
+        "pkg:npm/rrweb-cssom@0.8.0?path=node_modules%2Frrweb-cssom"
+      ]
+    },
+    {
+      "ref": "pkg:npm/data-urls@5.0.0?path=node_modules%2Fdata-urls",
+      "dependsOn": [
+        "pkg:npm/whatwg-mimetype@4.0.0?path=node_modules%2Fwhatwg-mimetype",
+        "pkg:npm/whatwg-url@14.2.0?path=node_modules%2Fwhatwg-url"
+      ]
+    },
+    {
+      "ref": "pkg:npm/debug@4.4.3?path=node_modules%2Fdebug",
+      "dependsOn": [
+        "pkg:npm/ms@2.1.3?path=node_modules%2Fms"
+      ]
+    },
+    {
+      "ref": "pkg:npm/decimal.js@10.6.0?path=node_modules%2Fdecimal.js",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/entities@6.0.1?path=node_modules%2Fentities",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/fsevents@2.3.2?path=node_modules%2Ffsevents",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/html-encoding-sniffer@4.0.0?path=node_modules%2Fhtml-encoding-sniffer",
+      "dependsOn": [
+        "pkg:npm/whatwg-encoding@3.1.1?path=node_modules%2Fwhatwg-encoding"
+      ]
+    },
+    {
+      "ref": "pkg:npm/http-proxy-agent@7.0.2?path=node_modules%2Fhttp-proxy-agent",
+      "dependsOn": [
+        "pkg:npm/agent-base@7.1.4?path=node_modules%2Fagent-base",
+        "pkg:npm/debug@4.4.3?path=node_modules%2Fdebug"
+      ]
+    },
+    {
+      "ref": "pkg:npm/https-proxy-agent@7.0.6?path=node_modules%2Fhttps-proxy-agent",
+      "dependsOn": [
+        "pkg:npm/agent-base@7.1.4?path=node_modules%2Fagent-base",
+        "pkg:npm/debug@4.4.3?path=node_modules%2Fdebug"
+      ]
+    },
+    {
+      "ref": "pkg:npm/iconv-lite@0.6.3?path=node_modules%2Ficonv-lite",
+      "dependsOn": [
+        "pkg:npm/safer-buffer@2.1.2?path=node_modules%2Fsafer-buffer"
+      ]
+    },
+    {
+      "ref": "pkg:npm/is-potential-custom-element-name@1.0.1?path=node_modules%2Fis-potential-custom-element-name",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/jsdom@26.1.0?path=node_modules%2Fjsdom",
+      "dependsOn": [
+        "pkg:npm/cssstyle@4.6.0?path=node_modules%2Fcssstyle",
+        "pkg:npm/data-urls@5.0.0?path=node_modules%2Fdata-urls",
+        "pkg:npm/decimal.js@10.6.0?path=node_modules%2Fdecimal.js",
+        "pkg:npm/html-encoding-sniffer@4.0.0?path=node_modules%2Fhtml-encoding-sniffer",
+        "pkg:npm/http-proxy-agent@7.0.2?path=node_modules%2Fhttp-proxy-agent",
+        "pkg:npm/https-proxy-agent@7.0.6?path=node_modules%2Fhttps-proxy-agent",
+        "pkg:npm/is-potential-custom-element-name@1.0.1?path=node_modules%2Fis-potential-custom-element-name",
+        "pkg:npm/nwsapi@2.2.24?path=node_modules%2Fnwsapi",
+        "pkg:npm/parse5@7.3.0?path=node_modules%2Fparse5",
+        "pkg:npm/rrweb-cssom@0.8.0?path=node_modules%2Frrweb-cssom",
+        "pkg:npm/saxes@6.0.0?path=node_modules%2Fsaxes",
+        "pkg:npm/symbol-tree@3.2.4?path=node_modules%2Fsymbol-tree",
+        "pkg:npm/tough-cookie@5.1.2?path=node_modules%2Ftough-cookie",
+        "pkg:npm/w3c-xmlserializer@5.0.0?path=node_modules%2Fw3c-xmlserializer",
+        "pkg:npm/webidl-conversions@7.0.0?path=node_modules%2Fwebidl-conversions",
+        "pkg:npm/whatwg-encoding@3.1.1?path=node_modules%2Fwhatwg-encoding",
+        "pkg:npm/whatwg-mimetype@4.0.0?path=node_modules%2Fwhatwg-mimetype",
+        "pkg:npm/whatwg-url@14.2.0?path=node_modules%2Fwhatwg-url",
+        "pkg:npm/ws@8.21.1?path=node_modules%2Fws",
+        "pkg:npm/xml-name-validator@5.0.0?path=node_modules%2Fxml-name-validator"
+      ]
+    },
+    {
+      "ref": "pkg:npm/lru-cache@10.4.3?path=node_modules%2Flru-cache",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/ms@2.1.3?path=node_modules%2Fms",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/nwsapi@2.2.24?path=node_modules%2Fnwsapi",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/parse5@7.3.0?path=node_modules%2Fparse5",
+      "dependsOn": [
+        "pkg:npm/entities@6.0.1?path=node_modules%2Fentities"
+      ]
+    },
+    {
+      "ref": "pkg:npm/playwright@1.61.1?path=node_modules%2Fplaywright",
+      "dependsOn": [
+        "pkg:npm/fsevents@2.3.2?path=node_modules%2Ffsevents",
+        "pkg:npm/playwright-core@1.61.1?path=node_modules%2Fplaywright-core"
+      ]
+    },
+    {
+      "ref": "pkg:npm/playwright-core@1.61.1?path=node_modules%2Fplaywright-core",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/pngjs@7.0.0?path=node_modules%2Fpngjs",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/punycode@2.3.1?path=node_modules%2Fpunycode",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/rrweb-cssom@0.8.0?path=node_modules%2Frrweb-cssom",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/safer-buffer@2.1.2?path=node_modules%2Fsafer-buffer",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/saxes@6.0.0?path=node_modules%2Fsaxes",
+      "dependsOn": [
+        "pkg:npm/xmlchars@2.2.0?path=node_modules%2Fxmlchars"
+      ]
+    },
+    {
+      "ref": "pkg:npm/symbol-tree@3.2.4?path=node_modules%2Fsymbol-tree",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/tldts@6.1.86?path=node_modules%2Ftldts",
+      "dependsOn": [
+        "pkg:npm/tldts-core@6.1.86?path=node_modules%2Ftldts-core"
+      ]
+    },
+    {
+      "ref": "pkg:npm/tldts-core@6.1.86?path=node_modules%2Ftldts-core",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/tough-cookie@5.1.2?path=node_modules%2Ftough-cookie",
+      "dependsOn": [
+        "pkg:npm/tldts@6.1.86?path=node_modules%2Ftldts"
+      ]
+    },
+    {
+      "ref": "pkg:npm/tr46@5.1.1?path=node_modules%2Ftr46",
+      "dependsOn": [
+        "pkg:npm/punycode@2.3.1?path=node_modules%2Fpunycode"
+      ]
+    },
+    {
+      "ref": "pkg:npm/w3c-xmlserializer@5.0.0?path=node_modules%2Fw3c-xmlserializer",
+      "dependsOn": [
+        "pkg:npm/xml-name-validator@5.0.0?path=node_modules%2Fxml-name-validator"
+      ]
+    },
+    {
+      "ref": "pkg:npm/webidl-conversions@7.0.0?path=node_modules%2Fwebidl-conversions",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/whatwg-encoding@3.1.1?path=node_modules%2Fwhatwg-encoding",
+      "dependsOn": [
+        "pkg:npm/iconv-lite@0.6.3?path=node_modules%2Ficonv-lite"
+      ]
+    },
+    {
+      "ref": "pkg:npm/whatwg-mimetype@4.0.0?path=node_modules%2Fwhatwg-mimetype",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/whatwg-url@14.2.0?path=node_modules%2Fwhatwg-url",
+      "dependsOn": [
+        "pkg:npm/tr46@5.1.1?path=node_modules%2Ftr46",
+        "pkg:npm/webidl-conversions@7.0.0?path=node_modules%2Fwebidl-conversions"
+      ]
+    },
+    {
+      "ref": "pkg:npm/ws@8.21.1?path=node_modules%2Fws",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/xml-name-validator@5.0.0?path=node_modules%2Fxml-name-validator",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/xmlchars@2.2.0?path=node_modules%2Fxmlchars",
+      "dependsOn": []
+    }
+  ]
+}

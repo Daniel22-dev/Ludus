@@ -1,0 +1,10 @@
+
+> ludus@1.16.23 garp25:ai-core-sync-patch
+> node scripts/qa-garp25-ai-core-sync-patch.mjs
+
+{
+  "status": "PASS",
+  "newCoreDirCaptured": true,
+  "gitApply": true,
+  "buildAfterApply": true
+}

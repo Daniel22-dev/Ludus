@@ -1,0 +1,1 @@
+FAIL: AI assurance fingerprint je zastaralý; změnila se AI/egress boundary.

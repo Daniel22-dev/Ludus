@@ -1,0 +1,7 @@
+PASS: CycloneDX 1.7 SBOM vytvořen: /tmp/tmp.rMqhuVLq09/fixture.cdx.json (3 komponent).
+{
+  "status": "PASS",
+  "expected": 3,
+  "actual": 3,
+  "nodeModulesCrossCheck": 0
+}

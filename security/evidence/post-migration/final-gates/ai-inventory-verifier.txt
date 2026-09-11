@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "files": 19,
+  "aggregate": "e5d31ff9273405e495ad1602bb761b4a4b72a90ff6e7683364d31376b4de2449",
+  "expected": "e5d31ff9273405e495ad1602bb761b4a4b72a90ff6e7683364d31376b4de2449",
+  "inventory": "/mnt/data/ludus_11622/work/app/security/ai-boundary-files.json",
+  "detectedCandidates": 14,
+  "untracked": [],
+  "inventoryEntriesNotDetectorMatched": [
+    "ghrab-ai-core.consumer.json",
+    "public/ai-operations.json",
+    "public/config/security-headers.json",
+    "scripts/qa-garp23-security.mjs",
+    "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-manifest-1.0.0.json"
+  ],
+  "verifierRevision": "garp-2.5.1-r3-ai-inventory-drift-hotfix"
+}

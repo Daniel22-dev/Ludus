@@ -1,0 +1,56 @@
+GARP 2.5.1 – SECURITY THREAT MODEL
+Application: LUDUS
+Version: 1.16.23
+Date: 2026-09-10
+Source baseline input SHA-256: 4120a1c79363b91fa9b464881e26086ee750aa1cd1c8be82fda7495f99c8193b
+
+ASSETS
+- identity/session: signed Studio permit in current static profile; target school-server session in school profile; suite-session generation/ACK lifecycle.
+- teacher/student data: teacher prompt/topic, imported JSON/material, optional document/image input, generated game content, player identity/progress in engine runtime.
+- AI context/output: system/safety instructions, untrusted-data envelope, operation schemas, generated structured JSON.
+- secrets: direct-mode Gemini credential stored session-only; production school profile forbids local provider key and targets school gateway.
+- release trust: GARP release-integrity manifest/signature, trust-root/keyId, release registry, security-critical SW routing.
+- availability/budget: AI request size, output token and call limits; school-side rate/concurrency/budget enforcement remains SHIELD-LIVE.
+
+ACTORS
+- authorized teacher: intended user; can provide prompts/imports and trigger exports/AI calls.
+- student/unprivileged user: may encounter generated games or shared-device state; must not gain teacher/session/secrets.
+- malicious/external content author: can craft imported JSON, worksheet/media content or prompt-injection text.
+- AI-assisted attacker: can compose obfuscated injection/XSS/data-exfiltration payloads.
+- server administrator/root: privileged infrastructure actor; outside browser security boundary, must be constrained operationally.
+- external provider: Gemini in direct static mode; school AI gateway in target school-server profile.
+
+TRUST BOUNDARIES
+ID | From -> To | Data/capability | Main threats | Controls/evidence | Residual status
+TB-01 | AI Studio/access -> LUDUS | permit/session state | auth bypass, stale access | access bootstrap, signed-permit current profile, target server session, GARP23 critical/suite-session | LIVE server auth NOT TESTED
+TB-02 | teacher/import/file -> builder | untrusted text/JSON/media | prototype pollution, oversized input, prompt injection | import byte/depth/node caps, forbidden structural keys, untrusted-data fencing, GARP23 48/48 | live hostile corpus/model NOT TESTED
+TB-03 | LUDUS -> GHRAB AI Core | operation, instructions, parts | direct provider bypass, schema bypass | registered operations only, Core 1.0.0, app wrapper, PC-01/AIR structural tests | external provider behavior varies
+TB-04 | AI Core -> provider/gateway | prompt/context + optional media | PII leakage, key exposure, cost abuse, egress | PII contact preflight, generic attachment name, 18 MiB/14 MiB caps, 45 s timeout, profile-controlled transport | server rate/concurrency enforcement NOT TESTED
+TB-05 | AI output -> normalize/render/export | generated JSON | XSS, unsafe HTML/action, malformed game | schema validation, station normalizer, text-safe rendering, XSS regression, sandboxed preview | browser/live DAST incomplete
+TB-06 | browser storage -> next user/session | settings/content/progress/credential | cross-user persistence, stale BFCache/tab | LUDUSPrivacy, endWork, suite-session quarantine/ACK after verified cleanup, PC-01 93/93 | real shared-device pilot NOT TESTED
+TB-07 | network -> Service Worker/Cache API | runtime/config/security assets | stale/revoked security state served from cache | security-critical allowlist + isSecurityCriticalRequest -> networkOnlyNoStore; R2 checker PASS | behavioral SIM-07 SW revocation NOT TESTED
+TB-08 | source -> build -> deployment | code/config/dependencies | source leakage, substitution, nonreproducible build | source/deployment separation, lockfile, SBOM, leak scan, deterministic build time, provenance | trusted CI builder attestation NOT TESTED
+TB-09 | signer/trust root/registry -> deployment | release authority | tamper, wrong key, rollback, mixed version | Ed25519 detached signature hook, keyId trust root, registry anti-rollback, independent verifier | real org key custody/integrity service LIVE NOT TESTED
+TB-10 | media registry -> public build | optional media/rights metadata | unauthorized media bundling | rights registry + unofficial public profile + media provenance QA | legal owner records remain operational dependency
+
+ATTACK SURFACE
+Entry | Method | Auth | Data class | Side effect | Controls
+Application startup | GET/PWA/SW | signed permit / future server-session | security state | load protected runtime | access bootstrap, fail-closed school config, security-critical SW bypass
+Topic input | form | teacher | potentially personal | AI topic analysis | untrusted fencing, contact preflight, operation allowlist
+Worksheet/media | file input | teacher | potentially personal | AI context | size caps, generic filename, Core type allowlist
+Studio/material import | JSON/handoff | teacher | potentially personal | builder state | byte/depth/node/prototype validation
+AI provider response | HTTPS JSON | provider/gateway | generated content | game content | output schema + normalizer + inert rendering
+Game export | download/blob | teacher | generated/student-entered content | local file | explicit action, no secrets, privacy runtime inline
+Browser storage | local/session | local user | settings/content/credential | persistence | data manifest + privacy lifecycle + shared-device controls
+Service worker | install/fetch/cache | browser | runtime/config | offline/update | critical-list freeze and no-store route
+Release artifact | ZIP/files | release process | executable/static app | deployment | RI manifest/signature/registry/provenance tooling
+
+TOP THREATS
+T-01 Prompt injection / hidden-context extraction: controlled structurally by untrusted-data boundary and AIR harness; live-model behavior NOT TESTED.
+T-02 Sensitive information disclosure: contact preflight, generic attachment filename, reporter redaction design; real student data not approved by this PREP candidate.
+T-03 Stale security asset from SW cache: was reproducibly CRITICAL on 1.16.20; corrected in 1.16.23 and R2 checker now PASS.
+T-04 Cross-user storage residue: deterministic lifecycle and suite-session checks PASS; live shared-device/browser/server validation remains pending.
+T-05 Release tamper/rollback/mixed-version: PREP tooling and disposable-key controls implemented; production key custody/registry/integrity service remain LIVE work.
+T-06 Unbounded AI cost/concurrency: browser request/output/call/timeout bounds exist; authoritative per-user/app quotas and concurrency must be enforced by school gateway.
+T-07 Unsafe generated HTML/code: output is schema constrained/normalized; XSS regression PASS, CSP retains documented unsafe-inline compatibility exception.
+T-08 Dependency/supply-chain compromise: lockfile + pinned Actions + SBOM present; fresh registry-backed SCA unavailable in current environment.

@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/S5",
+  "errors": [
+    "secret-pattern:src/aws.js:aws-access-key-id"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n4-secret-scan"
+}

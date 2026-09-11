@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "subjectSha256": "5b51dff2ffd4b28ee50da2db44d197adf96e21cedc479e2108eb55bcf228e6e0",
+  "builderId": "local-untrusted-builder",
+  "sourceRevision": "df1cc5bb8efff81eba9f9e1045fe1602d2fb53b7",
+  "warnings": [
+    "builder=local-untrusted-builder (PREP only, nikdy skolni release)"
+  ]
+}

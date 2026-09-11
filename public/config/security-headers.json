@@ -1,7 +1,7 @@
 {
   "schema": "ghrab-security-headers-v1",
   "appId": "ludus",
-  "version": "1.16.20",
+  "version": "1.16.23",
   "staticProfile": {
     "contentSecurityPolicy": "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://generativelanguage.googleapis.com; media-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'",
     "note": "unsafe-inline is a documented compatibility exception because the current LUDUS builder and engine HTML still contain inline scripts/styles. It must be removed only by a dedicated nonce/hash or external-module CSP refactor validated across all 11 engines; P5 does not claim that this exception has already been removed."

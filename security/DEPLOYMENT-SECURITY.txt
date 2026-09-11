@@ -1,0 +1,31 @@
+GARP 2.5.1 – DEPLOYMENT SECURITY REQUIREMENTS
+Application: LUDUS 1.16.23
+Profile: SHIELD-PREP; target school-server SHIELD-LIVE
+
+Required target controls (not asserted as currently deployed)
+1. Container/process: run as non-root service identity; no privileged mode; minimal writable paths; read-only application filesystem where feasible.
+2. Secrets: provider/API credentials only in server-side secret store/environment injected at runtime; never in browser bundle, repo, logs or service-worker cache.
+3. TLS: HTTPS at trusted reverse proxy; HSTS only after domain/proxy validation; same-origin app/API routing.
+4. Authentication: server-authoritative teacher session; fail closed on session/authorization uncertainty; logout/revocation must invalidate browser and server state.
+5. AI gateway: browser direct provider keys disabled in school profile; model/provider allowlist, authenticated quotas, body/output/concurrency/time limits, no arbitrary upstream URL.
+6. Egress: permit only required school services/provider endpoints; deny unexpected outbound destinations at infrastructure layer where feasible.
+7. Filesystem/deployment: deploy only runtime artifact, never source/audit/private keys/node_modules; verify release integrity before activation.
+8. Release trust: organization-controlled Ed25519 private key outside repository; public trust root/keyId and approved release registry; anti-rollback and mixed-version denial.
+9. Service worker: security-critical assets network-only/no-store; integrity/revocation/config artifacts never precached; behavioral revocation/update tested in real served environment.
+10. Headers: enforce school-server CSP plus X-Content-Type-Options, Referrer-Policy, Permissions-Policy, COOP/CORP and frame policy at reverse proxy/server. HTML meta CSP is defense-in-depth, not a replacement for HTTP headers.
+11. Logging/telemetry: operational metadata only by default; redact secrets, prompts, student content and identifiers; protect diagnostic access and retention.
+12. Backup/recovery: versioned deployment rollback must still obey approved release registry; backup configuration/trust metadata with tested restore; never restore revoked signing keys as active.
+13. Resources: CPU/memory/process limits, request queue caps, health probes and graceful failure; AI budget service fail-closed.
+14. Patching: OS/container/runtime dependency patch process and vulnerability triage with owner and remediation SLA.
+
+PREP evidence for 1.16.23
+- source/deployment separation implemented; source candidate excludes dist/node_modules;
+- school build enforces server-session + school-gateway and local provider keys disabled;
+- security-critical SW freeze is enforced in postbuild for static and school profiles;
+- RI-PREP binds the school-server deployment to SBOM, provenance and evidence manifest;
+- actual school-server/container/reverse-proxy enforcement remains NOT TESTED.
+
+GITHUB PAGES BOUNDARY (LU-N10)
+- the current GitHub Pages workflow deploys the static dist/ after QA, but that static artifact is NOT signed/registered by the RI-PREP ceremony in this corrective candidate;
+- therefore GitHub Pages is explicitly OUTSIDE RI-PREP and must not inherit school-server RI-PREP claims;
+- this is an open distribution-channel assurance debt, not a hidden GREEN condition.

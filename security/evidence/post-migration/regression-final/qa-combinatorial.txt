@@ -1,0 +1,5 @@
+
+> ludus@1.16.22 qa:combinatorial
+> node scripts/qa-combinatorial.mjs
+
+COMBINATORIAL PASS: 55/660 scénářů, pairwise 100%

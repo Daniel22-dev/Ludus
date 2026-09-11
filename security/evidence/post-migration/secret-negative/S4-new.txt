@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11622/work/app/security/evidence/post-migration/secret-negative/cases/S4",
+  "errors": [
+    "secret-pattern:src/github.js:github-token",
+    "secret-pattern:src/github.js:assigned-secret-literal"
+  ],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n4-secret-scan"
+}

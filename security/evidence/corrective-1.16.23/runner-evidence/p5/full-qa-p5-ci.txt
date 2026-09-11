@@ -1,0 +1,3420 @@
+
+> ludus@1.16.23 qa:p5:ci
+> npm run qa:lock && npm run build && npm run garp25:prep-static && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 npm run garp25:p5-certification-controls && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs
+
+
+> ludus@1.16.23 qa:lock
+> node scripts/qa-p5-lock.mjs
+
+{
+  "schema": "ghrab-p5-lock-audit-v1",
+  "status": "passed",
+  "package": "ludus",
+  "version": "1.16.23",
+  "directDependencies": 4,
+  "lockedPackages": 44,
+  "registry": "https://registry.npmjs.org"
+}
+
+> ludus@1.16.23 build
+> LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs
+
+LUDUS 1.16.23: Core 1.0.0 SHA-256 OK; 2 operations; 11 engines; profile unofficial; builder 302.6 kB
+[P3] ludus 1.16.23: platform 1.1.2, HTML 13, cache ghrab-ludus-v1.16.23
+
+> ludus@1.16.23 postbuild
+> node scripts/ghrab-platform-conformance.mjs && npm run garp25:sw
+
+{
+  "schema": "ghrab-platform-conformance-result-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "total": 154,
+  "passed": 154,
+  "failed": 0,
+  "checks": [
+    {
+      "label": "dist exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "satellite dist has no duplicate platform tree",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "satellite source has no duplicate platform tree",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "consumer schema",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "package ↔ consumer version",
+      "ok": true,
+      "detail": "1.16.23 / 1.16.23"
+    },
+    {
+      "label": "platform contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact exports declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact imports declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "native export formats declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "legacy JSON import policy declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "cache naming",
+      "ok": true,
+      "detail": "ghrab-ludus-v1.16.23"
+    },
+    {
+      "label": "storage migration declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage namespace ludus_",
+      "ok": true,
+      "detail": "ghrab.ludus."
+    },
+    {
+      "label": "storage namespace ludus.",
+      "ok": true,
+      "detail": "ghrab.ludus."
+    },
+    {
+      "label": "vendor ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.consumer.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist config/platform-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist config/brand-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist platform-build-info.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built consumer identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built platform manifest contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built platform cache metadata",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built service-worker contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built artifact contracts",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest migration id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest canonical prefix",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest artifact exports",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest artifact imports",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "canonical logo manifest hash",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no inline school logo base64",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no legacy school logo reference",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no obsolete top-level platform references in satellite build",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "platform contract present in build",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "full eligible HTML documents found",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/chronos.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/chronos.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/dnd.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/dnd.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/hogwarts.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/hogwarts.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/indiana-jones.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/indiana-jones.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/jumanji.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/jumanji.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/laughworks.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/laughworks.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/lotr.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/lotr.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/matrix.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/matrix.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/orient-express.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/orient-express.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/star-wars.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/star-wars.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/stranger-things.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/stranger-things.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader manual/index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config manual/index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker canonical cache",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker contract marker",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker legacy cleanup list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker update protocol",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker platform precache",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker P3 asset list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no automatic skipWaiting during install",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker no-store bypass",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker no obsolete satellite platform asset",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA manifest exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA version",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA platform contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA cache metadata",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA app identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime previous platform rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime pre-1.1.2 rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime current accepted",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime n+1 accepted",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime major rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage alias reads migrated value",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "canonical storage value created",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage alias writes canonical key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage migration idempotent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage migration rollback",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "rollback restored original value",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 create",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 peek",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 take",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge consumes once",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope unwrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope detection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope unwrapMaybe",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "legacy artifact compatibility",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme contract runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact compatibility facade",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "accessibility runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "performance runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "lazy module runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "lazy script loader available",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session generation key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session end signal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session handler invoked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session ACK after successful handler",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}
+
+> ludus@1.16.23 garp25:sw
+> node security/garp25/tools/check-sw-security-freeze.mjs dist/sw.js dist security/security-critical-assets.json
+
+{
+  "status": "PASS",
+  "serviceWorker": "dist/sw.js",
+  "criticalListSource": "security/security-critical-assets.json",
+  "precachedEntries": 21,
+  "precacheSources": [
+    {
+      "source": "map-add:GHRAB_PLATFORM_P3_ASSETS",
+      "entries": [
+        "./ghrab/ghrab-platform.css",
+        "./ghrab/ghrab-artifact-envelope-v1.schema.json",
+        "./ghrab/ghrab-app-registry-v2.schema.json",
+        "./ghrab/ghrab-platform-manifest-1.1.2.json",
+        "./assets/brand/school-logo.png"
+      ]
+    },
+    {
+      "source": "addAll:expression",
+      "entries": [
+        "./index.html",
+        "./manifest.webmanifest",
+        "./access/access-gate.css",
+        "./access/reporter-bootstrap.js",
+        "./access/error-reporter.js",
+        "./access/error-reporter.css",
+        "./access/error-reporter-adapter.js",
+        "./icons/icon-192.png",
+        "./icons/icon-512.png",
+        "./icons/icon-maskable-512.png",
+        "./engines/manifest.json",
+        "./config/brand-manifest.json",
+        "./assets/brand/school-logo.png",
+        "./runtime/ludus-engine-runtime.js",
+        "./runtime/ludus-engine-badge.css",
+        "./runtime/ludus-engine-controls.css",
+        "./content/engine-index.json"
+      ]
+    }
+  ],
+  "unresolvedCacheWrites": [],
+  "cacheFirstDetected": true,
+  "structuralNetworkOnlyGuard": true,
+  "structuralGuard": {
+    "pass": true,
+    "condition": "isSecurityCriticalRequest(url, scopePath)",
+    "preGuardRespondWith": false,
+    "hasRespondWithNetworkOnly": true,
+    "hasReturn": true,
+    "branchBeforeCacheFirst": true
+  },
+  "behavioralGuard": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "assets/app.js",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "manual/index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      }
+    ],
+    "falseNegatives": [],
+    "falsePositives": []
+  },
+  "fetchHandlerRegistrations": {
+    "addEventListenerCount": 1,
+    "onfetchAssignments": 0,
+    "total": 1,
+    "invalidFetchHandlers": 0,
+    "topLevelEffects": [],
+    "error": null,
+    "pass": true
+  },
+  "fetchRouteBehavior": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "preGuardPolicy": {
+      "requestAllowed": [
+        "method",
+        "url"
+      ],
+      "eventAllowed": [
+        "request"
+      ],
+      "urlAllowed": [
+        "origin",
+        "pathname"
+      ],
+      "rule": "Exactly one fetch handler registration is permitted. Before the guard, routing-sensitive reads and all network/cache/respondWith effects are fail-closed. After a positive guard, the critical branch may read only event.respondWith and must produce exactly one total route effect: networkOnlyNoStore."
+    },
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      }
+    ],
+    "failed": []
+  },
+  "networkOnlySink": {
+    "status": "PASS",
+    "error": null,
+    "fetchCalls": [
+      {
+        "sameRequest": true,
+        "options": {
+          "cache": "no-store"
+        }
+      }
+    ],
+    "cacheCalls": [],
+    "cacheWrites": [],
+    "resultObserved": true
+  },
+  "criticalAssetsInDeployment": [
+    "access/deployment-config.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js"
+  ],
+  "authoritativeCriticalAssets": [
+    "access/deployment-config.js",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "release-integrity.json",
+    "release-integrity.sig",
+    "integrity-status",
+    "integrity-status.json"
+  ],
+  "findings": [],
+  "checkerRevision": "garp-2.5.1-r4-minimal-critical-branch-hotfix",
+  "note": "Static bounded Cache API analysis plus bounded behavioral evaluation of service-worker registration, isSecurityCriticalRequest, the complete unique fetch handler, and networkOnlyNoStore. PASS requires exactly one dynamically observed fetch handler registration; no pre-guard routing-sensitive read or network/cache/respondWith side effect; after a positive guard no Request/URL/FetchEvent read except event.respondWith; exactly one total routing/network/cache effect (networkOnlyNoStore); and a sink that performs exactly one fetch with cache:no-store and zero Cache API accesses. Does not replace SIM-07 or live revocation tests."
+}
+
+> ludus@1.16.23 garp25:prep-static
+> npm run garp25:selftest && npm run garp25:sbom:check && npm run garp25:sbom:verify && npm run garp25:ai-evidence:check && npm run garp25:ai-evidence:verify && npm run garp25:source-scan && npm run garp25:action-pins && npm run garp25:ai-resource && npm run garp25:logging-canary && npm run garp25:sw && npm run garp25:leaks && npm run garp25:ai-core-sync-patch
+
+
+> ludus@1.16.23 garp25:selftest
+> node security/garp25/tools/selftest-garp251.mjs
+
+{
+  "status": "PASS",
+  "checks": 81,
+  "passed": 81,
+  "failed": []
+}
+
+> ludus@1.16.23 garp25:sbom:check
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json --check
+
+PASS: SBOM snapshot current: /mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/sbom/ludus-1.16.23.cdx.json
+
+> ludus@1.16.23 garp25:sbom:verify
+> node scripts/verify-cyclonedx-sbom.mjs security/sbom/ludus-1.16.23.cdx.json
+
+{
+  "status": "PASS",
+  "expected": 44,
+  "actual": 44,
+  "nodeModulesCrossCheck": 0
+}
+
+> ludus@1.16.23 garp25:ai-evidence:check
+> node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json --check
+
+PASS: AI assurance fingerprint current: 01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790
+
+> ludus@1.16.23 garp25:ai-evidence:verify
+> node security/garp25/tools/verify-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json security/ai-boundary-files.json .
+
+{
+  "status": "PASS",
+  "errors": [],
+  "files": 22,
+  "aggregate": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "expected": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "inventory": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/security/ai-boundary-files.json",
+  "detectedCandidates": 19,
+  "untracked": [],
+  "inventoryEntriesNotDetectorMatched": [
+    "ghrab-ai-core.consumer.json",
+    "public/ai-operations.json",
+    "vendor/ghrab-ai-core-1.0.0/ghrab-ai-core-manifest-1.0.0.json"
+  ],
+  "verifierRevision": "garp-2.5.1-lu-n17-ai-inventory-drift-hotfix"
+}
+
+> ludus@1.16.23 garp25:source-scan
+> node scripts/garp25-source-scan.mjs
+
+{
+  "status": "PASS",
+  "mode": "source",
+  "root": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}
+
+> ludus@1.16.23 garp25:action-pins
+> node scripts/check-action-pins.mjs
+
+{
+  "status": "PASS",
+  "workflowFiles": 7,
+  "externalUses": 24,
+  "findings": []
+}
+
+> ludus@1.16.23 garp25:ai-resource
+> node scripts/qa-garp25-ai-resource.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-07",
+  "expected": "PAYLOAD_TOO_LARGE",
+  "observed": "PAYLOAD_TOO_LARGE",
+  "networkCalls": 0
+}
+
+> ludus@1.16.23 garp25:logging-canary
+> node scripts/qa-garp25-logging-canary.mjs
+
+{
+  "status": "PASS",
+  "negativeControl": "SHNC-08",
+  "sanitized": true,
+  "output": "[e-mail odstraněn] | Bearer [token odstraněn] | api_key=[odstraněno] | access_token=[odstraněno] | prompt=[obsah odstraněn] | student data=[obsah odstraněn]"
+}
+
+> ludus@1.16.23 garp25:sw
+> node security/garp25/tools/check-sw-security-freeze.mjs dist/sw.js dist security/security-critical-assets.json
+
+{
+  "status": "PASS",
+  "serviceWorker": "dist/sw.js",
+  "criticalListSource": "security/security-critical-assets.json",
+  "precachedEntries": 21,
+  "precacheSources": [
+    {
+      "source": "map-add:GHRAB_PLATFORM_P3_ASSETS",
+      "entries": [
+        "./ghrab/ghrab-platform.css",
+        "./ghrab/ghrab-artifact-envelope-v1.schema.json",
+        "./ghrab/ghrab-app-registry-v2.schema.json",
+        "./ghrab/ghrab-platform-manifest-1.1.2.json",
+        "./assets/brand/school-logo.png"
+      ]
+    },
+    {
+      "source": "addAll:expression",
+      "entries": [
+        "./index.html",
+        "./manifest.webmanifest",
+        "./access/access-gate.css",
+        "./access/reporter-bootstrap.js",
+        "./access/error-reporter.js",
+        "./access/error-reporter.css",
+        "./access/error-reporter-adapter.js",
+        "./icons/icon-192.png",
+        "./icons/icon-512.png",
+        "./icons/icon-maskable-512.png",
+        "./engines/manifest.json",
+        "./config/brand-manifest.json",
+        "./assets/brand/school-logo.png",
+        "./runtime/ludus-engine-runtime.js",
+        "./runtime/ludus-engine-badge.css",
+        "./runtime/ludus-engine-controls.css",
+        "./content/engine-index.json"
+      ]
+    }
+  ],
+  "unresolvedCacheWrites": [],
+  "cacheFirstDetected": true,
+  "structuralNetworkOnlyGuard": true,
+  "structuralGuard": {
+    "pass": true,
+    "condition": "isSecurityCriticalRequest(url, scopePath)",
+    "preGuardRespondWith": false,
+    "hasRespondWithNetworkOnly": true,
+    "hasReturn": true,
+    "branchBeforeCacheFirst": true
+  },
+  "behavioralGuard": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expected": true,
+        "actual": true
+      },
+      {
+        "path": "index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "assets/app.js",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      },
+      {
+        "path": "manual/index.html",
+        "source": "negative-control",
+        "expected": false,
+        "actual": false
+      }
+    ],
+    "falseNegatives": [],
+    "falsePositives": []
+  },
+  "fetchHandlerRegistrations": {
+    "addEventListenerCount": 1,
+    "onfetchAssignments": 0,
+    "total": 1,
+    "invalidFetchHandlers": 0,
+    "topLevelEffects": [],
+    "error": null,
+    "pass": true
+  },
+  "fetchRouteBehavior": {
+    "status": "PASS",
+    "checkedAuthoritative": 12,
+    "checkedDeployed": 9,
+    "preGuardPolicy": {
+      "requestAllowed": [
+        "method",
+        "url"
+      ],
+      "eventAllowed": [
+        "request"
+      ],
+      "urlAllowed": [
+        "origin",
+        "pathname"
+      ],
+      "rule": "Exactly one fetch handler registration is permitted. Before the guard, routing-sensitive reads and all network/cache/respondWith effects are fail-closed. After a positive guard, the critical branch may read only event.respondWith and must produce exactly one total route effect: networkOnlyNoStore."
+    },
+    "cases": [
+      {
+        "path": "access/deployment-config.js",
+        "authority": "access/deployment-config.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab/ghrab-platform.js",
+        "authority": "ghrab/ghrab-platform.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ghrab-platform.consumer.json",
+        "authority": "ghrab-platform.consumer.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "runtime/ludus-privacy.js",
+        "authority": "runtime/ludus-privacy.js",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "ai-operations.json",
+        "authority": "ai-operations.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.json",
+        "authority": "config/deployment.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/deployment.school-server.json",
+        "authority": "config/deployment.school-server.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/platform-manifest.json",
+        "authority": "config/platform-manifest.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "config/release-acceptance.json",
+        "authority": "config/release-acceptance.json",
+        "source": "authoritative-list",
+        "inDeployment": true,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.json",
+        "authority": "release-integrity.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "release-integrity.sig",
+        "authority": "release-integrity.sig",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      },
+      {
+        "path": "integrity-status.json",
+        "authority": "integrity-status.json",
+        "source": "authoritative-list",
+        "inDeployment": false,
+        "expectedRoute": "networkOnlyNoStore",
+        "respondCalls": [
+          "networkOnlyNoStore"
+        ],
+        "preGuardReads": [],
+        "postGuardReads": [],
+        "preGuardEffects": [],
+        "routeEffects": [
+          {
+            "phase": "guard-or-later",
+            "route": "networkOnlyNoStore"
+          }
+        ],
+        "exactCriticalRoute": true,
+        "returnedAsync": false,
+        "error": null,
+        "pass": true
+      }
+    ],
+    "failed": []
+  },
+  "networkOnlySink": {
+    "status": "PASS",
+    "error": null,
+    "fetchCalls": [
+      {
+        "sameRequest": true,
+        "options": {
+          "cache": "no-store"
+        }
+      }
+    ],
+    "cacheCalls": [],
+    "cacheWrites": [],
+    "resultObserved": true
+  },
+  "criticalAssetsInDeployment": [
+    "access/deployment-config.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js"
+  ],
+  "authoritativeCriticalAssets": [
+    "access/deployment-config.js",
+    "ghrab/ghrab-platform.js",
+    "ghrab-platform.consumer.json",
+    "runtime/ludus-privacy.js",
+    "ai-operations.json",
+    "config/deployment.json",
+    "config/deployment.school-server.json",
+    "config/platform-manifest.json",
+    "config/release-acceptance.json",
+    "release-integrity.json",
+    "release-integrity.sig",
+    "integrity-status",
+    "integrity-status.json"
+  ],
+  "findings": [],
+  "checkerRevision": "garp-2.5.1-r4-minimal-critical-branch-hotfix",
+  "note": "Static bounded Cache API analysis plus bounded behavioral evaluation of service-worker registration, isSecurityCriticalRequest, the complete unique fetch handler, and networkOnlyNoStore. PASS requires exactly one dynamically observed fetch handler registration; no pre-guard routing-sensitive read or network/cache/respondWith side effect; after a positive guard no Request/URL/FetchEvent read except event.respondWith; exactly one total routing/network/cache effect (networkOnlyNoStore); and a sink that performs exactly one fetch with cache:no-store and zero Cache API accesses. Does not replace SIM-07 or live revocation tests."
+}
+
+> ludus@1.16.23 garp25:leaks
+> node security/garp25/tools/scan-deployment-leaks.mjs dist
+
+{
+  "status": "PASS",
+  "mode": "deployment",
+  "root": "/mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/dist",
+  "errors": [],
+  "info": [],
+  "scannerRevision": "garp-2.5.1-lu-n18-recursive-archive-secret-scan"
+}
+
+> ludus@1.16.23 garp25:ai-core-sync-patch
+> node scripts/qa-garp25-ai-core-sync-patch.mjs
+
+{
+  "status": "PASS",
+  "newCoreDirCaptured": true,
+  "gitApply": true,
+  "buildAfterApply": true
+}
+
+> ludus@1.16.23 verify:platform
+> node scripts/ghrab-platform-conformance.mjs
+
+{
+  "schema": "ghrab-platform-conformance-result-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "total": 154,
+  "passed": 154,
+  "failed": 0,
+  "checks": [
+    {
+      "label": "dist exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "satellite dist has no duplicate platform tree",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "satellite source has no duplicate platform tree",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "consumer schema",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "package ↔ consumer version",
+      "ok": true,
+      "detail": "1.16.23 / 1.16.23"
+    },
+    {
+      "label": "platform contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact exports declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact imports declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "native export formats declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "legacy JSON import policy declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "cache naming",
+      "ok": true,
+      "detail": "ghrab-ludus-v1.16.23"
+    },
+    {
+      "label": "storage migration declared",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage namespace ludus_",
+      "ok": true,
+      "detail": "ghrab.ludus."
+    },
+    {
+      "label": "storage namespace ludus.",
+      "ok": true,
+      "detail": "ghrab.ludus."
+    },
+    {
+      "label": "vendor ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-platform.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-platform.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-artifact-envelope-v1.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash ghrab-app-registry-v2.schema.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "vendor hash school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist hash school-logo.png",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist ghrab-platform.consumer.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist config/platform-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist config/brand-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "dist platform-build-info.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built consumer identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built platform manifest contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built platform cache metadata",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built service-worker contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "built artifact contracts",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest migration id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest canonical prefix",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest artifact exports",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "data manifest artifact imports",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "canonical logo manifest hash",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no inline school logo base64",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no legacy school logo reference",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no obsolete top-level platform references in satellite build",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "platform contract present in build",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "full eligible HTML documents found",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/chronos.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/chronos.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/dnd.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/dnd.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/hogwarts.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/hogwarts.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/indiana-jones.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/indiana-jones.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/jumanji.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/jumanji.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/laughworks.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/laughworks.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/lotr.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/lotr.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/matrix.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/matrix.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/orient-express.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/orient-express.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/star-wars.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/star-wars.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader engines/stranger-things.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config engines/stranger-things.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "exactly one platform loader manual/index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "exactly one platform config manual/index.html",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "label": "app identity manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme root contract manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker canonical cache",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker contract marker",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker legacy cleanup list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker update protocol",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker platform precache",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker P3 asset list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "no automatic skipWaiting during install",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker no-store bypass",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "service worker no obsolete satellite platform asset",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA manifest exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA version",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA platform contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA cache metadata",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "PWA app identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime previous platform rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime pre-1.1.2 rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime current accepted",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime n+1 accepted",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "runtime major rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage alias reads migrated value",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "canonical storage value created",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage alias writes canonical key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage migration idempotent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "storage migration rollback",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "rollback restored original value",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 create",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 peek",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge v2 take",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "Studio Bridge consumes once",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope unwrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope detection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact envelope unwrapMaybe",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "legacy artifact compatibility",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "theme contract runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "artifact compatibility facade",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "accessibility runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "performance runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "lazy module runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "lazy script loader available",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session runtime contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session generation key",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session end signal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session handler invoked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "label": "suite-session ACK after successful handler",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}
+
+> ludus@1.16.23 qa:quality
+> node scripts/qa-p3-quality.mjs
+
+{
+  "schema": "ghrab-p3-quality-result-v1",
+  "status": "passed",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "contracts": {
+    "accessibility": "ghrab-a11y-v1",
+    "performance": "ghrab-performance-v1",
+    "modules": "ghrab-lazy-modules-v1"
+  },
+  "metrics": {
+    "schema": "ghrab-performance-report-v1",
+    "appId": "ludus",
+    "appVersion": "1.16.23",
+    "platformVersion": "1.1.2",
+    "measuredAt": "2026-09-11T14:13:58.774Z",
+    "distBytes": 3498507,
+    "jsBytes": 194844,
+    "cssBytes": 30804,
+    "htmlBytes": 2097173,
+    "fileCount": 90,
+    "fullHtmlCount": 13,
+    "entryHtmlBytes": 311962,
+    "entryCriticalBytes": 517906,
+    "largestInlineScriptBytes": 267355,
+    "precacheBytes": 1092326,
+    "precacheAssetCount": 21,
+    "largestFileBytes": 361995,
+    "largestFilePath": "engines/hogwarts.html",
+    "duplicateLargeBytes": 36902
+  },
+  "budget": {
+    "distBytes": 4900000,
+    "entryHtmlBytes": 315000,
+    "entryCriticalBytes": 522000,
+    "largestInlineScriptBytes": 270000,
+    "precacheBytes": 1220000,
+    "largestFileBytes": 1050000,
+    "duplicateLargeBytes": 50000
+  },
+  "precacheAssets": [
+    "access/access-gate.css",
+    "access/error-reporter-adapter.js",
+    "access/error-reporter.css",
+    "access/error-reporter.js",
+    "access/reporter-bootstrap.js",
+    "assets/brand/school-logo.png",
+    "config/brand-manifest.json",
+    "content/engine-index.json",
+    "engines/manifest.json",
+    "ghrab/ghrab-app-registry-v2.schema.json",
+    "ghrab/ghrab-artifact-envelope-v1.schema.json",
+    "ghrab/ghrab-platform-manifest-1.1.2.json",
+    "ghrab/ghrab-platform.css",
+    "icons/icon-192.png",
+    "icons/icon-512.png",
+    "icons/icon-maskable-512.png",
+    "index.html",
+    "manifest.webmanifest",
+    "runtime/ludus-engine-badge.css",
+    "runtime/ludus-engine-controls.css",
+    "runtime/ludus-engine-runtime.js"
+  ],
+  "duplicateGroups": [
+    [
+      "icons/apple-touch-icon.png",
+      "icons/icon-180.png"
+    ]
+  ],
+  "checks": [
+    {
+      "id": "dist.exists",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "platform.version",
+      "ok": true,
+      "detail": "1.1.2"
+    },
+    {
+      "id": "contract.a11y",
+      "ok": true,
+      "detail": "ghrab-a11y-v1"
+    },
+    {
+      "id": "contract.performance",
+      "ok": true,
+      "detail": "ghrab-performance-v1"
+    },
+    {
+      "id": "contract.modules",
+      "ok": true,
+      "detail": "ghrab-lazy-modules-v1"
+    },
+    {
+      "id": "platform.runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "platform.styles",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.reduced-motion",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.focus-visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.skip-link",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.html-documents",
+      "ok": true,
+      "detail": "13"
+    },
+    {
+      "id": "a11y.lang:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/chronos.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/chronos.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/dnd.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/dnd.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/hogwarts.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/hogwarts.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/indiana-jones.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/indiana-jones.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/jumanji.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/jumanji.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/laughworks.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/laughworks.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/lotr.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/lotr.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/matrix.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/matrix.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/orient-express.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/orient-express.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/star-wars.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/star-wars.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:engines/stranger-things.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:engines/stranger-things.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:index.html",
+      "ok": true,
+      "detail": "platform=1; engine=1"
+    },
+    {
+      "id": "a11y.lang:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.viewport:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.zoom:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.title:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.main:manual/index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "a11y.runtime:manual/index.html",
+      "ok": true,
+      "detail": "platform=1; engine=0"
+    },
+    {
+      "id": "module.exists:runtime/ludus-engine-runtime.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.referenced:runtime/ludus-engine-runtime.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.exists:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.referenced:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "module.content-pack:content/engine-index.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "budget.distBytes",
+      "ok": true,
+      "detail": "3498507 <= 4900000"
+    },
+    {
+      "id": "budget.entryHtmlBytes",
+      "ok": true,
+      "detail": "311962 <= 315000"
+    },
+    {
+      "id": "budget.entryCriticalBytes",
+      "ok": true,
+      "detail": "517906 <= 522000"
+    },
+    {
+      "id": "budget.largestInlineScriptBytes",
+      "ok": true,
+      "detail": "267355 <= 270000"
+    },
+    {
+      "id": "budget.precacheBytes",
+      "ok": true,
+      "detail": "1092326 <= 1220000"
+    },
+    {
+      "id": "budget.largestFileBytes",
+      "ok": true,
+      "detail": "361995 <= 1050000"
+    },
+    {
+      "id": "budget.duplicateLargeBytes",
+      "ok": true,
+      "detail": "36902 <= 50000"
+    },
+    {
+      "id": "budget.minimum-count",
+      "ok": true,
+      "detail": "7"
+    }
+  ],
+  "warnings": [],
+  "summary": {
+    "total": 102,
+    "passed": 102,
+    "failed": 0,
+    "warnings": 0
+  }
+}
+
+> ludus@1.16.23 qa:browser
+> node scripts/qa-p3-browser.mjs
+
+{
+  "schema": "ghrab-p3-browser-result-v1",
+  "appId": "ludus",
+  "appVersion": "1.16.23",
+  "chromium": "system",
+  "result": {
+    "checks": {
+      "platformPresent": true,
+      "version": true,
+      "a11yContract": true,
+      "performanceContract": true,
+      "moduleContract": true,
+      "skipLink": true,
+      "liveRegion": true,
+      "inputName": true,
+      "iconName": true,
+      "imageAlt": true,
+      "dialogName": true,
+      "initialFocus": true,
+      "tabWrap": true,
+      "shiftTabWrap": true,
+      "escapeClosed": true,
+      "focusReturned": true,
+      "announcement": true,
+      "performance": true,
+      "lazy": true
+    },
+    "failed": [],
+    "activeElement": "launcher",
+    "snapshot": {
+      "contract": "ghrab-performance-v1",
+      "now": 356.5999999999767,
+      "domContentLoadedMs": 64,
+      "loadMs": 65.19999999995343,
+      "transferBytes": 0,
+      "decodedBytes": 0,
+      "jsHeapUsedBytes": 10000000,
+      "resourceCount": 0
+    }
+  },
+  "status": "passed"
+}
+
+> ludus@1.16.23 qa:runtime
+> node scripts/qa-p5-runtime.mjs
+
+[runtime] index.html @ 1280px
+file:///mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/scripts/qa-p5-runtime.mjs:177
+        const navResult=await client.call('Page.navigate',{url}); if(navResult?.errorText) throw new Error(`Runtime navigation failed: ${rel}: ${navResult.errorText}`);
+                                                                                                 ^
+
+Error: Runtime navigation failed: index.html: net::ERR_BLOCKED_BY_ADMINISTRATOR
+    at file:///mnt/data/ludus_11623/work/app/LUDUS-1_16_22-GARP2_5-SHIELD-KANDIDAT/scripts/qa-p5-runtime.mjs:177:98
+
+Node.js v22.16.0

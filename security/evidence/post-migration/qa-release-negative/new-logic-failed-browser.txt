@@ -1,0 +1,14 @@
+{
+  "appId": "ludus",
+  "appVersion": "1.16.22",
+  "axeRequired": false,
+  "summary": {
+    "total": 46,
+    "passed": 45,
+    "failed": 1
+  },
+  "status": "failed",
+  "failed": [
+    "report.browser.passed"
+  ]
+}

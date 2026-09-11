@@ -1,0 +1,26 @@
+GARP 2.5.1 – SECURITY ASSURANCE CROSSWALK
+Application: LUDUS
+Version: 1.16.23
+Pinned external references: GARP 2.5.1 `33-REFERENCES-OFFICIAL-PINNED.txt`, frozen 2026-09-06.
+
+External reference | GARP/LUDUS relevance | Evidence | Status
+OWASP ASVS 5.0.0 | input validation, auth/session, browser/output, secure configuration | GARP23 48/48; PC-01 93/93; suite 27/27; qa:security; CSP profiles | PARTIAL / PREP
+NIST SSDF SP 800-218 v1.1 | source/build/dependency/release process | lockfile, pinned Actions, SBOM, build provenance, RI tooling, evidence manifest | PARTIAL / PREP
+NIST AI SSDF SP 800-218A | AI boundary, model/provider changes, secure AI lifecycle | operation registry, AI fingerprint, AIR structural evidence, resource budget | PARTIAL / PREP
+SLSA v1.2 | build provenance concepts | custom GARP provenance + verify + rebuild equivalence | MAPPED; NO SLSA LEVEL CLAIM
+CycloneDX 1.7 | machine-readable dependency inventory | `security/sbom/ludus-1.16.23.cdx.json` | PASS
+OWASP GenAI LLM Top 10 2026 LLM01 | prompt injection | untrusted-data envelope, AIR structural campaign | PASS structural / live model NOT TESTED
+LLM02 | sensitive disclosure | contact preflight, generic attachment name, privacy/reporting controls | PARTIAL
+LLM03 | excessive agency | model has no tool/MCP/action capability; AGENTIC=NO | N/A for agency controls
+LLM04 | supply chain | vendored AI Core hash, lockfile, SBOM, pinned Actions | PARTIAL
+LLM05 | data/model poisoning | no model training/vector store; imported data untrusted | N/A/PARTIAL
+LLM06 | unbounded consumption | 18 MiB/14 MiB, output/call/timeout limits; LIVE gateway quotas pending | PARTIAL
+LLM07 | misinformation | educational correctness remains teacher validation responsibility; schemas do not prove truth | OPEN PRODUCT RISK
+LLM08 | hidden context exposure | safety instructions forbid disclosure; AIR structural cases | PASS structural / live model NOT TESTED
+LLM09 | vector/embedding weakness | no vector store/embedding/RAG subsystem | N/A
+LLM10 | improper output handling | JSON schema, normalizer, inert rendering, XSS regression | PASS structural/regression
+OWASP Agentic Top 10 2026 | model-selected tools/autonomous execution | call graph exposes only two generate operations; no tool registry/MCP/memory loop | N/A (AGENTIC=NO)
+OWASP ACS (developing framework, 2026-09-01) | inspectability/control concepts only | operation allowlist, evidence, fail-closed design | REFERENCE ONLY; NO CONFORMANCE CLAIM
+
+CLAIM RULE
+This crosswalk is an audit map. It is not a certification or compliance claim.

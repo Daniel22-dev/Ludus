@@ -1,0 +1,12 @@
+{
+  "appId": "ludus",
+  "appVersion": "1.16.22",
+  "axeRequired": false,
+  "summary": {
+    "total": 46,
+    "passed": 46,
+    "failed": 0
+  },
+  "status": "passed",
+  "failed": []
+}

@@ -1,0 +1,13 @@
+
+> ludus@1.16.23 garp25:p5-certification-controls
+> node scripts/qa-garp25-p5-certification-controls.mjs
+
+{
+  "status": "PASS",
+  "mode": "synthetic-complete-report-set",
+  "axeRequired": true,
+  "controls": 4,
+  "positive": 2,
+  "negative": 2,
+  "note": "This proves P5 certification logic, not live Chromium runtime behavior."
+}

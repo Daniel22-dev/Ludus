@@ -1,0 +1,5 @@
+
+> ludus@1.16.23 qa:pwa
+> node scripts/qa-pwa.mjs
+
+PWA PASS: 0 nálezů

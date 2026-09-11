@@ -1,0 +1,14 @@
+{
+  "schema": "ghrab-trust-root-v1",
+  "purpose": "LUDUS 1.16.23 disposable PREP verification only; NOT production custody",
+  "keys": [
+    {
+      "keyId": "prep-ludus-1.16.23-20260911",
+      "algorithm": "Ed25519",
+      "status": "active",
+      "notBefore": "2026-09-11T00:00:00.000Z",
+      "notAfter": "2026-10-11T23:59:59.000Z",
+      "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAcI0QBlNKXp8zax91VcuyLIEXZQhKuxmHpVeAE+2YZVU=\n-----END PUBLIC KEY-----\n"
+    }
+  ]
+}

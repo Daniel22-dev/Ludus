@@ -1,0 +1,65 @@
+
+> ludus@1.16.22 qa:garp23:critical
+> node scripts/qa-garp23-critical.mjs
+
+{
+  "schema": "ghrab-garp23-critical-v1",
+  "target": "app",
+  "total": 13,
+  "passed": 13,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "auth.no-global-permit-copy",
+      "ok": true
+    },
+    {
+      "id": "auth.nonsecret-granted-marker",
+      "ok": true
+    },
+    {
+      "id": "ai.untrusted-boundary",
+      "ok": true
+    },
+    {
+      "id": "ai.hierarchy-policy",
+      "ok": true
+    },
+    {
+      "id": "ai.topic-data-only",
+      "ok": true
+    },
+    {
+      "id": "ai.game-data-only",
+      "ok": true
+    },
+    {
+      "id": "ai.core-defense",
+      "ok": true
+    },
+    {
+      "id": "ai.production-no-test-hooks",
+      "ok": true
+    },
+    {
+      "id": "ai.attachment-name-hardcoded",
+      "ok": true
+    },
+    {
+      "id": "import.material-central-normalizer",
+      "ok": true
+    },
+    {
+      "id": "import.content-central-normalizer",
+      "ok": true
+    },
+    {
+      "id": "import.handoff-structural-validation",
+      "ok": true
+    },
+    {
+      "id": "privacy.shared-device-isolation",
+      "ok": true
+    }
+  ]
+}

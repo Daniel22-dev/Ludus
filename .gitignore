@@ -4,3 +4,5 @@ webroot/
 *.log
 .DS_Store
 qa-results/
+
+dist-school-server/

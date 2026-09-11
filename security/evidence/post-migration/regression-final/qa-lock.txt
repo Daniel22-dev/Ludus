@@ -1,0 +1,13 @@
+
+> ludus@1.16.22 qa:lock
+> node scripts/qa-p5-lock.mjs
+
+{
+  "schema": "ghrab-p5-lock-audit-v1",
+  "status": "passed",
+  "package": "ludus",
+  "version": "1.16.22",
+  "directDependencies": 4,
+  "lockedPackages": 44,
+  "registry": "https://registry.npmjs.org"
+}

@@ -1,0 +1,9 @@
+GARP 2.5.1 GHRAB - TOOLING SOURCE
+Source package: GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N17-N19-HOTFIX.zip
+Source package SHA-256: ace22965915f496bf56db81e6122ec88c93e04934a01fd894fbecd449919181a
+Internal SHA256SUMS.txt SHA-256: 327885a4999fe3501b307fc4031dcaaf94eb2a03895ec5983b97b72d1d36020a
+Freeze: 2026-09-11
+Tooling revision: R2 + N5 + LU-N2 + LU-N17/LU-N18 cumulative corrective hotfix
+Tools: 16
+Selftest at corrective-round freeze: PASS 81/81
+Do not substitute original R2, N5-only, or LU-N2-only package for this LUDUS 1.16.23 candidate.

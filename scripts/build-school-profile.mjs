@@ -5,6 +5,10 @@ import process from "node:process";
 const root = process.cwd();
 const sourceDist = path.join(root, "dist");
 const targetDist = path.join(root, "dist-school-server");
+const requestedBuildTime = String(process.env.GHRAB_BUILD_TIME || '').trim();
+const parsedBuildTime = requestedBuildTime ? Date.parse(requestedBuildTime) : NaN;
+if (requestedBuildTime && Number.isNaN(parsedBuildTime)) throw new Error('GHRAB_BUILD_TIME musí být platný ISO-8601 čas.');
+const buildTime = requestedBuildTime ? new Date(parsedBuildTime).toISOString() : new Date().toISOString();
 if (!fs.existsSync(sourceDist)) throw new Error("Chybí dist/. Nejprve spusťte standardní build.");
 fs.rmSync(targetDist, { recursive: true, force: true });
 fs.cpSync(sourceDist, targetDist, { recursive: true });
@@ -61,8 +65,8 @@ for (const htmlFile of files.filter((file) => file.toLowerCase().endsWith('.html
 }
 
 const deployment = readJson(path.join(path.dirname(schoolProfiles[0]), "deployment.json"));
-if (!deployment.appId || deployment.profile !== "school-server" || deployment.authMode !== "server-session") {
-  throw new Error("Aktivní school-server deployment kontrakt není úplný.");
+if (!deployment.appId || deployment.profile !== "school-server" || deployment.authMode !== "server-session" || deployment.aiTransport !== "school-gateway" || deployment.features?.allowLocalProviderKeys === true) {
+  throw new Error("Aktivní school-server deployment kontrakt není úplný nebo porušuje AI transport policy.");
 }
 const appBaseUrl = trailingSlash(deployment.appBaseUrl || deployment.appBaseUrls?.[deployment.appId]);
 if (!appBaseUrl.startsWith("/")) throw new Error("School-server appBaseUrl musí být same-origin absolutní cesta.");
@@ -93,7 +97,7 @@ writeJson(path.join(targetDist, "server-ready-build-info.json"), {
   version: pkg.version,
   phase: "P3",
   profile: "school-server",
-  builtAt: new Date().toISOString(),
+  builtAt: buildTime,
   activeAuthMode: deployment.authMode,
   activeAiTransport: deployment.aiTransport,
   telemetryMode: deployment.telemetryMode,

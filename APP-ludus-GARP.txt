@@ -1,0 +1,59 @@
+GARP 2.5.1 GHRAB – PRŮVODNÍ LIST APLIKACE
+
+1. IDENTITA
+appId:                    ludus
+Název:                    LUDUS
+Repozitář:                metadata repozitáře nebyla v dodaném ZIPu k dispozici
+Aktuální verze:           1.16.23 (Prompt C opravný kandidát)
+Verze standardu:          GARP 2.5.1 GHRAB / TOOLING-R2-LU-N17-N19-HOTFIX
+SHA-256 GARP ZIPu:        ace22965915f496bf56db81e6122ec88c93e04934a01fd894fbecd449919181a
+SHA-256 GARP SHA256SUMS:  327885a4999fe3501b307fc4031dcaaf94eb2a03895ec5983b97b72d1d36020a
+Vstupní source 1.16.20:   4120a1c79363b91fa9b464881e26086ee750aa1cd1c8be82fda7495f99c8193b
+Poslední doložený GARP baseline: 1.16.18 corrective candidate po Claude B; nezávislé uzavření druhého review není v tomto vstupu doloženo. Aktuální vstup 1.16.20 obsahuje navazující platformové změny 1.16.19–1.16.20.
+
+2. TRVALÁ KLASIFIKACE
+Třída dat:                D2 – aplikace může přijmout studentský text/obsah; D3 rozhodování/hodnocení není inherentní AI funkcí LUDUS.
+Povolená egress cesta:    static/direct profil -> explicitní Gemini transport; school profil -> same-origin /api/v1/ AI gateway. Reálná studentská data tímto PREP kandidátem nejsou schválena.
+AGENTIC:                  NO
+Ověřeno proti call grafu: 2026-09-11; pouze dvě registrované generate operace, bez tool/MCP registry, autonomní smyčky či persistentní modelové paměti.
+Deployment profil:        A statický + připravený B serverový school profile; produkční server NOT TESTED.
+Build profil:             obecný + školní
+Service worker:           ANO
+Vendorované komponenty:   GHRAB AI Core 1.0.0; GHRAB Platform 1.1.2; lokální error-reporter kopie. Local vendored consistency 4/4 PASS, drift 0.
+
+3. TRVALÁ ROZHODNUTÍ
+KD-01 | SH-AG | N/A | model nevolí nástroje/MCP ani autonomní side effecty; AGENTIC=NO | Prompt C corrective | 2026-09-11
+KD-02 | official media | private/add-on only | owner-supplied-unverified média se nesmí dostat do public/school artefaktu | existující media policy | zachováno 2026-09-10
+KD-03 | release signing | PREP synthetic only | skutečný private key není požadován ani ukládán; PREP trust entry má notBefore/notAfter; RI-LIVE vyžaduje organizační custody | GARP 2.5.1 | 2026-09-11
+
+4. REGISTR DLUHŮ
+DL-01 | MEDIUM | CSP unsafe-inline kompatibilita napříč builderem/enginy | XSS/normalizer/sandbox/CSP bez unsafe-eval | budoucí refactor | nonce/hash/external-module + browser regressions
+DL-02 | assurance gap | fresh online SCA nebyl dostupný | lockfile, SBOM, offline audit cache | CI/Prompt E | čistý online advisory scan
+DL-03 | assurance gap | served DAST/runtime/axe blokován managed Chromium politikou | static/VM/in-memory QA | Prompt E/CI | unmanaged browser
+DL-04 | release gate | SHIELD-LIVE/RI-LIVE neproveden | PREP contracts/RI tooling | Prompt F/G | actual school server + org key/integrity service
+DL-05 | product risk | AI educational output může být věcně chybný | teacher review + schema controls | provoz | human review policy
+
+5. NOT TESTED
+Behaviorální live-model AIR | v Prompt D nebyl použit živý model | Prompt E/live-safe campaign
+Served DAST/headers/SHNC-11 | Chromium URLBlocklist blokuje local HTTP | unmanaged browser/staging
+SH-RUN/SHIELD-LIVE | školní server není připojen | Prompt F
+RI-LIVE/alerting/watchdog | Integrity Service/registry/organizational key nejsou nasazeny | Prompt F/G
+Fresh online SCA | registry/advisory síťová čerstvost nedoložena | CI/online scanner
+
+6. HISTORIE KOL
+2026-09-01 | GARP 2.3 corrective candidate 1.16.18 | historický vstup uvnitř current ZIPu | druhá nezávislá closure v dodaném vstupu nedoložena | RELEASE-NOTES-1.16.18-GARP-KOLO-2.md
+2026-09-05/06 | Platform 1.1.2 1.16.19–1.16.20 | navazující source history | current input | CHANGELOG + audit-evidence
+2026-09-10 | GARP 2.5.1 1.16.21 source candidate | independent review found LU-N1..LU-N14 corrective requirements | superseded by 1.16.23 corrective round | OVERENI-KANDIDATA-ludus-1.16.21-2026-09-11.txt
+
+7. REOPEN TRIGGERS
+Změna AI provider/model/system prompt/operation manifest -> zneplatnit AIR fingerprint a revalidovat AIR/SH-AI.
+Změna auth/session/app-guard/SW/security-critical list -> revalidovat RT/SIM/PC-01/GH-02/SHNC-12.
+Změna import/export/storage/privacy -> revalidovat privacy lifecycle/PC-01.
+Přidání tool/MCP/autonomní smyčky/persistentní modelové paměti -> AGENTIC přestává být NO a SHNC-17..20 se stanou povinné.
+Nasazení na školní server -> spustit Prompt F/G; PREP status nelze přenést jako LIVE PASS.
+
+2026-09-11 | 1.16.22 LU-N2-HOTFIX | GARP selftest 72/72; LU-N1..14 remediations | independent review found LU-N15..19
+2026-09-11 | 1.16.23 LU-N17-N19-HOTFIX corrective round | GARP selftest 81/81; LU-N15..19 remediations/evidence | independent re-review pending
+
+DL-06 | ecosystem assurance | AI Core synchronization validates hashes but the upstream AI Core release manifest is not yet signed by a pinned ecosystem trust root | split read/write jobs + pinned origin/actions | ecosystem | signed AI Core release manifest
+DL-07 | distribution channel | GitHub Pages static dist is outside current RI-PREP ceremony | QA + SW/leak gates | future | sign/register static artifact or retire channel

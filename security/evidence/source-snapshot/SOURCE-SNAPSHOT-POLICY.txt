@@ -1,0 +1,12 @@
+LUDUS 1.16.23 exact build-input source snapshot policy
+Created for GARP 2.5.1 Prompt C corrective evidence (LU-N15..LU-N19).
+
+Excluded as generated outputs/evidence, not build inputs:
+.git/; node_modules/; dist/; dist-school-server/; qa-results/; test-results/; coverage/; security/evidence/; security/security-evidence-manifest.json; security/sbom/; security/release-integrity/.
+
+This fixes the 1.16.22 INFO observation: no security-evidence-manifest.json or evidence tree is embedded in the build-input snapshot.
+The supplied candidate contains no .git metadata; provenance therefore uses this exact source-package SHA-256 rather than inventing a commit SHA.
+
+Snapshot file: LUDUS-1.16.23-BUILD-INPUTS.zip
+SHA-256: 371b4f2723f2ea400894dea0b37944b9415005e3568ce3246b65953c051a52ee
+Size: 2160509 bytes

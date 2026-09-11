@@ -1,0 +1,5 @@
+
+> ludus@1.16.22 garp25:ai-evidence:check
+> node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json --check
+
+PASS: AI assurance fingerprint current: ad472225c5eba19a12755a8cd355f81be6689214a811add9579ab6fa47d0de26

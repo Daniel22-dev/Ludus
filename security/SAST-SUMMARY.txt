@@ -1,0 +1,14 @@
+GARP 2.5.1 – SAST / STATIC SECURITY SUMMARY
+Application: LUDUS 1.16.23
+Date: 2026-09-10
+
+Status: PASS for the application's built-in/static PREP subset; third-party SAST NOT TESTED.
+Evidence:
+- qa:security PASS, 0 findings.
+- GARP legacy gate PASS 49/49.
+- GARP 2.3 local security PASS 48/48.
+- qa:xss PASS; known unsafe-inline CSP compatibility debt remains explicitly registered.
+- modified/new local GARP scripts pass Node syntax checks.
+- GARP 2.5.1 source secret scanner PASS after clean restoration.
+
+This summary does not claim that an external commercial/static analyzer was run.

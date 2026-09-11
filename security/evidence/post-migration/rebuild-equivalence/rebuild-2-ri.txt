@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "output": "/mnt/data/ludus_11622/work/final-rebuild-2-ri.json",
+  "files": 90,
+  "artifactDigest": "508b1e6b79e27a379a7b6e7032a5e10d72493a69fc473439ea589b64073cfbcf"
+}

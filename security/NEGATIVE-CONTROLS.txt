@@ -1,0 +1,26 @@
+GARP 2.5.1 – SHIELD NEGATIVE CONTROLS
+Application: LUDUS 1.16.23
+Date: 2026-09-10
+
+SHNC-01 PASS – injected credential-like pattern -> source secret scanner FAIL; clean PASS.
+SHNC-02 PASS – one-byte index.html tamper -> release-integrity verifier TAMPERED.
+SHNC-03 PASS – provenance subject SHA mutation -> provenance verifier FAIL.
+SHNC-04 PASS – injected .map -> deployment leak scanner FAIL; clean PASS.
+SHNC-05 PASS – valid Ed25519-signed 1.16.20 PREP manifest -> current 1.16.23 registry DENIED / rollback-denied.
+SHNC-06 PASS – mixed 1.16.20 index.html with 1.16.23 deployment -> release-integrity verifier FAIL.
+SHNC-07 PASS – 1025-byte part against 1024-byte cap -> PAYLOAD_TOO_LARGE, zero network calls.
+SHNC-08 PASS – reporter sanitizer removes synthetic email/token/key/prompt/student-content canaries.
+SHNC-09 PASS – actions/checkout@main -> action pin checker FAIL; clean workflows PASS 21 refs.
+SHNC-10 PASS – mutation of a disposable evidence-directory copy after manifest creation -> evidence verifier FAIL; authoritative evidence remains unchanged and verifies PASS.
+SHNC-11 NOT TESTED – served header manipulation unavailable due managed Chromium URLBlocklist.
+SHNC-12 PASS – disposable school profile weakened from server-session to signed-permit; build fails closed before deployment; clean GARP gate PASS 49/49.
+SHNC-13 PASS – inherited GARP 2.3 hostile AI/output normalization and unsafe-output controls PASS 48/48 overall; no tool capability exists.
+SHNC-14 PASS – mutation of AI boundary -> AI fingerprint stale/FAIL; restoration -> current PASS.
+SHNC-15 NOT TESTED – live Integrity Service/policy alert channel does not exist in PREP environment.
+SHNC-16 PASS – correctly signed manifest with revoked keyId -> trust verifier UNVERIFIED key-status:revoked.
+SHNC-17 N/A – AGENTIC=NO.
+SHNC-18 N/A – AGENTIC=NO.
+SHNC-19 N/A – AGENTIC=NO / no agent memory.
+SHNC-20 N/A – AGENTIC=NO / no autonomous tool loop.
+
+All mutations were disposable and removed/restored before handoff.
