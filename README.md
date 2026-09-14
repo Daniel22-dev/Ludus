@@ -48,9 +48,9 @@ LUDUS obsahuje instalovatelnou PWA vrstvu s vlastní identitou, service workerem
 
 Každá hra může mít samostatné intro a soundtrack pro variantu `official` i `safe`. Soubory jsou mimo HTML v `media/<hra>/<varianta>/` a jejich technická evidence je v `media/registry.json`. Dílna při exportu vloží do samostatného HTML pouze média aktuálně zvolené varianty; export proto funguje offline a nenese média druhé varianty.
 
-**Tematická média jsou součástí her.** Výchozí build balí všechny soubory registrované v `media/registry.json` a ověřuje jejich cestu, velikost a SHA-256. Registr slouží k technické správě a dohledatelnosti; odstranění média je možné pouze na výslovný pokyn vlastníka aplikace. Další soundtracky lze doplňovat pod `media/<engine>/official/` a zapsat do registru.
+**Technická evidence média automaticky nezařazuje do distribuovaného buildu.** Výchozí veřejný i school-server build používá profil `unofficial` a zabalí pouze média, která splní release policy. `media/registry.json` eviduje i volitelné soukromé zdroje kvůli dohledatelnosti, ale jejich přítomnost v registru sama neznamená právní schválení ani oprávnění k distribuci.
 
-Bradavické intro a soundtrack jsou na výslovné rozhodnutí vlastníka aplikace součástí běžného GitHub i school-server buildu. Build ověřuje jejich cestu, velikost a SHA-256; registr slouží k technické správě médií a automaticky je nevyřazuje.
+Bradavické intro a soundtrack jsou vedeny jako volitelný profil `official/private-only` se stavem `owner-supplied-unverified`, `publicRelease:false` a `legalDetermination:false`. Nejsou součástí běžného GitHub ani school-server buildu a nesmějí se do veřejné či školní distribuce zařadit bez samostatného doložení práv. Soukromý official build je technicky oddělen a vyžaduje výslovné potvrzení vlastníka; toto potvrzení samo nenahrazuje právní titul k distribuci.
 
 ## Učitelský režim
 
