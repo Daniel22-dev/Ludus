@@ -187,7 +187,62 @@ if (fs.existsSync(template)) {
   const studioManifest = JSON.parse(text);
   if (/produk|production/.test(`${studioManifest.status?.cs || ''} ${studioManifest.status?.en || ''}`.toLowerCase())) fail('Studio manifest must not declare production.');
   if (studioManifest.aiCore?.coreVersion !== CORE_VERSION || studioManifest.aiCore?.serverReady !== true || studioManifest.aiCore?.conformancePassed !== true) fail('Studio manifest has invalid AI Core metadata.');
-  fs.writeFileSync(path.join(DIST, 'studio-manifest.json'), text);
+
+  const assuranceSourceRevision = String(process.env.GITHUB_SHA || '').trim();
+  const assuranceRequired = /^[a-f0-9]{40}$/i.test(assuranceSourceRevision) && process.env.GHRAB_PATCH_ASSURANCE_SKIP !== '1';
+  if (assuranceRequired) {
+    const assuranceDir = path.join(DIST, 'assurance');
+    fs.mkdirSync(assuranceDir, { recursive: true });
+    const assuranceSources = {
+      securityEvidenceManifest: path.join(ROOT, 'security', 'security-evidence-manifest.json'),
+      sourceSbom: path.join(ROOT, 'security', 'sbom', `ludus-${appVersion}.cdx.json`),
+      deploymentSbom: path.join(ROOT, 'security', 'sbom', `ludus-${appVersion}-deployment.cdx.json`),
+      aiAssuranceFingerprint: path.join(ROOT, 'security', 'evidence', 'ai-assurance-fingerprint.json'),
+    };
+    const assuranceNames = {
+      securityEvidenceManifest: 'security-evidence-manifest.json',
+      sourceSbom: 'source-sbom.cdx.json',
+      deploymentSbom: 'deployment-sbom.cdx.json',
+      aiAssuranceFingerprint: 'ai-assurance-fingerprint.json',
+    };
+    const assuranceArtifacts = {};
+    for (const [name, source] of Object.entries(assuranceSources)) {
+      if (!fs.existsSync(source)) fail(`Missing required patch-assurance artifact: ${source}`);
+      const targetName = assuranceNames[name];
+      const target = path.join(assuranceDir, targetName);
+      fs.copyFileSync(source, target);
+      assuranceArtifacts[name] = {
+        url: `https://daniel22-dev.github.io/Ludus/assurance/${targetName}`,
+        sha256: sha(target),
+      };
+    }
+    const evidenceDocument = readJson(assuranceSources.securityEvidenceManifest);
+    if (evidenceDocument.schema !== 'ghrab-security-evidence-manifest-v2' || evidenceDocument.appId !== APP_ID || evidenceDocument.version !== appVersion) fail('Patch assurance evidence manifest identity mismatch.');
+    const sourceSbomDocument = readJson(assuranceSources.sourceSbom);
+    const deploymentSbomDocument = readJson(assuranceSources.deploymentSbom);
+    if (sourceSbomDocument.bomFormat !== 'CycloneDX' || deploymentSbomDocument.bomFormat !== 'CycloneDX') fail('Patch assurance SBOM format mismatch.');
+    const fingerprintDocument = readJson(assuranceSources.aiAssuranceFingerprint);
+    if (fingerprintDocument.schema !== 'ghrab-ai-assurance-fingerprint-v2' || fingerprintDocument.appId !== APP_ID || fingerprintDocument.appVersion !== appVersion) fail('Patch assurance AI fingerprint identity mismatch.');
+
+    const sourceRevision = String(process.env.GITHUB_SHA || '').trim();
+    const patchAssurance = {
+      schema: 'ghrab-patch-assurance-manifest-v1',
+      appId: APP_ID,
+      version: appVersion,
+      sourceRevision: /^[a-f0-9]{40}$/i.test(sourceRevision) ? sourceRevision : 'LOCAL-BUILD',
+      generatedAt: buildTime,
+      algorithm: 'SHA-256',
+      artifacts: assuranceArtifacts,
+    };
+    const patchAssurancePath = path.join(DIST, 'patch-assurance.json');
+    writeJson(patchAssurancePath, patchAssurance);
+    studioManifest.assurance = {
+      schema: 'ghrab-patch-assurance-v1',
+      evidenceManifestUrl: 'https://daniel22-dev.github.io/Ludus/patch-assurance.json',
+      evidenceManifestSha256: sha(patchAssurancePath),
+    };
+  }
+  writeJson(path.join(DIST, 'studio-manifest.json'), studioManifest);
 }
 const kb = (file) => `${(fs.statSync(file).size / 1024).toFixed(1)} kB`;
 console.log(`LUDUS ${appVersion}: Core ${CORE_VERSION} SHA-256 OK; ${operations.operations.length} operations; ${engineCount} engines; profile ${MEDIA_PROFILE}; builder ${kb(path.join(DIST, 'index.html'))}`);

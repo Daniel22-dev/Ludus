@@ -1,3 +1,12 @@
+# Changelog
+
+## 1.16.25 - A06/A07 assurance hardening
+
+- closes A06 evidence drift after activation of the `Protect main` ruleset;
+- emits `ghrab-patch-assurance-v1` metadata from the GitHub build;
+- publishes a SHA-256-bound patch assurance manifest covering the GARP evidence manifest, source SBOM, deployment SBOM, and AI assurance fingerprint;
+- preserves GARP/N5 behavior and keeps SHIELD-LIVE / RI-LIVE explicitly pending school-server validation.
+
 ## 1.16.24 — 2026-09-16 — AI Studio auto-patch manifest contract
 
 - Opraven postprocessor GHRAB Platform tak, aby výsledný `dist/studio-manifest.json` zachoval canonical pole vyžadovaná AI Studiem (`schema`, `requiredPlatformRange`, `swContract`, `studioBridge`, `artifactEnvelope`, `storagePrefix`, `cacheName`).

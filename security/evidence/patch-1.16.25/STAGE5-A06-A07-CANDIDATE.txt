@@ -1,0 +1,20 @@
+LUDUS 1.16.25 - STAGE 5 A06/A07 CANDIDATE
+Date: 2026-09-16
+
+A06
+- GitHub ruleset Protect main ID 23551158: ACTIVE.
+- Target: default branch.
+- Blocks deletion and non-fast-forward updates.
+- Pull request required, 0 approvals.
+- Required checks: test, p5-release-gate, axe.
+- Strict up-to-date policy enabled.
+- No bypass actors.
+
+A07 LUDUS SIDE
+- Build emits dist/patch-assurance.json using schema ghrab-patch-assurance-manifest-v1.
+- GitHub Actions GITHUB_SHA is embedded as sourceRevision; local builds are explicitly marked LOCAL-BUILD.
+- Required artifacts are copied to dist/assurance/ and SHA-256 bound: security evidence manifest, source SBOM, deployment SBOM and AI assurance fingerprint.
+- dist/studio-manifest.json receives assurance.schema=ghrab-patch-assurance-v1 plus the URL and SHA-256 of patch-assurance.json.
+- Paired AI Studio fail-closed enforcement is implemented in main commit 5e5ffead0d6775e42d276778e013226d27942ce4. LUDUS 1.16.25 is the first candidate intended to prove the full evidence-bound promotion path E2E.
+
+No SHIELD-LIVE or RI-LIVE claim is made.

@@ -4,12 +4,12 @@ GARP 2.5.1 GHRAB – PRŮVODNÍ LIST APLIKACE
 appId:                    ludus
 Název:                    LUDUS
 Repozitář:                metadata repozitáře nebyla v dodaném ZIPu k dispozici
-Aktuální verze:           1.16.24 (Studio auto-patch manifest patch kandidát)
+Aktuální verze:           1.16.25 (Studio auto-patch manifest patch kandidát)
 Verze standardu:          GARP 2.5.1 GHRAB / TOOLING-R2-LU-N17-N19-HOTFIX
 SHA-256 GARP ZIPu:        ace22965915f496bf56db81e6122ec88c93e04934a01fd894fbecd449919181a
 SHA-256 GARP SHA256SUMS:  327885a4999fe3501b307fc4031dcaaf94eb2a03895ec5983b97b72d1d36020a
 Vstupní source 1.16.20:   4120a1c79363b91fa9b464881e26086ee750aa1cd1c8be82fda7495f99c8193b
-Poslední doložený GARP baseline: 1.16.23; audit 2026-09-15 potvrzuje aktivní GARP 2.5 sadu, selftest 81/81 a funkční N5 JWK/PEM/PGP blokování. Verze 1.16.24 je úzký manifest-contract patch a vyžaduje nové lokální regresní ověření.
+Poslední doložený GARP baseline: 1.16.23; audit 2026-09-15 potvrzuje aktivní GARP 2.5 sadu, selftest 81/81 a funkční N5 JWK/PEM/PGP blokování. Verze 1.16.25 je úzký manifest-contract patch a vyžaduje nové lokální regresní ověření.
 
 2. TRVALÁ KLASIFIKACE
 Třída dat:                D2 – aplikace může přijmout studentský text/obsah; D3 rozhodování/hodnocení není inherentní AI funkcí LUDUS.
@@ -54,7 +54,7 @@ Nasazení na školní server -> spustit Prompt F/G; PREP status nelze přenést 
 
 2026-09-11 | 1.16.22 LU-N2-HOTFIX | GARP selftest 72/72; LU-N1..14 remediations | independent review found LU-N15..19
 2026-09-11 | 1.16.23 LU-N17-N19-HOTFIX corrective round | GARP selftest 81/81; LU-N15..19 remediations/evidence | independently re-audited 2026-09-15; audit confirms active GARP 2.5 set and N5 JWK/PEM/PGP blocking
-2026-09-16 | 1.16.24 Studio manifest contract patch | postbuild manifest contract + regression guard; no semantic GARP tooling change | local revalidation required before upload
+2026-09-16 | 1.16.25 Studio manifest contract patch | postbuild manifest contract + regression guard; no semantic GARP tooling change | local revalidation required before upload
 
 DL-06 | ecosystem assurance | AI Core synchronization validates hashes but the upstream AI Core release manifest is not yet signed by a pinned ecosystem trust root | split read/write jobs + pinned origin/actions | ecosystem | signed AI Core release manifest
 DL-07 | distribution channel | GitHub Pages static dist is outside current RI-PREP ceremony | QA + SW/leak gates | future | sign/register static artifact or retire channel

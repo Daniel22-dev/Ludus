@@ -20,6 +20,6 @@ try{
   // repo HEAD is baseline; staged test changes are not part of clone. Apply exported patch exactly as write job does.
   r=run('git',['apply','--check',patchFile],clean);must(r.status===0,'git apply --check exported patch',r);r=run('git',['apply',patchFile],clean);must(r.status===0,'git apply exported patch',r);
   must(fs.existsSync(path.join(clean,'vendor','ghrab-ai-core-9.9.9','sync-regression-sentinel.txt')),'new core artifact must exist after git apply');
-  r=run('npm',['run','build'],clean,{env:{...process.env,LUDUS_MEDIA_PROFILE:'unofficial'}});must(r.status===0,'build after applying staged sync patch',r);
+  r=run('npm',['run','build'],clean,{env:{...process.env,LUDUS_MEDIA_PROFILE:'unofficial',GHRAB_PATCH_ASSURANCE_SKIP:'1'}});must(r.status===0,'build after applying staged sync patch',r);
   console.log(JSON.stringify({status:'PASS',newCoreDirCaptured:true,gitApply:true,buildAfterApply:true},null,2));
 }catch(e){if(!process.exitCode){console.error(e.stack||e);process.exitCode=1}}finally{fs.rmSync(tmp,{recursive:true,force:true});}
