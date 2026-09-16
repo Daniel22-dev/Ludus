@@ -1,0 +1,41 @@
+LUDUS 1.16.24 - STAGE 3 LIVE AUTO-PATCH VERIFICATION
+Date: 2026-09-16
+Meaning of AUTO PATCH in this evidence: AI Studio automatically adopts an already deployed higher patch version into its release wave. This is NOT auto-patch-prep and NOT autonomous code repair.
+
+SOURCE / ARTIFACT IDENTITY
+- Repository: Daniel22-dev/Ludus
+- Deployed source commit: c809f367e4c044331d352263e4fc7ddd8e966175
+- Version: 1.16.24
+- Delivered source package SHA-256: 7acd49c6296a485f3f9b66ade3ed5577f7785f9fee0968f94d374e9d7431c9e1
+
+LUDUS CI / DEPLOY
+- Validate and certify LUDUS: run 35109600990 - SUCCESS
+  https://github.com/Daniel22-dev/Ludus/actions/runs/35109600990
+- P5 R2 pre-production release gate: run 35109600732 - SUCCESS
+  https://github.com/Daniel22-dev/Ludus/actions/runs/35109600732
+- GHRAB QA and deploy: run 35109600755 - SUCCESS
+  https://github.com/Daniel22-dev/Ludus/actions/runs/35109600755
+- Blocking axe-core audit: run 35109600667 - SUCCESS
+  https://github.com/Daniel22-dev/Ludus/actions/runs/35109600667
+- The deploy workflow waited for https://daniel22-dev.github.io/Ludus/studio-manifest.json and required its live version to equal 1.16.24 before dispatching.
+- The workflow then sent repository_dispatch event_type=app-updated to Daniel22-dev/AI-Studio-GHRAB.
+
+AI STUDIO E2E PROMOTION
+- AI Studio Sync, certify and deploy run: 35109988090 - SUCCESS
+  https://github.com/Daniel22-dev/AI-Studio-GHRAB/actions/runs/35109988090
+- In that run, source synchronization, release-wave source verification, verified patch auto-promotion, P5 R2, persistence and Studio deploy all completed successfully.
+- Persistence commit: 6f3e2b6ad6c3e50c3f2c2f876ba4536ec7c1ae65
+  https://github.com/Daniel22-dev/AI-Studio-GHRAB/commit/6f3e2b6ad6c3e50c3f2c2f876ba4536ec7c1ae65
+- The commit changes only LUDUS in release-wave from 1.16.23 to 1.16.24.
+
+RESULT
+AUTO PATCH: E2E PASS
+fromVersion: 1.16.23
+toVersion: 1.16.24
+manualReleaseWaveEdit: NO
+
+SECURITY CONTEXT RETAINED
+- GARP 2.5.1 selftest: 81/81 PASS.
+- N5 probes: private JWK BLOCKED; encrypted private PEM BLOCKED; private PGP BLOCKED.
+- SHIELD-LIVE / RI-LIVE / school-server production approval are NOT claimed by this test.
+- AI Studio per-patch cryptographic evidence enforcement remains a separate transitional-design finding (audit A07).

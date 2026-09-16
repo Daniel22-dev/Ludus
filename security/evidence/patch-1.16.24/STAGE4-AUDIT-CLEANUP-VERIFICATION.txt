@@ -1,0 +1,35 @@
+LUDUS 1.16.24 - STAGE 4 AUDIT CLEANUP LOCAL VERIFICATION
+Date: 2026-09-16
+Scope: evidence/status cleanup only; no application/runtime/GARP tooling semantics changed.
+
+CHANGE BOUNDARY
+- security/garp25 is byte-for-byte unchanged from the deployed Stage 2 final package.
+- Application source/runtime/engines/platform contract/auto-patch deploy workflow are unchanged.
+- Current status files were refreshed for 1.16.24.
+- Exact prior 1.16.23 SHIELD/ASSURANCE snapshots were preserved under security/evidence/historical-status/.
+- Stage 3 live auto-patch evidence and first-audit cleanup mapping were added.
+- security/security-evidence-manifest.json was regenerated to include the new evidence and bind key current external files.
+
+LOCAL REGRESSION RESULTS
+- npm run garp25:selftest: 81/81 PASS
+- npm run build: PASS
+- npm run qa:platform: 171/171 PASS
+- service-worker security freeze via postbuild: PASS
+- source SBOM check: PASS
+- source SBOM verification: PASS (44/44 lock components; node_modules cross-check not present locally)
+- AI assurance fingerprint check + verify: PASS
+- GARP source scan: PASS
+- GitHub Actions pin check: PASS
+- deployment leak scan: PASS
+- SHNC-07 AI resource negative control: PASS / networkCalls=0
+- SHNC-08 logging canary: PASS / sanitized=true
+- AI-core staged patch regression: PASS / capture + git apply + build
+- evidence manifest verification: PASS
+
+N5 SYNTHETIC NEGATIVE PROBES
+- private JWK: BLOCKED, exit 1, jwk-private-key
+- encrypted private PEM: BLOCKED, exit 1, private-key-block
+- private PGP: BLOCKED, exit 1, pgp-private-key-block
+
+ASSURANCE BOUNDARY
+This cleanup does not claim SHIELD-LIVE, RI-LIVE or school-server production approval. It also does not close audit A06 branch governance or A07 AI Studio cryptographic enforcement; those are explicitly tracked as open governance/design items.

@@ -1,0 +1,35 @@
+GARP 2.5.1 – ASSURANCE STATUS SNAPSHOT
+Application: LUDUS 1.16.23
+Date: 2026-09-11
+Corrective profile: Prompt C / LU-N15..LU-N19
+Tooling: GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N17-N19-HOTFIX
+
+RT/SIM: AMBER/NOT TESTED overall. Structural, VM, storage and browser subsets remain available; managed Chromium blocks local HTTP navigation in qa:runtime, so full served runtime/DAST cannot be certified here.
+PC-01: PASS 93/93 in this round.
+AIR: inherited structural evidence is bound to the current explicit AI inventory; canonical LU-N17 detector additionally searches provider/API signatures in engines/, runtime/, public/ and scripts/. G2/G5/G7 negative controls fail closed. Live-model AIR remains NOT TESTED.
+RI: PREP inventory/signature/registry/provenance mechanisms are exercised with a disposable Ed25519 key. RI-LIVE and production key custody remain NOT TESTED.
+SH-APP/SH-SC: AMBER; corrected SBOM, secret scanning, CI staged-patch transport and static controls pass. Fresh online SCA in this runner is NOT TESTED because npm ci did not complete.
+SH-RUN/SH-DET: actual school server/integrity service/served headers and alerting remain NOT TESTED.
+SH-AI: AMBER; no AI prompt/provider/model semantics changed in 1.16.23.
+SH-AG: N/A; AGENTIC=NO.
+
+CORRECTIVE EVIDENCE HIGHLIGHTS
+- Canonical GARP selftest: 81/81 PASS.
+- LU-N15: actual quality 102/102 carries status=passed; synthetic complete valid report set -> P5 PASS; failed browser -> FAIL; quality summary.failed>0 -> FAIL; restored set -> PASS.
+- LU-N16: staged binary diff captures new vendor/ghrab-ai-core-9.9.9 file, git apply --check/apply succeeds in clean checkout, build after apply PASS.
+- LU-N17: G2 src endpoint, G5 engine AI token and G7 public-root provider endpoint all invalidate AI inventory; clean recovery PASS.
+- LU-N18: ordinary ZIP containing synthetic credential is rejected; canonical selftest also covers nested ZIP, OOXML, binary bytes, CSS and SVG.
+- qa:garp 49/49, qa:garp23 48/48, critical 13/13, privacy 27/27, PC-01 93/93, suite-session 27/27, quality 102/102, platform 154/154 PASS.
+- Full qa:p5:ci attempted: build/SHIELD/browser pass; qa:runtime stops on net::ERR_BLOCKED_BY_ADMINISTRATOR. Formal full-chain status in this runner: NOT TESTED, not application FAIL.
+
+GATES
+SECURITY: AMBER
+PRIVACY: AMBER
+RED TEAM: AMBER
+RELEASE INTEGRITY: AMBER
+SHIELD ASSURANCE: AMBER
+OVERALL: AMBER
+
+REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT
+TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY
+SCHOOL SERVER PRODUCTION: NEPOVOLENO

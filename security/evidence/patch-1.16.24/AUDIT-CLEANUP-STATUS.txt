@@ -1,0 +1,30 @@
+LUDUS 1.16.24 - FIRST AUDIT CLEANUP STATUS
+Date: 2026-09-16
+Reference: Audit-AI-Studio-GARP25-2026-09-15
+
+A01 - distinguish auto-patch meanings
+STATUS: CLOSED FOR LUDUS
+Central AUTO PATCH means Studio release-wave promotion of an already deployed patch. No auto-patch-prep or autonomous code-repair claim is made.
+
+A04 - N5 deployment scanner coverage
+STATUS: CLOSED FOR LUDUS
+Private JWK, encrypted private PEM and private PGP negative probes all fail closed.
+
+A05 - GARP 2.5 release-path enforcement
+STATUS: CLOSED FOR LUDUS
+qa:p5 and qa:p5:ci include garp25:prep-static. Current GitHub P5 for deployed 1.16.24 passed.
+
+A06 - branch protection / required checks
+STATUS: OPEN GOVERNANCE ITEM
+The GitHub rulesets endpoint is empty. The current connector cannot read the legacy branch-protection admin endpoint, so this cleanup does not claim main is protected. Configure and re-verify branch protection separately.
+
+A07 - cryptographic binding of each promoted patch to GARP evidence
+STATUS: OPEN TRANSITIONAL DESIGN ITEM
+This cleanup strengthens LUDUS evidence by binding current status, SBOMs, manifest template, deploy workflow and key security metadata into security/security-evidence-manifest.json and by recording the deployed source commit/package digest. AI Studio does not yet cryptographically require or verify that evidence during promotion; changing that is a cross-ecosystem migration and is intentionally not introduced here.
+
+A08 - stale status reports
+STATUS: CLOSED FOR LUDUS
+Top-level SHIELD-STATUS.json and ASSURANCE-STATUS.txt now describe 1.16.24. Exact previous 1.16.23 files are preserved under security/evidence/historical-status/ instead of being rewritten as if they were current 1.16.24 certification results.
+
+OUT-OF-SCOPE LIVE BOUNDARY
+SHIELD-LIVE and RI-LIVE on the actual school server remain NOT TESTED. Real student data and school-server production remain NOT APPROVED.

@@ -1,8 +1,9 @@
 {
   "schema": "ghrab-shield-status-v1",
   "appId": "ludus",
-  "version": "1.16.23",
-  "date": "2026-09-11",
+  "version": "1.16.24",
+  "date": "2026-09-16",
+  "statusScope": "current operational assurance summary after GitHub CI/deploy and AI Studio patch promotion",
   "gates": {
     "security": "AMBER",
     "privacy": "AMBER",
@@ -11,36 +12,62 @@
     "shieldAssurance": "AMBER",
     "overall": "AMBER"
   },
+  "verified": {
+    "garp25PrepStatic": "PASS",
+    "garp25Selftest": "81/81 PASS",
+    "n5PrivateJwk": "BLOCKED",
+    "n5EncryptedPrivatePem": "BLOCKED",
+    "n5PrivatePgp": "BLOCKED",
+    "githubP5": "PASS",
+    "githubValidate": "PASS",
+    "githubPagesDeploy": "PASS",
+    "studioAutoPatch": "E2E PASS: 1.16.23 -> 1.16.24"
+  },
   "profiles": {
-    "shieldPrep": "AMBER",
+    "shieldPrep": "STATIC/CI CONTROLS PASS; overall remains AMBER pending LIVE controls",
     "shieldLive": "NOT TESTED",
-    "riPrep": "AMBER",
+    "riPrep": "HISTORICAL 1.16.23 BASELINE PRESERVED; 1.16.24 NOT RE-SIGNED AS RI-PREP",
     "riLive": "NOT TESTED",
-    "githubPagesReleaseIntegrity": "OUTSIDE RI-PREP",
+    "githubPagesReleaseIntegrity": "DEPLOY PASS; OUTSIDE RI-PREP SIGNING/REGISTRY SCOPE",
     "agentic": "NO",
     "realStudentData": "NOT APPROVED",
     "schoolServerProduction": "NOT APPROVED"
   },
   "tooling": {
     "package": "GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N17-N19-HOTFIX.zip",
-    "sha256": "ace22965915f496bf56db81e6122ec88c93e04934a01fd894fbecd449919181a",
-    "internalSha256SumsSha256": "327885a4999fe3501b307fc4031dcaaf94eb2a03895ec5983b97b72d1d36020a",
+    "semanticChangeFrom11623": false,
     "selftest": "81/81 PASS"
   },
-  "correctiveFindings": {
-    "LU-N15": "FIXED / positive+negative certification controls PASS",
-    "LU-N16": "FIXED / staged patch capture+git apply+build control PASS",
-    "LU-N17": "FIXED / G2,G5,G7 fail closed",
-    "LU-N18": "FIXED / general ZIP negative control fail closed",
-    "LU-N19": "FIXED BY PROVIDED PAYLOAD ZIP / final gate evidence pending artifact freeze"
+  "artifactIdentity": {
+    "deployedSourceCommit": "c809f367e4c044331d352263e4fc7ddd8e966175",
+    "deployedSourcePackageSha256": "7acd49c6296a485f3f9b66ade3ed5577f7785f9fee0968f94d374e9d7431c9e1",
+    "sourceSbomSha256": "ac0ca64812618b8622eb79427f6c4fa4d99b1dcd5af6218cd1e4dde83785ed7d",
+    "deploymentSbomSha256": "a86abffc47b050eb8d16187526b1cf64a7737b488942c449c71356485140ac00",
+    "aiAssuranceFingerprintSha256": "061a58fa639c1de080c9ce5f85b8eea5f3fbb9c0b3ae628a9ca7ea5c2af2913c"
+  },
+  "ciEvidence": {
+    "validateRun": 35109600990,
+    "p5Run": 35109600732,
+    "deployRun": 35109600755,
+    "axeRun": 35109600667,
+    "aiStudioPromotionRun": 35109988090,
+    "aiStudioPromotionCommit": "6f3e2b6ad6c3e50c3f2c2f876ba4536ec7c1ae65"
+  },
+  "governance": {
+    "mainRulesets": "NONE DETECTED on 2026-09-16",
+    "legacyBranchProtection": "NOT RE-VERIFIED by current connector because administration endpoint is unavailable",
+    "patchEvidenceBindingInStudio": "TRANSITIONAL: Studio verified live manifest/promotion contract but does not yet cryptographically enforce this per-patch evidence manifest"
   },
   "blockers": [
-    "independent review of 1.16.23 pending",
-    "full qa:p5:ci cannot complete in this runner because managed Chromium blocks local HTTP navigation",
-    "fresh online npm install/advisory scan did not complete in this runner",
-    "served DAST and actual school-server HTTP security headers not tested",
     "school-server SHIELD-LIVE/RI-LIVE not executed",
-    "organization production signing-key custody/recovery drill not executed",
-    "GitHub Pages is not covered by RI-PREP signing/registry in this candidate"
-  ]
+    "served school-server DAST/security headers/alerting not tested",
+    "production signing-key custody/recovery drill not executed",
+    "GitHub Pages deployment is outside the historical RI-PREP signing/registry scope",
+    "AI Studio does not yet cryptographically enforce per-patch GARP/SBOM/provenance evidence (audit A07)",
+    "branch governance remains open until main protection/required checks are configured and re-verified"
+  ],
+  "history": {
+    "preservedShieldSnapshot": "security/evidence/historical-status/SHIELD-STATUS-1.16.23-2026-09-11.json",
+    "preservedAssuranceSnapshot": "security/evidence/historical-status/ASSURANCE-STATUS-1.16.23-2026-09-11.txt"
+  }
 }
