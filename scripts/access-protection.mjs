@@ -69,7 +69,7 @@ function startLocalReporter(context){
 async function ensurePrivacyRuntime(){
   if(window.LUDUSPrivacy)return true;
   await new Promise((resolve,reject)=>{
-    const node=document.createElement('script');node.src=PRIVACY_URL;node.dataset.ludusPrivacyRuntime='1.16.24';node.dataset.ludusPrivacyScope='builder';node.async=false;
+    const node=document.createElement('script');node.src=PRIVACY_URL;node.dataset.ludusPrivacyRuntime='1.16.25';node.dataset.ludusPrivacyScope='builder';node.async=false;
     node.onload=()=>resolve(true);node.onerror=()=>reject(new Error('LUDUS privacy runtime failed to load.'));document.head.append(node);
   });
   if(!window.LUDUSPrivacy)throw new Error('LUDUS privacy runtime unavailable after load.');

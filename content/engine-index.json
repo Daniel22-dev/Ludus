@@ -1,6 +1,6 @@
 {
   "schema": "ludus-engine-index-v1",
-  "appVersion": "1.16.24",
+  "appVersion": "1.16.25",
   "generatedFrom": "engines/manifest.json",
   "sharedRuntime": "runtime/ludus-engine-runtime.js",
   "engines": [

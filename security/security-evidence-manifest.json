@@ -1,15 +1,15 @@
 {
   "schema": "ghrab-security-evidence-manifest-v2",
   "appId": "ludus",
-  "version": "1.16.24",
-  "sourceRevision": "c809f367e4c044331d352263e4fc7ddd8e966175",
-  "sourcePackageSha256": "7acd49c6296a485f3f9b66ade3ed5577f7785f9fee0968f94d374e9d7431c9e1",
-  "createdAt": "2026-09-16T15:00:28.681Z",
+  "version": "1.16.25",
+  "sourceRevision": null,
+  "sourcePackageSha256": null,
+  "createdAt": "2026-09-16T17:29:38.615Z",
   "files": [
     {
       "path": "ai-assurance-fingerprint.json",
       "size": 4427,
-      "sha256": "061a58fa639c1de080c9ce5f85b8eea5f3fbb9c0b3ae628a9ca7ea5c2af2913c"
+      "sha256": "596e3a1769febb11bda73a2ebd15eca670f4009634d31eca857f31350301e25d"
     },
     {
       "path": "corrective-1.16.23/00-ZADANI-GPT-LUDUS-1.16.23.txt",
@@ -465,6 +465,11 @@
       "path": "patch-1.16.24/STAGE4-AUDIT-CLEANUP-VERIFICATION.txt",
       "size": 1842,
       "sha256": "7e1acd78793496d1a2d90b5c880f3b7a2d3c35722a8024ed0399a502fdeb2fe1"
+    },
+    {
+      "path": "patch-1.16.25/STAGE5-A06-A07-CANDIDATE.txt",
+      "size": 1083,
+      "sha256": "449a05971f8d7d3bd73bb7507e36bf002b97ab2b31580a92d86758571181bcbe"
     },
     {
       "path": "post-migration/action-pins.txt",
@@ -1256,17 +1261,22 @@
     {
       "path": "package.json",
       "size": 6264,
-      "sha256": "4fb497f8aec59c1ceec914bfe34be1f32b9d7424e6241d24d0f68af431cf2c2e"
+      "sha256": "a10cd9989ca3d699f44e922438497fbdd5998121508772c2fe74635c9ae1f8bc"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "size": 14738,
+      "sha256": "800e1713a22b469ee8576e5d8ecf82b35a6f7ad30e05509e305327742bbdbec4"
     },
     {
       "path": "security/ASSURANCE-STATUS.txt",
-      "size": 3338,
-      "sha256": "13272bc963891ac9b8b0398fc19f7b7ff87917d52db13e25e53b0783aaab3bb4"
+      "size": 3673,
+      "sha256": "fd6a17e08ec6bde3deff9768972dcec74d9b84faa9e569c26182731c305aafd9"
     },
     {
       "path": "security/SHIELD-STATUS.json",
-      "size": 3213,
-      "sha256": "53c7855566ec0f4b076a6089d2e3c323b9ce825fcbe95fdac0beb16ecad38231"
+      "size": 3846,
+      "sha256": "14cd01ab7a7bd1f8e00bd97875b3ac3bbb1026a3bfbac43cafa65feef4d3bfd9"
     },
     {
       "path": "security/ai-boundary-files.json",
@@ -1279,14 +1289,14 @@
       "sha256": "4534ec646a6d7fd4d6a09577727d792f99cc1f0c7ccfa49d052140bc57da5211"
     },
     {
-      "path": "security/sbom/ludus-1.16.24-deployment.cdx.json",
+      "path": "security/sbom/ludus-1.16.25-deployment.cdx.json",
       "size": 4347,
-      "sha256": "a86abffc47b050eb8d16187526b1cf64a7737b488942c449c71356485140ac00"
+      "sha256": "3a6b4e34a5ed7d720fc2609561689ca8b1cb26f8e78d107f3e4d17a7bdfd8ed2"
     },
     {
-      "path": "security/sbom/ludus-1.16.24.cdx.json",
+      "path": "security/sbom/ludus-1.16.25.cdx.json",
       "size": 40403,
-      "sha256": "ac0ca64812618b8622eb79427f6c4fa4d99b1dcd5af6218cd1e4dde83785ed7d"
+      "sha256": "a35616e742b43cb18e6bc9b14d5a424f267fc9695010adf46d48d03437a8eda9"
     },
     {
       "path": "security/security-critical-assets.json",

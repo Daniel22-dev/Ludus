@@ -1,9 +1,9 @@
 {
   "schema": "ghrab-shield-status-v1",
   "appId": "ludus",
-  "version": "1.16.24",
+  "version": "1.16.25",
   "date": "2026-09-16",
-  "statusScope": "current operational assurance summary after GitHub CI/deploy and AI Studio patch promotion",
+  "statusScope": "LUDUS 1.16.25 release candidate assurance summary; GitHub Pages/Studio promotion proof for this patch is established only after protected-branch merge and deployment",
   "gates": {
     "security": "AMBER",
     "privacy": "AMBER",
@@ -18,17 +18,17 @@
     "n5PrivateJwk": "BLOCKED",
     "n5EncryptedPrivatePem": "BLOCKED",
     "n5PrivatePgp": "BLOCKED",
-    "githubP5": "PASS",
-    "githubValidate": "PASS",
-    "githubPagesDeploy": "PASS",
-    "studioAutoPatch": "E2E PASS: 1.16.23 -> 1.16.24"
+    "githubP5": "HISTORICAL 1.16.24 PASS; 1.16.25 candidate must pass protected-branch PR gate",
+    "githubValidate": "HISTORICAL 1.16.24 PASS; 1.16.25 candidate must pass protected-branch PR gate",
+    "githubPagesDeploy": "HISTORICAL 1.16.24 PASS; 1.16.25 PENDING",
+    "studioAutoPatch": "HISTORICAL E2E PASS: 1.16.23 -> 1.16.24; 1.16.25 is first A07 evidence-bound candidate"
   },
   "profiles": {
     "shieldPrep": "STATIC/CI CONTROLS PASS; overall remains AMBER pending LIVE controls",
     "shieldLive": "NOT TESTED",
-    "riPrep": "HISTORICAL 1.16.23 BASELINE PRESERVED; 1.16.24 NOT RE-SIGNED AS RI-PREP",
+    "riPrep": "HISTORICAL 1.16.23 BASELINE PRESERVED; 1.16.25 NOT RE-SIGNED AS RI-PREP",
     "riLive": "NOT TESTED",
-    "githubPagesReleaseIntegrity": "DEPLOY PASS; OUTSIDE RI-PREP SIGNING/REGISTRY SCOPE",
+    "githubPagesReleaseIntegrity": "1.16.24 DEPLOY PASS; 1.16.25 PENDING; GitHub Pages remains outside historical RI-PREP signing/registry scope",
     "agentic": "NO",
     "realStudentData": "NOT APPROVED",
     "schoolServerProduction": "NOT APPROVED"
@@ -39,32 +39,34 @@
     "selftest": "81/81 PASS"
   },
   "artifactIdentity": {
-    "deployedSourceCommit": "c809f367e4c044331d352263e4fc7ddd8e966175",
-    "deployedSourcePackageSha256": "7acd49c6296a485f3f9b66ade3ed5577f7785f9fee0968f94d374e9d7431c9e1",
-    "sourceSbomSha256": "ac0ca64812618b8622eb79427f6c4fa4d99b1dcd5af6218cd1e4dde83785ed7d",
-    "deploymentSbomSha256": "a86abffc47b050eb8d16187526b1cf64a7737b488942c449c71356485140ac00",
-    "aiAssuranceFingerprintSha256": "061a58fa639c1de080c9ce5f85b8eea5f3fbb9c0b3ae628a9ca7ea5c2af2913c"
+    "candidateSourceRevision": "BOUND_AT_GITHUB_BUILD_VIA_GITHUB_SHA",
+    "previousDeployedSourceCommit11624": "c809f367e4c044331d352263e4fc7ddd8e966175",
+    "previousDeployedSourcePackageSha25611624": "7acd49c6296a485f3f9b66ade3ed5577f7785f9fee0968f94d374e9d7431c9e1",
+    "sourceSbomSha256": "a35616e742b43cb18e6bc9b14d5a424f267fc9695010adf46d48d03437a8eda9",
+    "deploymentSbomSha256": "3a6b4e34a5ed7d720fc2609561689ca8b1cb26f8e78d107f3e4d17a7bdfd8ed2",
+    "aiAssuranceFingerprintSha256": "596e3a1769febb11bda73a2ebd15eca670f4009634d31eca857f31350301e25d"
   },
   "ciEvidence": {
-    "validateRun": 35109600990,
-    "p5Run": 35109600732,
-    "deployRun": 35109600755,
-    "axeRun": 35109600667,
-    "aiStudioPromotionRun": 35109988090,
-    "aiStudioPromotionCommit": "6f3e2b6ad6c3e50c3f2c2f876ba4536ec7c1ae65"
+    "historical11624": {
+      "validateRun": 35109600990,
+      "p5Run": 35109600732,
+      "deployRun": 35109600755,
+      "axeRun": 35109600667,
+      "aiStudioPromotionRun": 35109988090,
+      "aiStudioPromotionCommit": "6f3e2b6ad6c3e50c3f2c2f876ba4536ec7c1ae65"
+    },
+    "studioA07ImplementationCommit": "5e5ffead0d6775e42d276778e013226d27942ce4"
   },
   "governance": {
-    "mainRulesets": "NONE DETECTED on 2026-09-16",
-    "legacyBranchProtection": "NOT RE-VERIFIED by current connector because administration endpoint is unavailable",
-    "patchEvidenceBindingInStudio": "TRANSITIONAL: Studio verified live manifest/promotion contract but does not yet cryptographically enforce this per-patch evidence manifest"
+    "mainRulesets": "ACTIVE: Protect main (ruleset 23551158), default branch, deletion/non-fast-forward blocked, PR required, status checks test+p5-release-gate+axe, no bypass; verified 2026-09-16",
+    "legacyBranchProtection": "NOT REQUIRED: active repository ruleset protects default branch; classic branch protection is not the controlling mechanism",
+    "patchEvidenceBindingInStudio": "IMPLEMENTED: AI Studio main commit 5e5ffead0d6775e42d276778e013226d27942ce4 requires ghrab-patch-assurance-v1 for every eligible future LUDUS patch; LUDUS 1.16.25 emits SHA-256-bound GARP/SBOM/AI evidence."
   },
   "blockers": [
     "school-server SHIELD-LIVE/RI-LIVE not executed",
     "served school-server DAST/security headers/alerting not tested",
     "production signing-key custody/recovery drill not executed",
-    "GitHub Pages deployment is outside the historical RI-PREP signing/registry scope",
-    "AI Studio does not yet cryptographically enforce per-patch GARP/SBOM/provenance evidence (audit A07)",
-    "branch governance remains open until main protection/required checks are configured and re-verified"
+    "GitHub Pages deployment is outside the historical RI-PREP signing/registry scope"
   ],
   "history": {
     "preservedShieldSnapshot": "security/evidence/historical-status/SHIELD-STATUS-1.16.23-2026-09-11.json",
