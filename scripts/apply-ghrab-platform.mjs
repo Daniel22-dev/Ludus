@@ -180,19 +180,27 @@ for (const name of ['studio-manifest.json', 'app-manifest.json']) {
   const target = path.join(dist, name);
   if (!fs.existsSync(target)) continue;
   const manifest = JSON.parse(fs.readFileSync(target, 'utf8'));
+  const existingPlatform = manifest.platform && typeof manifest.platform === 'object' ? manifest.platform : {};
   manifest.platform = {
+    ...existingPlatform,
+    schema: 'ghrab-platform-app-integration-v1',
     contract: consumer.platform.contract,
+    requiredPlatformRange: consumer.platform.requiredRange,
     platformVersion: consumer.platform.version,
-    requiredRange: consumer.platform.requiredRange,
     brandVersion: consumer.brand.version,
     themeContract: 'ghrab-theme-v1',
+    swContract: 1,
+    studioBridge: consumer.bridge.contract,
+    artifactEnvelope: consumer.artifact.schema,
+    storagePrefix: `ghrab.${consumer.appId}.`,
+    cacheName: consumer.cache.name,
+    requiredRange: consumer.platform.requiredRange,
     storageContract: 'ghrab-storage-namespace-v1',
     bridgeContract: consumer.bridge.contract,
     artifactContract: consumer.artifact.schema,
     accessibilityContract: consumer.quality.accessibilityContract,
     performanceContract: consumer.quality.performanceContract,
     moduleContract: consumer.quality.moduleContract,
-    cacheName: consumer.cache.name,
   };
   fs.writeFileSync(target, `${JSON.stringify(manifest, null, 2)}\n`);
 }

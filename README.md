@@ -1,16 +1,16 @@
 # LUDUS
 
-**Aktuální verze:** 1.16.23  
-**Platforma:** GHRAB Platform 1.1.0 · etapa P3
+**Aktuální verze:** 1.16.24  
+**Platforma:** GHRAB Platform 1.1.2
 
 
-Dílna výukových her pro interní školní použití Gymnázia, Ostrava-Hrabůvka. Tato verze je bezpečnostní kandidát GARP 2.3 určený k nezávislé kontrole.
+Dílna výukových her pro interní školní použití Gymnázia, Ostrava-Hrabůvka. Verze 1.16.24 je patch kandidát navazující na auditovanou GARP 2.5.1 baseline 1.16.23; opravuje kontrakt publikovaného Studio manifestu pro automatickou patch promotion AI Studia.
 
 ## Aktuální stav
 
-Verze: **1.16.23**
+Verze: **1.16.24**
 
-LUDUS 1.16.23 je opravený bezpečnostní kandidát po první nezávislé kontrole Claude (GARP 2.3) a je určen pro druhou nezávislou kontrolu. Opravy zpřísňují privacy na sdílených zařízeních, odstraňují produkční testovací AI háčky, sjednocují importní validaci a skutečně doručují CSP v HTML artefaktech. Do uzavření druhé nezávislé kontroly a zbývajících externích/live-model položek je povolen pouze testovací provoz se syntetickými daty; reálná studentská data se nepoužívají. Jednotlivé hry se posuzují samostatně podle stavu v `engines/manifest.json`; označení `ready` popisuje stav enginu, nikoli automatické povolení reálných studentských dat. Export je dovolen jen enginům s `builderCompatible: true`.
+LUDUS 1.16.24 nemění pedagogickou logiku, enginy, AI prompty ani bezpečnostní politiku. Opravuje postprocessing `studio-manifest.json`, aby výsledný nasazený manifest zachoval canonical GHRAB Platform pole vyžadovaná AI Studiem. Tím připravuje reálný test automatického převzetí patch verze 1.16.23 → 1.16.24. Bezpečnostní baseline GARP 2.5.1 zůstává 1.16.23 a pro 1.16.24 se znovu spouštějí lokální GARP/QA brány; historické reporty 1.16.23 se nepřepisují. Do samostatného schválení LIVE provozu nadále platí omezení na syntetická data.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -24,7 +24,7 @@ LUDUS 1.16.23 je opravený bezpečnostní kandidát po první nezávislé kontro
 
 **LUDUS není nástroj pro klasifikované testování.** Exportované hry jsou samostatné statické HTML soubory. Učitelský režim lze otevřít parametrem `?teacher=1` a řešení jsou technicky součástí souboru. LUDUS je určen pro výuku, procvičování, opakování a formativní zpětnou vazbu, nikoli pro zabezpečené známkované testy.
 
-Při práci s obsahem je nutná anonymizace. Do AI generování se nevkládají jména žáků, individuální hodnocení ani jiné osobní či citlivé údaje. Kandidát 1.16.23 má navíc explicitní omezení: **REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT** a **TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY**, dokud GARP gate nebudou uzavřeny.
+Při práci s obsahem je nutná anonymizace. Do AI generování se nevkládají jména žáků, individuální hodnocení ani jiné osobní či citlivé údaje. Kandidát 1.16.24 má navíc explicitní omezení: **REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT** a **TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY**, dokud GARP gate nebudou uzavřeny.
 
 ## Manifest enginů a volba hry
 
@@ -106,7 +106,7 @@ Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuál
 
 Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
 
-LUDUS 1.16.23 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
+LUDUS 1.16.24 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
 
 ## Licence
 

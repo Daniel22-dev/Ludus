@@ -1,0 +1,47 @@
+LUDUS 1.16.24 — STAGE 2 LOCAL VERIFICATION
+Date: 2026-09-16
+Purpose: patch candidate for AI Studio automatic patch promotion 1.16.23 -> 1.16.24.
+
+CHANGES IN SCOPE
+- Stage 1 Studio manifest contract fix retained.
+- Current application/runtime/PWA/QA identities bumped to 1.16.24.
+- New source CycloneDX SBOM generated for 1.16.24.
+- Current AI assurance fingerprint regenerated after version-boundary changes.
+- No semantic change to security/garp25 tooling.
+
+PASS
+- npm run build
+- npm run qa:platform (171/171)
+- npm test
+- npm run garp25:selftest (81/81)
+- garp25 source SBOM check + verify (44/44 lock components; node_modules cross-check not available locally)
+- AI assurance fingerprint check + verify
+- GARP source scan
+- action pin check
+- AI resource negative control SHNC-07
+- logging canary SHNC-08
+- service-worker security freeze
+- deployment leak scan
+- ai-core-sync-patch (run separately because the wrapper exceeded the local tool timeout)
+- N5 synthetic negative probes: private JWK BLOCKED; encrypted private PEM BLOCKED; PGP private key BLOCKED
+- npm run build:school-server
+- npm run qa:garp (49/49)
+- npm run qa:garp23 (48/48)
+- npm run qa:garp23:critical
+- npm run qa:garp23:privacy
+- npm run qa:xss
+- npm run qa:pc01 (93/93)
+- npm run qa:suite-session (27/27)
+- npm run qa:media
+- npm run qa:quality (102/102)
+- npm run qa:browser
+- npm run garp25:p5-certification-controls (4/4 control cases)
+- AI Studio promotion preflight against current main policy/contract: ELIGIBLE / SAFE_PATCH_DEPLOYMENT when the 1.16.24 manifest is available as verified live deployment.
+
+ENVIRONMENT LIMITATIONS / NOT CLAIMED
+- npm ci could not complete in this container because dependency download timed out; node_modules was removed before GARP/SBOM validation to avoid a misleading partial-install cross-check.
+- Required axe runtime gate was therefore not executed locally.
+- qa:runtime local-HTTP navigation was blocked by managed Chromium policy with net::ERR_BLOCKED_BY_ADMINISTRATOR. This is an environment limitation already known for this application, not treated as PASS.
+- Full qa:p5:ci is NOT claimed locally. GitHub Actions must be green after upload.
+- End-to-end auto promotion is NOT yet claimed. It requires GitHub Pages to expose the 1.16.24 live studio-manifest.json and AI Studio to perform source verification/promotion.
+- SHIELD-LIVE / RI-LIVE / production school-server approval is not claimed.

@@ -1,3 +1,11 @@
+## 1.16.24 — 2026-09-16 — AI Studio auto-patch manifest contract
+
+- Opraven postprocessor GHRAB Platform tak, aby výsledný `dist/studio-manifest.json` zachoval canonical pole vyžadovaná AI Studiem (`schema`, `requiredPlatformRange`, `swContract`, `studioBridge`, `artifactEnvelope`, `storagePrefix`, `cacheName`).
+- Platformní conformance doplněna o regresní kontroly skutečného publikovaného Studio manifestu; chyba se nyní zachytí až po buildu, nikoli jen ve zdrojové šabloně.
+- Verze aplikace, runtime identit, PWA cache, Studio/AI manifestů a QA očekávání sjednocena na 1.16.24.
+- Bezpečnostní logika a `security/garp25` tooling nejsou touto patch změnou funkčně měněny; historická evidence 1.16.23 zůstává zachována.
+- Cíl vydání: end-to-end ověření automatické patch promotion AI Studia z 1.16.23 na 1.16.24.
+
 ## 1.16.23 — 2026-09-11 — GARP 2.5.1 SHIELD corrective candidate, kolo LU-N15 až LU-N19
 - Opraven LU-N15: quality report nyní nese striktní `status` a P5 certifikace má pozitivní i dvě negativní kontroly.
 - Opraven LU-N16: AI Core sync exportuje staged binary patch včetně nových untracked vendor souborů; samostatná kontrola simuluje novou verzi jádra, `git apply` a následný build.

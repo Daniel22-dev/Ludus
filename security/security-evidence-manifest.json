@@ -1,15 +1,15 @@
 {
   "schema": "ghrab-security-evidence-manifest-v2",
   "appId": "ludus",
-  "version": "1.16.23",
+  "version": "1.16.24",
   "sourceRevision": null,
-  "sourcePackageSha256": "371b4f2723f2ea400894dea0b37944b9415005e3568ce3246b65953c051a52ee",
-  "createdAt": "2026-09-11T14:23:13.066Z",
+  "sourcePackageSha256": null,
+  "createdAt": "2026-09-16T14:12:24.298Z",
   "files": [
     {
       "path": "ai-assurance-fingerprint.json",
       "size": 4427,
-      "sha256": "62d089e487ed32ec7e6e1bf1e8703fed41ee8ffc3cec5c9078ac1795293f56ae"
+      "sha256": "061a58fa639c1de080c9ce5f85b8eea5f3fbb9c0b3ae628a9ca7ea5c2af2913c"
     },
     {
       "path": "corrective-1.16.23/00-ZADANI-GPT-LUDUS-1.16.23.txt",
@@ -435,6 +435,11 @@
       "path": "corrective-1.16.23/runner-evidence/tool-sha-check.txt",
       "size": 3530,
       "sha256": "e585a49dfc8f1106c325fa43c75c522011bb071162e00974bc4417c2af629fa2"
+    },
+    {
+      "path": "patch-1.16.24/STAGE2-LOCAL-VERIFICATION.txt",
+      "size": 2422,
+      "sha256": "7cfc4d86b5145b6d47cee1c7bf6be85eab9a31c5d2122df67e66c4dd78477da6"
     },
     {
       "path": "post-migration/action-pins.txt",

@@ -2,7 +2,7 @@
   "schema": "ghrab-platform-consumer-v1",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.23",
+  "appVersion": "1.16.24",
   "platform": {
     "version": "1.1.2",
     "contract": "ghrab-platform-v1",
@@ -60,7 +60,7 @@
     ]
   },
   "cache": {
-    "name": "ghrab-ludus-v1.16.23",
+    "name": "ghrab-ludus-v1.16.24",
     "updateMessage": "GHRAB_SKIP_WAITING"
   },
   "html": {

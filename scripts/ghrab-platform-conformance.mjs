@@ -67,6 +67,31 @@ check(JSON.stringify(builtData.import?.artifactTypes || []) === JSON.stringify(c
 const builtBrand = fs.existsSync(path.join(dist, 'config/brand-manifest.json')) ? readJson(path.join(dist, 'config/brand-manifest.json')) : {};
 check(builtBrand.logo?.sha256 === release.artifacts?.['school-logo.png']?.sha256, 'canonical logo manifest hash');
 
+const studioManifestPath = path.join(dist, 'studio-manifest.json');
+check(fs.existsSync(studioManifestPath), 'AI Studio manifest exists');
+if (fs.existsSync(studioManifestPath)) {
+  const studioManifest = readJson(studioManifestPath);
+  const platform = studioManifest.platform || {};
+  const compatibility = studioManifest.compatibility || {};
+  const normalizeStudioBridge = (value) => [2, '2', '2.0', 'ghrab-studio-handoff-v2'].includes(value) ? 'v2' : value === 'not-applicable' ? 'not-applicable' : null;
+  check(studioManifest.schema === 'ai-studio-app-manifest-v1', 'AI Studio manifest schema');
+  check(studioManifest.id === consumer.appId, 'AI Studio manifest app identity');
+  check(studioManifest.version === consumer.appVersion, 'AI Studio manifest app version');
+  check(platform.schema === 'ghrab-platform-app-integration-v1', 'AI Studio platform schema');
+  check(platform.contract === consumer.platform.contract, 'AI Studio platform contract');
+  check(platform.platformVersion === consumer.platform.version, 'AI Studio platform version');
+  check(platform.requiredPlatformRange === consumer.platform.requiredRange, 'AI Studio required platform range');
+  check(platform.brandVersion === consumer.brand.version, 'AI Studio brand version');
+  check(['ghrab-theme-v1', 1].includes(platform.themeContract), 'AI Studio theme contract');
+  check(platform.swContract === 1, 'AI Studio service-worker contract');
+  check(normalizeStudioBridge(platform.studioBridge) === 'v2', 'AI Studio bridge contract');
+  check(['ghrab-artifact-envelope-v1', 1].includes(platform.artifactEnvelope), 'AI Studio artifact envelope');
+  check(platform.storagePrefix === `ghrab.${consumer.appId}.`, 'AI Studio storage namespace');
+  check(platform.cacheName === consumer.cache.name, 'AI Studio cache identity');
+  check(compatibility.platformRange === consumer.platform.requiredRange, 'AI Studio compatibility platform range');
+  check(normalizeStudioBridge(compatibility.studioBridge) === 'v2', 'AI Studio compatibility bridge');
+}
+
 if (fs.existsSync(dist)) {
   const textFiles = walk(dist).filter((file) => /\.(?:html|js|css|json|webmanifest)$/i.test(file));
   const allText = textFiles.map((file) => { try { return fs.readFileSync(file, 'utf8'); } catch { return ''; } }).join('\n');

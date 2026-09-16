@@ -1,10 +1,10 @@
 {
   "schema": "ghrab-ai-assurance-fingerprint-v2",
   "appId": "ludus",
-  "appVersion": "1.16.23",
+  "appVersion": "1.16.24",
   "coreVersion": "1.0.0",
   "algorithm": "SHA-256",
-  "aggregate": "01d70d1bd39645aa782d33444a9553421b7ed0a636130b8446f96d97a35b3790",
+  "aggregate": "49fc59cb41d228257134d2bb17308a4119d229ace9868a1a03e6f5ed86ce887a",
   "inventory": "security/ai-boundary-files.json",
   "providerBoundary": "deployment-profile-and-egress-controlled",
   "files": [
@@ -26,12 +26,12 @@
     {
       "path": "public/ai-operations.json",
       "size": 1049,
-      "sha256": "1c921ae54af9963ceda30dc636ea36e11e1828122eb614a83dcbe70333f27664"
+      "sha256": "2bab7979827b207998a0b0affab1c900f250b48cafd11fd8b727dec78443469a"
     },
     {
       "path": "public/config/data-manifest.json",
       "size": 7132,
-      "sha256": "b23a8510cd06f5c4383144ae76830bb247cd93c5aed66b4673fd6719fcf32333"
+      "sha256": "b38bd5e6f33c2610537363912bc0869cee4afa68cfbc7d540309cb78d8ee4cd6"
     },
     {
       "path": "public/config/deployment.json",
@@ -56,12 +56,12 @@
     {
       "path": "public/config/release-acceptance.json",
       "size": 2332,
-      "sha256": "dbe183150adffa2a6199af1ac6fe752bfedae5fae022a2fe4d93af673825cbb7"
+      "sha256": "abc9b8176794e6cfe460f081f1b3bc6314c0444585d544d632ccbdca432a0f90"
     },
     {
       "path": "public/config/security-headers.json",
       "size": 1939,
-      "sha256": "a1e4a0cc32bf1bf58a63709dd9decc8d30ec69aeb571f73b0fb50b45879fe535"
+      "sha256": "bb38c00346e62164e69106395e990ec839a7a48c180f85acd1601ff24e8f72cf"
     },
     {
       "path": "scripts/build-school-profile.mjs",
@@ -71,7 +71,7 @@
     {
       "path": "scripts/qa-garp-security.mjs",
       "size": 9341,
-      "sha256": "34ad7b2607053994ffb147518854cd0a428f1a9ee3014352fe3c7b972ba5d369"
+      "sha256": "3f1452c418c49dd434a6f5ed5ea8b8c273236ebfeedbbe02e6e825adf5c2079f"
     },
     {
       "path": "scripts/qa-garp23-critical.mjs",
@@ -81,22 +81,22 @@
     {
       "path": "scripts/qa-garp23-security.mjs",
       "size": 25668,
-      "sha256": "5f1c8176f6e3e0b280a2e46ce721910c6df3c54a07d8d750c78afbb4c3759212"
+      "sha256": "113fc06e7023000133ee9a74b3cfca353e8518cad07c7a0f3c11cedca45e444f"
     },
     {
       "path": "scripts/qa-garp25-ai-resource.mjs",
       "size": 2314,
-      "sha256": "71f8bc8f14b8579ae826531e2ce859443bb84f96ec01825d4acc49fb3e1d7256"
+      "sha256": "11c6b14bc33751c17ad9d24fbb47aee4553940806ce53ded2ec458a6a5879cd3"
     },
     {
       "path": "src/ai-core-integration.js",
       "size": 5215,
-      "sha256": "f8306c2c195123f377db3b56a9d1c32b0e0222b7da5268552ee13cce41c04a7f"
+      "sha256": "87c95560a7b35820e8bbcd07c8b55db06b374b06c4e03b9f08bc784ef6108643"
     },
     {
       "path": "src/index.html",
       "size": 252338,
-      "sha256": "c0fcf1634411063af4939e33d43f223c01d78c2dd42296120b7b60e0ac5d65ba"
+      "sha256": "c632c5befda30c58708fc02392db2c87aeebced355d00817be723e6e93f645dd"
     },
     {
       "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-conformance-1.0.0.js",

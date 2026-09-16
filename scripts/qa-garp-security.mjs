@@ -19,7 +19,7 @@ const stdModule=read('dist/access/deployment-config.js');
 const schoolModule=read('dist-school-server/access/deployment-config.js');
 const schoolInfo=json('dist-school-server/server-ready-build-info.json');
 
-check('version.package',pkg.version==='1.16.23',pkg.version);
+check('version.package',pkg.version==='1.16.24',pkg.version);
 check('build.standard.exists',fs.existsSync(path.join(root,'dist/index.html')));
 check('access-gate.stylesheet-injected',/<link\b[^>]*data-ghrab-access-gate-css\b[^>]*href=[\"']\.\/access\/access-gate\.css[\"'][^>]*>/i.test(read('dist/index.html')));
 check('build.school.exists',fs.existsSync(path.join(root,'dist-school-server/index.html')));
