@@ -1,5 +1,5 @@
 /* ===================== GHRAB AI CORE 1.0.0 · LUDUS P1 ===================== */
-const LUDUS_AI_APP=Object.freeze({id:'ludus',version:'1.16.27'});
+const LUDUS_AI_APP=Object.freeze({id:'ludus',version:'1.16.28'});
 const LUDUS_AI_SCHEMAS=Object.freeze({'ludus.topic-analysis.v1':{type:'object',additionalProperties:false,required:['label','kind','domain','operations'],properties:{label:{type:'string'},kind:{type:'string'},domain:{type:'string'},operations:{type:'object'}}},'ludus.content-pack.v1':{type:'object',additionalProperties:false,required:['stations'],properties:{stations:{type:'array'}}}});
 const LUDUS_AI_OPERATIONS=Object.freeze({schema:'ghrab-ai-operations-v1',appId:LUDUS_AI_APP.id,operations:Object.freeze({'topic-analysis':{outputSchemaId:'ludus.topic-analysis.v1',defaultModelProfile:'economy',allowedModelProfiles:['economy','balanced'],inputTypes:['text'],streaming:false,requiredCapabilities:[],expectedOutputs:1,maxOutputTokensHint:8192},'game-content-generation':{outputSchemaId:'ludus.content-pack.v1',defaultModelProfile:'balanced',allowedModelProfiles:['balanced','quality'],inputTypes:['text','image','document'],streaming:false,requiredCapabilities:[],expectedOutputs:1,maxOutputTokensHint:32768}})});
 function ludusSchoolMode(){return Boolean(window.GHRAB_PLATFORM?.isSchoolProfile?.())}

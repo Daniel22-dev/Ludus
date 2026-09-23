@@ -1,7 +1,7 @@
 (function(global){
   'use strict';
 
-  const VERSION='1.16.27';
+  const VERSION='1.16.28';
   const APP_ID='ludus';
   const SUITE_CONTRACT='ghrab-suite-session-v1';
   const SUITE_GENERATION_KEY='ghrab.platform.suite-session-generation.v1';

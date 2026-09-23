@@ -14,13 +14,42 @@ const apGood={schema:'garp27-auto-patch-manifest-v1',garpVersion:'2.7',state:'CO
 const apEmpty=structuredClone(apGood);apEmpty.gates=[];const apAllNA=structuredClone(apGood);apAllNA.gates=apAllNA.gates.map(g=>({...g,status:'N/A',evidenceRefs:[]}));const apForged=structuredClone(apGood);apForged.source.allowlisted=false;apForged.gates[0].evidenceRefs=[{id:'gate1',sha256:sha3}];const apReplay=structuredClone(apGood);apReplay.sequence=2;
 const liveFalse={schema:'garp27-live-status-v1',garpVersion:'2.7',environment:'school-runtime',overall:'PASS',controls:[{id:'x',status:'PASS'}],runtimeEvidence:[{id:'live',sha256:sha2}]},liveDeferred={schema:'garp27-live-status-v1',garpVersion:'2.7',environment:'school-runtime',overall:'NOT_TESTED',controls:[],runtimeEvidence:[]};
 const runtimeUnsafe={schema:'garp27-runtime-test-request-v1',garpVersion:'2.7',testId:'RVP-01',safetyClass:'PROD_SAFE_CONDITIONAL',environment:'production',target:{id:'x',allowlisted:false,dedicatedSink:false},approval:{approved:false,expiresAt:'2000-01-01T00:00:00Z'},limits:{requests:999,bytes:99999999}},runtimeSafe={schema:'garp27-runtime-test-request-v1',garpVersion:'2.7',testId:'RVP-01',safetyClass:'PROD_SAFE_CONDITIONAL',environment:'production',target:{id:'approved-synthetic-sink',allowlisted:true,dedicatedSink:true},approval:{approved:true,approvedBy:'security-owner',expiresAt:'2099-01-01T00:00:00Z'},limits:{requests:2,bytes:4096}};
-const policyGood={schema:'garp27-policy-v1',garpVersion:'2.7',appId:'demo',appVersion:'1.0.0',identity:{mode:'strict'},requestApiAi:{mode:'strict'},egress:{mode:'strict'},files:{mode:'strict'},dataLifecycle:{mode:'strict'},release:{mode:'strict'},inventory:{mode:'strict'},securityHealth:{mode:'strict'},incident:{mode:'strict'},recovery:{mode:'strict'}},policyBad=structuredClone(policyGood);policyBad.identity={};policyBad.garpVersion='2.6';const policyPlaceholder=structuredClone(policyGood);policyPlaceholder.incident={mode:'TBD'};
-const prepared={...structuredClone(apGood),state:'PREPARED'},validated={...structuredClone(apGood),state:'VALIDATED'},committed={...structuredClone(apGood),state:'COMMITTED'},core=path.resolve(root,'CONTRACTS/garp27-core.json'),pf=w('profile.json',profile),tf=w('trust.json',trust);
+const policyGood={
+  schema:'garp27-policy-v1',garpVersion:'2.7',appId:'demo',appVersion:'1.0.0',
+  identity:{rule:'server-authoritative identity'},
+  requestApiAi:{controls:'schema-bound requests'},
+  egress:{defaultDeny:true},
+  files:{uploads:{enabled:false}},
+  dataLifecycle:{classification:'D0'},
+  release:{activeAuthority:'GARP-2.7'},
+  inventory:{source:'contract-selftest'},
+  securityHealth:{checks:['contract-selftest']},
+  incident:{response:'fail-closed'},
+  recovery:{rollback:'required'}
+};
+const policyBad=structuredClone(policyGood); policyBad.identity={}; policyBad.garpVersion='2.6';
+const policyPlaceholder=structuredClone(policyGood); policyPlaceholder.incident={response:'TBD'};
+const policySubstring=structuredClone(policyGood); policySubstring.incident={response:'replace-with-incident-plan'};
+const policyUnknown=structuredClone(policyGood); policyUnknown.appId='ghost-app';
+const policyZero=structuredClone(policyGood); policyZero.appVersion='0.0.0';
+const policyModeOnly=structuredClone(policyGood);
+for(const key of ['identity','requestApiAi','egress','files','dataLifecycle','release','inventory','securityHealth','incident','recovery']) policyModeOnly[key]={mode:'explicit-app-policy'};
+const inventory={schema:'garp27-ecosystem-app-inventory-v1',garpVersion:'2.7',revision:'selftest',apps:[{appId:'demo'}]};
+const prepared={...structuredClone(apGood),state:'PREPARED'},validated={...structuredClone(apGood),state:'VALIDATED'},committed={...structuredClone(apGood),state:'COMMITTED'},core=path.resolve(root,'CONTRACTS/garp27-core.json'),pf=w('profile.json',profile),tf=w('trust.json',trust),invf=w('inventory.json',inventory);
+const untouchedTemplate=path.resolve(root,'TEMPLATES/garp-policy.template.json');
+const policyArgs=f=>[f,'--core',core,'--inventory',invf];
 const cases=[
 ['A01-positive-foundation-with-live-deferred','validate-assurance.mjs',[w('ag.json',assuranceGood),'--profile',pf],0],['A01-reject-contradictory-pass','validate-assurance.mjs',[w('ab.json',assuranceBad),'--profile',pf],1],['A01-reject-pass-without-evidence','validate-assurance.mjs',[w('ane.json',assuranceNoEvidence),'--profile',pf],1],['A01-reject-duplicate-components','validate-assurance.mjs',[w('ad.json',assuranceDuplicate),'--profile',pf],1],['A01-A04-reject-missing-environment','validate-assurance.mjs',[w('ame.json',assuranceMissingEnv),'--profile',pf],1],['A01-reject-untrusted-evidence','validate-assurance.mjs',[w('af.json',assuranceForged),'--profile',pf],1],
 ['A02-A03-positive-committed','validate-auto-patch.mjs',[w('apg.json',apGood),'--trust',tf,'--require-committed'],0],['A02-reject-empty-gates','validate-auto-patch.mjs',[w('ape.json',apEmpty),'--trust',tf,'--require-committed'],1],['A02-reject-all-gates-na','validate-auto-patch.mjs',[w('apn.json',apAllNA),'--trust',tf,'--require-committed'],1],['A03-reject-untrusted-source-and-evidence','validate-auto-patch.mjs',[w('apf.json',apForged),'--trust',tf,'--require-committed'],1],['A03-reject-replay-sequence','validate-auto-patch.mjs',[w('apr.json',apReplay),'--trust',tf,'--require-committed'],1],
 ['A03-valid-transition-prepared-validated','validate-auto-patch-transition.mjs',[w('pre.json',prepared),w('val.json',validated)],0],['A03-reject-direct-prepared-committed','validate-auto-patch-transition.mjs',[w('pre2.json',prepared),w('com.json',committed)],1],
-['A04-A05-policy-positive-2.7','validate-policy.mjs',[w('pg.json',policyGood),'--core',core],0],['A04-A05-policy-reject-empty-and-2.6','validate-policy.mjs',[w('pb.json',policyBad),'--core',core],1],['A04-policy-reject-placeholder','validate-policy.mjs',[w('pp.json',policyPlaceholder),'--core',core],1],
+['A04-A05-policy-positive-2.7','validate-policy.mjs',policyArgs(w('policy-good.json',policyGood)),0],
+['A04-A05-policy-reject-empty-and-2.6','validate-policy.mjs',policyArgs(w('policy-bad.json',policyBad)),1],
+['A04-policy-reject-placeholder','validate-policy.mjs',policyArgs(w('policy-placeholder.json',policyPlaceholder)),1],
+['G02-reject-untouched-template','validate-policy.mjs',policyArgs(untouchedTemplate),1],
+['G02-reject-unknown-app-id','validate-policy.mjs',policyArgs(w('policy-unknown.json',policyUnknown)),1],
+['G02-reject-zero-version','validate-policy.mjs',policyArgs(w('policy-zero.json',policyZero)),1],
+['G02-reject-mode-only-sections','validate-policy.mjs',policyArgs(w('policy-mode-only.json',policyModeOnly)),1],
+['G02-reject-placeholder-substring','validate-policy.mjs',policyArgs(w('policy-substring.json',policySubstring)),1],
 ['A04-live-false-pass-rejected','validate-live-status.mjs',[w('lf.json',liveFalse),'--profile',pf],1],['A04-live-deferred-is-not-tested','validate-live-status.mjs',[w('ld.json',liveDeferred),'--profile',pf],3],['A06-unsafe-production-is-not-tested','validate-runtime-test-request.mjs',[w('ru.json',runtimeUnsafe)],3],['A06-safe-approved-production-request','validate-runtime-test-request.mjs',[w('rs.json',runtimeSafe)],0]];
-const results=[];for(const[id,tool,args,expected]of cases){const r=spawnSync(process.execPath,[path.join(tools,tool),...args],{encoding:'utf8'});results.push({id,expectedExit:expected,actualExit:r.status,pass:r.status===expected});}
-const ok=results.every(r=>r.pass);console.log(JSON.stringify({classification:'CONTRACT_TEST',status:ok?'PASS':'FAIL',checks:results.length,passed:results.filter(r=>r.pass).length,scope:'reference-validator-positive-negative-tests',appBehaviorTest:false,liveTest:false,results},null,2));fs.rmSync(tmp,{recursive:true,force:true});process.exit(ok?0:1);
+const results=[];for(const[id,tool,args,expected]of cases){const r=spawnSync(process.execPath,[path.join(tools,tool),...args],{encoding:'utf8'});results.push({id,expectedExit:expected,actualExit:r.status,pass:r.status===expected,stdout:r.stdout.trim(),stderr:r.stderr.trim()});}
+const ok=results.every(r=>r.pass);console.log(JSON.stringify({classification:'CONTRACT_TEST',status:ok?'PASS':'FAIL',checks:results.length,passed:results.filter(r=>r.pass).length,scope:'reference-validator-positive-negative-tests',appBehaviorTest:false,liveTest:false,g02:{status:results.filter(r=>r.id.startsWith('G02-')).every(r=>r.pass)?'PASS':'FAIL',checks:results.filter(r=>r.id.startsWith('G02-')).length},results},null,2));fs.rmSync(tmp,{recursive:true,force:true});process.exit(ok?0:1);

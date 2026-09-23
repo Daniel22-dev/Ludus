@@ -1,10 +1,51 @@
 {
-  "schema":"ghrab-garp27-app-profile-v1","garpVersion":"2.7","status":"CONSOLIDATED_FOUNDATION_CANDIDATE_LIVE_DEFERRED","appId":"ludus","appVersion":"1.16.27","dataClass":"D2","agentic":false,
-  "protocolSource":{"name":"GARP-2.7-KONSOLIDOVANY-FINAL.zip","sha256":"bc29f4490933acac7546ac4a6f0b80fca651077752a635543eba3402aec968d2","normativeDocument":"01-GARP-2.7-BEZPECNOSTNI-PROTOKOL.md","consolidationDocument":"09-CONSOLIDATION-R1.md","statusAtImport":"IMPLEMENTATION_MASTER_FOR_APP_MIGRATION"},
-  "deploymentProfiles":{
-    "school-server":{"role":"DEFERRED_FUTURE_PHASE","authMode":"server-session","aiTransport":"school-gateway","allowedOrigins":["self"],"allowLocalProviderKeys":false,"realStudentData":"NOT_APPROVED","liveStatus":"NOT_TESTED","implementationStatus":"DEFERRED_BY_OWNER_DECISION"},
-    "github-pages":{"role":"CURRENT_PRE_SERVER_RUNTIME","authMode":"signed-permit","aiTransport":"direct-gemini","allowLocalProviderKeys":true,"realStudentData":"NOT_APPROVED","garp27LiveEligible":false,"garp27FoundationEligible":true}
+  "schema": "ghrab-garp27-app-profile-v1",
+  "garpVersion": "2.7",
+  "status": "CONSOLIDATED_FOUNDATION_CANDIDATE_LIVE_DEFERRED",
+  "appId": "ludus",
+  "appVersion": "1.16.28",
+  "dataClass": "D2",
+  "agentic": false,
+  "protocolSource": {
+    "name": "GARP-2.7-KONSOLIDOVANY-FINAL-r2-G02-FIX.zip",
+    "sha256": "0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8",
+    "normativeDocument": "01-GARP-2.7-BEZPECNOSTNI-PROTOKOL.md",
+    "consolidationDocument": "10-CONSOLIDATION-R2-G02.md",
+    "statusAtImport": "IMPLEMENTATION_MASTER_FOR_APP_MIGRATION_G02_HARDENED"
   },
-  "requiredLiveControls":["server-side identity and object authorization","server-side AI gateway authorization and budgets","network egress enforcement outside the app process","file quarantine/scanning for document inputs","server logging/alerting/watchdog","release admission with trusted policy outside candidate control","Node 24/Alpine staging verification"],
-  "consolidationRevision":"2026-09-23-r1","serverImplementation":"DEFERRED_BY_OWNER_DECISION","requiredLiveControlsStatus":"DEFERRED_UNTIL_SERVER_APPROVAL"
+  "deploymentProfiles": {
+    "school-server": {
+      "role": "DEFERRED_FUTURE_PHASE",
+      "authMode": "server-session",
+      "aiTransport": "school-gateway",
+      "allowedOrigins": [
+        "self"
+      ],
+      "allowLocalProviderKeys": false,
+      "realStudentData": "NOT_APPROVED",
+      "liveStatus": "NOT_TESTED",
+      "implementationStatus": "DEFERRED_BY_OWNER_DECISION"
+    },
+    "github-pages": {
+      "role": "CURRENT_PRE_SERVER_RUNTIME",
+      "authMode": "signed-permit",
+      "aiTransport": "direct-gemini",
+      "allowLocalProviderKeys": true,
+      "realStudentData": "NOT_APPROVED",
+      "garp27LiveEligible": false,
+      "garp27FoundationEligible": true
+    }
+  },
+  "requiredLiveControls": [
+    "server-side identity and object authorization",
+    "server-side AI gateway authorization and budgets",
+    "network egress enforcement outside the app process",
+    "file quarantine/scanning for document inputs",
+    "server logging/alerting/watchdog",
+    "release admission with trusted policy outside candidate control",
+    "Node 24/Alpine staging verification"
+  ],
+  "consolidationRevision": "2026-09-23-r2",
+  "serverImplementation": "DEFERRED_BY_OWNER_DECISION",
+  "requiredLiveControlsStatus": "DEFERRED_UNTIL_SERVER_APPROVAL"
 }

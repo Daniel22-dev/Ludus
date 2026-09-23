@@ -1,16 +1,49 @@
 {
   "schema": "ghrab-garp27-input-audit-disposition-v2",
   "garpVersion": "2.7",
-  "consolidationRevision": "2026-09-23-r1",
-  "scope": "LUDUS application mapping against the consolidated GARP 2.7 reference master. This does not claim school-server or LIVE certification.",
-  "masterPackageSha256": "bc29f4490933acac7546ac4a6f0b80fca651077752a635543eba3402aec968d2",
+  "consolidationRevision": "2026-09-23-r2",
+  "scope": "LUDUS application mapping against the consolidated GARP 2.7 r2 reference master. This does not claim school-server or LIVE certification.",
+  "masterPackageSha256": "0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8",
   "findings": [
-    {"id":"A-01","status":"CLOSED_IN_CONSOLIDATED_MASTER_AND_MAPPED","reason":"Reference ASSURANCE derives overall from required components and trusted evidence. LUDUS does not self-declare LIVE PASS; server-dependent evidence stays NOT_TESTED."},
-    {"id":"A-02","status":"CLOSED_IN_CONSOLIDATED_MASTER","reason":"Reference AUTO-PATCH requires a non-empty trusted gate set; LUDUS does not implement a competing application-local COMMITTED authority."},
-    {"id":"A-03","status":"CLOSED_IN_CONSOLIDATED_MASTER","reason":"Reference AUTO-PATCH binds source, target digests, trusted evidence and replay sequence to expectations outside the candidate."},
-    {"id":"A-04","status":"CLOSED_AND_MAPPED","reason":"Policy, app profile, capability inventory and LIVE status have distinct semantics. Missing school runtime is DEFERRED/NOT_TESTED, not PASS."},
-    {"id":"A-05","status":"CLOSED_AND_MAPPED","reason":"Current authority is explicitly GARP 2.7. GARP 2.5.1 remains byte-locked historical regression tooling and is not relabeled."},
-    {"id":"A-06","status":"CLOSED_IN_CONSOLIDATED_MASTER_NOT_DISTRIBUTED","reason":"Conditional production runtime tests require machine-readable approval, allowlisted dedicated target and hard limits. LUDUS distributes no active production red-team runner."},
-    {"id":"A-07","status":"CLOSED_AND_MAPPED","reason":"Reference output separates PACKAGE_SELFTEST, CONTRACT_TEST, APP behavior and LIVE. Legacy 81/81 remains regression tooling evidence only."}
+    {
+      "id": "A-01",
+      "status": "CLOSED_IN_CONSOLIDATED_MASTER_AND_MAPPED",
+      "reason": "Reference ASSURANCE derives overall from required components and trusted evidence. LUDUS does not self-declare LIVE PASS; server-dependent evidence stays NOT_TESTED."
+    },
+    {
+      "id": "A-02",
+      "status": "CLOSED_IN_CONSOLIDATED_MASTER",
+      "reason": "Reference AUTO-PATCH requires a non-empty trusted gate set; LUDUS does not implement a competing application-local COMMITTED authority."
+    },
+    {
+      "id": "A-03",
+      "status": "CLOSED_IN_CONSOLIDATED_MASTER",
+      "reason": "Reference AUTO-PATCH binds source, target digests, trusted evidence and replay sequence to expectations outside the candidate."
+    },
+    {
+      "id": "A-04",
+      "status": "CLOSED_AND_MAPPED",
+      "reason": "Policy, app profile, capability inventory and LIVE status have distinct semantics. Missing school runtime is DEFERRED/NOT_TESTED, not PASS."
+    },
+    {
+      "id": "A-05",
+      "status": "CLOSED_AND_MAPPED",
+      "reason": "Current authority is explicitly GARP 2.7. GARP 2.5.1 remains byte-locked historical regression tooling and is not relabeled."
+    },
+    {
+      "id": "A-06",
+      "status": "CLOSED_IN_CONSOLIDATED_MASTER_NOT_DISTRIBUTED",
+      "reason": "Conditional production runtime tests require machine-readable approval, allowlisted dedicated target and hard limits. LUDUS distributes no active production red-team runner."
+    },
+    {
+      "id": "A-07",
+      "status": "CLOSED_AND_MAPPED",
+      "reason": "Reference output separates PACKAGE_SELFTEST, CONTRACT_TEST, APP behavior and LIVE. Legacy 81/81 remains regression tooling evidence only."
+    },
+    {
+      "id": "G-02",
+      "status": "CLOSED_IN_CONSOLIDATED_MASTER_R2_AND_MAPPED",
+      "reason": "LUDUS foundation policy uses inventory-valid app identity, semver and recognized semantic fields in every required section; mode-only and placeholder policies are rejected by the r2 validator."
+    }
   ]
 }
