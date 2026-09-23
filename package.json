@@ -1,6 +1,6 @@
 {
   "name": "ludus",
-  "version": "1.16.25",
+  "version": "1.16.27",
   "description": "LUDUS — dílna výukových her (builder + samostatné enginy)",
   "type": "module",
   "scripts": {
@@ -35,8 +35,8 @@
     "qa:a11y": "node scripts/qa-p5-runtime.mjs",
     "qa:p4": "npm run qa:p5",
     "qa:p4:ci": "npm run qa:p5:ci",
-    "qa:p5": "npm run qa:lock && npm run build && npm run garp25:prep-static && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run garp25:p5-certification-controls && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
-    "qa:p5:ci": "npm run qa:lock && npm run build && npm run garp25:prep-static && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 npm run garp25:p5-certification-controls && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
+    "qa:p5": "npm run qa:lock && npm run garp27:foundation && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run garp25:p5-certification-controls && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
+    "qa:p5:ci": "npm run qa:lock && npm run garp27:foundation:ci && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 npm run garp25:p5-certification-controls && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
     "test:p5": "npm run qa:p5",
     "build:unofficial": "LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs",
     "qa:runtime": "node scripts/qa-p5-runtime.mjs",
@@ -53,8 +53,8 @@
     "garp25:selftest": "node security/garp25/tools/selftest-garp251.mjs",
     "garp25:sw": "node security/garp25/tools/check-sw-security-freeze.mjs dist/sw.js dist security/security-critical-assets.json",
     "garp25:leaks": "node security/garp25/tools/scan-deployment-leaks.mjs dist",
-    "garp25:sbom": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.25.cdx.json",
-    "garp25:sbom:check": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.25.cdx.json --check",
+    "garp25:sbom": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27.cdx.json",
+    "garp25:sbom:check": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27.cdx.json --check",
     "garp25:ai-evidence": "node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json",
     "garp25:ai-evidence:check": "node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json --check",
     "garp25:source-scan": "node scripts/garp25-source-scan.mjs",
@@ -63,15 +63,26 @@
     "garp25:ai-resource": "node scripts/qa-garp25-ai-resource.mjs",
     "garp25:logging-canary": "node scripts/qa-garp25-logging-canary.mjs",
     "garp25:sw:school": "node security/garp25/tools/check-sw-security-freeze.mjs dist-school-server/sw.js dist-school-server security/security-critical-assets.json",
-    "garp25:sbom:verify": "node scripts/verify-cyclonedx-sbom.mjs security/sbom/ludus-1.16.25.cdx.json",
-    "garp25:sbom:deploy": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.25-deployment.cdx.json --deploy",
-    "garp25:sbom:deploy:check": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.25-deployment.cdx.json --deploy --check",
+    "garp25:sbom:verify": "node scripts/verify-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27.cdx.json",
+    "garp25:sbom:deploy": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27-deployment.cdx.json --deploy",
+    "garp25:sbom:deploy:check": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27-deployment.cdx.json --deploy --check",
     "garp25:p5-certification-controls": "node scripts/qa-garp25-p5-certification-controls.mjs",
     "garp25:ai-core-sync-patch": "node scripts/qa-garp25-ai-core-sync-patch.mjs",
-    "garp25:ai-evidence:verify": "node security/garp25/tools/verify-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json security/ai-boundary-files.json ."
+    "garp25:ai-evidence:verify": "node security/garp25/tools/verify-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json security/ai-boundary-files.json .",
+    "garp27:contract": "node scripts/qa-garp27-contract.mjs",
+    "garp27:architecture": "node security/garp27/tools/architecture-integrity.mjs",
+    "garp27:architecture:ci": "node scripts/qa-garp27-ci-trust.mjs",
+    "garp27:mutations": "node scripts/qa-garp27-mutations.mjs",
+    "garp27:foundation": "GHRAB_PATCH_ASSURANCE_SKIP=1 npm run build && npm run garp27:prepare-evidence && npm run build && npm run qa:garp && npm run garp25:prep-static && npm run garp27:master-contracts && npm run garp27:contract && npm run garp27:architecture && npm run garp27:mutations",
+    "garp27:foundation:ci": "GHRAB_PATCH_ASSURANCE_SKIP=1 npm run build && npm run garp27:prepare-evidence && npm run build && npm run qa:garp && npm run garp25:prep-static && npm run garp27:master-contracts && npm run garp27:contract && npm run garp27:architecture:ci && npm run garp27:mutations",
+    "garp27:master-contracts": "node security/garp27/reference-package/MASTER/TOOLS/contract-selftest.mjs && node security/garp27/reference-package/MASTER/TOOLS/validate-policy.mjs security/garp27/contracts/foundation-policy.json --core security/garp27/reference-package/MASTER/CONTRACTS/garp27-core.json && node scripts/qa-garp27-live-deferred.mjs",
+    "qa:garp:school-future": "npm run build:school-server && node scripts/qa-garp-security.mjs --school-server",
+    "garp25:sbom:deploy:school-future": "node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.27-school-server-deployment.cdx.json dist-school-server --deploy",
+    "garp27:evidence": "node scripts/create-garp27-evidence-manifest.mjs",
+    "garp27:prepare-evidence": "npm run garp25:sbom && npm run garp25:sbom:deploy && npm run garp25:ai-evidence && npm run garp27:evidence"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24 <25"
   },
   "devDependencies": {
     "axe-core": "4.12.1",

@@ -1,0 +1,12 @@
+{
+  "schema":"garp27-application-migration-profile-v1","garpVersion":"2.7","appId":"ludus","appVersion":"1.16.27","serverApproval":"DEFERRED_BY_OWNER_DECISION","maxEvidenceAgeHours":168,
+  "requiredComponents":[
+    {"componentId":"AG-01-policy","required":true,"serverDependent":false},
+    {"componentId":"AG-03-request-api-ai","required":true,"serverDependent":false},
+    {"componentId":"AG-07-release","required":true,"serverDependent":false},
+    {"componentId":"AG-08-architecture","required":true,"serverDependent":false},
+    {"componentId":"AG-10-live-health","required":true,"serverDependent":true}
+  ],
+  "trustedEvidence":{},"releaseIdentity":{"appId":"ludus","appVersion":"1.16.27","sourceCommit":"0000000000000000000000000000000000000000"},
+  "note":"Source commit and trusted evidence are bound by CI/release evidence, not pre-filled by this candidate profile."
+}

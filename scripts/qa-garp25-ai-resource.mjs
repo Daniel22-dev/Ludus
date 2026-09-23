@@ -21,7 +21,7 @@ context.window=context; context.globalThis=context;
 vm.runInNewContext(source,context,{filename:'ghrab-ai-core-1.0.0.js'});
 const AI=context.GHRAB_AI;
 AI.configure({
-  app:{id:'ludus',version:'1.16.25'},
+  app:{id:'ludus',version:'1.16.27'},
   runtimeConfig:{ai:{defaultMode:'direct-gemini',selectedMode:'direct-gemini',allowedModes:['direct-gemini'],allowUserModeSelection:false,maxRequestBytes:2048,maxPartBytes:1024,requestTimeoutMs:5000,directGemini:{endpointBase:'https://generativelanguage.googleapis.com/v1beta',profileModels:{economy:'gemini-test'},fallbackModels:[],useResponseSchema:true,maxOutputTokens:8192}},telemetry:{enabled:false}},
   operations:{schema:'ghrab-ai-operations-v1',appId:'ludus',operations:{'topic-analysis':{outputSchemaId:'ludus.topic-analysis.v1',defaultModelProfile:'economy',allowedModelProfiles:['economy'],inputTypes:['text'],streaming:false,expectedOutputs:1,maxOutputTokensHint:8192}}},
   outputSchemas:{'ludus.topic-analysis.v1':{type:'object'}}

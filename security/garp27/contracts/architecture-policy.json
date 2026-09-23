@@ -1,0 +1,132 @@
+{
+  "schema": "ghrab-garp27-architecture-policy-v1",
+  "garpVersion": "2.7",
+  "policyId": "ludus-garp27-architecture-v1",
+  "appId": "ludus",
+  "status": "APPROVED_FOR_CONSOLIDATED_FOUNDATION_TESTS_TRUST_ANCHOR_REQUIRED_IN_CI",
+  "layers": {
+    "contracts": [
+      "ghrab-ai-core.consumer.json",
+      "ghrab-platform.consumer.json",
+      "public/ai-operations.json",
+      "public/config",
+      "studio"
+    ],
+    "runtime": [
+      "runtime",
+      "public/access",
+      "vendor/ghrab-ai-core-1.0.0",
+      "vendor/ghrab-platform-1.1.2"
+    ],
+    "app": [
+      "src",
+      "engines",
+      "content"
+    ],
+    "delivery": [
+      "scripts/build.mjs",
+      "scripts/build-school-profile.mjs",
+      "scripts/access-protection.mjs",
+      "security/garp25/tools"
+    ],
+    "verification": [
+      "qa",
+      "audit-evidence",
+      "scripts/qa-",
+      "scripts/test-",
+      "security/evidence",
+      "security/garp27/tools"
+    ]
+  },
+  "criticalSourceRoots": [
+    "src",
+    "runtime",
+    "public/access",
+    "vendor/ghrab-ai-core-1.0.0",
+    "vendor/ghrab-platform-1.1.2"
+  ],
+  "forbiddenDependencies": [
+    {
+      "from": "contracts",
+      "to": [
+        "app",
+        "runtime",
+        "delivery",
+        "verification"
+      ]
+    },
+    {
+      "from": "runtime",
+      "to": [
+        "app",
+        "delivery",
+        "verification"
+      ]
+    },
+    {
+      "from": "app",
+      "to": [
+        "delivery",
+        "verification"
+      ]
+    }
+  ],
+  "allowedHistoricalAuthorities": [
+    "security/garp25"
+  ],
+  "activeAuthority": "security/garp27",
+  "forbiddenActiveAuthorityRoots": [
+    "security/garp26",
+    "security/garp28",
+    "security/garp3"
+  ],
+  "artifact": {
+    "requiredPaths": [
+      "index.html",
+      "config/deployment.json",
+      "ai-operations.json",
+      "ghrab-platform.consumer.json",
+      "runtime/ludus-privacy.js",
+      "sw.js"
+    ],
+    "forbiddenPathFragments": [
+      "/.git/",
+      "/.github/",
+      "/node_modules/",
+      "/qa-results/",
+      "/security/garp27/",
+      "/security/garp25/",
+      "/scripts/qa-",
+      "/scripts/test-"
+    ],
+    "forbiddenSuffixes": [
+      ".map",
+      ".pem",
+      ".key",
+      ".p12",
+      ".pfx"
+    ],
+    "forbiddenExecutableNameFragments": [
+      "mock-auth",
+      "test-runner",
+      "red-team-runner",
+      "bypass-auth"
+    ],
+    "foundationArtifact": "dist"
+  },
+  "schoolDeployment": {
+    "profile": "school-server",
+    "authMode": "server-session",
+    "aiTransport": "school-gateway",
+    "allowLocalProviderKeys": false,
+    "allowedOrigins": [
+      "self"
+    ],
+    "deploymentConfigFailureMode": "fail-closed",
+    "liveServerValidationRequired": true,
+    "status": "DEFERRED_BY_OWNER_DECISION",
+    "enforceDuringFoundation": false
+  },
+  "consolidationRevision": "2026-09-23-r1",
+  "serverPhase": "DEFERRED_BY_OWNER_DECISION"
+}

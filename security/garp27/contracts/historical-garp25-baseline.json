@@ -1,0 +1,92 @@
+{
+  "schema": "ghrab-garp27-historical-baseline-v1",
+  "purpose": "Historical GARP 2.5.1 tooling baseline retained unchanged during GARP 2.7 migration.",
+  "files": [
+    {
+      "path": "security/garp25/TOOLING-SOURCE.txt",
+      "sha256": "4534ec646a6d7fd4d6a09577727d792f99cc1f0c7ccfa49d052140bc57da5211",
+      "size": 542
+    },
+    {
+      "path": "security/garp25/tools/check-sw-security-freeze.mjs",
+      "sha256": "f446af43a84298a363de9db1dc985e8bb5a36e887dc6b5b7a6807c3f7b7bd5d1",
+      "size": 41989
+    },
+    {
+      "path": "security/garp25/tools/check-vendored-consistency.mjs",
+      "sha256": "1dc6856173b8fa006b8a646f4cba49274c5abbf803c30d0489e07598cbaba8d8",
+      "size": 3693
+    },
+    {
+      "path": "security/garp25/tools/create-build-provenance.mjs",
+      "sha256": "559150c1d5a6e7928fe785a67d896eb17dc5aac7a5a40188c8fa407d45d4438d",
+      "size": 1854
+    },
+    {
+      "path": "security/garp25/tools/create-evidence-manifest.mjs",
+      "sha256": "cb75f70118624f8bdaf81209c7f2c5ad9a189d219a3d5b1c4b02af5f5e9599ff",
+      "size": 2719
+    },
+    {
+      "path": "security/garp25/tools/create-release-integrity.mjs",
+      "sha256": "f463a0de089bfd50e9bc0c2f8cc859df3debff6af6a0cae4c555d1814cbc43a6",
+      "size": 3443
+    },
+    {
+      "path": "security/garp25/tools/release-gate.mjs",
+      "sha256": "74b3618557791e9ddf392140240212a057fedb3639116c315d28d057acd990c4",
+      "size": 6885
+    },
+    {
+      "path": "security/garp25/tools/scan-deployment-leaks.mjs",
+      "sha256": "66c984c1f70c0a1d135b41cceeab66f339b752ec434c70c31261e027678aefa1",
+      "size": 8848
+    },
+    {
+      "path": "security/garp25/tools/selftest-garp251.mjs",
+      "sha256": "c404656841639cdcd32db0f0c9e6f9c3a61b356089265c516cf44d534f735153",
+      "size": 41694
+    },
+    {
+      "path": "security/garp25/tools/sign-release-integrity.mjs",
+      "sha256": "4c5e15f4f26c98b68670efd8a86e4a6d438b2f206d1515c705c8727cb19e9473",
+      "size": 753
+    },
+    {
+      "path": "security/garp25/tools/verify-ai-assurance-fingerprint.mjs",
+      "sha256": "f02e9c94df2fb1db726a088eed490a1eaa3b4ca80368582ba562bb335419548c",
+      "size": 5840
+    },
+    {
+      "path": "security/garp25/tools/verify-assurance-links.mjs",
+      "sha256": "a8eb845e6813e904d664a0e7070d7883438fe019c0f7b4141237093056bf89dc",
+      "size": 1865
+    },
+    {
+      "path": "security/garp25/tools/verify-build-provenance.mjs",
+      "sha256": "cb3684cae12d23514e4269316c51d4b2680150c41341bc8d8f1d03c2cc696774",
+      "size": 2566
+    },
+    {
+      "path": "security/garp25/tools/verify-evidence-manifest.mjs",
+      "sha256": "3064419e662a8c6800f5b7c15bdc0e3086ddd2b7fcdf50b01f2ef20b2948d686",
+      "size": 2599
+    },
+    {
+      "path": "security/garp25/tools/verify-release-integrity.mjs",
+      "sha256": "083b5d809c6b4711b5175fdb637de360a3a8a37ad421d451835f70df9c0e5a95",
+      "size": 3309
+    },
+    {
+      "path": "security/garp25/tools/verify-release-registry.mjs",
+      "sha256": "df91033d686e658a4604ae5dea926b8338d420381aeb0d1d1d0812f31235ae98",
+      "size": 2865
+    },
+    {
+      "path": "security/garp25/tools/verify-release-signature.mjs",
+      "sha256": "1d49f9f54638723db3beeed572d5b1a82c105ef1d7f29d41522b79de4478ef27",
+      "size": 2386
+    }
+  ],
+  "aggregateSha256": "b4afcf371de1498cca8a35448067d3305e4d96985bb1d642b6f9dabd7dbb7295"
+}

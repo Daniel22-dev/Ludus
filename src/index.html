@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.25">
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.27">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -396,7 +396,7 @@ a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:cente
 a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
 a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
 </style>
-  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.25" data-ludus-privacy-scope="builder"></script>
+  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.27" data-ludus-privacy-scope="builder"></script>
 </head>
 <body>
 <div class="wrap" role="main">
@@ -1604,7 +1604,7 @@ function extractJson(raw){const s=String(raw||"").trim();const a=s.indexOf("{"),
 function gErr(e){if(!e)return"Neznámá chyba.";if(e.code==="MISSING_KEY")return"Chybí API klíč — v GitHub režimu ho vlož nahoře jen pro tuto relaci; ve školním režimu obnov přihlášení.";if(e.code==="TIMEOUT")return"Model neodpověděl včas, zkus to znovu.";if(e.status===401||e.status===403)return"Klíč není platný nebo nemá oprávnění.";if(e.status===400)return"Gemini odmítlo požadavek (zkontroluj délku a téma).";if(e.quota)return"Kvóta/limit API vyčerpán — zkus lehčí model nebo počkej.";if(e.status>=500)return"Služba Gemini má dočasný problém, zkus to znovu.";return e.message||"Nepovedlo se spojit s modelem.";}
 function updateKeyUI(){const b=$('#keyBadge');const school=window.GHRAB_PLATFORM?.isSchoolProfile?.()===true;if(b){b.textContent=school?'AI: školní server':(geminiApiKey?'klíč: aktivní · relace':'klíč: nezadán');b.className='kbadge '+((school||geminiApiKey)?'on':'off');}const ti=$('#keyInput');if(ti&&!ti.value&&geminiApiKey)ti.value=geminiApiKey;renderModelSeg();}
 function renderModelSeg(){document.querySelectorAll('[data-model]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.model===geminiModel));const n=$('#modelNote');if(n){const m=G_MODELS.find(x=>x.id===geminiModel);n.textContent=m?m.note:'';}}
-function loadKey(){let s='',p='';try{s=sessionStorage.getItem(G_KEY_SESSION_SK)||'';}catch(_){}try{p=localStorage.getItem(G_KEY_SK)||'';}catch(_){}if(!s&&p){s=p;try{sessionStorage.setItem(G_KEY_SESSION_SK,p);}catch(_){}}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey=cleanKey(s);geminiKeyScope=s?'session':'';updateKeyUI();}
+function loadKey(){if(window.GHRAB_PLATFORM?.isSchoolProfile?.()===true){try{sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey='';geminiKeyScope='server';updateKeyUI();return;}let s='',p='';try{s=sessionStorage.getItem(G_KEY_SESSION_SK)||'';}catch(_){}try{p=localStorage.getItem(G_KEY_SK)||'';}catch(_){}if(!s&&p){s=p;try{sessionStorage.setItem(G_KEY_SESSION_SK,p);}catch(_){}}try{localStorage.removeItem(G_KEY_SK);}catch(_){}geminiApiKey=cleanKey(s);geminiKeyScope=s?'session':'';updateKeyUI();}
 function loadModel(){let s='';try{s=localStorage.getItem(G_MODEL_SK)||'';}catch(_){}s=String(s||'').toLowerCase();if(['gemini-2.5-pro','gemini-2.5-flash','gemini-3.1-flash','gemini-3.5-flash','gemini-flash-latest'].includes(s))s=G_MODEL_DEFAULT;if(['gemini-2.5-flash-lite','gemini-3.1-flash-lite'].includes(s))s='gemini-3.5-flash-lite';geminiModel=isValidModel(s)?s:G_MODEL_DEFAULT;try{localStorage.setItem(G_MODEL_SK,geminiModel);}catch(_){}}
 function useKeySession(){const k=cleanKey($('#keyInput').value);try{k?sessionStorage.setItem(G_KEY_SESSION_SK,k):sessionStorage.removeItem(G_KEY_SESSION_SK);}catch(_){}geminiApiKey=k;geminiKeyScope=k?'session':'';updateKeyUI();toast(k?"Klíč uložen jen pro tuto relaci ✓":"Klíč pro relaci smazán.");}
 function useKeyPersistent(){useKeySession();try{localStorage.removeItem(G_KEY_SK);}catch(_){}if(geminiApiKey)toast('Klíč je z bezpečnostních důvodů uložen jen pro tuto relaci ✓');return true;}
@@ -2104,7 +2104,7 @@ function stageTopic(){
     <div class="field">
       <label>Hotový pracovní list <span class="zap">⚡</span> <span style="color:var(--faint);font-weight:400">(nepovinné — obrázek nebo PDF)</span></label>
       ${state.worksheet?`<div class="wschip"><span class="wsname">📎 ${esc(state.worksheet.name)}</span><span class="wsmeta">${esc(state.worksheet.note)}</span><button class="wsx" id="wsRemove" type="button" title="Odebrat">✕</button></div>
-      <div class="note">Při „Vygenerovat“ z něj Gemini vyjde — převede jeho úlohy a látku do herních stanic.</div>`:`<label class="filebtn"><input type="file" id="wsFile" accept="image/*,application/pdf,.pdf" hidden>📎 Vložit obrázek nebo PDF</label>
+      <div class="note">Při „Vygenerovat“ z něj Gemini vyjde — převede jeho úlohy a látku do herních stanic.</div>`:`<label class="filebtn"><input type="file" id="wsFile" accept="image/jpeg,image/png,image/webp,application/pdf,.pdf" hidden>📎 Vložit obrázek nebo PDF</label>
       <div class="note" style="color:var(--faint)">Vyfoť nebo nahraj cvičení. Velké obrázky se podle limitů zmenší, PDF se pošle beze změny. DOCX ulož jako PDF nebo vyfoť.</div>`}
     </div>
     ${cur}
@@ -2378,11 +2378,12 @@ function resetBuild(){
 }
 
 /* ---- pracovní list (obrázek/PDF) jako podklad pro Gemini ---- */
-const WS_IMG_MAXDIM=1568, WS_IMG_KEEP_BYTES=1.5*1024*1024, WS_PDF_MAX_BYTES=15*1024*1024;
+const WS_IMG_MAXDIM=1568, WS_IMG_KEEP_BYTES=1.5*1024*1024, WS_INPUT_MAX_BYTES=12*1024*1024, WS_PDF_MAX_BYTES=12*1024*1024, WS_IMAGE_MIME=new Set(['image/jpeg','image/png','image/webp']);
 function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result));r.onerror=()=>rej(new Error('Soubor se nepodařilo načíst.'));r.readAsDataURL(file);});}
 async function processWorksheet(file){
-  const type=file.type||'';
-  if(/^image\//.test(type)){
+  const type=String(file.type||'').toLowerCase();
+  if(file.size>WS_INPUT_MAX_BYTES) throw new Error('Soubor je příliš velký ('+Math.round(file.size/1048576)+' MB). Maximum je 12 MB.');
+  if(WS_IMAGE_MIME.has(type)){
     const dataUrl=await fileToDataURL(file);
     const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error('Obrázek nelze načíst.'));im.src=dataUrl;});
     const big=Math.max(img.width,img.height);
@@ -2398,11 +2399,11 @@ async function processWorksheet(file){
     return {name:file.name,kind:'image',mime:'image/jpeg',data:out.split(',')[1],note:'zmenšeno na '+w+'×'+h+' px'};
   }
   if(type==='application/pdf'||/\.pdf$/i.test(file.name)){
-    if(file.size>WS_PDF_MAX_BYTES) throw new Error('PDF je moc velké ('+Math.round(file.size/1048576)+' MB). Max ~15 MB — zmenši ho nebo vyfoť jen potřebné stránky.');
+    if(file.size>WS_PDF_MAX_BYTES) throw new Error('PDF je moc velké ('+Math.round(file.size/1048576)+' MB). Maximum je 12 MB — zmenši ho nebo vyfoť jen potřebné stránky.');
     const dataUrl=await fileToDataURL(file);
     return {name:file.name,kind:'pdf',mime:'application/pdf',data:dataUrl.split(',')[1],note:Math.round(file.size/1024)+' kB, beze změny'};
   }
-  throw new Error('Podporované jsou obrázky (JPG/PNG) a PDF. DOCX prosím ulož jako PDF nebo vyfoť — Gemini čte obrázky i PDF přímo.');
+  throw new Error('Podporované jsou pouze obrázky JPG/PNG/WebP a PDF. DOCX prosím ulož jako PDF nebo vyfoť.');
 }
 async function attachWorksheet(file){
   if(!file)return;
@@ -3051,10 +3052,10 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.16.25';
+const APP_VERSION='1.16.27';
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
-  '1.16.25 · Platform 1.1.2 wave: zdrojový Studio manifest je srovnán s runtime/consumer metadaty; suite-session cleanup a PC-01 ownership se nemění.',
+  '1.16.27 · GARP 2.7 FOUNDATION: přidána architecture-integrity brána, fail-closed school AI hranice, omezení příloh a Node 24 CI; LIVE ověření zůstává otevřené.',
   '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',
   '1.16.13 · CI hotfix: GitHub Actions instalují připnuté Playwright Chromium a nastaví CHROMIUM_PATH před npm test; validace pořadí kroků brání opakování chyby.',
   '1.16.12 · Sjednocený reportér: skutečné dvoukrokové stažení diagnostického ZIPu, ruční přiložení do Gmailu a bezpečně skryté pomocné video.',

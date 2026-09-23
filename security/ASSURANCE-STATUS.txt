@@ -1,45 +1,31 @@
-GARP 2.5.1 - CURRENT ASSURANCE STATUS
-Application: LUDUS 1.16.25
-Date: 2026-09-16
-Scope: LUDUS 1.16.25 release-candidate assurance summary; current production deployment remains 1.16.24 until protected-branch merge
+GARP 2.7 – CURRENT ASSURANCE STATUS
+Application: LUDUS 1.16.27
+Date: 2026-09-23
+Consolidation: 2026-09-23-r1
+Overall: AMBER
 
-IDENTITY
-- Candidate version: 1.16.25.
-- Candidate source revision: bound dynamically from GitHub Actions GITHUB_SHA into patch-assurance.json.
-- Previous deployed 1.16.24 source commit: c809f367e4c044331d352263e4fc7ddd8e966175.
-- GARP tooling: GARP-2.5.1-ZAVEDENI-TOOLING-R2-LU-N17-N19-HOTFIX.
-- GARP tooling semantics are unchanged; this patch changes release/evidence binding, not GARP policy semantics.
+CURRENT AUTHORITY
+- Active authority: GARP 2.7 under security/garp27/.
+- Consolidated reference package: GARP-2.7-KONSOLIDOVANY-FINAL.zip.
+- GARP 2.5.1 remains historical regression tooling.
 
-VERIFIED LOCALLY FOR 1.16.25 CANDIDATE
-- Canonical GARP selftest: 81/81 PASS.
-- GARP 2.5.1 prep-static constituent controls: PASS.
-- Platform conformance: PASS.
-- N5 scanner implementation/tooling remains unchanged from the previously verified 1.16.24 baseline; mandatory negative probes remain part of the protected release path.
-- Source SBOM SHA-256: a35616e742b43cb18e6bc9b14d5a424f267fc9695010adf46d48d03437a8eda9.
-- Deployment SBOM SHA-256: 3a6b4e34a5ed7d720fc2609561689ca8b1cb26f8e78d107f3e4d17a7bdfd8ed2.
-- AI assurance fingerprint SHA-256: 596e3a1769febb11bda73a2ebd15eca670f4009634d31eca857f31350301e25d.
-- GitHub 1.16.25 PR checks/deployment: pending protected-branch submission.
-- Historical 1.16.24 GitHub Validate/P5/deploy/axe and AUTO PATCH promotion remain preserved as prior E2E evidence.
-- AI Studio A07 implementation commit: 5e5ffead0d6775e42d276778e013226d27942ce4.
-- Version 1.16.25 is the first candidate that will exercise A07 evidence-bound auto-promotion E2E.
+VERIFIED FOUNDATION
+- Consolidated PACKAGE_SELFTEST: 15/15 PASS.
+- Consolidated CONTRACT_TEST: 20/20 PASS.
+- LUDUS GARP 2.7 app contract: PASS.
+- Architecture-integrity: 0 findings locally; external CI trust pending.
+- Mutation/negative controls: PASS.
+- Legacy GARP 2.5.1 selftest: 81/81 PASS.
+- Missing school server does not disable or weaken FOUNDATION controls.
 
-AUDIT FINDING STATUS FOR LUDUS
-- A01 auto-patch terminology: CLOSED for LUDUS. Central Studio promotion is kept distinct from auto-patch-prep and code-repair automation.
-- A04 N5 coverage: CLOSED for LUDUS. All three mandatory probes are fail-closed.
-- A05 GARP 2.5 on release path: CLOSED for LUDUS. prep-static remains part of qa:p5 / qa:p5:ci; the 1.16.25 candidate passes local prep-static and the protected PR must pass GitHub P5 before merge.
-- A06 main branch governance: CLOSED. Active ruleset Protect main (ID 23551158) protects the default branch, blocks deletion and non-fast-forward updates, requires PR flow and checks test + p5-release-gate + axe, with no bypass.
-- A07 cryptographic per-patch evidence enforcement in AI Studio: IMPLEMENTED. AI Studio main commit 5e5ffead0d6775e42d276778e013226d27942ce4 requires ghrab-patch-assurance-v1 for eligible LUDUS patches, and LUDUS 1.16.25 emits the matching commit-bound SHA-256 evidence contract. E2E enforcement is verified by the 1.16.25 deployment/promotion run, not by this static status file alone.
-- A08 stale status reporting: CLOSED for LUDUS by this current 1.16.25 status; exact 1.16.23 snapshots are preserved under security/evidence/historical-status/.
-
-ASSURANCE BOUNDARIES - DO NOT OVERCLAIM
-- Overall remains AMBER, not GREEN.
-- SHIELD-LIVE: NOT TESTED.
-- RI-LIVE: NOT TESTED.
-- 1.16.25 was not re-signed as a new RI-PREP ceremony; historical RI-PREP material remains tied to its documented 1.16.23 scope.
-- GitHub Pages 1.16.24 is deployed and tested; 1.16.25 is pending protected-branch deployment. GitHub Pages remains outside the historical RI-PREP signing/registry scope.
-- Actual school-server DAST, served security headers, alerting and production key custody/recovery drill are not completed.
+SERVER / LIVE BOUNDARY
+- Active school-server implementation: DEFERRED_BY_OWNER_DECISION.
+- School-server and LIVE controls: NOT_TESTED, never false PASS.
 - Real student data: NOT APPROVED.
 - School-server production: NOT APPROVED.
 
+TRUST
+- GARP27_TRUSTED_POLICY_SHA256=23ea7997e2b47a88cf588f89468c392cd23c775b4e80a3bf453314b739147be8
+
 OVERALL: AMBER
-Reason: application CI, GARP 2.5, N5 and central AUTO PATCH are verified; A06 is closed and A07 is implemented in both Studio and the 1.16.25 candidate; production LIVE controls remain open.
+Reason: consolidated FOUNDATION passes; server-dependent SHIELD-LIVE/RI-LIVE remain intentionally deferred/not tested.
