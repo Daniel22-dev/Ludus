@@ -1,1 +1,112 @@
-{"schema":"garp27-policy-v1","garpVersion":"2.7","appId":"ludus","appVersion":"1.16.27","identity":{"mode":"existing-access-guard-plus-explicit-server-deferred"},"requestApiAi":{"mode":"ai-core-boundary-file-input-limits-and-school-direct-provider-fail-closed-preserved"},"egress":{"mode":"browser-runtime-current-server-egress-deferred"},"files":{"mode":"local-json-validation-and-ai-input-mime-size-limits"},"dataLifecycle":{"mode":"local-first-suite-session-and-delete-regressions"},"release":{"mode":"garp25-release-evidence-plus-garp27-architecture-trust"},"inventory":{"mode":"capability-inventory-and-artifact-scope"},"securityHealth":{"mode":"local-ci-evidence-live-health-deferred"},"incident":{"mode":"existing-error-reporting-live-response-deferred"},"recovery":{"mode":"local-recovery-regressions-server-recovery-deferred"}}
+{
+  "schema": "garp27-policy-v1",
+  "garpVersion": "2.7",
+  "appId": "ludus",
+  "appVersion": "1.16.28",
+  "identity": {
+    "standaloneProfile": {
+      "authMode": "signed-permit",
+      "clientStateIsSecurityAuthority": false
+    },
+    "schoolProfile": {
+      "status": "DEFERRED_BY_OWNER_DECISION",
+      "authMode": "server-session"
+    }
+  },
+  "requestApiAi": {
+    "registeredOperations": [
+      "game-content-generation",
+      "topic-analysis"
+    ],
+    "agentic": false,
+    "requestPolicy": {
+      "schoolDirectProvider": "BLOCKED",
+      "inputValidation": "schema-mime-size-bound"
+    }
+  },
+  "egress": {
+    "standalone": {
+      "aiTransport": "direct-gemini",
+      "profile": "github-pages"
+    },
+    "school": {
+      "status": "DEFERRED_BY_OWNER_DECISION",
+      "aiTransport": "school-gateway",
+      "defaultDeny": true
+    }
+  },
+  "files": {
+    "currentBoundary": {
+      "allowedMimeTypes": [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "application/pdf"
+      ],
+      "maxBytes": 12582912,
+      "jsonImportMaxBytes": 2097152
+    },
+    "serverBoundary": {
+      "status": "DEFERRED_BY_OWNER_DECISION",
+      "quarantine": "NOT_TESTED"
+    }
+  },
+  "dataLifecycle": {
+    "classification": "D2",
+    "storage": {
+      "primary": "browser-local",
+      "serverStorage": "DEFERRED_BY_OWNER_DECISION"
+    },
+    "deletion": {
+      "suiteSessionCleanup": true,
+      "ownedDataDeleteRegression": true
+    }
+  },
+  "release": {
+    "activeAuthority": "GARP-2.7",
+    "promotion": {
+      "foundationRequired": true,
+      "trustedArchitecturePolicyRequiredInCi": true
+    },
+    "publicAssurance": {
+      "foundation": "CI_VERIFIED",
+      "live": "NOT_TESTED"
+    }
+  },
+  "inventory": {
+    "source": "security/garp27/contracts/capability-inventory.json",
+    "architecturePolicy": "security/garp27/contracts/architecture-policy.json",
+    "changeRule": "capability-drift-must-fail-closed"
+  },
+  "securityHealth": {
+    "localCi": {
+      "contract": "REQUIRED",
+      "architectureIntegrity": "REQUIRED",
+      "mutationTests": "REQUIRED"
+    },
+    "live": {
+      "status": "NOT_TESTED",
+      "serverImplementation": "DEFERRED_BY_OWNER_DECISION"
+    }
+  },
+  "incident": {
+    "current": {
+      "errorReporter": "enabled",
+      "releaseEvidence": "retained"
+    },
+    "future": {
+      "status": "DEFERRED_BY_OWNER_DECISION",
+      "centralAlerting": "NOT_TESTED"
+    }
+  },
+  "recovery": {
+    "current": {
+      "rollback": "release-gate-and-versioned-artifact",
+      "localStateCleanupRegression": true
+    },
+    "future": {
+      "status": "DEFERRED_BY_OWNER_DECISION",
+      "serverRestore": "NOT_TESTED"
+    }
+  }
+}

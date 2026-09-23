@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.16.27 — 2026-09-23 — GARP 2.7 CONSOLIDATED FOUNDATION
+## 1.16.28 — 2026-09-23 — GARP 2.7 r2 / G-02 hardening
+
+- Nahrazen konsolidační master r1 revizí r2 bez změny hlavní verze GARP 2.7.
+- G-02 uzavřen: policy validator nově ověřuje appId proti důvěryhodnému inventáři, platný semver, zákaz 0.0.0, semantický obsah všech deseti sekcí a exact/substr placeholdery.
+- Foundation policy Ludusu byla převedena z mode-only tvaru na konkrétní semantický kontrakt a prochází r2 admission validátorem.
+- Referenční kontraktní selftest je rozšířen na 25/25 včetně 5/5 G-02 negativních případů; master package eviduje 19/19 package selftest.
+- Architecture policy se funkčně nemění, takže externí SHA-256 trust anchor zůstává zachován.
+- School-server implementace je dál DEFERRED_BY_OWNER_DECISION; SHIELD-LIVE a RI-LIVE zůstávají NOT_TESTED.
+
+
+## 1.16.28 — 2026-09-23 — GARP 2.7 CONSOLIDATED FOUNDATION
 
 - Aktivní bezpečnostní autorita je povýšena na GARP 2.7; historický GARP 2.5.1 zůstává beze změny jako regresní baseline.
 - Přidány konsolidované kontrakty, architecture-integrity gate, mutační negativní testy a externí CI trust anchor.

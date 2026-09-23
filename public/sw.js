@@ -1,6 +1,6 @@
 const GHRAB_SW_CONTRACT='ghrab-service-worker-v1';
 /* GHRAB service-worker contract v1 · update activation is user-controlled. */
-const LUDUS_CACHE = "ghrab-ludus-v1.16.27";
+const LUDUS_CACHE = "ghrab-ludus-v1.16.28";
 const CACHE_PREFIXES = ["ghrab-ludus-v", "ludus-pwa-"];
 const CORE_ASSETS = [
   "./index.html",

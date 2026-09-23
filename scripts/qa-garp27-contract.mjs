@@ -19,12 +19,12 @@ const acceptance=json('public/config/release-acceptance.json');
 const ops=json('public/ai-operations.json');
 const ai=read('src/ai-core-integration.js');
 const html=read('src/index.html');
-check('identity.version',pkg.version==='1.16.27',pkg.version);
+check('identity.version',pkg.version==='1.16.28',pkg.version);
 check('identity.node24',pkg.engines?.node==='>=24 <25',pkg.engines?.node);
 check('contract.garp27',profile.garpVersion==='2.7'&&policy.garpVersion==='2.7'&&inventory.garpVersion==='2.7');
-check('contract.consolidation',profile.consolidationRevision==='2026-09-23-r1'&&masterLock.consolidationRevision==='2026-09-23-r1');
-check('contract.protocol-digest',profile.protocolSource?.sha256==='bc29f4490933acac7546ac4a6f0b80fca651077752a635543eba3402aec968d2',profile.protocolSource?.sha256);
-check('contract.master-lock',masterLock.packageSha256===profile.protocolSource?.sha256&&masterLock.packageSelftest==='15/15 PASS'&&masterLock.contractSelftest==='20/20 PASS');
+check('contract.consolidation',profile.consolidationRevision==='2026-09-23-r2'&&masterLock.consolidationRevision==='2026-09-23-r2');
+check('contract.protocol-digest',profile.protocolSource?.sha256==='0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8',profile.protocolSource?.sha256);
+check('contract.master-lock',masterLock.packageSha256===profile.protocolSource?.sha256&&masterLock.packageSelftest==='19/19 PASS'&&masterLock.contractSelftest==='25/25 PASS'&&masterLock.g02==='CLOSED_IN_REFERENCE_MASTER_R2');
 check('contract.server-deferred',profile.serverImplementation==='DEFERRED_BY_OWNER_DECISION'&&policy.serverPhase==='DEFERRED_BY_OWNER_DECISION');
 check('contract.identity',profile.appId===pkg.name&&profile.appVersion===pkg.version&&inventory.appId===pkg.name&&inventory.appVersion===pkg.version);
 check('contract.data-class',profile.dataClass==='D2'&&profile.agentic===false);
@@ -42,12 +42,12 @@ check('file.mime-allowlist',html.includes("WS_IMAGE_MIME=new Set(['image/jpeg','
 check('file.pdf-limit',html.includes('WS_PDF_MAX_BYTES=12*1024*1024'));
 check('authority.current',policy.activeAuthority==='security/garp27');
 check('authority.no-competing',!(policy.forbiddenActiveAuthorityRoots||[]).some(rel=>fs.existsSync(path.join(root,rel))));
-check('disposition.complete',Array.isArray(dispositions.findings)&&dispositions.findings.length===7&&dispositions.findings.every(x=>String(x.status).startsWith('CLOSED')));
+check('disposition.complete',Array.isArray(dispositions.findings)&&dispositions.findings.length===8&&dispositions.findings.some(x=>x.id==='G-02')&&dispositions.findings.every(x=>String(x.status).startsWith('CLOSED')));
 check('disposition.no-live-certification',String(dispositions.scope||'').includes('does not claim school-server or LIVE certification'));
 const rows=[]; for(const item of historic.files||[]){const abs=path.join(root,item.path);rows.push({path:item.path,sha256:fs.existsSync(abs)?sha(fs.readFileSync(abs)):null});}
 const agg=sha(Buffer.from(rows.map(x=>`${x.path}\0${x.sha256}\n`).join('')));
 check('authority.garp25-byte-baseline',agg===historic.aggregateSha256,`${agg} expected=${historic.aggregateSha256}`);
-check('release.garp27',acceptance.garp?.version==='2.7'&&acceptance.garp?.consolidationRevision==='2026-09-23-r1');
+check('release.garp27',acceptance.garp?.version==='2.7'&&acceptance.garp?.consolidationRevision==='2026-09-23-r2');
 check('release.foundation-current',acceptance.garp?.foundation==='PASS_LOCAL_TRUST_PENDING'&&acceptance.garp?.targetProfile==='pre-server-local-ci');
 check('release.live-deferred',acceptance.garp?.overall==='AMBER'&&acceptance.garp?.shieldLive==='NOT TESTED'&&acceptance.garp?.riLive==='NOT TESTED'&&acceptance.garp?.serverImplementation==='DEFERRED_BY_OWNER_DECISION');
 check('release.server-not-required',acceptance.schoolServer?.status==='deferred-by-owner-decision'&&acceptance.schoolServer?.requiredForP5===false&&acceptance.schoolServer?.runtimeBuildIncluded===false);
@@ -56,7 +56,7 @@ const workflowDir=path.join(root,'.github/workflows'); const workflows=fs.readdi
 const p5Workflows=workflows.filter(x=>x.text.includes('npm run qa:p5:ci'));
 check('ci.node24',workflows.every(x=>!(/node-version:\s*22(?:\.|\s|$)/.test(x.text))),workflows.filter(x=>/node-version:\s*22(?:\.|\s|$)/.test(x.text)).map(x=>x.name).join(','));
 check('ci.external-policy-digest',p5Workflows.length>0&&p5Workflows.every(x=>x.text.includes('GARP27_TRUSTED_POLICY_SHA256: $'+'{{ vars.GARP27_TRUSTED_POLICY_SHA256 }}')),p5Workflows.map(x=>x.name).join(','));
-const failed=checks.filter(x=>!x.ok); const result={schema:'ghrab-garp27-contract-result-v2',testClass:'CONTRACT_TEST',garpVersion:'2.7',consolidationRevision:'2026-09-23-r1',appId:pkg.name,appVersion:pkg.version,decision:failed.length?'BLOCK':'PASS',foundationClaim:failed.length?'BLOCK':'PASS_LOCAL_TRUST_PENDING',liveClaim:'NOT_TESTED',serverImplementation:'DEFERRED_BY_OWNER_DECISION',total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks};
+const failed=checks.filter(x=>!x.ok); const result={schema:'ghrab-garp27-contract-result-v2',testClass:'CONTRACT_TEST',garpVersion:'2.7',consolidationRevision:'2026-09-23-r2',appId:pkg.name,appVersion:pkg.version,decision:failed.length?'BLOCK':'PASS',foundationClaim:failed.length?'BLOCK':'PASS_LOCAL_TRUST_PENDING',liveClaim:'NOT_TESTED',serverImplementation:'DEFERRED_BY_OWNER_DECISION',total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks};
 fs.mkdirSync(path.join(root,'qa-results'),{recursive:true}); fs.writeFileSync(path.join(root,'qa-results/garp27-contract.json'),JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({schema:result.schema,appVersion:result.appVersion,decision:result.decision,total:result.total,passed:result.passed,failed:result.failed,foundationClaim:result.foundationClaim,liveClaim:result.liveClaim},null,2));
 if(failed.length){for(const f of failed)console.error(`FAIL ${f.id}: ${f.detail}`);process.exit(1);}

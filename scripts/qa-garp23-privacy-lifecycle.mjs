@@ -86,7 +86,7 @@ for(const file of fs.readdirSync(path.join(root,'engines')).filter(f=>f.endsWith
 }
 
 const failures=checks.filter(x=>!x.ok);
-const report={schema:'ghrab-garp23-privacy-lifecycle-v1',appId:'ludus',appVersion:'1.16.27',mode:'deterministic-browser-storage-equivalent',syntheticCanaries:{A,B},checks,total:checks.length,passed:checks.length-failures.length,failed:failures.length,evidence,status:failures.length?'failed':'passed',limitations:['This Platform 1.1.2 wave environment cannot navigate local HTTP because Chromium has managed URLBlocklist=["*"].','Independent Claude review must repeat A/B/new-tab/restart/multi-tab/export-open in an unblocked real browser.']};
+const report={schema:'ghrab-garp23-privacy-lifecycle-v1',appId:'ludus',appVersion:'1.16.28',mode:'deterministic-browser-storage-equivalent',syntheticCanaries:{A,B},checks,total:checks.length,passed:checks.length-failures.length,failed:failures.length,evidence,status:failures.length?'failed':'passed',limitations:['This Platform 1.1.2 wave environment cannot navigate local HTTP because Chromium has managed URLBlocklist=["*"].','Independent Claude review must repeat A/B/new-tab/restart/multi-tab/export-open in an unblocked real browser.']};
 fs.mkdirSync(path.join(root,'qa-results'),{recursive:true});
 fs.writeFileSync(path.join(root,'qa-results/garp23-privacy-lifecycle.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({schema:report.schema,total:report.total,passed:report.passed,failed:report.failed,status:report.status},null,2));

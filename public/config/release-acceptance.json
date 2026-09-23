@@ -2,15 +2,81 @@
   "schema": "ghrab-release-acceptance-v1",
   "stage": "P5",
   "appId": "ludus",
-  "appVersion": "1.16.27",
-  "releaseStatus": "garp-2.7-consolidated-foundation-candidate-live-deferred",
-  "primaryRuntime": {"mode":"standalone-github-pages","serverRequired":false,"offlineCapable":true,"currentUseApproved":false},
-  "github": {"status":"not-yet-uploaded","uploadDeferredUntilEcosystemComplete":true,"postUploadValidationRequired":true,"requiredChecks":["project-tests","p5-release-gate","live-pages-smoke","pwa-update-from-previous-release"],"garp27LiveEligible":false},
-  "schoolServer": {"status":"deferred-by-owner-decision","requiredForP5":false,"runtimeBuildIncluded":false,"liveValidationPending":true,"shieldLiveStatus":"NOT TESTED","garp27Target":false,"note":"Active school-server implementation is intentionally deferred until management approval."},
-  "accessibility": {"automatedOpenFindingsAllowed":0,"keyboardSmokeRequired":true,"screenReaderPilot":"manual-post-upload-checklist"},
-  "handoff": {"runtimeOnlyPackageIncluded":true,"sourceRepositoriesExcludedFromSchoolOperationalPackage":true,"legalTermsRequireSeparateAgreement":true},
-  "mediaModes": {"canonical":["official","unofficial"],"legacyAliases":{"safe":"unofficial"},"official":"official naming and owner-registered thematic soundtrack","unofficial":"original naming and AI-created or owner-supplied soundtrack"},
+  "appVersion": "1.16.28",
+  "releaseStatus": "garp-2.7-consolidated-r2-g02-foundation-candidate-live-deferred",
+  "primaryRuntime": {
+    "mode": "standalone-github-pages",
+    "serverRequired": false,
+    "offlineCapable": true,
+    "currentUseApproved": false
+  },
+  "github": {
+    "status": "not-yet-uploaded",
+    "uploadDeferredUntilEcosystemComplete": true,
+    "postUploadValidationRequired": true,
+    "requiredChecks": [
+      "project-tests",
+      "p5-release-gate",
+      "live-pages-smoke",
+      "pwa-update-from-previous-release"
+    ],
+    "garp27LiveEligible": false
+  },
+  "schoolServer": {
+    "status": "deferred-by-owner-decision",
+    "requiredForP5": false,
+    "runtimeBuildIncluded": false,
+    "liveValidationPending": true,
+    "shieldLiveStatus": "NOT TESTED",
+    "garp27Target": false,
+    "note": "Active school-server implementation is intentionally deferred until management approval."
+  },
+  "accessibility": {
+    "automatedOpenFindingsAllowed": 0,
+    "keyboardSmokeRequired": true,
+    "screenReaderPilot": "manual-post-upload-checklist"
+  },
+  "handoff": {
+    "runtimeOnlyPackageIncluded": true,
+    "sourceRepositoriesExcludedFromSchoolOperationalPackage": true,
+    "legalTermsRequireSeparateAgreement": true
+  },
+  "mediaModes": {
+    "canonical": [
+      "official",
+      "unofficial"
+    ],
+    "legacyAliases": {
+      "safe": "unofficial"
+    },
+    "official": "official naming and owner-registered thematic soundtrack",
+    "unofficial": "original naming and AI-created or owner-supplied soundtrack"
+  },
   "revision": "P5-R2",
-  "runtimeAudit": {"required":true,"scriptsExecuted":true,"transport":"mixed-in-memory-CDP; local-http blocked-by-managed-URLBlocklist","note":"GARP 2.7 consolidated FOUNDATION controls are locally/CI revalidated where executable. School-server and LIVE controls are intentionally DEFERRED/NOT_TESTED and are not prerequisites for current FOUNDATION."},
-  "garp": {"version":"2.7","protocolStatus":"IMPLEMENTATION_MASTER_FOR_APP_MIGRATION","targetProfile":"pre-server-local-ci","legacyCompatibilityTooling":"GARP 2.5.1 selftest/prep-static preserved unchanged","round":"CONSOLIDATED FOUNDATION re-baseline","studentData":"synthetic-only","independentReview":"pending","foundation":"PASS_LOCAL_TRUST_PENDING","architectureIntegrity":"PASS_LOCAL_TRUST_PENDING","mutationTests":"9/9 PASS","trustedPolicyAdmission":"NOT TESTED until external repository variable is configured and CI runs","node24Alpine":"NOT TESTED in this local environment","shieldLive":"NOT TESTED","riLive":"NOT TESTED","overall":"AMBER","consolidationRevision":"2026-09-23-r1","serverImplementation":"DEFERRED_BY_OWNER_DECISION"}
+  "runtimeAudit": {
+    "required": true,
+    "scriptsExecuted": true,
+    "transport": "mixed-in-memory-CDP; local-http blocked-by-managed-URLBlocklist",
+    "note": "GARP 2.7 consolidated r2 FOUNDATION controls are revalidated in local/CI scope. G-02 policy admission is fail-closed. School-server and LIVE controls remain DEFERRED/NOT_TESTED."
+  },
+  "garp": {
+    "version": "2.7",
+    "protocolStatus": "IMPLEMENTATION_MASTER_FOR_APP_MIGRATION_G02_HARDENED",
+    "targetProfile": "pre-server-local-ci",
+    "legacyCompatibilityTooling": "GARP 2.5.1 selftest/prep-static preserved unchanged",
+    "round": "CONSOLIDATED R2 / G-02 re-baseline",
+    "studentData": "synthetic-only",
+    "independentReview": "pending",
+    "foundation": "PASS_LOCAL_TRUST_PENDING",
+    "architectureIntegrity": "PASS_LOCAL_TRUST_PENDING",
+    "mutationTests": "9/9 PASS",
+    "trustedPolicyAdmission": "PENDING_REAL_CI",
+    "node24Alpine": "PENDING_REAL_CI",
+    "shieldLive": "NOT TESTED",
+    "riLive": "NOT TESTED",
+    "overall": "AMBER",
+    "consolidationRevision": "2026-09-23-r2",
+    "serverImplementation": "DEFERRED_BY_OWNER_DECISION",
+    "g02": "CLOSED_IN_REFERENCE_MASTER_R2"
+  }
 }
