@@ -189,7 +189,10 @@ if (fs.existsSync(template)) {
   if (studioManifest.aiCore?.coreVersion !== CORE_VERSION || studioManifest.aiCore?.serverReady !== true || studioManifest.aiCore?.conformancePassed !== true) fail('Studio manifest has invalid AI Core metadata.');
 
   const assuranceSourceRevision = String(process.env.GITHUB_SHA || '').trim();
-  const assuranceRequired = /^[a-f0-9]{40}$/i.test(assuranceSourceRevision) && process.env.GHRAB_PATCH_ASSURANCE_SKIP !== '1';
+  const assuranceRequired =
+    process.env.GHRAB_PATCH_ASSURANCE_REQUIRED === '1' &&
+    /^[a-f0-9]{40}$/i.test(assuranceSourceRevision) &&
+    process.env.GHRAB_PATCH_ASSURANCE_SKIP !== '1';
   if (assuranceRequired) {
     const assuranceDir = path.join(DIST, 'assurance');
     fs.mkdirSync(assuranceDir, { recursive: true });
