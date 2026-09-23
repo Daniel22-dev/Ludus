@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.16.27 — 2026-09-23 — GARP 2.7 CONSOLIDATED FOUNDATION
+
+- Aktivní bezpečnostní autorita je povýšena na GARP 2.7; historický GARP 2.5.1 zůstává beze změny jako regresní baseline.
+- Přidány konsolidované kontrakty, architecture-integrity gate, mutační negativní testy a externí CI trust anchor.
+- Běžný GitHub/CI build je oddělen od finální release-assurance fáze; SBOM, AI fingerprint a evidence manifest se před finálním assurance buildem generují čerstvě.
+- School-server implementace zůstává výslovně DEFERRED_BY_OWNER_DECISION; SHIELD-LIVE a RI-LIVE jsou NOT_TESTED a neoslabují FOUNDATION.
+- Zpřísněna školní AI hranice a přílohy: direct provider je ve school profilu fail-closed a AI vstupy jsou omezeny na JPG/PNG/WebP/PDF do 12 MB.
+- CI cílí na Node 24 a P5 vyžaduje externí SHA-256 očekávání architecture policy.
+
+
 ## 1.16.25 - A06/A07 assurance hardening
 
 - closes A06 evidence drift after activation of the `Protect main` ruleset;

@@ -20,7 +20,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 22.16.0
+          node-version: 24.8.0
           cache: npm
           registry-url: https://registry.npmjs.org
       - name: Install dependencies
@@ -44,3 +44,5 @@ jobs:
         run: npm run qa:platform
       - name: Enforce P5 R2 release gate
         run: npm run qa:p5:ci
+        env:
+          GARP27_TRUSTED_POLICY_SHA256: ${{ vars.GARP27_TRUSTED_POLICY_SHA256 }}

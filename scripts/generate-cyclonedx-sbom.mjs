@@ -8,7 +8,7 @@ const deployMode=args.includes('--deploy');
 const checkMode=args.includes('--check');
 const positional=args.filter(a=>!a.startsWith('--'));
 const outArg=positional[0] || (deployMode?'security/sbom/ludus-deploy.cdx.json':'security/sbom/ludus.cdx.json');
-const deployRoot=path.resolve(positional[1] || 'dist-school-server');
+const deployRoot=path.resolve(positional[1] || 'dist');
 const root=process.cwd();
 const norm=s=>String(s||'').replace(/\\/g,'/');
 const sha256=b=>createHash('sha256').update(b).digest('hex');

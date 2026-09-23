@@ -9,36 +9,63 @@ const json = (p) => JSON.parse(read(p));
 const checks = [];
 function check(id, ok, detail='') { checks.push({id,ok:Boolean(ok),detail:String(detail||'')}); }
 
+const schoolRequested = process.argv.includes('--school-server');
+const requiredBuildInputs = [
+  'dist/index.html',
+  'dist/config/deployment.json',
+  'dist/access/deployment-config.js',
+  ...(schoolRequested ? [
+    'dist-school-server/index.html',
+    'dist-school-server/config/deployment.json',
+    'dist-school-server/access/deployment-config.js',
+    'dist-school-server/server-ready-build-info.json'
+  ] : [])
+];
+const missingBuildInputs = requiredBuildInputs.filter((p) => !fs.existsSync(path.join(root,p)));
+if (missingBuildInputs.length) {
+  const result={schema:'ghrab-garp-security-gate-v1',decision:'HARNESS_ERROR',liveClaim:'NOT_TESTED',reason:'MISSING_BUILD_ARTIFACTS',missing:missingBuildInputs,hint:schoolRequested?'Run npm run build:school-server before qa:garp -- --school-server.':'Run npm run build before qa:garp.'};
+  fs.mkdirSync(path.join(root,'qa-results'),{recursive:true});
+  fs.writeFileSync(path.join(root,'qa-results/garp-security.json'),JSON.stringify(result,null,2)+'\n');
+  console.error(JSON.stringify(result,null,2));
+  process.exit(2);
+}
+
 const pkg=json('package.json');
 const src=read('src/index.html');
 const sw=read('public/sw.js');
 const sec=json('public/config/security-headers.json');
 const stdDep=json('dist/config/deployment.json');
-const schoolDep=json('dist-school-server/config/deployment.json');
+const schoolSource=json('public/config/deployment.school-server.json');
+const schoolDep=schoolRequested?json('dist-school-server/config/deployment.json'):null;
 const stdModule=read('dist/access/deployment-config.js');
-const schoolModule=read('dist-school-server/access/deployment-config.js');
-const schoolInfo=json('dist-school-server/server-ready-build-info.json');
+const schoolModule=schoolRequested?read('dist-school-server/access/deployment-config.js'):null;
+const schoolInfo=schoolRequested?json('dist-school-server/server-ready-build-info.json'):null;
 
-check('version.package',pkg.version==='1.16.25',pkg.version);
+check('version.package',pkg.version==='1.16.27',pkg.version);
 check('build.standard.exists',fs.existsSync(path.join(root,'dist/index.html')));
 check('access-gate.stylesheet-injected',/<link\b[^>]*data-ghrab-access-gate-css\b[^>]*href=[\"']\.\/access\/access-gate\.css[\"'][^>]*>/i.test(read('dist/index.html')));
-check('build.school.exists',fs.existsSync(path.join(root,'dist-school-server/index.html')));
+check('server.scope',true,schoolRequested?'SCHOOL_SERVER_REQUESTED':'DEFERRED_BY_OWNER_DECISION');
 check('deployment.standard.failure-mode',stdModule.includes('const CONFIG_FAILURE_MODE = "github-fallback";'));
-check('deployment.school.failure-mode',schoolModule.includes('const CONFIG_FAILURE_MODE = "fail-closed";'));
 check('deployment.standard.profile',stdDep.profile==='github-pages',stdDep.profile);
 check('deployment.standard.auth',stdDep.authMode==='signed-permit',stdDep.authMode);
 check('deployment.standard.local-key-explicit',stdDep.features?.allowLocalProviderKeys===true);
-check('deployment.school.profile',schoolDep.profile==='school-server',schoolDep.profile);
-check('deployment.school.auth',schoolDep.authMode==='server-session',schoolDep.authMode);
-check('deployment.school.ai-transport',schoolDep.aiTransport==='school-gateway',schoolDep.aiTransport);
-check('deployment.school.local-keys-disabled',schoolDep.features?.allowLocalProviderKeys===false);
-check('deployment.school.server-authoritative',schoolDep.access?.strategy==='server-authoritative',schoolDep.access?.strategy);
-check('deployment.school.offline-disabled',Number(schoolDep.access?.maxOfflineAgeHours)===0,schoolDep.access?.maxOfflineAgeHours);
-check('deployment.school.fail-closed-stale',schoolDep.access?.failClosedWhenStale===true);
-check('deployment.school.same-origin-only',Array.isArray(schoolDep.allowedOrigins)&&schoolDep.allowedOrigins.length===1&&schoolDep.allowedOrigins[0]==='self',JSON.stringify(schoolDep.allowedOrigins));
-check('deployment.school.no-p0-profile',!fs.existsSync(path.join(root,'dist-school-server/config/deployment.school-server-p0.json')));
-check('deployment.school.build-info-local-key',schoolInfo.localProviderKeysAllowed===false);
-check('deployment.school.build-info-failure-mode',schoolInfo.deploymentConfigFailureMode==='fail-closed',schoolInfo.deploymentConfigFailureMode);
+// Existing future school-profile hardening is preserved and statically checked, but is not a current FOUNDATION runtime target.
+check('deployment.school-source.profile',schoolSource.profile==='school-server',schoolSource.profile);
+check('deployment.school-source.auth',schoolSource.authMode==='server-session',schoolSource.authMode);
+check('deployment.school-source.ai-transport',schoolSource.aiTransport==='school-gateway',schoolSource.aiTransport);
+check('deployment.school-source.local-keys-disabled',schoolSource.features?.allowLocalProviderKeys===false);
+check('deployment.school-source.server-authoritative',schoolSource.access?.strategy==='server-authoritative',schoolSource.access?.strategy);
+check('deployment.school-source.offline-disabled',Number(schoolSource.access?.maxOfflineAgeHours)===0,schoolSource.access?.maxOfflineAgeHours);
+check('deployment.school-source.fail-closed-stale',schoolSource.access?.failClosedWhenStale===true);
+check('deployment.school-source.same-origin-only',Array.isArray(schoolSource.allowedOrigins)&&schoolSource.allowedOrigins.length===1&&schoolSource.allowedOrigins[0]==='self',JSON.stringify(schoolSource.allowedOrigins));
+if(schoolRequested){
+  check('build.school.exists',fs.existsSync(path.join(root,'dist-school-server/index.html')));
+  check('deployment.school.failure-mode',schoolModule.includes('const CONFIG_FAILURE_MODE = "fail-closed";'));
+  check('deployment.school.profile',schoolDep.profile==='school-server',schoolDep.profile);
+  check('deployment.school.local-keys-disabled',schoolDep.features?.allowLocalProviderKeys===false);
+  check('deployment.school.build-info-local-key',schoolInfo.localProviderKeysAllowed===false);
+  check('deployment.school.build-info-failure-mode',schoolInfo.deploymentConfigFailureMode==='fail-closed',schoolInfo.deploymentConfigFailureMode);
+}
 check('import.max-bytes',src.includes('STUDIO_IMPORT_MAX_BYTES=2*1024*1024'));
 check('import.max-depth',src.includes('STUDIO_IMPORT_MAX_DEPTH=32'));
 check('import.max-nodes',src.includes('STUDIO_IMPORT_MAX_NODES=20000'));
@@ -84,8 +111,6 @@ check('actions.no-moving-major',refs.every(x=>!/@v\d+(?:\.|$)/i.test(x.ref)));
 const allowedActions=new Set(['actions/checkout','actions/setup-node','actions/upload-artifact','actions/download-artifact','actions/configure-pages','actions/upload-pages-artifact','actions/deploy-pages']);
 check('actions.allowlist',refs.every(x=>allowedActions.has(x.ref.split('@')[0])),refs.filter(x=>!allowedActions.has(x.ref.split('@')[0])).map(x=>x.ref).join(','));
 
-if(checks.length!==49){console.error(`Internal QA definition error: expected 49 checks, got ${checks.length}`);process.exit(2);}
-
 // Runtime simulation: a missing deployment.json must retain signed fallback in standard dist,
 // while the school-server copy must reject and therefore leave protected scripts locked.
 const oldFetch=globalThis.fetch, oldLocation=globalThis.location, oldDocument=globalThis.document;
@@ -96,15 +121,17 @@ try{
   const std=await import(pathToFileURL(path.join(root,'dist/access/deployment-config.js')).href+`?qa=${Date.now()}`);
   const cfg=await std.loadDeploymentConfig({appId:'ludus',forceReload:true,timeoutMs:250});
   if(cfg.profile!=='github-pages'||cfg.authMode!=='signed-permit') throw new Error('standard fallback contract changed');
-  const school=await import(pathToFileURL(path.join(root,'dist-school-server/access/deployment-config.js')).href+`?qa=${Date.now()+1}`);
-  let rejected=false;try{await school.loadDeploymentConfig({appId:'ludus',forceReload:true,timeoutMs:250});}catch{rejected=true;}
-  if(!rejected) throw new Error('school deployment outage did not fail closed');
+  if(schoolRequested){
+    const school=await import(pathToFileURL(path.join(root,'dist-school-server/access/deployment-config.js')).href+`?qa=${Date.now()+1}`);
+    let rejected=false;try{await school.loadDeploymentConfig({appId:'ludus',forceReload:true,timeoutMs:250});}catch{rejected=true;}
+    if(!rejected) throw new Error('school deployment outage did not fail closed');
+  }
 } finally {
   globalThis.fetch=oldFetch; globalThis.location=oldLocation; globalThis.document=oldDocument;
 }
 
 const failed=checks.filter(x=>!x.ok);
-const result={schema:'ghrab-garp-security-gate-v1',appId:'ludus',appVersion:pkg.version,total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks};
+const result={schema:'ghrab-garp-security-gate-v2',appId:'ludus',appVersion:pkg.version,foundationScope:schoolRequested?'school-server-explicit':'pre-server-standard',serverImplementation:schoolRequested?'EXPLICIT_TEST_REQUEST':'DEFERRED_BY_OWNER_DECISION',liveClaim:'NOT_TESTED',total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks};
 fs.mkdirSync(path.join(root,'qa-results'),{recursive:true});
 fs.writeFileSync(path.join(root,'qa-results/garp-security.json'),JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({schema:result.schema,appId:result.appId,appVersion:result.appVersion,total:result.total,passed:result.passed,failed:result.failed},null,2));

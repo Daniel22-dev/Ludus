@@ -15,6 +15,7 @@
   "scripts/qa-garp23-critical.mjs",
   "scripts/qa-garp23-security.mjs",
   "scripts/qa-garp25-ai-resource.mjs",
+  "scripts/qa-garp27-contract.mjs",
   "src/ai-core-integration.js",
   "src/index.html",
   "vendor/ghrab-ai-core-1.0.0/ghrab-ai-conformance-1.0.0.js",
