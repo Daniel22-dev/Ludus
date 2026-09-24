@@ -1,6 +1,6 @@
 GARP 2.7 – CURRENT ASSURANCE STATUS
-Application: LUDUS 1.16.28
-Date: 2026-09-23
+Application: LUDUS 1.16.29
+Date: 2026-09-24
 Consolidation: 2026-09-23-r2
 Overall: AMBER
 
@@ -8,16 +8,22 @@ CURRENT AUTHORITY
 - Active authority: GARP 2.7 under security/garp27/.
 - Consolidated reference package: GARP-2.7-KONSOLIDOVANY-FINAL-r2-G02-FIX.zip.
 - GARP 2.5.1 remains historical regression tooling.
+- Commit-specific CI PASS is authoritative only in GitHub Actions evidence; this source file never self-certifies CI.
 
-VERIFIED FOUNDATION
+VERIFIED FOUNDATION CONTRACT
 - Consolidated PACKAGE_SELFTEST: 19/19 PASS.
 - Consolidated CONTRACT_TEST: 25/25 PASS.
 - G-02 policy-validator negative cases: 5/5 PASS in the reference package.
 - LUDUS foundation policy is semantic, inventory-valid and semver-valid under the r2 validator.
-- Architecture-integrity remains bound to the unchanged external CI trust anchor.
-- Mutation/negative controls remain required.
+- Architecture-integrity requires the external GARP27_TRUSTED_POLICY_SHA256 expectation in release CI.
+- Mutation/negative controls remain mandatory.
 - Legacy GARP 2.5.1 selftest remains regression evidence.
 - Missing school server does not disable or weaken FOUNDATION controls.
+
+RELEASE-CI SEMANTICS
+- Source-level state may be PASS_LOCAL_TRUST_PENDING.
+- A concrete release is admissible only after protected GitHub CI verifies Node 24, the external policy trust anchor and the remaining release gates.
+- A historical green run is evidence for that commit only; future commits must requalify.
 
 SERVER / LIVE BOUNDARY
 - Active school-server implementation: DEFERRED_BY_OWNER_DECISION.
@@ -26,4 +32,4 @@ SERVER / LIVE BOUNDARY
 - School-server production: NOT APPROVED.
 
 OVERALL: AMBER
-Reason: r2 closes G-02 in policy admission; consolidated FOUNDATION must pass CI before promotion, while server-dependent SHIELD-LIVE/RI-LIVE remain intentionally deferred/not tested.
+Reason: FOUNDATION has a complete r2/G-02 contract and mandatory external CI admission, while server-dependent SHIELD-LIVE/RI-LIVE remain intentionally deferred/not tested.

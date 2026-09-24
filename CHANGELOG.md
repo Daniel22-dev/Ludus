@@ -1,24 +1,24 @@
 # Changelog
 
-## 1.16.28 — 2026-09-23 — GARP 2.7 r2 / G-02 hardening
+## 1.16.29 — 2026-09-24 — Final clean-up and assurance metadata audit
 
-- Nahrazen konsolidační master r1 revizí r2 bez změny hlavní verze GARP 2.7.
-- G-02 uzavřen: policy validator nově ověřuje appId proti důvěryhodnému inventáři, platný semver, zákaz 0.0.0, semantický obsah všech deseti sekcí a exact/substr placeholdery.
-- Foundation policy Ludusu byla převedena z mode-only tvaru na konkrétní semantický kontrakt a prochází r2 admission validátorem.
-- Referenční kontraktní selftest je rozšířen na 25/25 včetně 5/5 G-02 negativních případů; master package eviduje 19/19 package selftest.
-- Architecture policy se funkčně nemění, takže externí SHA-256 trust anchor zůstává zachován.
-- School-server implementace je dál DEFERRED_BY_OWNER_DECISION; SHIELD-LIVE a RI-LIVE zůstávají NOT_TESTED.
+- Bez změny pedagogické logiky, herních enginů, AI operací nebo GARP 2.7 r2 security policy.
+- Opraveny čtyři stavové nesrovnalosti odhalené finálním auditem: veřejná release evidence už netvrdí `not-yet-uploaded`, SHIELD/ASSURANCE už nevedou dávno proběhlý Node 24 CI a externí trust jako „pending“ a release metadata sama sobě nepřidělují CI PASS.
+- `release-acceptance.json` používá stabilní semantiku `repository-tracked` + `REQUIRED_BY_RELEASE_CI`; commit-specific PASS zůstává výhradně autoritou GitHub Actions evidence.
+- P5 acceptance gate nově ověřuje, že repository-tracked release není označen jako odložený upload a že Node 24 i externí policy trust jsou povinné v release CI.
+- SHIELD/ASSURANCE evidence rozlišuje source-level `PASS_LOCAL_TRUST_PENDING` od externě ověřeného release commitu; jediným trvalým blockerem zůstává úmyslně odložený school-server/LIVE scope.
+- Historické duplicitní bloky 1.16.28 byly sloučeny do jednoho záznamu.
 
+## 1.16.28 — 2026-09-23 — GARP 2.7 CONSOLIDATED r2 / G-02 hardening
 
-## 1.16.28 — 2026-09-23 — GARP 2.7 CONSOLIDATED FOUNDATION
-
-- Aktivní bezpečnostní autorita je povýšena na GARP 2.7; historický GARP 2.5.1 zůstává beze změny jako regresní baseline.
-- Přidány konsolidované kontrakty, architecture-integrity gate, mutační negativní testy a externí CI trust anchor.
-- Běžný GitHub/CI build je oddělen od finální release-assurance fáze; SBOM, AI fingerprint a evidence manifest se před finálním assurance buildem generují čerstvě.
-- School-server implementace zůstává výslovně DEFERRED_BY_OWNER_DECISION; SHIELD-LIVE a RI-LIVE jsou NOT_TESTED a neoslabují FOUNDATION.
+- Aktivní bezpečnostní autorita byla povýšena na GARP 2.7; historický GARP 2.5.1 zůstal beze změny jako regresní baseline.
+- Přidány konsolidované kontrakty, architecture-integrity gate, mutační negativní testy, externí CI trust anchor a oddělená release-assurance fáze s čerstvým SBOM/AI fingerprint/evidence manifestem.
+- G-02 uzavřen: policy validator ověřuje appId proti důvěryhodnému inventáři, platný semver, zákaz 0.0.0, sémantický obsah všech deseti sekcí a exact/substr placeholdery.
+- Foundation policy Ludusu byla převedena z mode-only tvaru na konkrétní sémantický kontrakt.
+- Referenční selftesty: PACKAGE 19/19, CONTRACT 25/25 včetně 5/5 G-02 negativních případů.
+- School-server implementace zůstává DEFERRED_BY_OWNER_DECISION; SHIELD-LIVE a RI-LIVE jsou NOT_TESTED a neoslabují FOUNDATION.
 - Zpřísněna školní AI hranice a přílohy: direct provider je ve school profilu fail-closed a AI vstupy jsou omezeny na JPG/PNG/WebP/PDF do 12 MB.
-- CI cílí na Node 24 a P5 vyžaduje externí SHA-256 očekávání architecture policy.
-
+- CI cílí na Node 24; architecture policy vyžaduje externí SHA-256 očekávání a r2 tuto policy neměnil.
 
 ## 1.16.25 - A06/A07 assurance hardening
 
