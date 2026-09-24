@@ -1,9 +1,9 @@
 {
   "schema": "ghrab-shield-status-v2",
   "appId": "ludus",
-  "version": "1.16.28",
-  "date": "2026-09-23",
-  "statusScope": "GARP 2.7 consolidated r2 FOUNDATION with G-02 policy-admission hardening; school-server implementation deferred by owner decision; LIVE not tested.",
+  "version": "1.16.29",
+  "date": "2026-09-24",
+  "statusScope": "GARP 2.7 consolidated r2 FOUNDATION after final metadata/status audit; school-server implementation deferred by owner decision; LIVE not tested.",
   "protocol": {
     "version": "2.7",
     "consolidationRevision": "2026-09-23-r2",
@@ -26,7 +26,7 @@
     "referencePackageSelftest": "19/19 PASS",
     "referenceContractSelftest": "25/25 PASS",
     "garp27Contract": "PASS",
-    "garp27Architecture": "0 findings locally; external trust pending",
+    "garp27Architecture": "0 findings in source gate; external policy trust is mandatory in release CI and is not self-certified by this file",
     "garp27MutationNegativeControls": "PASS",
     "garp25HistoricalSelftest": "81/81 PASS",
     "g02PolicyAdmission": "reference validator closes mode-only/template false-PASS path"
@@ -43,10 +43,12 @@
   "tooling": {
     "garp27PolicySha256": "23ea7997e2b47a88cf588f89468c392cd23c775b4e80a3bf453314b739147be8",
     "garp27ExternalCiVariable": "GARP27_TRUSTED_POLICY_SHA256",
-    "historicalGarp25Selftest": "81/81 PASS"
+    "historicalGarp25Selftest": "81/81 PASS",
+    "releaseCiAuthority": "GitHub Actions",
+    "releaseCiRequired": true,
+    "sourceSelfCertification": false
   },
   "blockers": [
-    "actual Node 24 CI pending for this candidate",
     "school-server/LIVE controls intentionally deferred"
   ]
 }

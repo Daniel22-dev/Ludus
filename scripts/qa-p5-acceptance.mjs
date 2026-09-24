@@ -13,7 +13,13 @@ if(acceptance.schoolServer?.status==='deferred-by-owner-decision'){
   need(acceptance.garp?.serverImplementation==='DEFERRED_BY_OWNER_DECISION','acceptance.garp-server-deferred',acceptance.garp?.serverImplementation||'missing');
   need(acceptance.garp?.shieldLive==='NOT TESTED'&&acceptance.garp?.riLive==='NOT TESTED','acceptance.garp-live-not-tested',`${acceptance.garp?.shieldLive||'missing'}/${acceptance.garp?.riLive||'missing'}`);
 }
-need(acceptance.github?.status==='not-yet-uploaded','acceptance.github-pending',acceptance.github?.status||'missing');
+const allowedGithubStatuses=new Set(['not-yet-uploaded','repository-tracked']);
+need(allowedGithubStatuses.has(acceptance.github?.status),'acceptance.github-status',acceptance.github?.status||'missing');
+if(acceptance.github?.status==='repository-tracked'){
+  need(acceptance.github?.uploadDeferredUntilEcosystemComplete===false,'acceptance.github-not-deferred',String(acceptance.github?.uploadDeferredUntilEcosystemComplete));
+  need(acceptance.garp?.trustedPolicyAdmission==='REQUIRED_BY_RELEASE_CI','acceptance.garp-ci-trust-required',acceptance.garp?.trustedPolicyAdmission||'missing');
+  need(acceptance.garp?.node24Alpine==='REQUIRED_BY_RELEASE_CI','acceptance.garp-node24-required',acceptance.garp?.node24Alpine||'missing');
+}
 for(const file of ['dist/config/release-acceptance.json','dist/qa-p5-runtime-report.json','dist/qa-p3-browser-report.json','dist/qa-p5-release-report.json']){const p=path.join(root,file);need(fs.existsSync(p),`file.${file}`,file);if(fs.existsSync(p)&&file.endsWith('.json')&&!file.includes('release-acceptance')){const d=JSON.parse(fs.readFileSync(p,'utf8'));need(d.status==='passed'||d.status==='pass',`status.${file}`,d.status||'missing')}}
 const runtimePath=path.join(root,'dist','qa-p5-runtime-report.json');if(fs.existsSync(runtimePath)){const r=JSON.parse(fs.readFileSync(runtimePath,'utf8'));need(r.scriptsExecuted===true,'runtime.scripts-executed',String(r.scriptsExecuted));need(r.transport==='local-http','runtime.transport',r.transport||'missing');need(Number(r.summary?.blockers||0)===0,'runtime.zero-blockers',JSON.stringify(r.summary||{}));}
 const forbidden=[];for(const name of ['.env','.env.local','.npmrc'])if(fs.existsSync(path.join(root,name)))forbidden.push(name);need(forbidden.length===0,'source.no-secret-files',forbidden.join(','));

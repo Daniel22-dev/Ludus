@@ -4,7 +4,7 @@ GARP 2.7 GHRAB – PRŮVODNÍ LIST APLIKACE
 appId:                    ludus
 Název:                    LUDUS
 Repozitář:                Daniel22-dev/Ludus
-Aktuální verze:           1.16.28
+Aktuální verze:           1.16.29
 Verze standardu:          GARP 2.7 CONSOLIDATED r2 / G-02 HARDENING
 Referenční balík:         GARP-2.7-KONSOLIDOVANY-FINAL-r2-G02-FIX.zip
 SHA-256 referenčního ZIPu: 0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8
@@ -54,7 +54,8 @@ Změna architecture-policy -> aktualizovat externí GARP27_TRUSTED_POLICY_SHA256
 Nasazení na školní server -> spustit samostatnou LIVE fázi; FOUNDATION status nelze přenést jako LIVE PASS.
 
 7. STAV
-FOUNDATION candidate:     PASS po úspěšném CI r2
+FOUNDATION source state:  PASS_LOCAL_TRUST_PENDING
+Release authority:        chráněné GitHub CI; každý commit musí znovu prokázat externí trust a release gates
 Overall assurance:        AMBER do samostatného LIVE ověření
 School server:            DEFERRED_BY_OWNER_DECISION
 Production LIVE approval: NO

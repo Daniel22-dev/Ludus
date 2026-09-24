@@ -41,7 +41,7 @@ const stdModule=read('dist/access/deployment-config.js');
 const schoolModule=schoolRequested?read('dist-school-server/access/deployment-config.js'):null;
 const schoolInfo=schoolRequested?json('dist-school-server/server-ready-build-info.json'):null;
 
-check('version.package',pkg.version==='1.16.28',pkg.version);
+check('version.package',pkg.version==='1.16.29',pkg.version);
 check('build.standard.exists',fs.existsSync(path.join(root,'dist/index.html')));
 check('access-gate.stylesheet-injected',/<link\b[^>]*data-ghrab-access-gate-css\b[^>]*href=[\"']\.\/access\/access-gate\.css[\"'][^>]*>/i.test(read('dist/index.html')));
 check('server.scope',true,schoolRequested?'SCHOOL_SERVER_REQUESTED':'DEFERRED_BY_OWNER_DECISION');

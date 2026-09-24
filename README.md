@@ -1,18 +1,18 @@
 # LUDUS
-> **1.16.28 / GARP 2.7 r2:** closes the G-02 policy-admission gap. Foundation policy now uses inventory-valid app identity, semver and recognized semantic fields in every required section; mode-only/template policies fail closed. School-server and LIVE controls remain DEFERRED/NOT_TESTED.
+> **1.16.29 / GARP 2.7 r2 FINAL AUDIT:** final cleanup of release/assurance metadata after the G-02 hardening. Runtime and pedagogical behavior are unchanged. Source metadata no longer pretends to know the result of its own CI; protected GitHub CI remains the external release authority. School-server and LIVE controls remain DEFERRED/NOT_TESTED.
 
 
-**Aktuální verze:** 1.16.28  
+**Aktuální verze:** 1.16.29  
 **Platforma:** GHRAB Platform 1.1.2
 
 
-Dílna výukových her pro interní školní použití Gymnázia, Ostrava-Hrabůvka. Verze 1.16.28 je konsolidovaný GARP 2.7 FOUNDATION kandidát: zachovává ověřené regresní ochrany GARP 2.5.1, přidává architecture-integrity, externí CI trust gate, mutační testy a explicitně ponechává školní server a SHIELD-LIVE jako DEFERRED/NOT_TESTED.
+Dílna výukových her pro interní školní použití Gymnázia, Ostrava-Hrabůvka. Verze 1.16.29 uzavírá finální audit GARP 2.7 r2: zachovává r2/G-02 hardening i historické regresní ochrany GARP 2.5.1 a čistí stavovou evidenci tak, aby zdrojový kód sám sobě nikdy nepřiděloval CI PASS. School-server a SHIELD-LIVE zůstávají DEFERRED/NOT_TESTED.
 
 ## Aktuální stav
 
-Verze: **1.16.28**
+Verze: **1.16.29**
 
-LUDUS 1.16.28 nemění pedagogickou logiku ani herní enginy. Aktivní bezpečnostní autoritou je GARP 2.7 CONSOLIDATED FOUNDATION; historické GARP 2.5.1 nástroje zůstávají zachovány jako regresní baseline. FOUNDATION je nezávislý na školním serveru. Serverové a SHIELD-LIVE kontroly jsou záměrně DEFERRED/NOT_TESTED do případného schválení vedením. Do samostatného LIVE schválení nadále platí pouze syntetická data.
+LUDUS 1.16.29 nemění pedagogickou logiku ani herní enginy. Aktivní bezpečnostní autoritou je GARP 2.7 CONSOLIDATED r2; historické GARP 2.5.1 nástroje zůstávají regresní baseline. FOUNDATION je nezávislý na školním serveru a každý konkrétní release commit musí projít chráněným GitHub CI s externím trust anchorem. Serverové a SHIELD-LIVE kontroly jsou záměrně DEFERRED/NOT_TESTED do případného schválení vedením.
 
 - build: `npm run build`
 - testy: `npm test`
@@ -26,7 +26,7 @@ LUDUS 1.16.28 nemění pedagogickou logiku ani herní enginy. Aktivní bezpečno
 
 **LUDUS není nástroj pro klasifikované testování.** Exportované hry jsou samostatné statické HTML soubory. Učitelský režim lze otevřít parametrem `?teacher=1` a řešení jsou technicky součástí souboru. LUDUS je určen pro výuku, procvičování, opakování a formativní zpětnou vazbu, nikoli pro zabezpečené známkované testy.
 
-Při práci s obsahem je nutná anonymizace. Do AI generování se nevkládají jména žáků, individuální hodnocení ani jiné osobní či citlivé údaje. Kandidát 1.16.28 má navíc explicitní omezení: **REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT** a **TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY**, dokud GARP gate nebudou uzavřeny.
+Při práci s obsahem je nutná anonymizace. Do AI generování se nevkládají jména žáků, individuální hodnocení ani jiné osobní či citlivé údaje. Release 1.16.29 má explicitní omezení: **REÁLNÁ STUDENTSKÁ DATA: NEPOUŽÍVAT** a **TESTOVACÍ PROVOZ POUZE SE SYNTETICKÝMI DATY**, dokud GARP gate nebudou uzavřeny.
 
 ## Manifest enginů a volba hry
 
@@ -108,7 +108,7 @@ Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuál
 
 Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
 
-LUDUS 1.16.28 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
+LUDUS 1.16.29 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
 
 ## Licence
 

@@ -1,5 +1,5 @@
 {
-  "schema":"ghrab-garp27-capability-inventory-v1","garpVersion":"2.7","appId":"ludus","appVersion":"1.16.28",
+  "schema":"ghrab-garp27-capability-inventory-v1","garpVersion":"2.7","appId":"ludus","appVersion":"1.16.29",
   "browser":{"serviceWorker":true,"localStorageUsed":true,"sessionStorageUsed":true,"clientStateIsSecurityAuthority":false,"fileInputs":[{"kind":"json-import","execution":"local-only"},{"kind":"image","execution":"ai-input","allowedMimeTypes":["image/jpeg","image/png","image/webp"]},{"kind":"pdf","execution":"ai-input","allowedMimeTypes":["application/pdf"]}]},
   "ai":{"coreVersion":"1.0.0","operations":["game-content-generation","topic-analysis"],"toolCalling":false,"autonomousLoops":false,"persistentModelMemory":false,"schoolTransport":"school-gateway","legacyDemoTransport":"direct-gemini"},
   "serverContract":{"appDefinedServerRoutes":[],"platformEndpoints":["ai/generate","ai/health","health","session/logout","session","telemetry"],"backgroundJobs":[],"adminConsole":false,"privilegedDeployOperations":false,"status":"DEFERRED_BY_OWNER_DECISION","platformEndpointsStatus":"PRESERVED_COMPATIBILITY_CONTRACT_NOT_LIVE_TESTED"},

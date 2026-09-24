@@ -19,7 +19,7 @@ const acceptance=json('public/config/release-acceptance.json');
 const ops=json('public/ai-operations.json');
 const ai=read('src/ai-core-integration.js');
 const html=read('src/index.html');
-check('identity.version',pkg.version==='1.16.28',pkg.version);
+check('identity.version',pkg.version==='1.16.29',pkg.version);
 check('identity.node24',pkg.engines?.node==='>=24 <25',pkg.engines?.node);
 check('contract.garp27',profile.garpVersion==='2.7'&&policy.garpVersion==='2.7'&&inventory.garpVersion==='2.7');
 check('contract.consolidation',profile.consolidationRevision==='2026-09-23-r2'&&masterLock.consolidationRevision==='2026-09-23-r2');
