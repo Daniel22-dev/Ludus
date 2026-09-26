@@ -53,8 +53,12 @@ for (const manifestPath of files.filter((file) => file.endsWith(`${path.sep}mani
 
 const securityHeaders = readJson(path.join(root, 'public', 'config', 'security-headers.json'));
 const schoolCsp = String(securityHeaders.schoolServerProfile?.headers?.['Content-Security-Policy'] || '');
+const schoolStudioBase = String(readJson(schoolProfiles[0]).studioBaseUrl || '').trim();
+const schoolGuardPreload = schoolStudioBase.startsWith('/') && !schoolStudioBase.startsWith('//') ? `${schoolStudioBase.replace(/\/+$/, '')}/access/app-guard.js` : '';
 for (const htmlFile of files.filter((file) => file.toLowerCase().endsWith('.html'))) {
   let html = fs.readFileSync(htmlFile, 'utf8');
+  // Přednačtení brány musí mířit na AI Studio školního profilu; bez platné adresy se odkaz odstraní.
+  html = html.replace(/<link\b[^>]*data-ghrab-access-preload="guard"[^>]*>/gi, () => schoolGuardPreload ? `<link rel="modulepreload" href="${schoolGuardPreload}" data-ghrab-access-preload="guard">` : '');
   const escaped = schoolCsp.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
   if (/http-equiv=["']Content-Security-Policy["']/i.test(html)) {
     html = html.replace(/<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/i, `<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="school-server">`);

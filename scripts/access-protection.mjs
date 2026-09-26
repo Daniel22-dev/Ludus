@@ -12,6 +12,41 @@ function protectScriptOpen(opening) {
   return `<script type="application/ghrab-protected" data-ghrab-protected${original}${attrs}>`;
 }
 
+const PRELOAD_ATTR = 'data-ghrab-access-preload';
+
+function sameOriginRelative(url) {
+  const value = String(url || '').trim();
+  return Boolean(value) && !/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(value);
+}
+
+function escapeAttr(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
+
+/*
+ * Přednačtení zkracuje sériový řetězec sítě před odemčením aplikace:
+ * HTML → deployment-config.js → deployment.json → app-guard.js → runtime skripty.
+ * Odkazy soubory pouze stáhnou (modulepreload navíc zkompiluje modul), nic se
+ * nespustí dřív, než brána AI Studia přístup povolí. Při exportu hry se odstraní.
+ */
+function buildPreloadHints({ accessBase, guardPreloadUrl, classicScripts, moduleScripts }) {
+  const hints = [];
+  const seen = new Set();
+  const add = (rel, href, extra = '') => {
+    const key = `${rel}|${href}`;
+    if (!href || seen.has(key)) return;
+    seen.add(key);
+    const as = rel === 'preload' ? ' as="script"' : '';
+    hints.push(`<link rel="${rel}"${as} href="${escapeAttr(href)}" ${PRELOAD_ATTR}${extra}>`);
+  };
+  add('modulepreload', `${accessBase}deployment-config.js`);
+  if (guardPreloadUrl) add('modulepreload', guardPreloadUrl, '="guard"');
+  for (const href of moduleScripts) add('modulepreload', href);
+  for (const href of classicScripts) add('preload', href);
+  // Bez oddělovačů: po odstranění odkazů při exportu nezůstanou prázdné řádky.
+  return hints.join('');
+}
+
 function transformActualScripts(html, transform) {
   let out = '';
   let pos = 0;
@@ -40,7 +75,7 @@ function transformActualScripts(html, transform) {
   return out;
 }
 
-export function protectHtmlForStudio(source, appId = 'ludus', relativeDepth = 0) {
+export function protectHtmlForStudio(source, appId = 'ludus', relativeDepth = 0, options = {}) {
   let html = String(source);
   const rootPrefix = relativeDepth > 0 ? '../'.repeat(relativeDepth) : './';
   const accessBase = `${rootPrefix}access/`;
@@ -48,7 +83,22 @@ export function protectHtmlForStudio(source, appId = 'ludus', relativeDepth = 0)
   if (!/<link\b[^>]*data-ghrab-access-gate-css\b/i.test(html)) {
     html = html.replace(/<\/head>/i, `<link rel="stylesheet" data-ghrab-access-gate-css href="${accessBase}access-gate.css">\n<style data-ghrab-access-style>html[data-ghrab-access="checking"] body{visibility:hidden}</style>\n</head>`);
   }
-  html = transformActualScripts(html, (opening, content) => protectScriptOpen(opening) + content + '</script>');
+  const classicScripts = [];
+  const moduleScripts = [];
+  html = transformActualScripts(html, (opening, content) => {
+    const protectedOpening = protectScriptOpen(opening);
+    if (protectedOpening !== opening) {
+      const src = opening.match(/\ssrc\s*=\s*(["'])(.*?)\1/i)?.[2] || '';
+      const type = opening.match(/\stype\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase() || '';
+      if (sameOriginRelative(src)) (type === 'module' ? moduleScripts : classicScripts).push(src);
+    }
+    return protectedOpening + content + '</script>';
+  });
+  if (relativeDepth === 0) classicScripts.unshift(`${rootPrefix}runtime/ludus-privacy.js`);
+  if (options.preload !== false && !new RegExp(`<link\\b[^>]*${PRELOAD_ATTR}`, 'i').test(html)) {
+    const hints = buildPreloadHints({ accessBase, guardPreloadUrl: options.guardPreloadUrl || '', classicScripts, moduleScripts });
+    html = html.replace(/<link\b[^>]*data-ghrab-access-gate-css\b[^>]*>/i, (tag) => `${hints}${tag}`);
+  }
   const bootstrap = `<script type="module" data-ghrab-access-bootstrap>
 const APP_ID=${JSON.stringify(appId)};
 const ACCESS_BASE=${JSON.stringify(accessBase)};
@@ -107,6 +157,7 @@ export function stripStudioProtection(source) {
   let html = String(source)
     .replace(/\sdata-ghrab-access="(?:checking|granted|denied)"/i, '')
     .replace(/<link\s+[^>]*data-ghrab-access-gate-css[^>]*>\s*/i, '')
+    .replace(/<link\b[^>]*data-ghrab-access-preload\b[^>]*>\s*/gi, '')
     .replace(/<style\s+data-ghrab-access-style>[\s\S]*?<\/style>\s*/i, '')
     .replace(/<noscript\s+data-ghrab-access-noscript>[\s\S]*?<\/noscript>\s*/i, '');
   html = transformActualScripts(html, (opening, content, whole) => {

@@ -79,7 +79,7 @@
     "performanceBudget": {
       "distBytes": 4900000,
       "entryHtmlBytes": 315000,
-      "entryCriticalBytes": 522000,
+      "entryCriticalBytes": 548000,
       "largestInlineScriptBytes": 270000,
       "precacheBytes": 1220000,
       "largestFileBytes": 1050000,
