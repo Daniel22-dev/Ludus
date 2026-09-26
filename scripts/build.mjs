@@ -27,6 +27,14 @@ const sha = (file) => createHash('sha256').update(fs.readFileSync(file)).digest(
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 const writeJson = (file, value) => fs.writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 const SECURITY_HEADERS = readJson(path.join(ROOT, 'public', 'config', 'security-headers.json'));
+// Přednačtení brány AI Studia: adresa se odvozuje z nasazené konfigurace, nikdy se nezapisuje napevno.
+// School-server build ji přepisuje podle vlastního profilu (scripts/build-school-profile.mjs).
+function guardPreloadUrlFor(configFile) {
+  const base = String(readJson(configFile).studioBaseUrl || '').trim();
+  if (!base.startsWith('/') || base.startsWith('//')) return '';
+  return `${base.replace(/\/+$/, '')}/access/app-guard.js`;
+}
+const GUARD_PRELOAD_URL = guardPreloadUrlFor(path.join(ROOT, 'public', 'config', 'deployment.json'));
 
 for (const file of [
   SRC_INDEX,
@@ -67,7 +75,7 @@ const marker = '/* ---- init ---- */';
 if (!html.includes(marker)) fail('AI integration marker is missing.');
 html = html.replace(marker, `${integration}\n;\n${marker}`);
 html = html.replace(/(<html[^>]*>)/i, `$1\n<!-- BUILD: ${buildTime} -->`);
-html = protectHtmlForStudio(html, APP_ID, 0);
+html = protectHtmlForStudio(html, APP_ID, 0, { guardPreloadUrl: GUARD_PRELOAD_URL });
 html = html.replace(/\s*<script\b[^>]*type="application\/ghrab-protected"[^>]*data-ludus-privacy-runtime[^>]*><\/script>\s*/i, '\n');
 fs.writeFileSync(path.join(DIST, 'index.html'), html, 'utf8');
 
@@ -150,7 +158,7 @@ for (const file of fs.readdirSync(ENGINES_DIR)) {
     writeJson(path.join(contentDir, `${engine.id}.json`), pack);
     contentIndex.push({ engineId: engine.id, file: `engines/${file}`, contentPack: `content/${engine.id}.json`, status: pack.status, builderCompatible: pack.builderCompatible });
     const prepared = injectRuntime(fs.readFileSync(source, 'utf8'), engine);
-    fs.writeFileSync(path.join(DIST_ENGINES, file), protectHtmlForStudio(prepared, APP_ID, 1), 'utf8');
+    fs.writeFileSync(path.join(DIST_ENGINES, file), protectHtmlForStudio(prepared, APP_ID, 1, { guardPreloadUrl: GUARD_PRELOAD_URL }), 'utf8');
     engineCount += 1;
   } else if (file === 'manifest.json') {
     fs.copyFileSync(source, path.join(DIST_ENGINES, file));

@@ -42,6 +42,8 @@
     "qa:runtime": "node scripts/qa-p5-runtime.mjs",
     "build:official-private": "LUDUS_MEDIA_PROFILE=official LUDUS_PRIVATE_MEDIA_ACK=1 node scripts/build.mjs",
     "qa:xss": "node scripts/qa-p5-xss-sinks.mjs",
+    "qa:behavior": "node scripts/qa-behavior-fingerprint.mjs --check qa/behavior-baseline.json",
+    "qa:behavior:record": "node scripts/qa-behavior-fingerprint.mjs --record qa/behavior-baseline.json",
     "qa:lock": "node scripts/qa-p5-lock.mjs",
     "pretest:reporter": "npm run build",
     "qa:garp": "node scripts/qa-garp-security.mjs",

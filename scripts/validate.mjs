@@ -551,6 +551,9 @@ async function main() {
   need(distIndex.indexOf(accessBootstrapTag, accessBootstrapPos + 1) === -1, 'dist/index.html: přístupový bootstrap musí být vložen právě jednou');
   need(src.includes('function stripDeploymentAccessGate'), 'src/index.html: chybí odstranění brány ze studentského exportu');
   need(src.includes('const exportEngine=stripDeploymentAccessGate(engine)'), 'src/index.html: export nepoužívá očištěný engine');
+  const guardPreloadExpected = `${String(JSON.parse(read('public/config/deployment.json')).studioBaseUrl || '').replace(/\/+$/, '')}/access/app-guard.js`;
+  need(src.includes('link[data-ghrab-access-preload]'), 'src/index.html: studentský export neodstraňuje přednačítací odkazy');
+  need(distIndex.includes('<link rel="modulepreload" href="./access/deployment-config.js" data-ghrab-access-preload>') && distIndex.includes('<link rel="preload" as="script" href="./runtime/ludus-privacy.js" data-ghrab-access-preload>') && distIndex.includes(`<link rel="modulepreload" href="${guardPreloadExpected}" data-ghrab-access-preload="guard">`), 'dist/index.html: chybí přednačtení řetězce přístupové brány');
   for (const file of uniqueHtml) {
     const deployed = read('dist/engines/' + file);
     need(/data-ghrab-access="checking"/.test(deployed), `dist/engines/${file}: chybí fail-closed stav`);
@@ -559,6 +562,12 @@ async function main() {
     const student = stripStudioProtection(deployed);
     need(!/data-ghrab-access-bootstrap|application\/ghrab-protected|access-gate\.css/.test(student), `dist/engines/${file}: ochranu nelze bezpečně odstranit pro export`);
     need(/<script(?:\s|>)/i.test(student), `dist/engines/${file}: po očištění chybí spustitelný studentský skript`);
+    // Přednačtení (1.16.30): jen stažení bez spuštění, adresa brány z konfigurace, při exportu se odstraní.
+    need(/<link rel="modulepreload" href="\.\.\/access\/deployment-config\.js" data-ghrab-access-preload>/.test(deployed), `dist/engines/${file}: chybí přednačtení deployment-config.js`);
+    need(deployed.includes(`<link rel="modulepreload" href="${guardPreloadExpected}" data-ghrab-access-preload="guard">`), `dist/engines/${file}: přednačtení brány neodpovídá config/deployment.json`);
+    need(deployed.includes('<link rel="preload" as="script" href="../runtime/ludus-privacy.js" data-ghrab-access-preload>'), `dist/engines/${file}: chybí přednačtení privacy runtime`);
+    need(!/<link\b[^>]*data-ghrab-access-preload[^>]*\bas="(?!script")/i.test(deployed) && !/<link\b[^>]*rel="(?!preload"|modulepreload")[^"]*"[^>]*data-ghrab-access-preload/i.test(deployed), `dist/engines/${file}: přednačtení smí být jen preload/modulepreload skriptů`);
+    need(!/data-ghrab-access-preload/.test(student), `dist/engines/${file}: přednačtení zůstalo ve studentském exportu`);
     if(file==='stranger-things.html'){
       need(deployed.includes('document.readyState==="loading"') && deployed.includes('else startEscapeEngine()'), 'dist/engines/stranger-things.html: pozdní aktivace po guardu musí spustit engine i po DOMContentLoaded');
     }
