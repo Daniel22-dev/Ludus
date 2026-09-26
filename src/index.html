@@ -2594,7 +2594,7 @@ function toContentV2(pack){
 function stripDeploymentAccessGate(source){
   const parsed=new DOMParser().parseFromString(String(source||''),'text/html');
   parsed.documentElement.removeAttribute('data-ghrab-access');
-  parsed.querySelectorAll('link[data-ghrab-access-gate-css],style[data-ghrab-access-style],script[data-ghrab-access-bootstrap],noscript[data-ghrab-access-noscript]').forEach(function(node){node.remove();});
+  parsed.querySelectorAll('link[data-ghrab-access-gate-css],link[data-ghrab-access-preload],style[data-ghrab-access-style],script[data-ghrab-access-bootstrap],noscript[data-ghrab-access-noscript]').forEach(function(node){node.remove();});
   parsed.querySelectorAll('script[type="application/ghrab-protected"]').forEach(function(sourceScript){
     const executable=parsed.createElement('script');
     [...sourceScript.attributes].forEach(function(attr){
