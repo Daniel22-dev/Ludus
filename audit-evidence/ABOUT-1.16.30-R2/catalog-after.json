@@ -1,0 +1,301 @@
+{
+  "schema": "ludus-engine-catalog-regression-v1",
+  "source": "/mnt/data/ludus-review/Ludus-main",
+  "node": "v22.16.0",
+  "scope": "Offline Node VM tests; real catalog, diagnostic predicates, prechecks and click handler; AI and DOM are test doubles. Not browser or LIVE certification.",
+  "total": 58,
+  "passed": 58,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "diagnostics.source-lines",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "diagnostic.GAME_ENGINES: flowModel, capabilities a smlouva hotové hry",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "diagnostic.Mechanika bez enginu nevyžaduje engine (fallback)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.arcanum:academy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.arcanum:academy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.knights:academy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.knights:academy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.sundered:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.sundered:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.timepatrol:timeline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.timelineRestore",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.timepatrol:timeline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.frostline:detective",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.roomsCluesAccusation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.frostline:detective",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.illusion:detective",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.scenesEvidenceAccusation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.illusion:detective",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.maple:escape",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.roomsCodesFinalLock",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.maple:escape",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.laughworks:lab",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.stationsSynthesis",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.laughworks:lab",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.wild:arena",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.arenaRoundsBoss",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.wild:arena",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.tombraider:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.tombraider:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.bananacrew:collection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.drillTrainer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.bananacrew:collection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.laughworks:roleSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.drillTrainer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.laughworks:roleSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.relic:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.relic:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.rollq:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "flow-label.mapStationsFinalChallenge",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.rollq:quest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "catalog.no-cross-mechanic-substitution",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "lab.connected-engine-retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "lab.engine-less-pair-retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "fallback.precheck-accepts-content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "fallback.playable-precheck-refuses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "fallback.handler-generated-content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "fallback.handler-never-downloaded-game",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "fallback.handler-restores-button",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "planned.precheck-accepts-content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "planned.playable-precheck-refuses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "planned.handler-content-only",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "ready.handler-still-downloads-game",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "incomplete.handler-refuses-generation",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

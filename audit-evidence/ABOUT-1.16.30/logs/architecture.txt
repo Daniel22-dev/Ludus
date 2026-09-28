@@ -1,0 +1,8 @@
+{
+  "schema": "ghrab-garp27-architecture-integrity-result-v1",
+  "decision": "PASS_LOCAL_TRUST_PENDING",
+  "trustStatus": "NOT_TESTED",
+  "sourceFilesChecked": 39,
+  "artifactFilesChecked": 95,
+  "findings": 0
+}

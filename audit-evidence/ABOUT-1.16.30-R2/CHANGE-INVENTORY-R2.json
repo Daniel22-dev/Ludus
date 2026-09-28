@@ -1,0 +1,368 @@
+{
+  "baseCommit": "22586442be63f1a6127059f781652d0e2d637ddb",
+  "baseTree": "4eb1b77ee2c2043d91b93b7380e8461958d781f9",
+  "changes": [
+    {
+      "path": "APP-ludus-GARP.txt",
+      "status": "modified",
+      "beforeSha256": "0bc3a878b334d7dfebd0b9d34f59dd843e25eaf73e37449aae810d4835d15770",
+      "afterSha256": "32bf22309e5961711848cc65f4c15286436fb590b9d322e20d733a31bb451e1f"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "status": "modified",
+      "beforeSha256": "d0c73fc111fd360c6b197432d2e0ef19fc4663bd1b53305bdb79718f7e5ab966",
+      "afterSha256": "97f0ab54a2448d413318d5e4a8a1ef6f382a4a733f0c8fe93d8ee410f7e84dff"
+    },
+    {
+      "path": "README.md",
+      "status": "modified",
+      "beforeSha256": "8008caffc5beb67416587ae1423ba3a1c8abb4c9c124107027dc35692a7ce7f5",
+      "afterSha256": "9b58c157cece7a553cf57353fabb269a22730bd2e05e9117ac354a7ef0e91158"
+    },
+    {
+      "path": "README_PWA.md",
+      "status": "modified",
+      "beforeSha256": "aacf540bc19ee5fb486e8bc3e75e7db17ff5d245b69e0e09116b3c6803537648",
+      "afterSha256": "d9761e3c96f7608a60eb99201a7b9393763c4e15fe9a888727981ce7e20bdc68"
+    },
+    {
+      "path": "REPORT-O-APLIKACI-1.16.30.md",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "1298e7d6f4450eac30979e0b35a76d669925101de9ac58b8204e18b790b43439"
+    },
+    {
+      "path": "content/engine-index.json",
+      "status": "modified",
+      "beforeSha256": "64236a2ea0c8e25797bd48addfade72d9947414f40d0af65afe9b9d6110af6fc",
+      "afterSha256": "6e7462dd2fce7fc0248d661c49b86e28a28d0a918605528c078a5fdb5cd7a95c"
+    },
+    {
+      "path": "engines/chronos.html",
+      "status": "modified",
+      "beforeSha256": "ab7513db5d4c8ed3c338248d3607ea8c8fe7b14f423778bbe0f23aa920444d8d",
+      "afterSha256": "116af3b0dd5dc58231eb3a4994967bbd7d4daaaa1dffc9c844341ffc76482ab6"
+    },
+    {
+      "path": "engines/dnd.html",
+      "status": "modified",
+      "beforeSha256": "b914038db0b630959736d99ee397d76c30b8b72f0a0bbaf450727e9efab76944",
+      "afterSha256": "a90f80ed7c0b6b25609f4ac0cf87d7cd61f91a7ab7253627450e92ee4af01ce2"
+    },
+    {
+      "path": "engines/hogwarts.html",
+      "status": "modified",
+      "beforeSha256": "5debf1f0927bafaeaabe2126aefaa0c120a38ade2a31b2a39d66870684584d44",
+      "afterSha256": "c57991f1a5084599ce2da892350415f997bdae4fc6ee034022a82d681cedd26b"
+    },
+    {
+      "path": "engines/indiana-jones.html",
+      "status": "modified",
+      "beforeSha256": "adf62ff290fcd35df4bac229fdf924f8cb28f5f90103c61fd0383ed7dd81cdbc",
+      "afterSha256": "4eab7516a75552aa230c0d6dc341e7dd769c27ecdb6fbf12dbf48ae4de1326f7"
+    },
+    {
+      "path": "engines/jumanji.html",
+      "status": "modified",
+      "beforeSha256": "60567cb7b8663d56aa8aa2296ebc5ddde3fff5c52e7edd82c95f9c3c645ef462",
+      "afterSha256": "03b0a0a2a91ff48fcc62d0821821af51d0a889e44b4b019461ca00dcec9e6a46"
+    },
+    {
+      "path": "engines/laughworks.html",
+      "status": "modified",
+      "beforeSha256": "314829720f74edd312b4ad878298e0498611e599d4b72fc1c79b0d8c76bf606c",
+      "afterSha256": "fa7a8fea83de1e3c9f03ae691fdb7fe48992ad0774fb2e9b534e08ce660e5c92"
+    },
+    {
+      "path": "engines/lotr.html",
+      "status": "modified",
+      "beforeSha256": "28676d073ca2ad1111e3d0bfbdfb2cd1a7c50aab9de0e22ca4f4e1546f5ecec0",
+      "afterSha256": "4ab004dd2896173aa8cebb961ef9c66e9517af8067f86c081d0163cc7529f66f"
+    },
+    {
+      "path": "engines/matrix.html",
+      "status": "modified",
+      "beforeSha256": "9d43ccf89903fd7ea5991c50c9be07de4ab52d2442a012f48970633544ca5d5e",
+      "afterSha256": "2cf2d0e1ded5f02968c217db2b8b67be200b34774482af814cba7f65ca8b9fd5"
+    },
+    {
+      "path": "engines/orient-express.html",
+      "status": "modified",
+      "beforeSha256": "e8b4e94eea9bae1dc663aaa5c85fe5c9fd1f4bbfd9d8836cfa687d81ceccd330",
+      "afterSha256": "a22a1a4e31ebc3253cd6cc60ccbd5c2183d5ee13425efabfb5696cbacd4b3d96"
+    },
+    {
+      "path": "engines/star-wars.html",
+      "status": "modified",
+      "beforeSha256": "63284b313ce8611ba25c3e273413dd9dd29654361b7f6ffe0173676a595625e6",
+      "afterSha256": "3ef7a9060bfebd419989b200986522389ae722a2254a18c00498bd099655348b"
+    },
+    {
+      "path": "engines/stranger-things.html",
+      "status": "modified",
+      "beforeSha256": "2c51426df217f233432afb1d78a338e2520587e25ef9cc520c65756b19dd8a19",
+      "afterSha256": "c3af2ea76c67eb17f1bcab8b8db9ad37842f33902193b43d495c8627ca316169"
+    },
+    {
+      "path": "ghrab-platform.consumer.json",
+      "status": "modified",
+      "beforeSha256": "64f077df1830ff6806fa99be287c69e7da7c801c64e0258e92e4bbbe7ef85a5c",
+      "afterSha256": "b34c461da725c87c8ac6715adab132a17be9f0a951dd3296fd203687f2bedca3"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified",
+      "beforeSha256": "f866233b9d7aa66bc05868238ba7b24416297f62cb3dfacb1d17ea89e9a80680",
+      "afterSha256": "5df00124df9bafb16de13a92efbd6271408d469ee7bbd8e934b6c14ec467e27d"
+    },
+    {
+      "path": "package.json",
+      "status": "modified",
+      "beforeSha256": "55bd7c74567fbe9a71af0ddfe57bde485406e7b8288e27fcda4e6014bcefa220",
+      "afterSha256": "3198166d05afb0f659d64f44861df588a7c3777c8ef2f0debd2bd2117f1276ac"
+    },
+    {
+      "path": "public/access/error-reporter-adapter.js",
+      "status": "modified",
+      "beforeSha256": "2ed21ad9d4908e01059381345d61ce598dcdaff5ab817e8339f7757b3278b8d4",
+      "afterSha256": "45b387f7a1cb3627ff61884d2fbe8f450b87d7c2f1dd18c564802c090da5b7be"
+    },
+    {
+      "path": "public/ai-operations.json",
+      "status": "modified",
+      "beforeSha256": "eea1c774558e9895f1e5fb2ad685539729f24eb5dcf1238f563320f63af4b5b1",
+      "afterSha256": "608a937c0227d4307022d5d7279ac30ee25661e684a3290a11c7b17a080d46ab"
+    },
+    {
+      "path": "public/config/data-manifest.json",
+      "status": "modified",
+      "beforeSha256": "197d08cde1d484a150e28a32b1b3962281e998abe94b9b7e0ea53e544c5c3994",
+      "afterSha256": "6506b9cc1f985ebaf1b8ecc0e974f667beb3197e9ef330a9cb9221a2a7530f39"
+    },
+    {
+      "path": "public/config/platform-manifest.json",
+      "status": "modified",
+      "beforeSha256": "39d5b4801e37529d6e322179ada5cd15daa59d1d9f83a82c73abe0275c8c6ba0",
+      "afterSha256": "49b672a7af6341c21cda2ea293ec34051ec3e2a98780a4517d31d80d92a4f36c"
+    },
+    {
+      "path": "public/config/release-acceptance.json",
+      "status": "modified",
+      "beforeSha256": "e4c2946507e2c7d1b80ca13cdf3a4d2da082c2af81f41e19664d253b45ee1b28",
+      "afterSha256": "02db039cb76c8b7a59fad9646cf23c12542c1d0897daca5e6bee5e754e9f0667"
+    },
+    {
+      "path": "public/config/security-headers.json",
+      "status": "modified",
+      "beforeSha256": "92c58edde212290051ee9b9b8aa130e4c3190984c17421dbb69b7e5db7138297",
+      "afterSha256": "831f4326ab40c010555256e1e6ad5d4560b3f07a1c3f95883bf742729688b604"
+    },
+    {
+      "path": "public/ghrab-platform.consumer.json",
+      "status": "modified",
+      "beforeSha256": "64f077df1830ff6806fa99be287c69e7da7c801c64e0258e92e4bbbe7ef85a5c",
+      "afterSha256": "b34c461da725c87c8ac6715adab132a17be9f0a951dd3296fd203687f2bedca3"
+    },
+    {
+      "path": "public/manifest.webmanifest",
+      "status": "modified",
+      "beforeSha256": "eda66878a09275046858a66a5f1152786a4658277896499b17233482fc18672f",
+      "afterSha256": "864178c8ca54b0a43ff7f291d6aa04eeb095424f7cf3c7c60cdf1c0678f5e4f6"
+    },
+    {
+      "path": "public/manual/index.html",
+      "status": "modified",
+      "beforeSha256": "c9bf44ce85e269002c78975ef06a206f8e360bd0244b7d9558189526f718ca0f",
+      "afterSha256": "838a56b89c705c344d3345b0ed8a9ee7d7ab9bbd8ee7a0e5ee9b6a12d9da9e93"
+    },
+    {
+      "path": "public/sw.js",
+      "status": "modified",
+      "beforeSha256": "eb89f4d060d91514ddc4d8e32dde4379fcbc384396f5195e93b86d1fdc09b5f1",
+      "afterSha256": "b947ec6d87251f0f3457e526f17bc3ea51d0e644e783354bdf35e234dc1e4dae"
+    },
+    {
+      "path": "qa/qa-manifest.json",
+      "status": "modified",
+      "beforeSha256": "423b2106249b87da3fafc62f8b316dd86d04d322aa0fe044c283488daa7d2c37",
+      "afterSha256": "5687a8a9ca433115e0a3668b4d09a535afbfff11c4358331afb40ff711cb424b"
+    },
+    {
+      "path": "reporter-test.config.json",
+      "status": "modified",
+      "beforeSha256": "600afb6e5d427792de6af50d6fe5fede7f75b17af7c80c34fcfc137ba32ec26a",
+      "afterSha256": "10595b199d56a784849a233dc42d3d7da46cbfb7ebbb0c22803e65b338ac4070"
+    },
+    {
+      "path": "runtime/ludus-about.css",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "12a2f6d701756195b99952c2d24ca91979298e61ae013289b284e61c9f83c6c9"
+    },
+    {
+      "path": "runtime/ludus-about.js",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "b16dac6383b0ef1177e6650931e7020e6a18678a2e0ce7850d9958b8c956f72b"
+    },
+    {
+      "path": "runtime/ludus-engine-runtime.js",
+      "status": "modified",
+      "beforeSha256": "f38d9178821852bcf7cee110aa85af97d73fd835dc6c8b58f062443b084d6335",
+      "afterSha256": "3daa24819ffdcb47281a38ff00ff3122ad880b50b974827cade638806b065bdf"
+    },
+    {
+      "path": "runtime/ludus-privacy.js",
+      "status": "modified",
+      "beforeSha256": "bf7db88aad39549d28c0ee3a771e7757f8a6db5c38fc0db6d145c12abe89a5e1",
+      "afterSha256": "de3565e1ba44444b91e1b692101a7239df7fa025bc60b8145b9940ea7ed1fe35"
+    },
+    {
+      "path": "scripts/access-protection.mjs",
+      "status": "modified",
+      "beforeSha256": "7bee6a4d93abc1ba4f1ccec34248108e419a3f19110d85b7f3ae7262883cba88",
+      "afterSha256": "43263c6fd51df71a279e32249f899b9c7b831716770d9ae4d47eb04efc9eec2f"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "status": "modified",
+      "beforeSha256": "a1a32ea7fd34753e09d7201c2e56727679e0ee210d69ae8fe776401921aa433c",
+      "afterSha256": "cb8503adaf3bed214af1f53f3d9aff2343aba60930ee795617f2ea79bbeef22b"
+    },
+    {
+      "path": "scripts/qa-about.mjs",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "96f5670c24679bafd3978a40e8dc3e5e3d971ece8c7126fb21d6a763695528f6"
+    },
+    {
+      "path": "scripts/qa-engine-catalog.mjs",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "317adfbcdf08a6472d0ef2d663842eb2d2bb9977e3e0ac5d060ae0307106ed13"
+    },
+    {
+      "path": "scripts/qa-garp-security.mjs",
+      "status": "modified",
+      "beforeSha256": "dc6c909df82f2f4b6e4b88518478cf11e741f66808ab66246d929a2faeacfc11",
+      "afterSha256": "f8520e937ef132bfe7a27269faf751b1b74d851ef24940ef2960238e56c1210e"
+    },
+    {
+      "path": "scripts/qa-garp23-privacy-lifecycle.mjs",
+      "status": "modified",
+      "beforeSha256": "876dde37e92c40469e5a7594bf524df9b34f5f33dd55893cd64e1679dd7056d5",
+      "afterSha256": "71b759b098c15640b479c58cc3947b61f401837d5fb3413014d291a654888cf0"
+    },
+    {
+      "path": "scripts/qa-garp23-security.mjs",
+      "status": "modified",
+      "beforeSha256": "d3f565e1286f10c7bb3bd19c24f10ea1ad984142bd794277fc4b7f6e0a70b8ca",
+      "afterSha256": "a8f2eaa8bb3193ee5659aa1765943698f6d52a77a91fc206c428ba97e6c7d2ce"
+    },
+    {
+      "path": "scripts/qa-garp25-ai-resource.mjs",
+      "status": "modified",
+      "beforeSha256": "4c52d85e24a8a5fd2c0998e2b05a12bcae141e60340fd8dfb14a569de4cc24dc",
+      "afterSha256": "e1dfa03c72bd31d2dbff1a1f8be9a356ab7b9f5a7b2ff9a42212065d090e1c7d"
+    },
+    {
+      "path": "scripts/qa-garp27-contract.mjs",
+      "status": "modified",
+      "beforeSha256": "eb6ece5a689a6299915b5ac3080a9c8b637f881ae018e34b9857db82bf28cdba",
+      "afterSha256": "7445e5176c367b6939aeb57d9ff26f7ae1b93d4bfd692223adfc540e217c6e63"
+    },
+    {
+      "path": "scripts/qa-garp27-mutations.mjs",
+      "status": "modified",
+      "beforeSha256": "af67b3f35ab38551b14a49e5ec03272b6997102d1c7e311b712bf24cd2942afa",
+      "afterSha256": "202e36faae058bf1de1106505b3039dd2e5e81ba594c804205a238eeea65a5f0"
+    },
+    {
+      "path": "scripts/qa-pc01-suite-session.mjs",
+      "status": "modified",
+      "beforeSha256": "8f0e17823adfc700d1dc90cf2baef393ad32417239089a65ff075fd6ab465fd7",
+      "afterSha256": "5df16ef665c33cf6e3961bd88aa75139f64541a0ef1050dd4b6f212189d48c56"
+    },
+    {
+      "path": "security/ASSURANCE-STATUS.txt",
+      "status": "modified",
+      "beforeSha256": "3c0f7a646592db351bf2d647a1ddecbf114893ea28572e1373b7ee84d3a931dd",
+      "afterSha256": "e268fdbfd39014b632849774c66de355ccad828f0eee7b3db22f8d616747af37"
+    },
+    {
+      "path": "security/SHIELD-STATUS.json",
+      "status": "modified",
+      "beforeSha256": "a2c1d2422186d9836291f3a7a34a70fe3e777b7e2e630e70e2f1068d271821c9",
+      "afterSha256": "0d0e503421e8faffa6fc79839324a8b74f6dcf60765ed757b081523878cefb8f"
+    },
+    {
+      "path": "security/ai-boundary-files.json",
+      "status": "modified",
+      "beforeSha256": "afa873d9388ebc0a365d9e87b108d42ac23bd3274ed1e0e70cf6245824ef5233",
+      "afterSha256": "cdb80fe8019ec2933adb5c224f2b67d8133511afa73dbea29b1302570a5613bc"
+    },
+    {
+      "path": "security/evidence/ai-assurance-fingerprint.json",
+      "status": "modified",
+      "beforeSha256": "596e3a1769febb11bda73a2ebd15eca670f4009634d31eca857f31350301e25d",
+      "afterSha256": "e9cbe9117b7dddc0a7d30b976705f433129d8c305fafdbffdd270e87993b1b80"
+    },
+    {
+      "path": "security/garp27/contracts/app-profile.json",
+      "status": "modified",
+      "beforeSha256": "c851f4225b723a32fc9c06e342b86c68d148938ada2cbe55e51f25017cdb50ae",
+      "afterSha256": "980789af8b826cf5c1d76ab192d0dc8d9f4c920eba86ceec4a6157a0d9474ecf"
+    },
+    {
+      "path": "security/garp27/contracts/application-migration-profile.json",
+      "status": "modified",
+      "beforeSha256": "e162f01cf3051010aee0832ecfff652b5f25ed97dc22d5908dcd619bcafbedb1",
+      "afterSha256": "bc34d8c1699d1903c9f97bd26fdd5a1b44f0712143a3e783d1689c5b0ee979dd"
+    },
+    {
+      "path": "security/garp27/contracts/capability-inventory.json",
+      "status": "modified",
+      "beforeSha256": "1c3dfb412e7d850ba9bfd9f4a6951ef6c7f2be667a9efb908d45c5f7139faf1a",
+      "afterSha256": "e41851b73f06eadc93c19213284bb85e7c91073184860f48cf78ef21ab377c88"
+    },
+    {
+      "path": "security/garp27/contracts/foundation-policy.json",
+      "status": "modified",
+      "beforeSha256": "04dc3068fd332003b2c9b6540afed4ddb50fea730365ffe2eb49ae1212d3a18a",
+      "afterSha256": "06c5dc0d09d0fa324c972db173cdeefe0182f96dc2d1d96831b4725d001a777c"
+    },
+    {
+      "path": "security/sbom/ludus-1.16.30-deployment.cdx.json",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "d1fc0613f38fa30258f1cd4e9d392213baf08479e43a7885439226ef6a449581"
+    },
+    {
+      "path": "security/sbom/ludus-1.16.30.cdx.json",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "b17ee9afb49f752a896a52078984cdb13aa006a12d7a5d1ae1615c6a1b734b2f"
+    },
+    {
+      "path": "security/security-evidence-manifest.json",
+      "status": "modified",
+      "beforeSha256": "ecb48fab24a1aeee3c3f32c9e502381012fb9d253dad56a4b5540893c2e77984",
+      "afterSha256": "449a3e880f84b1cfbf7fe30f31da71b88819ffbede477d01891d8b5203a61e70"
+    },
+    {
+      "path": "src/ai-core-integration.js",
+      "status": "modified",
+      "beforeSha256": "83cb84816639d430ba1112ce3c820ba575832ca567a88229b21c8fe04ca4ab9b",
+      "afterSha256": "644638c323ccbe30b628e17763fed46bfa0954195d5ce6fa89e8fd3679d5d880"
+    },
+    {
+      "path": "src/index.html",
+      "status": "modified",
+      "beforeSha256": "08d757456cf06b5ba87dc2de1fe2a37209efe671c58b48ce994884cf57f81a65",
+      "afterSha256": "a4a7f31fd6c4151d478b880cbec3f9a5c78858042c7dd7446a1f018df745fe31"
+    }
+  ],
+  "removed": [],
+  "note": "Audit evidence excluded. git apply --check passed against byte-identical main source."
+}

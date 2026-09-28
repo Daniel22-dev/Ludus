@@ -1,0 +1,177 @@
+{
+  "schema": "ghrab-garp27-contract-result-v2",
+  "testClass": "CONTRACT_TEST",
+  "garpVersion": "2.7",
+  "consolidationRevision": "2026-09-23-r2",
+  "appId": "ludus",
+  "appVersion": "1.16.30",
+  "decision": "PASS",
+  "foundationClaim": "PASS_LOCAL_TRUST_PENDING",
+  "liveClaim": "NOT_TESTED",
+  "serverImplementation": "DEFERRED_BY_OWNER_DECISION",
+  "total": 32,
+  "passed": 32,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "identity.version",
+      "ok": true,
+      "detail": "1.16.30"
+    },
+    {
+      "id": "identity.node24",
+      "ok": true,
+      "detail": ">=24 <25"
+    },
+    {
+      "id": "contract.garp27",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.consolidation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.protocol-digest",
+      "ok": true,
+      "detail": "0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8"
+    },
+    {
+      "id": "contract.master-lock",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.server-deferred",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.identity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "contract.data-class",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "inventory.operations",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "inventory.non-agentic",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "inventory.image-types",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "legacy.current-runtime",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "server.future-only",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "ai.school-direct-provider-block-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "ai.school-key-load-fail-closed-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "file.input-accept-tight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "file.max-pre-read",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "file.mime-allowlist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "file.pdf-limit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "authority.current",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "authority.no-competing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "disposition.complete",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "disposition.no-live-certification",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "authority.garp25-byte-baseline",
+      "ok": true,
+      "detail": "b4afcf371de1498cca8a35448067d3305e4d96985bb1d642b6f9dabd7dbb7295 expected=b4afcf371de1498cca8a35448067d3305e4d96985bb1d642b6f9dabd7dbb7295"
+    },
+    {
+      "id": "release.garp27",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "release.foundation-current",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "release.live-deferred",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "release.server-not-required",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "foundation.normal-artifact",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "ci.node24",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "ci.external-policy-digest",
+      "ok": true,
+      "detail": "deploy.yml,p3-quality.yml,p4-release.yml,p5-release-gate.yml,validate.yml"
+    }
+  ]
+}

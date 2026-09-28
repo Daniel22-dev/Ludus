@@ -1,0 +1,122 @@
+[
+  {
+    "path": ".github/workflows/axe-supplemental.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/deploy.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/p3-quality.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/p4-release.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/p5-release-gate.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/sync-ghrab-ai-core.yml",
+    "unchanged": true
+  },
+  {
+    "path": ".github/workflows/validate.yml",
+    "unchanged": true
+  },
+  {
+    "path": "engines/chronos.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/dnd.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/hogwarts.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/indiana-jones.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/jumanji.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/laughworks.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/lotr.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/manifest.json",
+    "unchanged": true
+  },
+  {
+    "path": "engines/matrix.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/orient-express.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/placeholder.txt",
+    "unchanged": true
+  },
+  {
+    "path": "engines/star-wars.html",
+    "unchanged": true
+  },
+  {
+    "path": "engines/stranger-things.html",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/access-gate.css",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/deployment-config.js",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/error-reporter-adapter.js",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/error-reporter.css",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/error-reporter.js",
+    "unchanged": true
+  },
+  {
+    "path": "public/access/reporter-bootstrap.js",
+    "unchanged": true
+  },
+  {
+    "path": "runtime/ludus-about.css",
+    "unchanged": true
+  },
+  {
+    "path": "runtime/ludus-about.js",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/access-protection.mjs",
+    "unchanged": true
+  },
+  {
+    "path": "security/garp27/contracts/architecture-policy.json",
+    "unchanged": true
+  }
+]

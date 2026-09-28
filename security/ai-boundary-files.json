@@ -11,6 +11,7 @@
   "public/config/release-acceptance.json",
   "public/config/security-headers.json",
   "scripts/build-school-profile.mjs",
+  "scripts/qa-engine-catalog.mjs",
   "scripts/qa-garp-security.mjs",
   "scripts/qa-garp23-critical.mjs",
   "scripts/qa-garp23-security.mjs",

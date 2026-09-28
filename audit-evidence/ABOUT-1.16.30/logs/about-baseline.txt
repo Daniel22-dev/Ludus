@@ -1,0 +1,157 @@
+{
+  "tests": [
+    {
+      "name": "Kolekce nejsou prázdné",
+      "pass": true
+    },
+    {
+      "name": "ID světů a témat jsou unikátní",
+      "pass": true
+    },
+    {
+      "name": "Mechaniky a světy odkazují na existující prvky",
+      "pass": true
+    },
+    {
+      "name": "Dvojčata mají značku, volná díla ne",
+      "pass": true
+    },
+    {
+      "name": "cosine() je korektní (0 i identita)",
+      "pass": true
+    },
+    {
+      "name": "blockFit() a frameFit() jsou vždy 0–1",
+      "pass": true
+    },
+    {
+      "name": "verdict() pokrývá zelenou/oranžovou/červenou",
+      "pass": true
+    },
+    {
+      "name": "bestFrameFor() najde rámec pro každé téma",
+      "pass": true
+    },
+    {
+      "name": "Veřejný spec nikdy neznačkuje dvojče",
+      "pass": true
+    },
+    {
+      "name": "Interní spec umí značkový režim",
+      "pass": true
+    },
+    {
+      "name": "Veřejné sdílení vypíná značku",
+      "pass": true
+    },
+    {
+      "name": "Spec je validní JSON s povinnými poli a fit 0–1",
+      "pass": true
+    },
+    {
+      "name": "hljson() escapuje HTML v náhledu",
+      "pass": true
+    },
+    {
+      "name": "Engine je registrovaný a balíček je validní",
+      "pass": true
+    },
+    {
+      "name": "GAME_ENGINES: platné stavy, ready/draft má engine",
+      "pass": true
+    },
+    {
+      "name": "GAME_ENGINES: flowModel, capabilities a smlouva hotové hry",
+      "pass": false
+    },
+    {
+      "name": "Hotové enginy deklarují save/load/resume API",
+      "pass": true
+    },
+    {
+      "name": "Engine se řeší podle svět+mechanika (ne jen mechanika)",
+      "pass": true
+    },
+    {
+      "name": "Generování hry přes Gemini je připojené",
+      "pass": true
+    },
+    {
+      "name": "normalizeStations odfiltruje neplatné typy",
+      "pass": true
+    },
+    {
+      "name": "EXERCISE_TYPES: existující typy, autoCheck a pole sedí",
+      "pass": true
+    },
+    {
+      "name": "Povolené typy: neprázdné, podmnožina enginu, mc4 vždy",
+      "pass": true
+    },
+    {
+      "name": "normalizeStations odmítne nepovolený typ a zaloguje",
+      "pass": true
+    },
+    {
+      "name": "Třídní soutěž i lesson pack nesou náš obsah",
+      "pass": true
+    },
+    {
+      "name": "Mechanika bez enginu nevyžaduje engine (fallback)",
+      "pass": false
+    },
+    {
+      "name": "Procesní téma preferuje Laboratoř",
+      "pass": true
+    },
+    {
+      "name": "AI běží přes společný GHRAB AI Core",
+      "pass": true
+    },
+    {
+      "name": "Changelog má aktuální verzi a max 10 položek",
+      "pass": true
+    },
+    {
+      "name": "Jazykové volby ČJ/AJ: ve stavu, v meta i v promptu",
+      "pass": true
+    },
+    {
+      "name": "Obsah: v1 (GAME_CONTENT) i v2 (LUDUS_CONTENT) se injektují",
+      "pass": true
+    },
+    {
+      "name": "toContentV2: schema 2, flow/capabilities/jazyk/týmy zachované",
+      "pass": true
+    },
+    {
+      "name": "Preflight a pas hry jsou zapojené v kroku Obsah",
+      "pass": true
+    },
+    {
+      "name": "Brand/safe režim je viditelný v kroku Obsah a promítá se do promptu i LUDUS_CONTENT",
+      "pass": true
+    },
+    {
+      "name": "Identita (logo, patička, vlastník) je v HTML",
+      "pass": true
+    }
+  ],
+  "failures": [
+    {
+      "name": "GAME_ENGINES: flowModel, capabilities a smlouva hotové hry",
+      "pass": false
+    },
+    {
+      "name": "Mechanika bez enginu nevyžaduje engine (fallback)",
+      "pass": false
+    }
+  ]
+}
+{
+  "version": "1.16.30",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "screenshots": 0
+}

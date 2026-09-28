@@ -1,0 +1,18 @@
+{
+  "schema": "ludus-about-regression-v1",
+  "version": "1.16.30",
+  "scope": "Local HTTP Chromium UI fixture; production access control tested separately. No live AI, school-server, GitHub deployment or live-access certification.",
+  "node": "v22.16.0",
+  "chromium": "/usr/bin/chromium",
+  "total": 1,
+  "passed": 0,
+  "failed": 1,
+  "screenshots": [],
+  "checks": [
+    {
+      "id": "harness.completed",
+      "ok": false,
+      "detail": "Error: Local navigation failed: net::ERR_BLOCKED_BY_ADMINISTRATOR\n    at file:///mnt/data/ludus-review/Ludus-main/scripts/qa-about.mjs:57:33"
+    }
+  ]
+}

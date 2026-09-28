@@ -1,0 +1,94 @@
+{
+  "schema": "ghrab-garp27-mutation-result-v1",
+  "testClass": "CONTRACT_MUTATION_TEST",
+  "garpVersion": "2.7",
+  "appId": "ludus",
+  "appVersion": "1.16.30",
+  "decision": "PASS",
+  "liveClaim": "NOT_TESTED",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "results": [
+    {
+      "name": "baseline",
+      "expected": "PASS_TRUSTED_POLICY",
+      "decision": "PASS_TRUSTED_POLICY",
+      "codes": [],
+      "ok": true
+    },
+    {
+      "name": "ar01-forbidden-dependency",
+      "expected": "AR01_FORBIDDEN_DEPENDENCY",
+      "decision": "BLOCK",
+      "codes": [
+        "AR01_FORBIDDEN_DEPENDENCY"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar02-artifact-test-leak",
+      "expected": "AR02_TEST_OR_INTERNAL_PATH_IN_ARTIFACT",
+      "decision": "BLOCK",
+      "codes": [
+        "AR02_TEST_OR_INTERNAL_PATH_IN_ARTIFACT",
+        "AR02_TEST_BYPASS_EXECUTABLE"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar03-capability-drift",
+      "expected": "AR03_AI_OPERATION_INVENTORY_DRIFT",
+      "decision": "BLOCK",
+      "codes": [
+        "AR03_AI_OPERATION_INVENTORY_DRIFT"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar04-missing-trust",
+      "expected": "AR04_TRUST_ANCHOR_MISSING",
+      "decision": "BLOCK",
+      "codes": [
+        "AR04_TRUST_ANCHOR_MISSING"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar04-wrong-trust",
+      "expected": "AR04_TRUST_ANCHOR_MISMATCH",
+      "decision": "BLOCK",
+      "codes": [
+        "AR04_TRUST_ANCHOR_MISMATCH"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar04-scope-missing",
+      "expected": "AR04_SCOPE_ROOT_MISSING",
+      "decision": "BLOCK",
+      "codes": [
+        "AR04_SCOPE_ROOT_MISSING"
+      ],
+      "ok": true
+    },
+    {
+      "name": "ar05-competing-authority",
+      "expected": "AR05_COMPETING_AUTHORITY",
+      "decision": "BLOCK",
+      "codes": [
+        "AR05_COMPETING_AUTHORITY"
+      ],
+      "ok": true
+    },
+    {
+      "name": "c04-version-downgrade",
+      "expected": "C04_PROFILE_VERSION",
+      "decision": "BLOCK",
+      "codes": [
+        "C04_PROFILE_VERSION"
+      ],
+      "ok": true
+    }
+  ]
+}

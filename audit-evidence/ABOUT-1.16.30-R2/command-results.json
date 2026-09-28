@@ -1,0 +1,37 @@
+[
+  {
+    "command": "npm run qa:catalog",
+    "exitCode": 0,
+    "log": "catalog-r2.log"
+  },
+  {
+    "command": "npm run qa:quality",
+    "exitCode": 0,
+    "log": "quality-r2.log"
+  },
+  {
+    "command": "npm run qa:pwa",
+    "exitCode": 0,
+    "log": "pwa-r2.log"
+  },
+  {
+    "command": "npm run qa:xss",
+    "exitCode": 0,
+    "log": "xss-r2.log"
+  },
+  {
+    "command": "npm run qa:lock",
+    "exitCode": 0,
+    "log": "lock-r2.log"
+  },
+  {
+    "command": "npm run qa:suite-session",
+    "exitCode": 0,
+    "log": "session-r2.log"
+  },
+  {
+    "command": "npm run qa:pc01",
+    "exitCode": 0,
+    "log": "pc01-r2.log"
+  }
+]

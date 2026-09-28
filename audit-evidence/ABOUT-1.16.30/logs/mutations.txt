@@ -1,0 +1,12 @@
+
+> ludus@1.16.30 garp27:mutations
+> node scripts/qa-garp27-mutations.mjs
+
+{
+  "schema": "ghrab-garp27-mutation-result-v1",
+  "decision": "PASS",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "liveClaim": "NOT_TESTED"
+}

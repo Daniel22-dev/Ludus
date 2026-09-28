@@ -1,0 +1,90 @@
+[
+  {
+    "check": "builder_game_logic_identical",
+    "passed": true
+  },
+  {
+    "check": "builder_initialization_identical",
+    "passed": true
+  },
+  {
+    "check": "src/ai-core-integration.js version-only",
+    "passed": true
+  },
+  {
+    "check": "runtime/ludus-engine-runtime.js version-only",
+    "passed": true
+  },
+  {
+    "check": "runtime/ludus-privacy.js version-only",
+    "passed": true
+  },
+  {
+    "check": "scripts/access-protection.mjs version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/stranger-things.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/orient-express.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/hogwarts.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/laughworks.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/lotr.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/chronos.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/indiana-jones.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/star-wars.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/dnd.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/matrix.html version-only",
+    "passed": true
+  },
+  {
+    "check": "engines/jumanji.html version-only",
+    "passed": true
+  },
+  {
+    "check": "security/garp27/contracts/architecture-policy.json byte-identical",
+    "passed": true
+  },
+  {
+    "check": "public/access/deployment-config.js byte-identical",
+    "passed": true
+  },
+  {
+    "check": "public/config/deployment.json byte-identical",
+    "passed": true
+  },
+  {
+    "check": "public/config/deployment.school-server.json byte-identical",
+    "passed": true
+  },
+  {
+    "check": "all_prior_markdown_history_preserved",
+    "passed": true
+  }
+]

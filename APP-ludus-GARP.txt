@@ -4,7 +4,7 @@ GARP 2.7 GHRAB – PRŮVODNÍ LIST APLIKACE
 appId:                    ludus
 Název:                    LUDUS
 Repozitář:                Daniel22-dev/Ludus
-Aktuální verze:           1.16.29
+Aktuální verze:           1.16.30
 Verze standardu:          GARP 2.7 CONSOLIDATED r2 / G-02 HARDENING
 Referenční balík:         GARP-2.7-KONSOLIDOVANY-FINAL-r2-G02-FIX.zip
 SHA-256 referenčního ZIPu: 0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8

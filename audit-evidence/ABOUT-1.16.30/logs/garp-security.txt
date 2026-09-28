@@ -1,0 +1,18 @@
+
+> ludus@1.16.30 qa:garp
+> node scripts/qa-garp-security.mjs
+
+GHRAB deployment konfigurace není dostupná; používám serverless GitHub fallback, který stále vyžaduje platné podepsané oprávnění. Error: qa simulated deployment outage
+    at globalThis.fetch (file:///mnt/data/ludus_work/Ludus-main/scripts/qa-garp-security.mjs:119:34)
+    at fetchWithTimeout (file:///mnt/data/ludus_work/Ludus-main/dist/access/deployment-config.js?qa=1790572429644:42:7)
+    at file:///mnt/data/ludus_work/Ludus-main/dist/access/deployment-config.js?qa=1790572429644:193:34
+    at Module.loadDeploymentConfig (file:///mnt/data/ludus_work/Ludus-main/dist/access/deployment-config.js?qa=1790572429644:221:9)
+    at file:///mnt/data/ludus_work/Ludus-main/scripts/qa-garp-security.mjs:122:23
+{
+  "schema": "ghrab-garp-security-gate-v2",
+  "appId": "ludus",
+  "appVersion": "1.16.30",
+  "total": 45,
+  "passed": 45,
+  "failed": 0
+}
