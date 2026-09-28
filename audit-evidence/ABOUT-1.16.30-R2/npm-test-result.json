@@ -1,0 +1,5 @@
+{
+  "command": "npm test",
+  "exitCode": 1,
+  "timedOut": false
+}

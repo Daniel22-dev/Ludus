@@ -1,0 +1,61 @@
+{
+  "schema": "ghrab-garp27-architecture-integrity-result-v1",
+  "testClass": "CONTRACT_AND_ARTIFACT_TEST",
+  "garpVersion": "2.7",
+  "appId": "ludus",
+  "appVersion": "1.16.30",
+  "decision": "PASS_LOCAL_TRUST_PENDING",
+  "liveClaim": "NOT_TESTED",
+  "serverPhase": "DEFERRED_BY_OWNER_DECISION",
+  "trustStatus": "NOT_TESTED",
+  "scope": {
+    "projectRoot": ".",
+    "artifact": "dist",
+    "criticalSourceRoots": [
+      "src",
+      "runtime",
+      "public/access",
+      "vendor/ghrab-ai-core-1.0.0",
+      "vendor/ghrab-platform-1.1.2"
+    ],
+    "sourceFilesChecked": 39,
+    "artifactFilesChecked": 95
+  },
+  "digests": {
+    "candidateArtifactSha256": "5d30a4022ffadc06955da16c2eaeb481b2c33603c4d61fd4ae83dcf02a46d8bd",
+    "policySha256": "23ea7997e2b47a88cf588f89468c392cd23c775b4e80a3bf453314b739147be8",
+    "profileSha256": "980789af8b826cf5c1d76ab192d0dc8d9f4c920eba86ceec4a6157a0d9474ecf",
+    "capabilityInventorySha256": "e41851b73f06eadc93c19213284bb85e7c91073184860f48cf78ef21ab377c88",
+    "gateToolSha256": "bb801e129fe90548c0616fba47fab4a689cebe47be68a9d1b9d0845e3203774e"
+  },
+  "graph": {
+    "edgeCount": 4,
+    "edges": [
+      {
+        "from": "public/access/error-reporter-adapter.js",
+        "to": "public/access/error-reporter.js",
+        "fromLayer": "runtime",
+        "toLayer": "runtime"
+      },
+      {
+        "from": "public/access/reporter-bootstrap.js",
+        "to": "public/access/error-reporter-adapter.js",
+        "fromLayer": "runtime",
+        "toLayer": "runtime"
+      },
+      {
+        "from": "scripts/build.mjs",
+        "to": "scripts/access-protection.mjs",
+        "fromLayer": "delivery",
+        "toLayer": "delivery"
+      },
+      {
+        "from": "scripts/build.mjs",
+        "to": "scripts/apply-ghrab-platform.mjs",
+        "fromLayer": "delivery",
+        "toLayer": "unclassified"
+      }
+    ]
+  },
+  "findings": []
+}

@@ -1,6 +1,6 @@
 GARP 2.7 – CURRENT ASSURANCE STATUS
-Application: LUDUS 1.16.29
-Date: 2026-09-24
+Application: LUDUS 1.16.30
+Date: 2026-09-28
 Consolidation: 2026-09-23-r2
 Overall: AMBER
 
@@ -33,3 +33,7 @@ SERVER / LIVE BOUNDARY
 
 OVERALL: AMBER
 Reason: FOUNDATION has a complete r2/G-02 contract and mandatory external CI admission, while server-dependent SHIELD-LIVE/RI-LIVE remain intentionally deferred/not tested.
+
+UI-ONLY RELEASE 1.16.30
+- About information section added; AI operations, game logic and architectural policy unchanged.
+- Local UI/source regression evidence is not a Node 24 CI, external-trust or LIVE certificate.

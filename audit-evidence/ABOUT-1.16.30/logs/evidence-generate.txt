@@ -1,0 +1,30 @@
+
+> ludus@1.16.30 garp27:prepare-evidence
+> npm run garp25:sbom && npm run garp25:sbom:deploy && npm run garp25:ai-evidence && npm run garp27:evidence
+
+
+> ludus@1.16.30 garp25:sbom
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.30.cdx.json
+
+PASS: CycloneDX 1.7 SBOM vytvořen: /mnt/data/ludus_work/Ludus-main/security/sbom/ludus-1.16.30.cdx.json (44 komponent).
+
+> ludus@1.16.30 garp25:sbom:deploy
+> node scripts/generate-cyclonedx-sbom.mjs security/sbom/ludus-1.16.30-deployment.cdx.json --deploy
+
+PASS: CycloneDX 1.7 SBOM vytvořen: /mnt/data/ludus_work/Ludus-main/security/sbom/ludus-1.16.30-deployment.cdx.json (3 komponent).
+
+> ludus@1.16.30 garp25:ai-evidence
+> node scripts/generate-ai-assurance-fingerprint.mjs security/evidence/ai-assurance-fingerprint.json
+
+PASS: AI assurance fingerprint vytvořen: 010e2febd1469e490fe3008e49a70b1aa42988e82e1026cb61f51b03e0fac3ce
+
+> ludus@1.16.30 garp27:evidence
+> node scripts/create-garp27-evidence-manifest.mjs
+
+{
+  "status": "PASS",
+  "schema": "ghrab-security-evidence-manifest-v2",
+  "appId": "ludus",
+  "version": "1.16.30",
+  "externalFiles": 3
+}

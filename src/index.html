@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.29">
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.30">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -342,6 +342,7 @@
   .footer-tools-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
   .footer-tools-title{font:700 11px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-right:4px}
   .foot-link{border:1px solid var(--line2);background:transparent;color:var(--gold-soft);border-radius:999px;padding:8px 14px;font:700 12.5px var(--sans);cursor:pointer;text-decoration:none}
+  .about-launch{flex:none;min-height:40px;white-space:nowrap}
   .foot-link:hover{border-color:var(--gold);background:rgba(245,185,66,.08)}
   .foot-owner{color:var(--faint);font-size:12px;line-height:1.6}
   .foot-owner strong{color:var(--dim)}
@@ -361,6 +362,7 @@
   .modal-row span,.modal-row small{font-size:12.5px;color:var(--dim)}
   .modal-row.ok{border-color:rgba(62,230,143,.3)} .modal-row.ok b{color:var(--green)}
   .modal-row.fail{border-color:rgba(255,107,125,.4)} .modal-row.fail b{color:var(--red)}
+
   .modal-kv{display:grid;gap:8px}
   .modal-kv>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:7px}
   .modal-kv b{color:var(--faint);font-weight:600;font-size:12.5px} .modal-kv span{color:var(--ink);font-size:12.5px;text-align:right}
@@ -396,7 +398,7 @@ a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:cente
 a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
 a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
 </style>
-  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.29" data-ludus-privacy-scope="builder"></script>
+  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.30" data-ludus-privacy-scope="builder"></script>
 </head>
 <body>
 <div class="wrap" role="main">
@@ -418,6 +420,7 @@ a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacit
         <button id="tgInternal" aria-pressed="true">🏫 Vnitřní výuka</button>
         <button id="tgPublic" aria-pressed="false">🌐 Veřejné sdílení</button>
       </div>
+      <button class="foot-link about-launch" id="openAboutTop" type="button" aria-haspopup="dialog" aria-controls="infoModal">O aplikaci</button>
       <button class="iconbtn" id="theme" aria-pressed="false" title="Denní / noční režim">🌙</button>
       <a class="iconbtn manual-launch-btn" id="manualLaunch" href="./manual/" target="_self" aria-label="Otevřít interaktivní manuál celé aplikace" title="Interaktivní manuál celé aplikace">📖</a>
       <button class="iconbtn" id="fullscreen" aria-pressed="false" title="Celá obrazovka">⛶</button>
@@ -487,9 +490,8 @@ a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacit
       <div class="footer-tools-row">
         <span class="footer-tools-title">Nástroje aplikace</span>
         <button class="foot-link" id="openGuide" type="button">Návod</button>
-        <button class="foot-link" id="openChangelog" type="button">Changelog</button>
+        <button class="foot-link" id="openAbout" type="button" aria-haspopup="dialog" aria-controls="infoModal">O aplikaci</button>
         <button class="foot-link" id="runTests" type="button">Testy</button>
-        <button class="foot-link" id="showOwner" type="button">Vlastník</button>
         <button class="foot-link" id="endWork" type="button" title="Smaže lokální data LUDUS z tohoto zařízení">Ukončit práci</button>
       </div>
       <div data-ghrab-footer-branding></div>
@@ -498,7 +500,7 @@ a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacit
 </div>
 
 <div class="modal-overlay" id="infoModal" aria-hidden="true" inert>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-ghrab-focus-trap="off">
     <div class="modal-head"><h3 id="modalTitle">—</h3><button class="modal-x" id="modalClose" aria-label="Zavřít">✕</button></div>
     <div class="modal-body" id="modalBody"></div>
   </div>
@@ -1347,7 +1349,13 @@ const FLOW_MODELS={
   detectiveCase:'detektivní případ · stopy · obvinění',
   escapeRooms:'místnosti · zámky · finální kód',
   labSimulation:'laboratoř / simulace',
-  drillTrainer:'procvičovací trenažér bez příběhového finále'
+  drillTrainer:'procvičovací trenažér bez příběhového finále',
+  timelineRestore:'obnova časové osy',
+  roomsCluesAccusation:'místnosti · stopy · obvinění',
+  scenesEvidenceAccusation:'scény · důkazy · obvinění',
+  roomsCodesFinalLock:'místnosti · kódy · finální zámek',
+  stationsSynthesis:'stanice · závěrečné propojení',
+  arenaRoundsBoss:'kola v aréně · závěrečný boss'
 };
 const READY_CONTRACT=['manifest','supportedExerciseTypes','i18n','themeVariants','adapter','contentV2','flowModel','capabilities','progressApi'];
 const ALL_CONTENT_LANGS=['cs','en'];
@@ -1493,13 +1501,8 @@ async function loadEngine(skinId,frame){
   const html=await res.text(); __engineCache[__k]=html; return html;
 }
 
-/* engines/manifest.json je kanonický katalog enginů.
-   GAME_ENGINES výš zůstává jen fallback pro offline/file:// režim a pro bezpečný
-   start před načtením manifestu. Po načtení se z manifestu přebírá nejen status,
-   ale i gameId, mechanicId, soubor enginu, flowModel, jazyky, typy cvičení,
-   capabilities a kontrolní smlouva. Nové kombinace skinId+mechanicId lze přidat
-   do manifestu bez ručního přepisování tohoto registru, pokud už existuje daný
-   svět a mechanika v UI. */
+/* engines/manifest.json je kanonický katalog; GAME_ENGINES je offline fallback.
+   Načtení přebírá metadata i nové dvojice svět+mechanika pro existující UI. */
 function engineKeyFromManifest(m){
   if(!m||typeof m!=='object')return '';
   if(m.gameKey)return String(m.gameKey);
@@ -3051,10 +3054,12 @@ function buildLessonPackHtml(spec,tasks){
     +'</div></body></html>';
 }
 
-/* ============================ APP IDENTITY: changelog, owner, guide, tests ============================ */
-const APP_VERSION='1.16.29';
+/* ============================ APP IDENTITY: about, history, guide, tests ============================ */
+const APP_VERSION='1.16.30';
+const APP_ABOUT=Object.freeze(/* ABOUT_METADATA_START */{"releaseDate":"2026-09-28","platformVersion":"1.1.2","aiCoreVersion":"1.0.0","garpVersion":"2.7","pilotStatus":"Ověřováno v pilotu","shieldLive":"NOT TESTED","serverStatus":"DEFERRED_BY_OWNER_DECISION"}/* ABOUT_METADATA_END */);
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.16.30 · O aplikaci: jednotná identita, autor a vývojový garant, školní projekt a technický stav; historie vydání je součástí nové sekce. Herní logika beze změn.',
   '1.16.29 · GARP 2.7 FOUNDATION: přidána architecture-integrity brána, fail-closed school AI hranice, omezení příloh a Node 24 CI; LIVE ověření zůstává otevřené.',
   '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',
   '1.16.13 · CI hotfix: GitHub Actions instalují připnuté Playwright Chromium a nastaví CHROMIUM_PATH před npm test; validace pořadí kroků brání opakování chyby.',
@@ -3064,16 +3069,44 @@ const CHANGELOG=[
   '1.16.1 · Zavedena trvalá správa médií: Bradavice mají zpět intro a soundtrack, varianty mají oddělené zdroje a export vkládá pouze vybranou variantu pro offline hraní.',
   '1.16.0 · Auditní opravná verze: odstraněna nekonečná překladová smyčka, opraveno dělení týmů, striktní vazba svět + mechanika, CI brána, PWA registrace a bezpečnější export enginů.',
   '1.15.0 · Anonymní technické metriky výstupů bez témat, promptů a identity uživatele.',
+];
+const CHANGELOG_ARCHIVE=[
   '1.14.6 · Integrovaný interaktivní manuál dostupný z aplikace i PWA balíčku.',
 ];
-function modalOpen(title,html){const m=$('#infoModal');$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;m.inert=false;m.classList.add('open');m.setAttribute('aria-hidden','false');$('#modalClose').focus();}
-function modalClose(){const m=$('#infoModal');m.classList.remove('open');m.setAttribute('aria-hidden','true');m.inert=true;}
-function openChangelog(){
-  const rows=CHANGELOG.slice(0,CHANGELOG_LIMIT).map(x=>'<div class="modal-row"><b>'+esc(x.split(':')[0])+'</b><span>'+esc(x.replace(/^.*?:\s*/,''))+'</span></div>').join('');
-  modalOpen('Changelog','<p>Posledních '+CHANGELOG_LIMIT+' změn v LUDUS. Starší se při přidání nové automaticky odříznou.</p><div class="modal-list">'+rows+'</div>');
+let modalReturnFocus=null;
+let modalBackgroundWasInert=false;
+let modalPreviousOverflow='';
+function modalOpen(title,html,kind=''){
+  const m=$('#infoModal'),dialog=m.querySelector('.modal'),background=document.querySelector('.wrap');
+  if(!m.classList.contains('open')){
+    modalReturnFocus=document.activeElement;
+    modalBackgroundWasInert=Boolean(background?.inert);
+    modalPreviousOverflow=document.body.style.overflow;
+  }
+  $('#modalTitle').textContent=title;
+  $('#modalBody').innerHTML=html;
+  dialog.classList.toggle('modal-about',kind==='about');
+  m.inert=false;m.classList.add('open');m.setAttribute('aria-hidden','false');
+  if(background)background.inert=true;
+  document.body.style.overflow='hidden';dialog.scrollTop=0;
+  $('#modalClose').focus({preventScroll:true});
 }
-function openOwner(){
-  modalOpen('Vlastník aplikace','<div class="modal-kv"><div><b>Aplikace</b><span>LUDUS — dílna výukových her</span></div><div><b>Verze</b><span>'+esc(APP_VERSION)+'</span></div><div><b>Vlastník</b><span>Daniel Baláž · Gymnázium, Ostrava-Hrabůvka</span></div><div><b>Engine</b><span>Akademie (z Hogwarts)</span></div><div><b>Obsah</b><span>GHRAB AI Core (školní gateway nebo klíč pouze pro relaci)</span></div><div><b>Copyright</b><span>© 2026 Daniel Baláž</span></div></div>');
+function modalClose(){
+  const m=$('#infoModal');if(!m.classList.contains('open'))return;
+  m.classList.remove('open');m.setAttribute('aria-hidden','true');m.inert=true;
+  const background=document.querySelector('.wrap');if(background)background.inert=modalBackgroundWasInert;
+  document.body.style.overflow=modalPreviousOverflow;
+  const target=modalReturnFocus;modalReturnFocus=null;
+  if(target?.isConnected&&!target.closest('[inert]'))target.focus({preventScroll:true});
+}
+async function openAbout(){
+  const trigger=document.activeElement;
+  trigger?.setAttribute('aria-busy','true');
+  try{
+    const {openAboutView}=await import('./runtime/ludus-about.js');
+    await openAboutView({version:APP_VERSION,metadata:APP_ABOUT,history:CHANGELOG,archive:CHANGELOG_ARCHIVE,escapeHtml:esc,showDialog:modalOpen});
+  }catch(_){toast('Sekci O aplikaci se nepodařilo načíst. Zkus ji otevřít znovu.');}
+  finally{trigger?.removeAttribute('aria-busy');}
 }
 function openGuide(){
   modalOpen('Jak se v Ludusu orientovat',
@@ -3168,7 +3201,7 @@ function selfTests(){
   add(C.game,'Třídní soutěž i lesson pack nesou náš obsah', ()=>{const d=flattenPackToTasks(ACADEMY_RC_PACK);const cq=buildClassQuizHtml('Test','t','Test','#b475ff',{},d);const lp=buildLessonPackHtml({content:{label:'t',kind:'grammar'},skinName:'Test',fit:.8},d);return d.length>=15&&cq.includes('RAW_TASKS')&&lp.includes('lesson pack');}, ()=>flattenPackToTasks(ACADEMY_RC_PACK).length+' úloh');
 
   // OBECNOST A NÁSTROJE
-  add(C.gen,'Mechanika bez enginu nevyžaduje engine (fallback)', ()=>!!FRAMES.lab&&typeof precheckContent==='function'&&$('#build').onclick.toString().includes('precheckContent')&&!Object.keys(GAME_ENGINES).some(k=>k.endsWith(':lab')), 'lab → obsah/recept/soutěž');
+  add(C.gen,'Mechanika bez enginu nevyžaduje engine (fallback)', ()=>!!FRAMES.lab&&typeof precheckContent==='function'&&$('#build').onclick.toString().includes('precheckContent')&&SKINS.some(s=>s.frames.includes('lab')&&!getGameEngine(s.id,'lab')), 'lab → obsah/recept/soutěž');
   add(C.gen,'Procesní téma preferuje Laboratoř', ()=>{const t=TOPICS.find(x=>x.id==='photosynthesis');return !t||bestFrameFor(t).id==='lab';}, 'fotosyntéza → lab');
   add(C.gen,'AI běží přes společný GHRAB AI Core', ()=>typeof window.GHRAB_AI==='object'&&callGemini.toString().includes('GHRAB_AI.generate')&&useKeySession.toString().includes('sessionStorage'), 'Core 1.0.0 · gateway/direct');
   add(C.gen,'Changelog má aktuální verzi a max 10 položek', ()=>CHANGELOG[0].startsWith(APP_VERSION)&&CHANGELOG.length<=CHANGELOG_LIMIT, ()=>CHANGELOG.length+'/'+CHANGELOG_LIMIT);
@@ -3211,13 +3244,23 @@ function openTests(){
 }
 
 $('#openGuide').onclick=openGuide;
-$('#openChangelog').onclick=openChangelog;
+$('#openAbout').onclick=openAbout;
+$('#openAboutTop').onclick=openAbout;
 $('#runTests').onclick=openTests;
-$('#showOwner').onclick=openOwner;
 {const b=$('#enginePassport');if(b)b.onclick=openEnginePassport;const p=$('#preflightPassport');if(p)p.onclick=openEnginePassport;}
 $('#modalClose').onclick=modalClose;
 $('#infoModal').addEventListener('click',e=>{if(e.target.id==='infoModal')modalClose();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#infoModal').classList.contains('open'))modalClose();});
+document.addEventListener('keydown',e=>{
+  const m=$('#infoModal');if(!m.classList.contains('open'))return;
+  if(e.key==='Escape'){e.preventDefault();modalClose();return;}
+  if(e.key!=='Tab')return;
+  const collapsed=Array.from(m.querySelectorAll('details:not([open])'));
+  const controls=Array.from(m.querySelectorAll('button,a[href],input,select,textarea,summary,[tabindex]')).filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length&&!collapsed.some(d=>d.contains(el)&&d.querySelector('summary')!==el));
+  const first=controls[0],last=controls[controls.length-1];
+  if(!first){e.preventDefault();return;}
+  if(e.shiftKey&&(document.activeElement===first||!m.contains(document.activeElement))){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&(document.activeElement===last||!m.contains(document.activeElement))){e.preventDefault();first.focus();}
+});
 {const fv=$('#footVersion');if(fv)fv.textContent='v'+APP_VERSION;}
 
 /* ---- init ---- */

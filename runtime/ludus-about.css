@@ -1,0 +1,48 @@
+/* About LUDUS: a focused information view, not another builder step. */
+  .about-launch{flex:none;min-height:40px;white-space:nowrap}
+  .modal.modal-about{width:min(1000px,100%);max-height:calc(100dvh - 40px);overscroll-behavior:contain}
+  .modal-about .modal-head{z-index:1}
+  .modal-about .modal-body{padding:24px}
+  .modal-about .modal-x{flex:none;min-width:40px;min-height:40px}
+  .about-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;align-items:start}
+  .about-identity{padding:24px;border:1px solid var(--line2);border-radius:16px;background:linear-gradient(155deg,rgba(245,185,66,.09),transparent 65%)}
+  .about-kicker{color:var(--dim);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .about-identity h4{font:700 36px var(--serif);letter-spacing:.14em;color:var(--gold-soft);margin:12px 0 4px}
+  .modal-body .about-subtitle{font-size:16px;color:var(--ink);margin-bottom:16px}
+  .modal-body .about-description{font-size:14px;line-height:1.65;margin:0}
+  .about-status{display:inline-flex;align-items:center;gap:7px;margin-top:20px;padding:6px 10px;border:1px solid var(--line2);border-radius:8px;font-size:12px;color:var(--gold-soft)}
+  .about-status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+  .about-facts{display:grid;gap:14px;min-width:0}
+  .about-credits{display:grid;gap:12px}
+  .about-credits dt,.about-tech dt{color:var(--dim);font-size:12px}
+  .about-credits dd{color:var(--ink);font-size:14px;font-weight:650;margin-top:2px;overflow-wrap:anywhere}
+  .about-tech{border-top:1px solid var(--line);padding-top:14px}
+  .about-tech h4,.about-copy h4{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+  .about-tech dl{display:grid;gap:7px}
+  .about-tech dl>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px;align-items:baseline}
+  .about-tech dd{font:500 12.5px var(--mono);text-align:right;overflow-wrap:anywhere;color:var(--ink)}
+  .modal-body .about-scope{font-size:12px;line-height:1.6;margin:12px 0 0;color:var(--dim)}
+  .about-guidance{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+  .about-copy{min-width:0}
+  .modal-body .about-copy p{font-size:13px;line-height:1.65;margin:0}
+  .about-history{border:1px solid var(--line2);border-radius:12px;margin-top:22px}
+  .about-history>summary{cursor:pointer;padding:14px 16px;color:var(--ink);font-size:14px;font-weight:650;border-radius:11px;min-height:44px}
+  .about-history>summary::marker{color:var(--gold-soft)}
+  .about-history>summary:hover{background:var(--panel2)}
+  .about-history-body{padding:4px 16px 16px}
+  .about-releases{list-style:none;display:grid;gap:12px}
+  .about-releases li+li{padding-top:12px;border-top:1px solid var(--line)}
+  .about-release-version{font:600 12px var(--mono);color:var(--gold-soft)}
+  .modal-body .about-releases p{font-size:12.5px;line-height:1.6;margin:4px 0 0}
+  .about-archive{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+  .about-archive>summary{cursor:pointer;min-height:40px;padding:8px 0;color:var(--dim);font-size:12.5px}
+  .about-launch:focus-visible,.modal-about summary:focus-visible,.modal-x:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  @media(max-width:720px){
+    .about-grid,.about-guidance{grid-template-columns:1fr;gap:20px}
+    .modal-about .modal-body{padding:18px}
+    .about-identity{padding:18px}
+    .about-identity h4{font-size:30px}
+    .modal.modal-about{max-height:calc(100dvh - 24px)}
+    .modal-overlay:has(.modal-about){padding:12px}
+    .modal-about .modal-head{padding:12px 18px}
+  }

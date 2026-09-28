@@ -68,6 +68,25 @@ const appVersion = readJson(path.join(ROOT, 'package.json')).version;
 const coreJs = fs.readFileSync(path.join(CORE_DIR, CORE_FILE), 'utf8');
 const integration = fs.readFileSync(path.join(ROOT, 'src', 'ai-core-integration.js'), 'utf8');
 let html = fs.readFileSync(SRC_INDEX, 'utf8');
+
+const aboutPlatform = readJson(path.join(ROOT, 'ghrab-platform.consumer.json'));
+const aboutShield = readJson(path.join(ROOT, 'security', 'SHIELD-STATUS.json'));
+const aboutTemplate = readJson(path.join(ROOT, 'studio', 'app-manifest.template.json'));
+const aboutMetadata = {
+  releaseDate: readJson(path.join(ROOT, 'package.json')).releaseDate,
+  platformVersion: aboutPlatform.platform.version,
+  aiCoreVersion: CORE_VERSION,
+  garpVersion: aboutShield.protocol.version,
+  pilotStatus: aboutTemplate.status.cs,
+  shieldLive: aboutShield.profiles.shieldLive,
+  serverStatus: aboutShield.protocol.serverImplementation,
+};
+if (!/^\d{4}-\d{2}-\d{2}$/.test(aboutMetadata.releaseDate || '')) fail('Missing valid releaseDate for About.');
+const aboutMetadataMarker = /\/\* ABOUT_METADATA_START \*\/[\s\S]*?\/\* ABOUT_METADATA_END \*\//g;
+if ((html.match(aboutMetadataMarker) || []).length !== 1) fail('About metadata marker must occur exactly once.');
+const aboutJson = JSON.stringify(aboutMetadata).replaceAll('<', '\\u003c');
+html = html.replace(aboutMetadataMarker, () => `/* ABOUT_METADATA_START */${aboutJson}/* ABOUT_METADATA_END */`);
+
 const firstScript = html.indexOf('<script>');
 if (firstScript < 0) fail('Builder does not contain the main script.');
 html = `${html.slice(0, firstScript + 8)}\n${coreJs}\n;\n${html.slice(firstScript + 8)}`;

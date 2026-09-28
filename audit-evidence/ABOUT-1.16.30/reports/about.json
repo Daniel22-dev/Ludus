@@ -1,0 +1,584 @@
+{
+  "schema": "ludus-about-regression-v1",
+  "version": "1.16.30",
+  "scope": "In-memory Chromium UI fixture with real loopback lazy assets; CSP and storage are adapted for opaque-origin testing. No live AI, school-server, GitHub deployment or live-access certification.",
+  "node": "v22.16.0",
+  "chromium": "/usr/bin/chromium",
+  "total": 95,
+  "passed": 95,
+  "failed": 0,
+  "screenshots": [
+    "about-1366-dark.png",
+    "about-1366-light.png",
+    "about-1024-dark.png",
+    "about-1024-light.png",
+    "about-390-dark.png",
+    "about-390-light.png",
+    "about-320-dark.png",
+    "about-320-light.png"
+  ],
+  "checks": [
+    {
+      "id": "navigation.unified",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "performance.lazy-about",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "history.all-original-entries-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "identity.release",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "identity.platform",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "identity.ai-core",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "identity.garp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "builder.self-tests-no-new-failures",
+      "ok": true,
+      "detail": {
+        "currentFailures": [
+          {
+            "name": "GAME_ENGINES: flowModel, capabilities a smlouva hotové hry",
+            "pass": false
+          },
+          {
+            "name": "Mechanika bez enginu nevyžaduje engine (fallback)",
+            "pass": false
+          }
+        ],
+        "knownFailures": [
+          "GAME_ENGINES: flowModel, capabilities a smlouva hotové hry",
+          "Mechanika bez enginu nevyžaduje engine (fallback)"
+        ]
+      }
+    },
+    {
+      "id": "1366.dark.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "1366.dark.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.dark.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "1366.light.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1366.light.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "1024.dark.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.dark.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "1024.light.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "1024.light.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "390.dark.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.dark.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "390.light.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "390.light.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "320.dark.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.dark.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.viewport",
+      "ok": true,
+      "detail": {
+        "title": "O aplikaci",
+        "version": "1.16.30",
+        "closed": true,
+        "inside": true,
+        "reflow": true,
+        "inert": true,
+        "focus": "modalClose",
+        "text": "SOUČÁST EKOSYSTÉMU AI STUDIO\nLUDUS\n\nDílna výukových her\n\nVyber mechaniku, svět a učivo. LUDUS z nich pomáhá připravit výukovou hru, třídní soutěž nebo lesson pack — bez programování.\n\nOvěřováno v pilotu\nAutor a vývojový garant\nDaniel Baláž\nŠkolní projekt\nGymnázium, Ostrava-Hrabůvka\nVerze a technický stav\nVerze aplikace\n1.16.30\nDatum vydání\n28. 9. 2026\nGHRAB Platform\n1.1.2\nGHRAB AI Core\n1.0.0\nBezpečnostní architektura\nGARP 2.7 · FOUNDATION\n\nLIVE provoz dosud neověřen. Nasazení školního serveru je odloženo. Pilotní stav není potvrzením produkční připravenosti.\n\nÚčel a odpovědnost\n\nNástroj pro učitele k přípravě a vedení výuky. Před použitím zkontroluj správnost zadání, řešení i přiměřenost třídě. AI nenahrazuje pedagogické rozhodnutí učitele.\n\nProvozní zásady\n\nHotovou hru před hodinou vyzkoušej. Hratelný export závisí na dostupnosti enginu pro vybranou kombinaci; jinak využij nabízený obsah, soutěž nebo lesson pack. Používej jen schválený přístup.\n\nHistorie vydání"
+      }
+    },
+    {
+      "id": "320.light.collapsed-history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.initial-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.excluded-sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.shift-tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.tab-wrap",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.history-expand",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.escape-and-return-focus",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "320.light.builder-state-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "footer.entry",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "dialog.backdrop-close",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "guide.original-dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "diagnostics.no-new-failures",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "browser.no-script-errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "id": "production.access-gate-preserved",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "pwa.about-precache",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

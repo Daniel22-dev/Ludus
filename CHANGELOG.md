@@ -1,5 +1,19 @@
 # Changelog
 
+### Revize před vydáním 1.16.30 (r2)
+
+Doplněny popisy šesti herních průběhů, opraven zastaralý diagnostický předpoklad o Laboratoři a přidán `qa:catalog`. Test O aplikaci nově požaduje všechny diagnostické položky bez historických výjimek. Stav ověření a nenahrání na GitHub: `REPORT-O-APLIKACI-1.16.30.md`.
+
+
+## 1.16.30 — 2026-09-28 — O aplikaci
+
+- Sjednocena identita LUDUS podle standardu AI Studia: autor a vývojový garant, školní projekt, účel, provozní zásady a technický stav.
+- Nový vstup O aplikaci v záhlaví i patě; samostatné Changelog a Vlastník odstraněny. Všech deset původních záznamů historie zachováno.
+- Verze platformy, AI Core a GARP se při sestavení odvozují z manifestů. FOUNDATION není prezentován jako ověřený LIVE provoz.
+- Responzivní dialog, světlý/tmavý režim, Tab/Shift+Tab, Escape, návrat fokusu a uzamčení pozadí.
+- Aktualizován manuál a identifikátory vydání včetně PWA cache. Herní logika, AI operace, přístupová pravidla a architektonická policy GARP zůstávají funkčně beze změn.
+- Podpora, licence a samostatná sekce Práce s daty se podle zadání nepřidávají.
+
 ## 1.16.29 — 2026-09-24 — Final clean-up and assurance metadata audit
 
 - Bez změny pedagogické logiky, herních enginů, AI operací nebo GARP 2.7 r2 security policy.

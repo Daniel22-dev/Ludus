@@ -2,7 +2,7 @@
   "schema": "ghrab-release-acceptance-v1",
   "stage": "P5",
   "appId": "ludus",
-  "appVersion": "1.16.29",
+  "appVersion": "1.16.30",
   "releaseStatus": "garp-2.7-r2-final-audit-source-ci-required-live-deferred",
   "primaryRuntime": {
     "mode": "standalone-github-pages",

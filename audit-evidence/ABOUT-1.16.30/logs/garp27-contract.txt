@@ -1,0 +1,10 @@
+{
+  "schema": "ghrab-garp27-contract-result-v2",
+  "appVersion": "1.16.30",
+  "decision": "PASS",
+  "total": 32,
+  "passed": 32,
+  "failed": 0,
+  "foundationClaim": "PASS_LOCAL_TRUST_PENDING",
+  "liveClaim": "NOT_TESTED"
+}
