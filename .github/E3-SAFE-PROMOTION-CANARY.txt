@@ -4,3 +4,5 @@ Controlled release-governance test artifact.
 No application/runtime behavior is changed by this file.
 Created to verify candidate -> P5 -> PR -> protected merge -> candidate reconciliation.
 Date: 2026-10-02
+
+Cycle 2: verify hardened all-required-check wait and automatic protected merge.
