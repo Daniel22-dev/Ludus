@@ -562,7 +562,7 @@ async function main() {
     const student = stripStudioProtection(deployed);
     need(!/data-ghrab-access-bootstrap|application\/ghrab-protected|access-gate\.css/.test(student), `dist/engines/${file}: ochranu nelze bezpečně odstranit pro export`);
     need(/<script(?:\s|>)/i.test(student), `dist/engines/${file}: po očištění chybí spustitelný studentský skript`);
-    // Přednačtení (1.16.30): jen stažení bez spuštění, adresa brány z konfigurace, při exportu se odstraní.
+    // Přednačtení (1.16.31): jen stažení bez spuštění, adresa brány z konfigurace, při exportu se odstraní.
     need(/<link rel="modulepreload" href="\.\.\/access\/deployment-config\.js" data-ghrab-access-preload>/.test(deployed), `dist/engines/${file}: chybí přednačtení deployment-config.js`);
     need(deployed.includes(`<link rel="modulepreload" href="${guardPreloadExpected}" data-ghrab-access-preload="guard">`), `dist/engines/${file}: přednačtení brány neodpovídá config/deployment.json`);
     need(deployed.includes('<link rel="preload" as="script" href="../runtime/ludus-privacy.js" data-ghrab-access-preload>'), `dist/engines/${file}: chybí přednačtení privacy runtime`);

@@ -198,7 +198,10 @@ function injectCspMeta(file, policy) {
   if (!/<head\b[^>]*>/i.test(source)) return;
   source = source.replace(/\s*<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '');
   const escaped = String(policy || '').replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-  source = source.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="static">`);
+  const guardRelative = path.relative(path.dirname(file), path.join(DIST, 'frame-guard.js')).replaceAll(path.sep, '/');
+  const guardSrc = guardRelative.startsWith('.') ? guardRelative : `./${guardRelative}`;
+  const frameGuard = `<script src="${guardSrc}?v=${appVersion}"></script>`;
+  source = source.replace(/<head\b([^>]*)>/i, `<head$1>\n<meta http-equiv="Content-Security-Policy" content="${escaped}" data-ghrab-csp-profile="static">\n${frameGuard}`);
   fs.writeFileSync(file, source, 'utf8');
 }
 for (const file of (function walkHtml(dir){const out=[];for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const target=path.join(dir,entry.name);if(entry.isDirectory())out.push(...walkHtml(target));else if(entry.isFile()&&entry.name.toLowerCase().endsWith('.html'))out.push(target);}return out;})(DIST)) {

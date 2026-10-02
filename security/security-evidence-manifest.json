@@ -1,26 +1,26 @@
 {
   "schema": "ghrab-security-evidence-manifest-v2",
   "appId": "ludus",
-  "version": "1.16.30",
+  "version": "1.16.31",
   "sourceRevision": null,
   "sourcePackageSha256": null,
-  "createdAt": "2026-09-28T08:07:56.132Z",
+  "createdAt": "2026-10-02T07:44:56.900Z",
   "files": [],
   "externalFiles": [
     {
-      "path": "security/sbom/ludus-1.16.30.cdx.json",
+      "path": "security/sbom/ludus-1.16.31.cdx.json",
       "size": 40403,
-      "sha256": "b17ee9afb49f752a896a52078984cdb13aa006a12d7a5d1ae1615c6a1b734b2f"
+      "sha256": "2d54bc91d3a66631130d783b86facb335060958c05c87d9d3fabbe6ecb5cd46d"
     },
     {
-      "path": "security/sbom/ludus-1.16.30-deployment.cdx.json",
+      "path": "security/sbom/ludus-1.16.31-deployment.cdx.json",
       "size": 4347,
-      "sha256": "d1fc0613f38fa30258f1cd4e9d392213baf08479e43a7885439226ef6a449581"
+      "sha256": "2135edaaa0be22c5cbadf411141b1996537cb17ac90a90d09d65931ad5d1e023"
     },
     {
       "path": "security/evidence/ai-assurance-fingerprint.json",
       "size": 4755,
-      "sha256": "e9cbe9117b7dddc0a7d30b976705f433129d8c305fafdbffdd270e87993b1b80"
+      "sha256": "17fd1da4470a422806d78180cce57ebe52e4ecccd503b2e8bca0c266cce412a0"
     }
   ]
 }
