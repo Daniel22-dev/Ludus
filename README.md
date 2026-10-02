@@ -107,7 +107,7 @@ GitHub Actions spouští `npm test` samostatně při pushi a pull requestu a zno
 
 Build vytváří `dist/studio-manifest.json`. AI Studio z něj načítá aktuální verzi, stav, adresu a metadata LUDUSu.
 
-Pro okamžitou synchronizaci lze v repozitáři nastavit secret `AI_STUDIO_DISPATCH_TOKEN`. Bez něj Studio změnu zachytí při pravidelné kontrole.
+Deployment vyžaduje repository secret `AI_STUDIO_DISPATCH_TOKEN`; pokud chybí, nasazení je fail-closed zablokováno, protože AI Studio nelze bezpečně informovat o nové release identitě.
 
 LUDUS 1.16.31 podporuje Studio Bridge v2 s kompatibilitou v1 a ruční import `ghrab-material-v1` / `LUDUS_CONTENT v2`. Podporované strukturované úlohy převádí na stanice a připraví engine, třídní soutěž nebo lesson pack bez dalšího AI volání.
 
