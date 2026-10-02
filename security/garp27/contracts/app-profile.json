@@ -3,7 +3,7 @@
   "garpVersion": "2.7",
   "status": "CONSOLIDATED_FOUNDATION_CANDIDATE_LIVE_DEFERRED",
   "appId": "ludus",
-  "appVersion": "1.16.30",
+  "appVersion": "1.16.31",
   "dataClass": "D2",
   "agentic": false,
   "protocolSource": {

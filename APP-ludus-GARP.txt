@@ -4,13 +4,14 @@ GARP 2.7 GHRAB – PRŮVODNÍ LIST APLIKACE
 appId:                    ludus
 Název:                    LUDUS
 Repozitář:                Daniel22-dev/Ludus
-Aktuální verze:           1.16.30
+Aktuální verze:           1.16.31
 Verze standardu:          GARP 2.7 CONSOLIDATED r2 / G-02 HARDENING
 Referenční balík:         GARP-2.7-KONSOLIDOVANY-FINAL-r2-G02-FIX.zip
 SHA-256 referenčního ZIPu: 0c278aefa0581b3ba13dd5725da9d3fc624976c255602ec16b054fc81da6f7c8
 Konsolidační revize:      2026-09-23-r2
 Aktivní autorita:         security/garp27
 Historická baseline:      GARP 2.5.1 nástroje zachované jako regresní kontrola
+Auditní patch 1.16.31:   GARP 2.8 S-BRW-12 frame guard + sanitizace API klíčů; bez změny aktivní GARP 2.7 autority
 
 2. AKTUÁLNÍ FOUNDATION
 - GARP 2.7 r2 PACKAGE_SELFTEST referenčního balíku: 19/19 PASS.

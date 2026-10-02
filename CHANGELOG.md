@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.16.31 — 2026-10-02 — GARP 2.8 audit hardening
+
+- Přidán `frame-guard.js` proti vložení nasazeného LUDUSu do cizího rámu; same-origin rám AI Studia zůstává povolen.
+- Všech 13 buildových HTML stránek načítá frame guard jako první klasický skript bezprostředně za CSP meta a service worker ho předukládá pro offline provoz.
+- Studentský export odstraňuje deployment frame guard společně s přístupovou bránou, aby zůstal funkční existující izolovaný náhled a samostatné offline hry.
+- Reportér chyb nově odstraňuje holé Google API klíče `AIza…` i hodnoty URL parametrů `key`, `api_key` a `apikey`.
+- Přidány regresní testy pro pořadí frame guardu a sanitizaci klíčů; UI/UX, workflow, závislosti a připnuté SHA akcí se nemění.
+
 ### Revize před vydáním 1.16.30 (r2)
 
 Doplněny popisy šesti herních průběhů, opraven zastaralý diagnostický předpoklad o Laboratoři a přidán `qa:catalog`. Test O aplikaci nově požaduje všechny diagnostické položky bez historických výjimek. Stav ověření a nenahrání na GitHub: `REPORT-O-APLIKACI-1.16.30.md`.

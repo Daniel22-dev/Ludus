@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.30">
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.31">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -398,7 +398,7 @@ a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:cente
 a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
 a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
 </style>
-  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.30" data-ludus-privacy-scope="builder"></script>
+  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.31" data-ludus-privacy-scope="builder"></script>
 </head>
 <body>
 <div class="wrap" role="main">
@@ -2598,6 +2598,7 @@ function stripDeploymentAccessGate(source){
   const parsed=new DOMParser().parseFromString(String(source||''),'text/html');
   parsed.documentElement.removeAttribute('data-ghrab-access');
   parsed.querySelectorAll('link[data-ghrab-access-gate-css],link[data-ghrab-access-preload],style[data-ghrab-access-style],script[data-ghrab-access-bootstrap],noscript[data-ghrab-access-noscript]').forEach(function(node){node.remove();});
+  parsed.querySelectorAll('script[src*="frame-guard.js"]').forEach(function(node){node.remove();});
   parsed.querySelectorAll('script[type="application/ghrab-protected"]').forEach(function(sourceScript){
     const executable=parsed.createElement('script');
     [...sourceScript.attributes].forEach(function(attr){
@@ -3055,10 +3056,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: about, history, guide, tests ============================ */
-const APP_VERSION='1.16.30';
-const APP_ABOUT=Object.freeze(/* ABOUT_METADATA_START */{"releaseDate":"2026-09-28","platformVersion":"1.1.2","aiCoreVersion":"1.0.0","garpVersion":"2.7","pilotStatus":"Ověřováno v pilotu","shieldLive":"NOT TESTED","serverStatus":"DEFERRED_BY_OWNER_DECISION"}/* ABOUT_METADATA_END */);
+const APP_VERSION='1.16.31';
+const APP_ABOUT=Object.freeze(/* ABOUT_METADATA_START */{"releaseDate":"2026-10-02","platformVersion":"1.1.2","aiCoreVersion":"1.0.0","garpVersion":"2.7","pilotStatus":"Ověřováno v pilotu","shieldLive":"NOT TESTED","serverStatus":"DEFERRED_BY_OWNER_DECISION"}/* ABOUT_METADATA_END */);
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
+  '1.16.31 · GARP 2.8 audit: ochrana všech nasazených stránek proti cizímu iframe a rozšířená sanitizace technických chyb o Google API klíče a parametr key. UI a herní logika beze změn.',
   '1.16.30 · O aplikaci: jednotná identita, autor a vývojový garant, školní projekt a technický stav; historie vydání je součástí nové sekce. Herní logika beze změn.',
   '1.16.29 · GARP 2.7 FOUNDATION: přidána architecture-integrity brána, fail-closed school AI hranice, omezení příloh a Node 24 CI; LIVE ověření zůstává otevřené.',
   '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',
@@ -3068,7 +3070,6 @@ const CHANGELOG=[
   '1.16.2 · Jednotná GHRAB QA 1.0.1: reprodukovatelný release příkaz, Chromium galerie všech enginů, bezpečnostní a PWA brány a verdikt vázaný na SHA-256 buildu.',
   '1.16.1 · Zavedena trvalá správa médií: Bradavice mají zpět intro a soundtrack, varianty mají oddělené zdroje a export vkládá pouze vybranou variantu pro offline hraní.',
   '1.16.0 · Auditní opravná verze: odstraněna nekonečná překladová smyčka, opraveno dělení týmů, striktní vazba svět + mechanika, CI brána, PWA registrace a bezpečnější export enginů.',
-  '1.15.0 · Anonymní technické metriky výstupů bez témat, promptů a identity uživatele.',
 ];
 const CHANGELOG_ARCHIVE=[
   '1.14.6 · Integrovaný interaktivní manuál dostupný z aplikace i PWA balíčku.',

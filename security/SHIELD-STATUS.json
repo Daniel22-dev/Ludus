@@ -1,7 +1,7 @@
 {
   "schema": "ghrab-shield-status-v2",
   "appId": "ludus",
-  "version": "1.16.30",
+  "version": "1.16.31",
   "date": "2026-09-28",
   "statusScope": "GARP 2.7 consolidated r2 FOUNDATION; About-only release with local source/UI regression checks; release CI, external trust and LIVE not certified by this file.",
   "protocol": {

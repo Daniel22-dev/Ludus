@@ -1,10 +1,10 @@
 {
   "schema": "ghrab-ai-assurance-fingerprint-v2",
   "appId": "ludus",
-  "appVersion": "1.16.30",
+  "appVersion": "1.16.31",
   "coreVersion": "1.0.0",
   "algorithm": "SHA-256",
-  "aggregate": "e8dccea949b4ec7ddd0a27761bc36a380e1bdb0f57862982d4d3041044fdb193",
+  "aggregate": "8f223a1be86d823cf62ec1596f8fbb67ecf4bc49d14254a39cb5fd20760f59a4",
   "inventory": "security/ai-boundary-files.json",
   "providerBoundary": "deployment-profile-and-egress-controlled",
   "files": [
@@ -20,18 +20,18 @@
     },
     {
       "path": "public/access/error-reporter.js",
-      "size": 74834,
-      "sha256": "db0a22f9934d3dd62db4a1ca3c7dcbbde509eea1db1f5b209765684da6aec1ec"
+      "size": 74978,
+      "sha256": "49b14dde9039f7d17db424e01bd453069980f593bb572c5b3413b526ac0cc1f6"
     },
     {
       "path": "public/ai-operations.json",
       "size": 1049,
-      "sha256": "608a937c0227d4307022d5d7279ac30ee25661e684a3290a11c7b17a080d46ab"
+      "sha256": "2a46ea2065307ac220b20061dd440c7b40d0a06787938bb132f72ecfe5a359a6"
     },
     {
       "path": "public/config/data-manifest.json",
       "size": 7132,
-      "sha256": "6506b9cc1f985ebaf1b8ecc0e974f667beb3197e9ef330a9cb9221a2a7530f39"
+      "sha256": "0b53a2ddd239c4c53311aa61d22dafb117327941b1bd0cdd1cf494f45dd6b5e3"
     },
     {
       "path": "public/config/deployment.json",
@@ -56,12 +56,12 @@
     {
       "path": "public/config/release-acceptance.json",
       "size": 3217,
-      "sha256": "02db039cb76c8b7a59fad9646cf23c12542c1d0897daca5e6bee5e754e9f0667"
+      "sha256": "4dc0221debe0c4c1bc60b9bf44fff8a31e57685712f11d4efc5ff62a28411cd6"
     },
     {
       "path": "public/config/security-headers.json",
       "size": 1939,
-      "sha256": "831f4326ab40c010555256e1e6ad5d4560b3f07a1c3f95883bf742729688b604"
+      "sha256": "4874e5dff496c8e62856804c081fecd675faca2dc2106dad1f5f0a715cb22429"
     },
     {
       "path": "scripts/build-school-profile.mjs",
@@ -76,7 +76,7 @@
     {
       "path": "scripts/qa-garp-security.mjs",
       "size": 11069,
-      "sha256": "f8520e937ef132bfe7a27269faf751b1b74d851ef24940ef2960238e56c1210e"
+      "sha256": "c600df8d33fedf6f0f5bb61c8dff74430a3abcd9b407980bde59d41fdaaaef65"
     },
     {
       "path": "scripts/qa-garp23-critical.mjs",
@@ -86,27 +86,27 @@
     {
       "path": "scripts/qa-garp23-security.mjs",
       "size": 25668,
-      "sha256": "a8f2eaa8bb3193ee5659aa1765943698f6d52a77a91fc206c428ba97e6c7d2ce"
+      "sha256": "2e41f46f222a1741b53c42fa1c5c574407ab8235bfade470039e6c011ee9df04"
     },
     {
       "path": "scripts/qa-garp25-ai-resource.mjs",
       "size": 2314,
-      "sha256": "e1dfa03c72bd31d2dbff1a1f8be9a356ab7b9f5a7b2ff9a42212065d090e1c7d"
+      "sha256": "db17d4b5e5fb6c78509e7d8fd17060a8daf5409b03faef2fa319a80fb4cc6ec3"
     },
     {
       "path": "scripts/qa-garp27-contract.mjs",
       "size": 7418,
-      "sha256": "7445e5176c367b6939aeb57d9ff26f7ae1b93d4bfd692223adfc540e217c6e63"
+      "sha256": "a6d0a1740933031fe10636b102f3ec160f7844c9b89bb07331a99c4ba337c7c8"
     },
     {
       "path": "src/ai-core-integration.js",
       "size": 5361,
-      "sha256": "644638c323ccbe30b628e17763fed46bfa0954195d5ce6fa89e8fd3679d5d880"
+      "sha256": "e5185ee5644bfe901701f40e50e6aad4a12a2bd74f8e367b11a959226645dd8d"
     },
     {
       "path": "src/index.html",
-      "size": 254831,
-      "sha256": "a4a7f31fd6c4151d478b880cbec3f9a5c78858042c7dd7446a1f018df745fe31"
+      "size": 255035,
+      "sha256": "0bfb178b91a43d0a95c822f7483b2e270270d2746d0f079010798fefb564fdc7"
     },
     {
       "path": "vendor/ghrab-ai-core-1.0.0/ghrab-ai-conformance-1.0.0.js",
