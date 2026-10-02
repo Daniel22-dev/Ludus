@@ -26,7 +26,7 @@
     --mono:ui-monospace,'SF Mono','Cascadia Code',Consolas,monospace;
     --r:16px; --shadow:0 18px 50px -22px rgba(0,0,0,.8);
   }
-  /* ---- denní (světlý) režim ---- */
+  
   html[data-theme="light"]{
     --bg:#f3efe6; --bg2:#e9e3d6; --panel:#fbf9f4; --panel2:#f0ebde;
     --ink:#241f30; --dim:#5b5470; --faint:#676078;
@@ -59,7 +59,7 @@
     color:var(--ink); font-family:var(--sans); line-height:1.5;
     min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden;
   }
-  /* ambient embers */
+  
   .ember{position:fixed;border-radius:50%;filter:blur(1px);pointer-events:none;z-index:0;
     background:radial-gradient(circle,var(--gold-soft),transparent 70%);opacity:.0;
     animation:rise linear infinite}
@@ -67,7 +67,7 @@
 
   .wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 22px 70px}
 
-  /* ---- top bar ---- */
+  
   header.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;
     padding:20px 4px 18px;border-bottom:1px solid var(--line);margin-bottom:30px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:14px}
@@ -87,14 +87,14 @@
   .iconbtn:hover{color:var(--ink);border-color:var(--line2)}
   .iconbtn[aria-pressed="true"]{color:var(--gold);border-color:rgba(245,185,66,.4);background:rgba(245,185,66,.08)}
 
-  /* ---- hero ---- */
+  
   .hero{margin-bottom:26px}
   .hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,4.6vw,50px);line-height:1.05;
     letter-spacing:-.01em;margin-bottom:12px}
   .hero h1 em{font-style:italic;color:var(--gold-soft)}
   .hero p{color:var(--dim);max-width:62ch;font-size:16px}
 
-  /* ---- stepper ---- */
+  
   .steps{display:flex;gap:10px;margin:26px 0 22px;flex-wrap:wrap}
   .step{flex:1;min-width:200px;text-align:left;border:1px solid var(--line);background:var(--bg2);
     border-radius:14px;padding:14px 16px;cursor:pointer;transition:.2s;display:flex;gap:13px;align-items:center;color:inherit}
@@ -108,11 +108,11 @@
   .step b{display:block;font-size:14.5px}
   .step span{font-size:12px;color:var(--faint)}
 
-  /* ---- workspace ---- */
+  
   .work{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;align-items:start}
   .work.solo{grid-template-columns:1fr}
   .core:not(.show){display:none}
-  /* ---- kovářská animace ve výhni ---- */
+  
   .forge{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0 4px;text-align:center}
   .forge svg{display:block;filter:drop-shadow(0 0 30px rgba(255,140,40,.42))}
   .forge .flabel{font:700 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft)}
@@ -153,7 +153,7 @@
   .tag{font:600 10.5px var(--mono);letter-spacing:.02em;padding:3px 8px;border-radius:7px;
     background:rgba(180,117,255,.13);color:#d3b8ff;border:1px solid rgba(180,117,255,.2)}
 
-  /* skin card extras */
+  
   .twinline{font-size:11px;color:var(--faint);margin-top:6px;display:flex;align-items:center;gap:5px}
   .brandtoggle{margin-top:11px;border-top:1px solid var(--line);padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .brandtoggle small{font-size:11px;color:var(--dim);line-height:1.35}
@@ -190,7 +190,7 @@
     .stage-context{display:none}
   }
 
-  /* topic step */
+  
   .field{margin-bottom:18px}
   .field label{display:block;font:600 13px var(--sans);margin-bottom:8px;color:var(--ink)}
   .input{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;color:var(--ink);
@@ -211,7 +211,7 @@
   .note{font-size:12.5px;color:var(--dim);margin-top:10px}
   .note b{color:var(--ink)}
 
-  /* ---- CORE (Jádro) ---- */
+  
   .core{position:sticky;top:18px;border:1px solid var(--line);border-radius:20px;
     background:linear-gradient(180deg,var(--panel),var(--bg2));padding:22px 20px;box-shadow:var(--shadow);overflow:hidden}
   .core::before{content:"";position:absolute;inset:0;background:
@@ -245,7 +245,7 @@
   .reco .rbtn:hover{border-color:var(--gold);color:var(--gold-soft)}
   .idle{text-align:center;color:var(--faint);font-size:13px;padding:18px 6px;line-height:1.6}
 
-  /* ---- spec ---- */
+  
   .spec{margin-top:30px;border:1px solid var(--line);border-radius:20px;background:var(--bg2);overflow:hidden;
     opacity:0;transform:translateY(12px);transition:.4s;pointer-events:none}
   .spec.show{opacity:1;transform:none;pointer-events:auto}
@@ -264,7 +264,7 @@
 
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-  /* ---- API key panel ---- */
+  
   .kbadge{font:600 11px var(--sans);padding:6px 11px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
   .kbadge.off{color:var(--faint);background:var(--bg2)}
   .kbadge.on{color:var(--green);background:rgba(62,230,143,.1);border-color:rgba(62,230,143,.3)}
@@ -277,7 +277,7 @@
   .btn.sm{padding:9px 13px;font-size:12.5px}
   .apihint{font-size:11.5px;color:var(--faint);flex:1;min-width:200px;line-height:1.4}
 
-  /* ---- nastavení výsledné hry ---- */
+  
   .settingspanel{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg2));border-radius:16px;padding:16px 18px;margin:-8px 0 24px;box-shadow:var(--shadow)}
   .settingshead{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
   .settingshead h3{font-size:15px;margin:0;color:var(--ink)}
@@ -319,7 +319,7 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .btn[data-busy="true"]{opacity:.7;pointer-events:none}
 
-  /* ---- badges engine/domény ---- */
+  
   .fmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
   .ebadge{font:700 10.5px var(--sans);padding:3px 8px;border-radius:999px;border:1px solid var(--line2)}
   .ebadge.on{color:var(--green);border-color:rgba(62,230,143,.4);background:rgba(62,230,143,.08)}
@@ -334,9 +334,9 @@
   .btn .zap{margin-left:7px;border-color:rgba(0,0,0,.18);background:rgba(0,0,0,.12);color:inherit}
   .dbadge{font:600 10.5px var(--sans);color:var(--faint);letter-spacing:.02em}
   .dbadge.sk{margin:2px 0 6px;color:var(--dim)}
-  /* ---- logo ---- */
+  
   .school-logo{height:40px;width:auto;border-radius:8px;display:block;box-shadow:0 4px 14px -6px rgba(0,0,0,.6)}
-  /* ---- footer + tools bar ---- */
+  
   .foot{margin-top:46px;border-top:1px solid var(--line);padding-top:22px}
   .footer-tools-panel{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
   .footer-tools-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
@@ -346,7 +346,7 @@
   .foot-link:hover{border-color:var(--gold);background:rgba(245,185,66,.08)}
   .foot-owner{color:var(--faint);font-size:12px;line-height:1.6}
   .foot-owner strong{color:var(--dim)}
-  /* ---- modal ---- */
+  
   .modal-overlay{position:fixed;inset:0;background:rgba(6,5,16,.72);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
   .modal-overlay.open{display:flex}
   .modal{width:min(680px,100%);max-height:86vh;overflow:auto;border:1px solid var(--line2);border-radius:20px;background:linear-gradient(180deg,var(--panel),var(--bg2));box-shadow:var(--shadow)}
@@ -379,7 +379,7 @@
   .guide-step b{display:block;font-size:14px;margin-bottom:2px} .guide-step small{color:var(--dim);font-size:12.5px}
   @media(max-width:560px){.school-logo{height:32px}.foot-link{flex:1;min-width:92px;min-height:40px;text-align:center}}
 
-  /* === GHRAB UNIFIED SCHOOL IDENTITY v1 === */
+  
   .school-logo-box{display:flex;align-items:center;justify-content:center;flex:0 0 78px;width:78px;height:78px;padding:6px;border-radius:18px;background:#fff;border:1px solid rgba(180,160,255,.22);box-shadow:0 8px 24px rgba(0,0,0,.26);overflow:hidden}
   .school-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:12px}
   .school-brand-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
@@ -393,7 +393,7 @@
   @media(max-width:720px){header.bar{align-items:flex-start}.brand{gap:10px;flex:1}.school-logo-box{flex-basis:58px;width:58px;height:58px;padding:5px;border-radius:14px}.school-name{font-size:13px;line-height:1.18;letter-spacing:.055em}.brand .lockup{flex-direction:column;gap:0}.mark{font-size:23px}.controls{width:100%;justify-content:flex-end}}
 
 
-/* Interaktivní manuál celé aplikace — oddělený od kontextových nápověd */
+
 a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:inherit;position:relative}
 a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
 a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
