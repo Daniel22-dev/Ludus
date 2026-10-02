@@ -85,9 +85,18 @@ try {
         });
         const page = await context.newPage();
         const errors = [];
+        const httpErrors = [];
         page.on("pageerror", (e) => errors.push(String(e)));
+        page.on("response", (response) => {
+          if (response.status() >= 400) {
+            httpErrors.push(`HTTP ${response.status()} ${response.url()}`);
+          }
+        });
         page.on("console", (m) => {
-          if (m.type() === "error") errors.push(m.text());
+          if (m.type() !== "error") return;
+          const text = m.text();
+          if (/Failed to load resource/i.test(text)) return;
+          errors.push(text);
         });
         await page.route("**/AI-Studio-GHRAB/access/app-guard.js", (r) =>
           r.fulfill({
@@ -165,9 +174,10 @@ try {
           throw new Error(`Chybí očekávaný text ${flow.expectedText}`);
         if (bodyText.length < (flow.minVisibleText || 20))
           throw new Error("Výsledek workflow nemá dost viditelného obsahu");
-        if (errors.length)
+        const runtimeErrors = [...httpErrors, ...errors];
+        if (runtimeErrors.length)
           throw new Error(
-            `Konzole workflow: ${errors.join(" | ").slice(0, 1000)}`,
+            `Konzole workflow: ${runtimeErrors.join(" | ").slice(0, 1600)}`,
           );
         evidence.push(url);
         await closeWithLimit(context);
