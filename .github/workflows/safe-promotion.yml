@@ -153,36 +153,57 @@ jobs:
             fi
           done
 
-          # The same commit can have both push- and PR-triggered P5 checks.
-          # Wait until every p5-release-gate for CHECKED_SHA is completed and GREEN
-          # so GitHub branch protection cannot race this merge with a still-running check.
-          p5_wait_seconds=0
-          p5_wait_limit=420
+          # Wait for every status check required by the active main Ruleset.
+          # This prevents the P5 workflow_run from racing test/axe checks that can
+          # still be pending when P5 itself turns GREEN.
+          mapfile -t required_contexts < <(
+            jq -r '[.[] | select(.type == "required_status_checks") | .parameters.required_status_checks[]? | .context] | unique[]' <<<"$rules_json"
+          )
+          if [ "${#required_contexts[@]}" -eq 0 ]; then
+            echo "::error::No required status checks resolved from the main Ruleset; merge blocked fail-closed."
+            exit 1
+          fi
+
+          check_wait_seconds=0
+          check_wait_limit=420
           while true; do
             checks_json="$(gh api -H 'Accept: application/vnd.github+json' "repos/${REPOSITORY}/commits/${CHECKED_SHA}/check-runs?per_page=100")"
-            p5_total="$(jq '[.check_runs[] | select(.name == "p5-release-gate")] | length' <<<"$checks_json")"
-            p5_pending="$(jq '[.check_runs[] | select(.name == "p5-release-gate" and .status != "completed")] | length' <<<"$checks_json")"
-            p5_failed="$(jq '[.check_runs[] | select(.name == "p5-release-gate" and .status == "completed" and .conclusion != "success")] | length' <<<"$checks_json")"
+            missing_contexts=()
+            pending_contexts=()
+            failed_contexts=()
 
-            if [ "$p5_total" -eq 0 ]; then
-              echo "::error::No p5-release-gate check exists for ${CHECKED_SHA}; merge blocked fail-closed."
+            for context in "${required_contexts[@]}"; do
+              context_total="$(jq --arg context "$context" '[.check_runs[] | select(.name == $context)] | length' <<<"$checks_json")"
+              context_pending="$(jq --arg context "$context" '[.check_runs[] | select(.name == $context and .status != "completed")] | length' <<<"$checks_json")"
+              context_failed="$(jq --arg context "$context" '[.check_runs[] | select(.name == $context and .status == "completed" and .conclusion != "success")] | length' <<<"$checks_json")"
+
+              if [ "$context_total" -eq 0 ]; then
+                missing_contexts+=("$context")
+              fi
+              if [ "$context_pending" -gt 0 ]; then
+                pending_contexts+=("$context")
+              fi
+              if [ "$context_failed" -gt 0 ]; then
+                failed_contexts+=("$context")
+              fi
+            done
+
+            if [ "${#failed_contexts[@]}" -gt 0 ]; then
+              echo "::error::Required status check(s) failed for ${CHECKED_SHA}: ${failed_contexts[*]}"
               exit 1
             fi
-            if [ "$p5_failed" -gt 0 ]; then
-              echo "::error::At least one p5-release-gate is not GREEN; merge blocked."
-              exit 1
-            fi
-            if [ "$p5_pending" -eq 0 ]; then
-              echo "All ${p5_total} p5-release-gate checks are completed and GREEN."
+            if [ "${#missing_contexts[@]}" -eq 0 ] && [ "${#pending_contexts[@]}" -eq 0 ]; then
+              echo "All required status checks are completed and GREEN: ${required_contexts[*]}"
               break
             fi
-            if [ "$p5_wait_seconds" -ge "$p5_wait_limit" ]; then
-              echo "::error::Timed out waiting for ${p5_pending} p5-release-gate check(s) to complete."
+            if [ "$check_wait_seconds" -ge "$check_wait_limit" ]; then
+              echo "::error::Timed out waiting for required status checks. Missing: ${missing_contexts[*]:-none}; pending: ${pending_contexts[*]:-none}."
               exit 1
             fi
-            echo "Waiting for ${p5_pending}/${p5_total} p5-release-gate check(s) on ${CHECKED_SHA}..."
+
+            echo "Waiting for required status checks on ${CHECKED_SHA}. Missing: ${missing_contexts[*]:-none}; pending: ${pending_contexts[*]:-none}."
             sleep 15
-            p5_wait_seconds=$((p5_wait_seconds + 15))
+            check_wait_seconds=$((check_wait_seconds + 15))
           done
 
           result="$(gh api --method PUT "repos/${REPOSITORY}/pulls/${pr_number}/merge" -f sha="$CHECKED_SHA" -f merge_method='merge')"
