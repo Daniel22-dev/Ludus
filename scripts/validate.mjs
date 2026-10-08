@@ -508,6 +508,31 @@ async function main() {
   const syncCoreWorkflow = read('.github/workflows/sync-ghrab-ai-core.yml');
   need(validateWorkflow.includes('npm ci') && validateWorkflow.includes('npm test'), '.github/workflows/validate.yml: chybí npm ci / npm test');
   need(deployWorkflow.includes('npm ci') && deployWorkflow.includes('npm test'), '.github/workflows/deploy.yml: nasazení není blokováno testy');
+  // P2.2: the no-apt alternative is an immutable official Playwright image
+  // and an actual Chromium smoke test before either independent QA gate.
+  const pinnedBrowserImage = 'mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48';
+  const hasVerifiedPreinstalledBrowser = (workflow) => {
+    const validationStart = workflow.indexOf('\n  qa-validation:\n');
+    const releaseStart = workflow.indexOf('\n  qa-build:\n');
+    const deployStart = workflow.indexOf('\n  deploy:\n');
+    if (!(validationStart >= 0 && validationStart < releaseStart && releaseStart < deployStart)) return false;
+    const sections = [
+      [workflow.slice(validationStart, releaseStart), 'run: npm test'],
+      [workflow.slice(releaseStart, deployStart), 'run: npm run qa:p5:ci'],
+    ];
+    return sections.every(([job, nextGate]) => {
+      const imageAt = job.indexOf('image: ' + pinnedBrowserImage);
+      const smokeAt = job.indexOf('      - name: Verify image-baked Playwright Chromium and launch smoke');
+      const launchAt = job.indexOf('const browser = await chromium.launch({ headless: true });');
+      const exportAt = job.indexOf("appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable");
+      const gateAt = job.indexOf(nextGate);
+      return imageAt >= 0 && smokeAt > imageAt && launchAt > smokeAt &&
+        exportAt > launchAt && gateAt > exportAt &&
+        job.includes("process.env.PLAYWRIGHT_BROWSERS_PATH !== '/ms-playwright'") &&
+        job.includes("installed !== '1.61.1'") &&
+        job.includes('accessSync(executable, constants.X_OK)');
+    });
+  };
   for (const [workflowPath, workflow] of [
     ['.github/workflows/validate.yml', validateWorkflow],
     ['.github/workflows/deploy.yml', deployWorkflow],
@@ -515,9 +540,13 @@ async function main() {
   ]) {
     const browserInstallPosition = workflow.indexOf('playwright install --with-deps chromium');
     const applicationTestPosition = workflow.indexOf('run: npm test');
+    const legacyInstallerBeforeTest = browserInstallPosition >= 0 &&
+      applicationTestPosition >= 0 && browserInstallPosition < applicationTestPosition;
+    const pinnedBrowserBeforeTest = workflowPath === '.github/workflows/deploy.yml' &&
+      hasVerifiedPreinstalledBrowser(workflow);
     need(
-      browserInstallPosition >= 0 && applicationTestPosition >= 0 && browserInstallPosition < applicationTestPosition,
-      `${workflowPath}: Playwright Chromium musí být nainstalován a CHROMIUM_PATH nastaven před npm test`,
+      legacyInstallerBeforeTest || pinnedBrowserBeforeTest,
+      `${workflowPath}: chybí důvěryhodné Chromium před npm test (instalace nebo přesně připnutý obraz se smoke testem)`,
     );
   }
 
