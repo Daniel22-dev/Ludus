@@ -16,8 +16,82 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  qa-validation:
+    # Independent QA evidence for the same SHA, without reusing the P5 build.
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.8.0
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+      # The reporter regression inspects ZIP contents with the distro unzip tool.
+      # Playwright/Chromium and browser OS dependencies remain preinstalled.
+      - name: Install ZIP inspection tool (reporter QA only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v unzip >/dev/null 2>&1; then
+            apt-get update -qq -o Acquire::Retries=2
+            apt-get install -y --no-install-recommends -o Acquire::Retries=2 unzip
+          fi
+          command -v unzip
+      - name: Verify image-baked Playwright Chromium and launch smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, accessSync, appendFileSync, constants } from 'node:fs';
+          import { chromium } from 'playwright';
+          const installed = JSON.parse(readFileSync('./node_modules/playwright/package.json', 'utf8')).version;
+          if (installed !== '1.61.1') throw new Error('Playwright version mismatch: ' + installed);
+          if (process.env.PLAYWRIGHT_BROWSERS_PATH !== '/ms-playwright') {
+            throw new Error('Unexpected browser source: ' + process.env.PLAYWRIGHT_BROWSERS_PATH);
+          }
+          const executable = chromium.executablePath();
+          accessSync(executable, constants.X_OK);
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage();
+            await page.goto('data:text/html,%3Ctitle%3ELUDUS%20P2.2%20smoke%3C%2Ftitle%3E');
+            if ((await page.title()) !== 'LUDUS P2.2 smoke') throw new Error('Chromium smoke test failed');
+            console.log('Verified preinstalled Chromium: ' + executable + ' (' + browser.version() + ')');
+          } finally {
+            await browser.close();
+          }
+          appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable + '\n');
+          NODE
+      - name: Test application
+        run: npm test
+      - name: Run unified error reporter regression
+        run: npm run test:reporter
+      - name: Run GHRAB QA release gate
+        run: npm run qa:release
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ghrab-qa-${{ github.sha }}
+          path: qa-results
+      - name: Verify GHRAB Platform P3 conformance
+        run: npm run qa:platform
   qa-build:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
     outputs:
       version: ${{ steps.release-meta.outputs.version }}
       patch_assurance_sha256: ${{ steps.release-evidence.outputs.patch_assurance_sha256 }}
@@ -42,27 +116,31 @@ jobs:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
       - name: Test release identity verifier (positive and negative cases)
         run: node --test scripts/verify-live-release.test.mjs
-      - name: Install pinned Playwright Chromium
+      - name: Verify image-baked Playwright Chromium and launch smoke
         shell: bash
         run: |
-          npx playwright install --with-deps chromium
-          node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
-      - name: Test application
-        run: npm test
-      - name: Run unified error reporter regression
-        run: npm run test:reporter
-      - name: Run GHRAB QA release gate
-        run: npm run qa:release
-        env:
-          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
-      - name: Upload QA evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: ghrab-qa-${{ github.sha }}
-          path: qa-results
-      - name: Verify GHRAB Platform P3 conformance
-        run: npm run qa:platform
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, accessSync, appendFileSync, constants } from 'node:fs';
+          import { chromium } from 'playwright';
+          const installed = JSON.parse(readFileSync('./node_modules/playwright/package.json', 'utf8')).version;
+          if (installed !== '1.61.1') throw new Error('Playwright version mismatch: ' + installed);
+          if (process.env.PLAYWRIGHT_BROWSERS_PATH !== '/ms-playwright') {
+            throw new Error('Unexpected browser source: ' + process.env.PLAYWRIGHT_BROWSERS_PATH);
+          }
+          const executable = chromium.executablePath();
+          accessSync(executable, constants.X_OK);
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage();
+            await page.goto('data:text/html,%3Ctitle%3ELUDUS%20P2.2%20smoke%3C%2Ftitle%3E');
+            if ((await page.title()) !== 'LUDUS P2.2 smoke') throw new Error('Chromium smoke test failed');
+            console.log('Verified preinstalled Chromium: ' + executable + ' (' + browser.version() + ')');
+          } finally {
+            await browser.close();
+          }
+          appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable + '\n');
+          NODE
       - name: Enforce P5 R2 release gate
         run: npm run qa:p5:ci
         env:
@@ -109,7 +187,8 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    needs: qa-build
+    # Both independent QA and release checks must succeed before publication.
+    needs: [qa-validation, qa-build]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -127,7 +206,7 @@ jobs:
 
   notify-ai-studio:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    needs: [qa-build, deploy]
+    needs: [qa-validation, qa-build, deploy]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
