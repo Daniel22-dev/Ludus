@@ -1,10 +1,9 @@
 name: Legacy P4 entrypoint (delegates to P5 R2)
 
+# Historical entrypoint retained for manual compatibility only.
+# Canonical required P5 and axe checks still run independently on PRs.
 on:
   workflow_dispatch:
-  push:
-    branches: [main, master]
-  pull_request:
 
 permissions:
   contents: read
