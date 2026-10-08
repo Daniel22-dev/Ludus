@@ -19,6 +19,8 @@ jobs:
   qa-validation:
     # Independent QA evidence for the same SHA, without reusing the P5 build.
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
     permissions:
       contents: read
     steps:
@@ -34,11 +36,31 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
-      - name: Install pinned Playwright Chromium
+      - name: Verify image-baked Playwright Chromium and launch smoke
         shell: bash
         run: |
-          npx playwright install --with-deps chromium
-          node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, accessSync, appendFileSync, constants } from 'node:fs';
+          import { chromium } from 'playwright';
+          const installed = JSON.parse(readFileSync('./node_modules/playwright/package.json', 'utf8')).version;
+          if (installed !== '1.61.1') throw new Error('Playwright version mismatch: ' + installed);
+          if (process.env.PLAYWRIGHT_BROWSERS_PATH !== '/ms-playwright') {
+            throw new Error('Unexpected browser source: ' + process.env.PLAYWRIGHT_BROWSERS_PATH);
+          }
+          const executable = chromium.executablePath();
+          accessSync(executable, constants.X_OK);
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage();
+            await page.goto('data:text/html,%3Ctitle%3ELUDUS%20P2.2%20smoke%3C%2Ftitle%3E');
+            if ((await page.title()) !== 'LUDUS P2.2 smoke') throw new Error('Chromium smoke test failed');
+            console.log('Verified preinstalled Chromium: ' + executable + ' (' + browser.version() + ')');
+          } finally {
+            await browser.close();
+          }
+          appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable + '\n');
+          NODE
       - name: Test application
         run: npm test
       - name: Run unified error reporter regression
@@ -57,6 +79,8 @@ jobs:
         run: npm run qa:platform
   qa-build:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
     outputs:
       version: ${{ steps.release-meta.outputs.version }}
       patch_assurance_sha256: ${{ steps.release-evidence.outputs.patch_assurance_sha256 }}
@@ -81,11 +105,31 @@ jobs:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
       - name: Test release identity verifier (positive and negative cases)
         run: node --test scripts/verify-live-release.test.mjs
-      - name: Install pinned Playwright Chromium
+      - name: Verify image-baked Playwright Chromium and launch smoke
         shell: bash
         run: |
-          npx playwright install --with-deps chromium
-          node -e "console.log('CHROMIUM_PATH=' + require('playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, accessSync, appendFileSync, constants } from 'node:fs';
+          import { chromium } from 'playwright';
+          const installed = JSON.parse(readFileSync('./node_modules/playwright/package.json', 'utf8')).version;
+          if (installed !== '1.61.1') throw new Error('Playwright version mismatch: ' + installed);
+          if (process.env.PLAYWRIGHT_BROWSERS_PATH !== '/ms-playwright') {
+            throw new Error('Unexpected browser source: ' + process.env.PLAYWRIGHT_BROWSERS_PATH);
+          }
+          const executable = chromium.executablePath();
+          accessSync(executable, constants.X_OK);
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage();
+            await page.goto('data:text/html,%3Ctitle%3ELUDUS%20P2.2%20smoke%3C%2Ftitle%3E');
+            if ((await page.title()) !== 'LUDUS P2.2 smoke') throw new Error('Chromium smoke test failed');
+            console.log('Verified preinstalled Chromium: ' + executable + ' (' + browser.version() + ')');
+          } finally {
+            await browser.close();
+          }
+          appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable + '\n');
+          NODE
       - name: Enforce P5 R2 release gate
         run: npm run qa:p5:ci
         env:
