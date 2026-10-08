@@ -22,6 +22,30 @@ try{
   write('qa-p5-xss-sinks-report.json',{schema:'synthetic-p5-xss-control-v1',appId:'ludus',appVersion:version,status:'passed',failures:[],summary:{failed:0}});
   write('qa-p5-axe-runtime-report.json',{schema:'synthetic-p5-axe-control-v1',appId:'ludus',appVersion:version,status:'passed',scriptsExecuted:true,summary:{blockers:0,failed:0}});
   let r=run();must(r.status===0,'LU-N15 positive control: valid complete report set must pass P5 certification',r);
+  // A pinned image is eligible only while the digest and actual runtime
+  // verification remain intact. Poison the synthetic source and require FAIL.
+  const workflowPath=path.join(testRoot,'.github','workflows','p5-release-gate.yml');
+  const goodWorkflow=fs.readFileSync(workflowPath,'utf8');
+  if(goodWorkflow.includes('image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48')){
+    const badDigest=goodWorkflow.replace('image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48',
+      'image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:'+'0'.repeat(64));
+    must(badDigest!==goodWorkflow,'LU-N15 negative setup: digest mutation');
+    fs.writeFileSync(workflowPath,badDigest);
+    r=run();must(r.status!==0&&((r.stdout||'')+(r.stderr||'')).includes('ci.browser-install'),
+      'LU-N15 negative control: untrusted image digest must block P5',r);
+    const originalLaunch='const browser = await chromium.launch({ headless: true });';
+    must(goodWorkflow.includes(originalLaunch),'LU-N15 negative setup: missing browser launch');
+    fs.writeFileSync(workflowPath,goodWorkflow.replace(originalLaunch,'const browser = await syntheticBrowserLaunch();'));
+    r=run();must(r.status!==0&&((r.stdout||'')+(r.stderr||'')).includes('ci.browser-install'),
+      'LU-N15 negative control: missing browser smoke must block P5',r);
+    const originalExport="appendFileSync(process.env.GITHUB_ENV, 'CHROMIUM_PATH=' + executable";
+    must(goodWorkflow.includes(originalExport),'LU-N15 negative setup: missing browser path export');
+    fs.writeFileSync(workflowPath,goodWorkflow.replace(originalExport,'console.log(executable'));
+    r=run();must(r.status!==0&&((r.stdout||'')+(r.stderr||'')).includes('ci.browser-install'),
+      'LU-N15 negative control: missing verified path export must block P5',r);
+    fs.writeFileSync(workflowPath,goodWorkflow);
+    r=run();must(r.status===0,'LU-N15 recovery: restored pinned browser attestation must pass',r);
+  }
   const browserPath=path.join(dist,'qa-p3-browser-report.json'), qualityPath=path.join(dist,'quality-report.json');
   const browser=JSON.parse(fs.readFileSync(browserPath,'utf8'));browser.status='failed';write('qa-p3-browser-report.json',browser);
   r=run();must(r.status!==0&&((r.stdout||'')+(r.stderr||'')).includes('report.browser.passed'),'LU-N15 negative control: browser status failed must fail P5',r);
