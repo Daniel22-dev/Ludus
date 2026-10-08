@@ -36,6 +36,17 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+      # The reporter regression inspects ZIP contents with the distro unzip tool.
+      # Playwright/Chromium and browser OS dependencies remain preinstalled.
+      - name: Install ZIP inspection tool (reporter QA only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v unzip >/dev/null 2>&1; then
+            apt-get update -qq -o Acquire::Retries=2
+            apt-get install -y --no-install-recommends -o Acquire::Retries=2 unzip
+          fi
+          command -v unzip
       - name: Verify image-baked Playwright Chromium and launch smoke
         shell: bash
         run: |
