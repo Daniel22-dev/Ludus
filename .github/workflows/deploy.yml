@@ -9,15 +9,18 @@ on:
 permissions:
   contents: read
 
+# Keep PR runs independent from published main releases. Never cancel a
+# running production deploy, including one started by workflow_dispatch.
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: pages-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   qa-build:
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.release-meta.outputs.version }}
+      patch_assurance_sha256: ${{ steps.release-evidence.outputs.patch_assurance_sha256 }}
     permissions:
       contents: read
     steps:
@@ -37,6 +40,8 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+      - name: Test release identity verifier (positive and negative cases)
+        run: node --test scripts/verify-live-release.test.mjs
       - name: Install pinned Playwright Chromium
         shell: bash
         run: |
@@ -62,8 +67,32 @@ jobs:
         run: npm run qa:p5:ci
         env:
           GARP27_TRUSTED_POLICY_SHA256: ${{ vars.GARP27_TRUSTED_POLICY_SHA256 }}
+      # Exercise the exact publish-identity binding on PRs as well as main.
+      # This fails before release if P5 stops generating commit-bound evidence.
+      - name: Bind publishable assurance manifest to this source commit
+        id: release-evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const patchBytes = fs.readFileSync('dist/patch-assurance.json');
+          const patch = JSON.parse(patchBytes.toString('utf8'));
+          const studio = JSON.parse(fs.readFileSync('dist/studio-manifest.json', 'utf8'));
+          const digest = createHash('sha256').update(patchBytes).digest('hex');
+          if (patch.schema !== 'ghrab-patch-assurance-manifest-v1' ||
+              patch.appId !== 'ludus' ||
+              patch.sourceRevision !== process.env.GITHUB_SHA ||
+              studio.id !== 'ludus' || studio.version !== patch.version ||
+              studio.assurance?.evidenceManifestSha256 !== digest) {
+            throw new Error('Invalid local release assurance binding; publication blocked.');
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'patch_assurance_sha256=' + digest + '\n');
+          console.log('Source ' + patch.sourceRevision + '; local assurance SHA-256 ' + digest);
+          NODE
       - name: Verify AI Studio dispatch credential
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         shell: bash
         env:
           AI_STUDIO_DISPATCH_TOKEN: ${{ secrets.AI_STUDIO_DISPATCH_TOKEN }}
@@ -73,13 +102,13 @@ jobs:
             exit 1
           fi
       - name: Upload GitHub Pages artifact
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
           path: dist
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: qa-build
     runs-on: ubuntu-24.04
     permissions:
@@ -97,27 +126,39 @@ jobs:
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
 
   notify-ai-studio:
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: [qa-build, deploy]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:
-      - name: Wait for the deployed Studio manifest
+      - name: Fetch verification script
+        uses: actions/checkout$11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Wait for verified live source and assurance digest
         shell: bash
         env:
           EXPECTED_VERSION: ${{ needs.qa-build.outputs.version }}
+          EXPECTED_SOURCE_SHA: ${{ github.sha }}
+          EXPECTED_PATCH_ASSURANCE_SHA256: ${{ needs.qa-build.outputs.patch_assurance_sha256 }}
         run: |
+          set -euo pipefail
           manifest_url="https://daniel22-dev.github.io/Ludus/studio-manifest.json"
+          assurance_url="https://daniel22-dev.github.io/Ludus/patch-assurance.json"
           for attempt in $(seq 1 18); do
-            live_version=$(curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --max-time 15 "$manifest_url?run=${GITHUB_RUN_ID}-${attempt}" 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{process.stdout.write(String(JSON.parse(s).version||''))}catch{}})")
-            if [ "$live_version" = "$EXPECTED_VERSION" ]; then
-              echo "Live manifest confirmed at version $live_version."
+            if curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --max-time 15 \
+                "${manifest_url}?run=${GITHUB_RUN_ID}-${attempt}" -o "${RUNNER_TEMP}/ludus-live-studio.json" && \
+               curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --max-time 15 \
+                "${assurance_url}?run=${GITHUB_RUN_ID}-${attempt}" -o "${RUNNER_TEMP}/ludus-live-assurance.json" && \
+               node scripts/verify-live-release.mjs \
+                "${RUNNER_TEMP}/ludus-live-studio.json" "${RUNNER_TEMP}/ludus-live-assurance.json"; then
+              echo "Live release verified for ${EXPECTED_SOURCE_SHA} (version ${EXPECTED_VERSION})."
               exit 0
             fi
-            sleep 5
+            if [ "${attempt}" -lt 18 ]; then sleep 5; fi
           done
-          echo "::error::The deployed studio-manifest.json did not reach expected version $EXPECTED_VERSION."
+          echo "::error::Live release did not match expected source SHA and assurance digest. AI Studio notification blocked."
           exit 1
 
       - name: Dispatch app-updated event to AI Studio
