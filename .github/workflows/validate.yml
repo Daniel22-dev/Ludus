@@ -42,7 +42,15 @@ jobs:
           path: qa-results
       - name: Verify GHRAB Platform P3 conformance
         run: npm run qa:platform
+      # The required, independent P5 job covers canonical same-repository
+      # candidate -> main PRs. All other events still execute full P5 here.
+      # The active protected-main ruleset requires test + p5-release-gate + axe.
       - name: Enforce P5 R2 release gate
+        if: >-
+          github.event_name != 'pull_request' ||
+          github.base_ref != 'main' ||
+          github.head_ref != 'candidate' ||
+          github.event.pull_request.head.repo.full_name != github.repository
         run: npm run qa:p5:ci
         env:
           GARP27_TRUSTED_POLICY_SHA256: ${{ vars.GARP27_TRUSTED_POLICY_SHA256 }}
