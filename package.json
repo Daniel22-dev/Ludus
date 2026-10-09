@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs",
-    "test": "npm run validate:media && npm run qa:catalog && npm run build && npm run qa:frame-guard && npm run test:reporter-sanitize && node scripts/validate.mjs && npm run qa:about",
+    "test": "npm run validate:media && npm run qa:catalog && npm run build && npm run qa:frame-guard && npm run test:reporter-sanitize && node scripts/validate.mjs && npm run qa:about && npm run test:manual-pdf:structure",
     "qa:technical": "node scripts/qa-technical.mjs",
     "qa:security": "node scripts/qa-security.mjs",
     "qa:pwa": "node scripts/qa-pwa.mjs",
@@ -35,8 +35,8 @@
     "qa:a11y": "node scripts/qa-p5-runtime.mjs",
     "qa:p4": "npm run qa:p5",
     "qa:p4:ci": "npm run qa:p5:ci",
-    "qa:p5": "npm run qa:lock && npm run garp27:foundation && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:catalog && npm run qa:about && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run garp25:p5-certification-controls && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
-    "qa:p5:ci": "npm run qa:lock && npm run garp27:foundation:ci && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:catalog && npm run qa:about && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 npm run garp25:p5-certification-controls && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs",
+    "qa:p5": "npm run qa:lock && npm run garp27:foundation && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:catalog && npm run qa:about && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run garp25:p5-certification-controls && node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs && npm run test:manual-pdf:structure",
+    "qa:p5:ci": "npm run qa:lock && npm run garp27:foundation:ci && npm run verify:platform && npm run qa:quality && npm run qa:browser && npm run qa:catalog && npm run qa:about && npm run qa:runtime && npm run qa:xss && npm run qa:pc01 && npm run qa:suite-session && npm run qa:media && npm run qa:axe && AXE_REQUIRED=1 npm run garp25:p5-certification-controls && AXE_REQUIRED=1 node scripts/qa-p5-release.mjs && node scripts/qa-p5-acceptance.mjs && npm run test:manual-pdf:structure",
     "test:p5": "npm run qa:p5",
     "build:unofficial": "LUDUS_MEDIA_PROFILE=unofficial node scripts/build.mjs",
     "qa:runtime": "node scripts/qa-p5-runtime.mjs",
@@ -85,7 +85,8 @@
     "qa:about": "node scripts/qa-about.mjs",
     "qa:catalog": "node scripts/qa-engine-catalog.mjs",
     "qa:frame-guard": "node scripts/qa-frame-guard.mjs",
-    "test:reporter-sanitize": "node scripts/test-error-reporter-sanitizer.mjs"
+    "test:reporter-sanitize": "node scripts/test-error-reporter-sanitizer.mjs",
+    "test:manual-pdf:structure": "node scripts/qa-manual-pdf-structure.mjs"
   },
   "engines": {
     "node": ">=24 <25"
