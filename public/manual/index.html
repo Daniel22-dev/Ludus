@@ -130,6 +130,35 @@ section{scroll-margin-top:90px;margin-top:54px}.section-head{display:flex;align-
 <script src="../runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.31" data-ludus-privacy-scope="manual"></script>
 <script type="application/ghrab-protected" data-ghrab-protected>
 const MANUAL={id:"ludus",version:"1.16.31",map:[{"n": "1", "title": "Režim sdílení", "desc": "Vnitřní výuka a Veřejné sdílení řídí branding a vhodnost exportu mimo školu."}, {"n": "2", "title": "Horní nástroje", "desc": "O aplikaci, vzhled, celá obrazovka, zvuk a API klíč. Klíč je potřeba jen pro generování obsahu."}, {"n": "3", "title": "I · Mechanika", "desc": "Určuje, jak se hraje: akademie, quest, časová osa, escape, aréna, laboratoř a další modely."}, {"n": "4", "title": "II · Svět", "desc": "Určuje vizuální atmosféru, názvosloví a příběhový rámec. Nemění učivo."}, {"n": "5", "title": "III · Obsah", "desc": "Učivo, otázky, odpovědi a importované struktury. Zde probíhá případná práce Gemini."}, {"n": "6", "title": "Sestavení hry", "desc": "Hlavní akce, stav kompatibility enginu, průběh sestavení a výstupní varianty."}, {"n": "7", "title": "Výstupy", "desc": "Offline ukázka, Třídní soutěž, Lesson pack, poslední hra, kopie specifikace a datový export."}],tour:[{"title": "Nejdřív zvol účel sdílení", "body": "Vnitřní výuka je výchozí školní režim. Veřejné sdílení používej pouze pro obsah a branding, které lze bezpečně publikovat mimo školu.", "tip": "Volba ovlivňuje výsledný export, nikoli jen vzhled dílny."}, {"title": "Vyber mechaniku", "body": "Mechanika rozhoduje o toku hry: postup po stanovištích, quest, týmová aréna, úniková hra nebo jiný herní model.", "tip": "Nevol podle oblíbeného filmu, ale podle toho, co mají žáci během hry dělat."}, {"title": "Vyber vizuální svět", "body": "Svět dává stejné mechanice atmosféru, názvy a grafický styl. Učivo a správné odpovědi zůstávají oddělené.", "tip": "Mechaniku a svět lze kombinovat; svět není totéž co engine."}, {"title": "Doplň nebo importuj obsah", "body": "Vlož vlastní učivo, použij krátkodobou předávku z AI Studia nebo importuj soubor LUDUS_CONTENT. Podporované strukturované úlohy se převedou na stanice.", "tip": "Po importu vždy projdi správné odpovědi a pořadí úloh."}, {"title": "Použij Gemini jen tam, kde pomáhá", "body": "API klíč je potřeba při generování nového obsahu. Hotovou specifikaci lze sestavit a přehrávat offline.", "tip": "Na sdíleném zařízení používej klíč pouze pro relaci."}, {"title": "Sleduj stav enginu", "body": "Ready znamená produkčně ověřený engine. Draft může být funkční, ale ještě není finálně schválen. Planned je pouze plán. Sestavit lze jen engine označený builderCompatible.", "tip": "Viditelná karta hry neznamená automaticky, že má povolený export."}, {"title": "Otevři hru a proveď smoke test", "body": "Vyzkoušej start, odpovědi, skóre, konec hry, mobilní zobrazení a skrývání řešení.", "tip": "Před hodinou otestuj hru v tom prohlížeči a na tom zařízení, které skutečně použiješ."}, {"title": "Použij učitelský režim v enginu", "body": "Standardní vstup je trojí rychlé klepnutí na logo LUDUS nebo parametr ?teacher=1. Učitel získá report a řešení podle možností konkrétního enginu.", "tip": "Před projekcí zkontroluj, zda jsou řešení žákům skrytá."}, {"title": "Využij doprovodné výstupy", "body": "Třídní soutěž řídí týmy, lesson pack připraví plán hodiny a datové exporty umožní další úpravy nebo předání.", "tip": "Lesson pack není hra; je to učitelská příprava k jejímu použití."}]};
+window.GHRAB_MANUAL_EXPORT = [
+  {type:"h2",text:"Mapa ovládání"},
+  ...MANUAL.map.flatMap(item=>[{type:"h3",text:item.n+". "+item.title},{type:"body",text:item.desc}]),
+  {type:"h2",text:"Kompletní interaktivní prohlídka"},
+  ...MANUAL.tour.flatMap((item,i)=>[{type:"h3",text:(i+1)+". "+item.title},{type:"body",text:item.body},{type:"body",text:"Tip: "+item.tip}])
+];
+// Etapa D: úplný datový obsah manuálu pro autorizovaný export AI Studia.
+// Publikuje pouze veřejně popsané kroky; žádné hodnoty formulářů, klíče ani studenty.
+window.GHRAB_MANUAL_DOC_INFO=Object.freeze({
+  appId: MANUAL.id,
+  appVersion: MANUAL.version,
+  docRevision: 'D-2026-10-08',
+  lastReviewedAt: '2026-10-08',
+  reviewStatus: 'review-required',
+  pdfContentContract: 'map-tour-v1'
+});
+window.GHRAB_MANUAL_EXPORT=[
+  {type:'h2',text:'Úplná mapa ovládání'},
+  ...MANUAL.map.flatMap(part=>[
+    {type:'h3',text:(part.n ? part.n+'. ' : '')+part.title},
+    {type:'body',text:part.desc}
+  ]),
+  {type:'h2',text:'Kompletní interaktivní prohlídka'},
+  ...MANUAL.tour.flatMap((step,i)=>[
+    {type:'h3',text:(i+1)+'. '+step.title},
+    {type:'body',text:step.body},
+    {type:'body',text:'Praktická poznámka: '+step.tip}
+  ])
+];
 const KEY='ghrab-manual-progress-'+MANUAL.id+'-'+MANUAL.version;
 let state={tour:[],checks:[]};try{state=Object.assign(state,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(_){ }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(_){ } updateProgress()}
@@ -199,4 +228,5 @@ if(localPreview){activatePage();}else{
 }
 </script>
 <noscript><style>html[data-ghrab-access="checking"] body{visibility:visible}</style><main style="max-width:42rem;margin:4rem auto;padding:1.5rem;font-family:system-ui">Interaktivní manuál vyžaduje JavaScript a platný přístup z AI Studia GHRAB.</main></noscript>
+<script type="module" src="./pdf-download.js"></script>
 </body></html>
