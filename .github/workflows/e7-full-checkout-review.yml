@@ -24,6 +24,7 @@ jobs:
           SOURCE_PIN: a5ac946600fba95fe9c4f77ac7a7a5b440945f0d
         run: |
           set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git cat-file -e "$SOURCE_PIN^{commit}"
           git merge-base --is-ancestor "$SOURCE_PIN" HEAD
           git diff --name-only "$SOURCE_PIN" HEAD | sort > /tmp/e7-review-diff.txt
