@@ -167,12 +167,12 @@ function seed(c,suffix='work'){
 // F-03 local boundary assertions: LUDUS observes global tombstone, it never owns/writes it or another app ACK.
 add('suite.f03.no-global-generation-write',!/rawSet\([^\n]*SUITE_GENERATION_KEY|setItem\([^\n]*ghrab\.platform\.suite-session-generation/.test(privacySource));
 add('suite.f03.no-other-app-ack-write',!/(ghrab\.(?!ludus\.)[a-z0-9-]+\.suite-session-seen\.v1)/i.test(privacySource));
-add('suite.platform.exact-contract',consumer.platform.version==='1.1.2'&&consumer.suiteSession?.contract==='ghrab-suite-session-v1',`${consumer.platform.version}/${consumer.suiteSession?.contract}`);
+add('suite.platform.exact-contract',consumer.platform.version==='1.1.3'&&consumer.suiteSession?.contract==='ghrab-suite-session-v1',`${consumer.platform.version}/${consumer.suiteSession?.contract}`);
 
 const failures=checks.filter(x=>!x.ok);
-const report={schema:'ghrab-suite-session-qa-v1',appId:'ludus',appVersion:consumer.appVersion,platformVersion:consumer.platform.version,contract:'ghrab-suite-session-v1',syntheticCanary:CANARY,generatedAt:new Date().toISOString(),checks,summary:{total:checks.length,passed:checks.length-failures.length,failed:failures.length},evidence,status:failures.length?'failed':'passed',limitations:['Deterministic VM harness exercises the exact vendored Platform 1.1.2 and LUDUS privacy runtime. Real-browser coverage is reported separately by qa:browser/qa:runtime and environment-limited tests must not be promoted to PASS.','Same-origin trust cannot cryptographically prevent another compromised first-party app/XSS from writing the global tombstone or another app ACK; this remains an ecosystem trust-boundary follow-up.']};
+const report={schema:'ghrab-suite-session-qa-v1',appId:'ludus',appVersion:consumer.appVersion,platformVersion:consumer.platform.version,contract:'ghrab-suite-session-v1',syntheticCanary:CANARY,generatedAt:new Date().toISOString(),checks,summary:{total:checks.length,passed:checks.length-failures.length,failed:failures.length},evidence,status:failures.length?'failed':'passed',limitations:['Deterministic VM harness exercises the exact vendored Platform 1.1.3 and LUDUS privacy runtime. Real-browser coverage is reported separately by qa:browser/qa:runtime and environment-limited tests must not be promoted to PASS.','Same-origin trust cannot cryptographically prevent another compromised first-party app/XSS from writing the global tombstone or another app ACK; this remains an ecosystem trust-boundary follow-up.']};
 fs.mkdirSync(path.join(root,'qa-results'),{recursive:true});
-fs.writeFileSync(path.join(root,'qa-results','suite-session-1.1.2.json'),JSON.stringify(report,null,2)+'\n');
+fs.writeFileSync(path.join(root,'qa-results','suite-session-1.1.3.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({schema:report.schema,appVersion:report.appVersion,platformVersion:report.platformVersion,summary:report.summary,status:report.status},null,2));
 for(const f of failures)console.error(`FAIL ${f.id}: ${f.detail}`);
 if(failures.length)process.exit(1);

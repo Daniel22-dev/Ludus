@@ -2,11 +2,11 @@
   "schema": "ghrab-platform-consumer-v1",
   "appId": "ludus",
   "appName": "LUDUS",
-  "appVersion": "1.16.31",
+  "appVersion": "1.16.32",
   "platform": {
-    "version": "1.1.2",
+    "version": "1.1.3",
     "contract": "ghrab-platform-v1",
-    "requiredRange": ">=1.1.2 <2.0.0",
+    "requiredRange": ">=1.1.3 <2.0.0",
     "compatibilityWindow": [
       "1.1.x",
       "1.2.x"
@@ -48,7 +48,9 @@
   "artifact": {
     "schema": "ghrab-artifact-envelope-v1",
     "checksum": "SHA-256",
-    "exports": [],
+    "exports": [
+      "studio-material"
+    ],
     "imports": [
       "studio-material",
       "ludus-content"
@@ -60,7 +62,7 @@
     ]
   },
   "cache": {
-    "name": "ghrab-ludus-v1.16.31",
+    "name": "ghrab-ludus-v1.16.32",
     "updateMessage": "GHRAB_SKIP_WAITING"
   },
   "html": {
@@ -78,9 +80,9 @@
     "requireBudget": true,
     "performanceBudget": {
       "distBytes": 4900000,
-      "entryHtmlBytes": 315000,
-      "entryCriticalBytes": 548000,
-      "largestInlineScriptBytes": 270000,
+      "entryHtmlBytes": 316000,
+      "entryCriticalBytes": 549000,
+      "largestInlineScriptBytes": 271000,
       "precacheBytes": 1220000,
       "largestFileBytes": 1050000,
       "duplicateLargeBytes": 50000
