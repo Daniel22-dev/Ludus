@@ -128,6 +128,7 @@ for (const file of walk(dist).filter((item) => item.toLowerCase().endsWith('.htm
       theme: consumer.theme,
       storageMigration: consumer.storageMigration,
       bridgeMaxBytes: consumer.bridge.maxBytes,
+      bridgeWriteLegacy: false, // E7 sender emits Bridge v2 only; legacy receivers unchanged
       artifactContract: consumer.artifact.schema,
       quality: consumer.quality,
     };

@@ -1,7 +1,7 @@
 {
   "schema": "ghrab-data-manifest-v1",
   "appId": "ludus",
-  "appVersion": "1.16.31",
+  "appVersion": "1.16.32",
   "manifestVersion": 5,
   "dataCategories": [
     "settings",
@@ -149,7 +149,9 @@
     "requiresExplicitUserAction": true,
     "includesSecrets": false,
     "envelopeSchema": "ghrab-artifact-envelope-v1",
-    "artifactTypes": [],
+    "artifactTypes": [
+      "studio-material"
+    ],
     "nativeFormats": [
       "html",
       "json"

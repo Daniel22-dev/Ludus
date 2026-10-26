@@ -1,8 +1,10 @@
+> **1.16.32 / E7 REVIEW CANDIDATE (NOT DEPLOYED):** LUDUS → AI Studio pedagogical Material v1 via Bridge v2. Version 1.1.3 of the GHRAB Platform; preserve game runtime and student privacy. CI release and authorized school UAT not yet certified.
+
 # LUDUS
 > **1.16.31 / GARP 2.8 AUDIT HARDENING:** security patch adds a first-script frame guard against foreign-origin embedding and extends error-report sanitization for Google API keys and `?key=` parameters. UI/UX, pedagogical behavior, dependencies and the active GARP 2.7 r2 FOUNDATION baseline remain unchanged; independent GARP 2.8 browser verification follows after handoff.
 
 
-**Aktuální verze:** 1.16.31
+**Aktuální verze:** 1.16.32
 
 **Platforma:** GHRAB Platform 1.1.2
 
@@ -11,7 +13,7 @@ Dílna výukových her pro interní školní použití Gymnázia, Ostrava-Hrabů
 
 ## Aktuální stav
 
-Verze: **1.16.31**
+Verze: **1.16.32**
 
 LUDUS 1.16.31 nemění pedagogickou logiku ani herní enginy. Přidává pouze GARP 2.8 audit hardening na browserové hranici a v reportéru chyb. Aktivní bezpečnostní autoritou zůstává GARP 2.7 CONSOLIDATED r2; historické GARP 2.5.1 nástroje zůstávají regresní baseline. FOUNDATION je nezávislý na školním serveru a každý konkrétní release commit musí projít chráněným GitHub CI s externím trust anchorem. Serverové a SHIELD-LIVE kontroly jsou záměrně DEFERRED/NOT_TESTED do případného schválení vedením.
 

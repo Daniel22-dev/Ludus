@@ -21,7 +21,7 @@ function detectLudusTheme() {
 const reporter = setupErrorReporter({
   appId: 'ludus',
   appName: 'LUDUS',
-  appVersion: '1.16.31',
+  appVersion: '1.16.32',
   studioUrl: reporterStudioUrl,
   supportEmail: 'balaz@ghrabuvka.cz',
   guideUrl: reporterGuideUrl,

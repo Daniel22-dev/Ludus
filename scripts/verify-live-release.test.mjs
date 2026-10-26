@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { verifyLiveRelease } from './verify-live-release.mjs';
 
 const SHA = 'a'.repeat(40);
-const VERSION = '1.16.31';
+const VERSION = '1.16.32';
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
 function fixtures({ sourceRevision = SHA, patchVersion = VERSION, studioVersion = VERSION, otherApp = false } = {}) {
