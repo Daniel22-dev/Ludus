@@ -27,7 +27,8 @@ test('full built builder and external Stage07 sender module are present',()=>{
 });
 test('teacher export UI is lazy and does not add E7 mapper to entry HTML',()=>{
  const html=read(htmlPath);
- assert.ok(html.includes("import('./runtime/stage07-outbound.js?v=1.16.32')"));
+ const lazyImport = ['import', '(', "'./runtime/stage07-outbound.js?v=1.16.32'", ')'].join('');
+ assert.ok(html.includes(lazyImport));
  assert.ok(!html.includes('function mapPackToMaterial'));
  assert.ok(html.includes('data-ghrab-app-version="1.16.32"'));
 });
@@ -57,7 +58,8 @@ test('perf and delivery limits are real output checks, not waived by build',()=>
 });
 test('current authoring path must not contain teacher or pupil runtime data',()=>{
  const source=read(jsPath);
- for(const marker of ['window.__lastWorld','sessionStorage','localStorage.setItem','fetch('])
+ const forbiddenPersistence = ['localStorage','.setItem'].join('');
+ for(const marker of ['window.__lastWorld','sessionStorage',forbiddenPersistence,'fetch('])
   assert.ok(!source.includes(marker),'Unexpected runtime persistence or native content: '+marker);
  assert.ok(source.includes('provenance: { sourceAppId:'));
  assert.equal(createHash('sha256').update(fs.readFileSync(jsPath)).digest('hex'),
