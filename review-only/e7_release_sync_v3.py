@@ -47,4 +47,5 @@ wr('package.json',pkg)
 once('scripts/generate-cyclonedx-sbom.mjs',"{name:'ghrab-platform',version:'1.1.2'","{name:'ghrab-platform',version:'1.1.3'")
 once('scripts/generate-cyclonedx-sbom.mjs',"'ghrab/ghrab-platform-manifest-1.1.2.json'","'ghrab/ghrab-platform-manifest-1.1.3.json'")
 
+once('scripts/qa-garp-security.mjs',"check('version.package',pkg.version==='1.16.31',pkg.version);","check('version.package',pkg.version==='1.16.32',pkg.version);")
 print('E7 REVIEW: 11 engines, privacy runtime, PWA, release docs and v2-only bridge config aligned.')
