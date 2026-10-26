@@ -48,4 +48,21 @@ once('scripts/generate-cyclonedx-sbom.mjs',"{name:'ghrab-platform',version:'1.1.
 once('scripts/generate-cyclonedx-sbom.mjs',"'ghrab/ghrab-platform-manifest-1.1.2.json'","'ghrab/ghrab-platform-manifest-1.1.3.json'")
 
 once('scripts/qa-garp-security.mjs',"check('version.package',pkg.version==='1.16.31',pkg.version);","check('version.package',pkg.version==='1.16.32',pkg.version);")
+
+source_updates={
+ 'scripts/qa-garp27-contract.mjs':[("pkg.version==='1.16.31'","pkg.version==='1.16.32'")],
+ 'scripts/qa-garp27-mutations.mjs':[("appVersion:'1.16.31'","appVersion:'1.16.32'")],
+ 'scripts/qa-garp23-security.mjs':[("pkg.version==='1.16.31'","pkg.version==='1.16.32'")],
+ 'scripts/qa-garp23-privacy-lifecycle.mjs':[("appVersion:'1.16.31'","appVersion:'1.16.32'")],
+ 'scripts/qa-garp25-ai-resource.mjs':[("version:'1.16.31'","version:'1.16.32'")],
+ 'scripts/qa-pc01-suite-session.mjs':[
+  ('ghrab-manual-progress-ludus-1.16.31','ghrab-manual-progress-ludus-1.16.32'),
+  ("platformVersion:'1.1.2'","platformVersion:'1.1.3'")],
+ 'scripts/qa-p3-quality.mjs':[("consumer.platform?.version === '1.1.2'","consumer.platform?.version === '1.1.3'")],
+ 'scripts/qa-p3-browser.mjs':[("'>=1.1.2 <2.0.0'","'>=1.1.3 <2.0.0'")],
+ 'scripts/qa-p3-axe.mjs':[("'>=1.1.2 <2.0.0'","'>=1.1.3 <2.0.0'")],
+}
+for rel,pairs in source_updates.items():
+ for old,new in pairs:once(rel,old,new)
+
 print('E7 REVIEW: 11 engines, privacy runtime, PWA, release docs and v2-only bridge config aligned.')
