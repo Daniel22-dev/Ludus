@@ -6,7 +6,7 @@ on:
       - review/e7-v4-node24-cert-20261026
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   stage07-full-checkout:
@@ -164,6 +164,129 @@ jobs:
         run: |
           cd "$E7_REVIEW"
           npm run qa:p5:ci
+      - name: Materialize only P5-certified E7 source into a separate feature branch
+        shell: bash
+        env:
+          FEATURE_BRANCH: feature/e7-ludus-outbound-1.16.32
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          test "$GITHUB_REF_NAME" = "review/e7-v4-node24-cert-20261026"
+          test "$(git rev-parse a5ac946600fba95fe9c4f77ac7a7a5b440945f0d)" = "a5ac946600fba95fe9c4f77ac7a7a5b440945f0d"
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$SOURCE_PIN"
+          if git ls-remote --exit-code --heads origin "$FEATURE_BRANCH"; then
+            echo "Source feature branch already exists: refuse overwrite."
+            exit 1
+          fi
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          original=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          candidate=pathlib.Path(os.environ['E7_REVIEW'])
+          destination=pathlib.Path(os.environ['RUNNER_TEMP'])/'e7-verified-source-files'
+          if destination.exists():raise RuntimeError('Materialization directory exists')
+          destination.mkdir()
+          exact={
+            'APP-ludus-GARP.txt','CHANGELOG.md','README.md','README_PWA.md',
+            'content/engine-index.json','ghrab-platform.consumer.json','package.json',
+            'package-lock.json','qa/qa-manifest.json','reporter-test.config.json',
+            'public/access/error-reporter-adapter.js','public/ai-operations.json',
+            'public/config/data-manifest.json','public/config/platform-manifest.json',
+            'public/config/release-acceptance.json','public/config/security-headers.json',
+            'public/ghrab-platform.consumer.json','public/manifest.webmanifest',
+            'public/manual/index.html','public/sw.js','runtime/ludus-engine-runtime.js',
+            'runtime/ludus-privacy.js','runtime/stage07-outbound.js',
+            'src/ai-core-integration.js','src/index.html','studio/app-manifest.template.json',
+            'STAGE07_PATCH_MANIFEST.json',
+            'scripts/access-protection.mjs','scripts/apply-ghrab-platform.mjs',
+            'scripts/ghrab-platform-conformance.mjs','scripts/qa-garp-security.mjs',
+            'scripts/qa-garp23-privacy-lifecycle.mjs','scripts/qa-garp23-security.mjs',
+            'scripts/qa-garp25-ai-resource.mjs','scripts/qa-garp27-contract.mjs',
+            'scripts/qa-garp27-mutations.mjs','scripts/qa-p3-quality.mjs',
+            'scripts/qa-pc01-suite-session.mjs','scripts/qa-suite-session.mjs',
+            'scripts/validate.mjs','scripts/verify-live-release.test.mjs',
+            'scripts/verify-stage07-built-runtime.mjs',
+            'security/SHIELD-STATUS.json',
+            'security/garp27/contracts/app-profile.json',
+            'security/garp27/contracts/application-migration-profile.json',
+            'security/garp27/contracts/capability-inventory.json',
+            'security/garp27/contracts/foundation-policy.json',
+            'tests/stage07-outbound.test.mjs','tests/stage07-ui-transport.test.mjs',
+            'tests/stage07-platform-bridge.test.mjs'
+          }
+          engines={'chronos','dnd','hogwarts','indiana-jones','jumanji',
+            'laughworks','lotr','matrix','orient-express','star-wars','stranger-things'}
+          vendor={'ghrab-platform.js','ghrab-platform.css',
+            'ghrab-platform-manifest-1.1.3.json','ghrab-app-registry-v2.schema.json',
+            'ghrab-artifact-envelope-v1.schema.json','school-logo.png'}
+          exact.update('engines/'+x+'.html' for x in engines)
+          exact.update('vendor/ghrab-platform-1.1.3/'+x for x in vendor)
+          def excluded(rel):
+            parts=rel.parts
+            return bool(set(parts)&{'.git','node_modules','dist','qa-results','test-results',
+             'playwright-report','review-only','__pycache__','.cache'}) or (
+             len(parts)>1 and parts[0]=='security' and parts[1] in {'evidence','sbom'}) or (
+             len(parts)>1 and parts[0]=='.github')
+          manifest=[]
+          unexpected=[]
+          for p in candidate.rglob('*'):
+            if not p.is_file():continue
+            rel=p.relative_to(candidate)
+            if p.is_symlink():raise RuntimeError('Source symlink forbidden: '+str(rel))
+            if excluded(rel):continue
+            key=rel.as_posix()
+            orig=original/rel
+            changed=not orig.is_file() or orig.read_bytes()!=p.read_bytes()
+            if not changed:continue
+            if key not in exact:
+              unexpected.append(key)
+              continue
+            assert p.stat().st_size<500000,'Unexpected oversized source: '+key
+            target=destination/rel
+            target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(p,target)
+            manifest.append({'path':key,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+          if unexpected:raise RuntimeError('Unreviewed E7 source differences: '+repr(unexpected[:25]))
+          assert 30<=len(manifest)<=75,'Unexpected release file count '+str(len(manifest))
+          must={'src/index.html','runtime/stage07-outbound.js','ghrab-platform.consumer.json',
+            'vendor/ghrab-platform-1.1.3/ghrab-platform.js','tests/stage07-outbound.test.mjs',
+            'package.json','package-lock.json'}
+          assert must.issubset({i['path'] for i in manifest}),'Critical E7 source files absent'
+          (destination/'E7_SOURCE_HASH_MANIFEST.json').write_text(
+            json.dumps({'release':'1.16.32','base':'a5ac946600fba95fe9c4f77ac7a7a5b440945f0d',
+             'p5_ci':'completed before materialization','files':sorted(manifest,key=lambda x:x['path'])},
+            indent=2)+'\n')
+          print('P5 certified source file count:',len(manifest))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --detach "$SOURCE_PIN"
+          git switch -c "$FEATURE_BRANCH"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          src=pathlib.Path(os.environ['RUNNER_TEMP'])/'e7-verified-source-files'
+          m=json.loads((src/'E7_SOURCE_HASH_MANIFEST.json').read_text())
+          assert m['release']=='1.16.32'
+          for row in m['files']:
+            rel=pathlib.PurePosixPath(row['path'])
+            assert not rel.is_absolute() and '..' not in rel.parts
+            content=(src/rel).read_bytes()
+            assert hashlib.sha256(content).hexdigest()==row['sha256']
+            target=root/rel
+            target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_bytes(content)
+          print('Applied only manifest-listed E7 sources to feature branch.')
+          PY
+          git add -A -- APP-ludus-GARP.txt CHANGELOG.md README.md README_PWA.md \
+            content engines ghrab-platform.consumer.json package.json package-lock.json \
+            public qa reporter-test.config.json runtime scripts security/SHIELD-STATUS.json \
+            security/garp27/contracts src studio STAGE07_PATCH_MANIFEST.json tests
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          git commit -m "feat(stage07): audited LUDUS pedagogical outbound Material Flow 1.16.32"
+          git push origin "HEAD:refs/heads/$FEATURE_BRANCH"
+          echo "Isolated candidate branch created. DO NOT MERGE before signed-school UAT."
       - name: Upload sanitized review evidence only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
