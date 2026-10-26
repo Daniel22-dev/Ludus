@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   transplant-reviewed-source:
-    if: github.event.head_commit.message == 'ci(e7): materialize pinned reviewed source'
+    if: "github.event.head_commit.message == 'ci(e7): materialize pinned reviewed source'"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -27,7 +27,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$GITHUB_REF_NAME" = "$E7_BRANCH"
-          test "$(git rev-parse HEAD~2)" = "$E7_BASE"
+          git merge-base --is-ancestor "$E7_BASE" HEAD
+          test "$(git diff --name-only "$E7_BASE" HEAD | wc -l | tr -d ' ')" -eq 2
           candidate="$(git ls-remote --exit-code origin refs/heads/candidate | awk '{print $1}')"
           test "$candidate" = "$E7_BASE"
           echo "Pinned source and candidate verified."
