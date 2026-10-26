@@ -1,0 +1,76 @@
+name: E7 pinned source transfer (temporary; review branch only)
+on:
+  push:
+    branches:
+      - feature/e7-ludus-outbound-material-flow-1-16-32
+
+permissions:
+  contents: write
+
+jobs:
+  transplant-reviewed-source:
+    if: github.event.head_commit.message == 'ci(e7): materialize pinned reviewed source'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      E7_BASE: a5ac946600fba95fe9c4f77ac7a7a5b440945f0d
+      E7_BRANCH: feature/e7-ludus-outbound-material-flow-1-16-32
+    steps:
+      - name: Checkout exact review branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 4
+          persist-credentials: true
+
+      - name: Assert immutable source base and no concurrent candidate change
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "$E7_BRANCH"
+          test "$(git rev-parse HEAD~2)" = "$E7_BASE"
+          candidate="$(git ls-remote --exit-code origin refs/heads/candidate | awk '{print $1}')"
+          test "$candidate" = "$E7_BASE"
+          echo "Pinned source and candidate verified."
+
+      - name: Authenticate patch by both archive and decoded content SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' "8fef3704566728a3bfa13888b3208e4a29b535013fdf2a96c6623c407d0627a4" ".e7-transfer/patch.diff.gz" | sha256sum -c -
+          gzip -dc .e7-transfer/patch.diff.gz > /tmp/e7-reviewed.patch
+          printf '%s  %s\n' "c1ffc093c55ac8e634e5ddffb01b8d50eb6820c91c8fb0654681588fc2efb0ce" "/tmp/e7-reviewed.patch" | sha256sum -c -
+          if grep -Eq '^\+\+\+ b/\.github/|^--- a/\.github/' /tmp/e7-reviewed.patch; then
+            echo "Refusing to modify GitHub workflow source from patch"
+            exit 1
+          fi
+
+      - name: Apply exact 71-file patch, verify original-code context and output
+        shell: bash
+        run: |
+          set -euo pipefail
+          git apply --check --index /tmp/e7-reviewed.patch
+          git apply --index /tmp/e7-reviewed.patch
+          test "$(git diff --cached --name-only | wc -l | tr -d ' ')" -eq 71
+          git diff --cached --check
+          printf '%s  %s\n' \
+            "69226ca40c2046ac1e62d8dba884a4eb3b7d104691b0b7669ff83740d181acf2" "package.json" \
+            "61693209151b8a0cd9b6ac6b8b8e7228c25f1ae7afb2b3b6ec8cc76bdc289edf" "src/index.html" \
+            "276c12411a2dc954fe59b42d850ba6c5b9914a17d1db72c0f19c38b786258163" "runtime/stage07-outbound.js" \
+            "97972aa79fa420e10549b16a46a59d8a99fd13d066b037a2d2fd56e537b225c4" "vendor/ghrab-platform-1.1.3/ghrab-platform.js" \
+            "2e846b7cb4197aa3a26322abb6f7a98f26cc0801a2c9daafb88041aae4e0dc1a" "scripts/verify-stage07-built-runtime.mjs" | sha256sum -c -
+          test "$(node -p 'require("./package.json").version')" = "1.16.32"
+          node --check runtime/stage07-outbound.js
+          node --check scripts/verify-stage07-built-runtime.mjs
+
+      - name: Commit source to feature branch, remove transfer payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -- .e7-transfer/patch.diff.gz
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'feat(stage07): LUDUS 1.16.32 outbound Material Flow source review'
+          test ! -f .e7-transfer/patch.diff.gz
+          test "$(git diff --name-only "$E7_BASE" HEAD | wc -l | tr -d ' ')" -eq 72
+          git diff --check "$E7_BASE" HEAD
+          git push origin "HEAD:refs/heads/$E7_BRANCH"
+          echo "E7 source commit: $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Review branch prepared. Still requires official Node 24 CI/P5 and signed school UAT." >> "$GITHUB_STEP_SUMMARY"
