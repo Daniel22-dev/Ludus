@@ -57,7 +57,7 @@ source_updates={
  'scripts/qa-garp25-ai-resource.mjs':[("version:'1.16.31'","version:'1.16.32'")],
  'scripts/qa-pc01-suite-session.mjs':[
   ('ghrab-manual-progress-ludus-1.16.31','ghrab-manual-progress-ludus-1.16.32'),
-  ("platformVersion:'1.1.2'","platformVersion:'1.1.3'")],
+  ],
  'scripts/qa-p3-quality.mjs':[("consumer.platform?.version === '1.1.2'","consumer.platform?.version === '1.1.3'")],
  'scripts/qa-p3-browser.mjs':[("'>=1.1.2 <2.0.0'","'>=1.1.3 <2.0.0'")],
  'scripts/qa-p3-axe.mjs':[("'>=1.1.2 <2.0.0'","'>=1.1.3 <2.0.0'")],
