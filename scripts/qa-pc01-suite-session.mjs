@@ -37,7 +37,7 @@ for(const key of expectedSession)add(`pc01.manifest.session.${key}`,covered(sess
 for(const key of ['ludus_gemini_key','ghrab.ludus.gemini_key'])add(`pc01.credentials.local.${key}`,covered(localCredential,key));
 for(const key of ['ludus_gemini_key_session','ghrab.ludus.gemini_key_session'])add(`pc01.credentials.session.${key}`,covered(sessionCredential,key));
 add('pc01.cache.noncontent-not-cleared',cache?.clearOnEndWork===false,JSON.stringify(cache||{}));
-add('pc01.manual.nonpersonal-not-cleared',manual?.clearOnEndWork===false&&match('ghrab-manual-progress-ludus-1.16.31',manual.patterns||[])&&match('ghrab-manual-theme',manual.patterns||[]),JSON.stringify(manual||{}));
+add('pc01.manual.nonpersonal-not-cleared',manual?.clearOnEndWork===false&&match('ghrab-manual-progress-ludus-1.16.32',manual.patterns||[])&&match('ghrab-manual-theme',manual.patterns||[]),JSON.stringify(manual||{}));
 add('pc01.lifecycle.local-not-cleared',localLifecycle?.clearOnEndWork===false&&['ghrab.ludus.suite-session-seen.v1','ghrab.ludus.suite-session-status.v1','ghrab.ludus.migration.p2-storage-namespace-v1.done'].every(k=>match(k,localLifecycle.patterns||[])));
 add('pc01.lifecycle.session-not-cleared',sessionLifecycle?.clearOnEndWork===false&&match('ghrab.ludus.suite-session-tab-seen.v1',sessionLifecycle?.patterns||[]));
 add('pc01.suite.generation-read-only',manifest.sessionLifecycle?.ownership?.generationKey==='platform-global-read-only-for-ludus');
@@ -77,7 +77,7 @@ const inventory={
   suiteSession:manifest.sessionLifecycle
 };
 const failed=checks.filter(c=>!c.ok);
-const report={schema:'ghrab-pc01-suite-session-audit-v1',appId:manifest.appId,appVersion:manifest.appVersion,platformVersion:'1.1.2',generatedAt:new Date().toISOString(),sourceScope:['src/index.html','runtime/ludus-privacy.js','runtime/ludus-engine-runtime.js','engines/*.html','public/config/data-manifest.json'],inventory,checks,summary:{total:checks.length,passed:checks.length-failed.length,failed:failed.length},status:failed.length?'failed':'passed'};
+const report={schema:'ghrab-pc01-suite-session-audit-v1',appId:manifest.appId,appVersion:manifest.appVersion,platformVersion:'1.1.3',generatedAt:new Date().toISOString(),sourceScope:['src/index.html','runtime/ludus-privacy.js','runtime/ludus-engine-runtime.js','engines/*.html','public/config/data-manifest.json'],inventory,checks,summary:{total:checks.length,passed:checks.length-failed.length,failed:failed.length},status:failed.length?'failed':'passed'};
 fs.mkdirSync(path.join(root,'qa-results'),{recursive:true});
 fs.writeFileSync(path.join(root,'qa-results','pc01-suite-session.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({schema:report.schema,appVersion:report.appVersion,summary:report.summary,status:report.status},null,2));

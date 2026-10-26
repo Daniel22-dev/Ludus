@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.31">
+<html lang="cs" data-ghrab-app-id="ludus" data-ghrab-app-version="1.16.32">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -398,7 +398,7 @@ a.manual-launch-btn{display:inline-flex;align-items:center;justify-content:cente
 a.manual-launch-btn::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 44%,transparent);pointer-events:none;opacity:.75}
 a.manual-launch-btn:hover::after,a.manual-launch-btn:focus-visible::after{opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc, var(--accent, #65d9ff)) 12%,transparent)}
 </style>
-  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.31" data-ludus-privacy-scope="builder"></script>
+  <script src="./runtime/ludus-privacy.js" data-ludus-privacy-runtime="1.16.32" data-ludus-privacy-scope="builder"></script>
 </head>
 <body>
 <div class="wrap" role="main">
@@ -2670,6 +2670,7 @@ async function inlineLudusRuntimeScripts(parsed,engineUrl){
 async function injectAndStore(pack,world){
   const sk=SKINS.find(x=>x.id===state.skin);
   window.__lastPack=pack; window.__lastWorld=world; window.__lastTopic=state.topic.cz;
+  const exportButton = document.getElementById('stage07Save'); if (exportButton) exportButton.disabled = false;
   window.__lastColor=(sk&&sk.c)||'#b475ff'; window.__lastSpec=window.__spec||null;
   const contentV2=toContentV2(pack); window.__lastContentV2=contentV2;
   const eng=getGameEngine(state.skin,state.frame);
@@ -2882,6 +2883,18 @@ let toastT;
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),4200);}
 
 
+/* STAGE07 LUDUS LAZY-BOOTSTRAP BEGIN */
+(()=>{
+const a=document.getElementById('dlLesson');if(!a)return;
+const b=document.createElement('button');
+Object.assign(b,{id:'stage07Save',type:'button',className:'btn ghost',textContent:'⇧ Uložit obsah do AI Studia',disabled:!window.__lastPack});
+a.after(b);let busy=false;
+b.onclick=async()=>{if(busy||!window.__lastPack)return;busy=true;b.disabled=true;
+try{await import('./runtime/stage07-outbound.js?v=1.16.32');
+b.remove();window.LUDUS_STAGE07.setupUI();document.getElementById('stage07Save')?.click();
+}catch{busy=false;b.disabled=false;b.textContent='Export není dostupný – opakovat';}};
+})();
+/* STAGE07 LUDUS LAZY-BOOTSTRAP END */
 /* ---- AI Studio GHRAB: přímý import GHRAB Material v1 / LUDUS_CONTENT v2 ---- */
 const STUDIO_HANDOFF_KEY='ghrab.handoff.v1', STUDIO_EVENTS_KEY='ghrab.pilot.events.v2';
 function studioGet(k){try{return localStorage.getItem(k)}catch(e){console.warn('AI Studio bridge: čtení úložiště selhalo',e);return null}}
@@ -3056,11 +3069,11 @@ function buildLessonPackHtml(spec,tasks){
 }
 
 /* ============================ APP IDENTITY: about, history, guide, tests ============================ */
-const APP_VERSION='1.16.31';
-const APP_ABOUT=Object.freeze(/* ABOUT_METADATA_START */{"releaseDate":"2026-10-02","platformVersion":"1.1.2","aiCoreVersion":"1.0.0","garpVersion":"2.7","pilotStatus":"Ověřováno v pilotu","shieldLive":"NOT TESTED","serverStatus":"DEFERRED_BY_OWNER_DECISION"}/* ABOUT_METADATA_END */);
+const APP_VERSION='1.16.32';
+const APP_ABOUT=Object.freeze(/* ABOUT_METADATA_START */{"releaseDate":"2026-10-02","platformVersion":"1.1.3","aiCoreVersion":"1.0.0","garpVersion":"2.7","pilotStatus":"Ověřováno v pilotu","shieldLive":"NOT TESTED","serverStatus":"DEFERRED_BY_OWNER_DECISION"}/* ABOUT_METADATA_END */);
 const CHANGELOG_LIMIT=10;
 const CHANGELOG=[
-  '1.16.31 · GARP 2.8 audit: ochrana všech nasazených stránek proti cizímu iframe a rozšířená sanitizace technických chyb o Google API klíče a parametr key. UI a herní logika beze změn.',
+  '1.16.32 · GARP 2.8 audit: ochrana všech nasazených stránek proti cizímu iframe a rozšířená sanitizace technických chyb o Google API klíče a parametr key. UI a herní logika beze změn.',
   '1.16.30 · O aplikaci: jednotná identita, autor a vývojový garant, školní projekt a technický stav; historie vydání je součástí nové sekce. Herní logika beze změn.',
   '1.16.29 · GARP 2.7 FOUNDATION: přidána architecture-integrity brána, fail-closed school AI hranice, omezení příloh a Node 24 CI; LIVE ověření zůstává otevřené.',
   '1.16.14 · GARP bezpečnost: school-server deployment selhává fail-closed, ruční JSON import má limity a strukturální guard, náhled hry izoluje opener a GitHub Actions jsou připnuté na commit SHA.',

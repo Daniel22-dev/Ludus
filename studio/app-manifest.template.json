@@ -42,14 +42,15 @@
     "canonical-branding",
     "storage-namespace-v1",
     "artifact-envelope-v1",
-    "suite-session-lifecycle-v1"
+    "suite-session-lifecycle-v1",
+    "material-flow-outbound"
   ],
   "compatibility": {
     "studioMinVersion": "0.5.1",
     "materialSchema": "ghrab-material-v1",
     "studioBridge": "2.0",
     "platformContract": "ghrab-platform-v1",
-    "platformRange": ">=1.1.2 <2.0.0"
+    "platformRange": ">=1.1.3 <2.0.0"
   },
   "publishedAt": "__BUILD_TIME__",
   "aiCore": {
@@ -75,8 +76,8 @@
   "platform": {
     "schema": "ghrab-platform-app-integration-v1",
     "contract": "ghrab-platform-v1",
-    "requiredPlatformRange": ">=1.1.2 <2.0.0",
-    "platformVersion": "1.1.2",
+    "requiredPlatformRange": ">=1.1.3 <2.0.0",
+    "platformVersion": "1.1.3",
     "brandVersion": "1.0.0",
     "themeContract": 1,
     "swContract": 1,

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.16.32 — 2026-10-26 — E7 LUDUS ⇄ AI Studio (release candidate)
+
+- Nový bezpečný pedagogický export z herních stanic do AI Studio „Moje materiály“ přes kanonický Bridge v2.
+- Pouze podporované úlohy a odpovědi; herní mechaniky, skóre a osobní údaje se nepřenášejí.
+- GHRAB Platform 1.1.3 – oprava kontroly verze při směrování do AI Studia.
+- **Stav:** místní integrační kandidát, neprodukční. P5 a školní autentizované UAT vyžadují samostatné ověření.
+
 ## 1.16.31 — 2026-10-02 — GARP 2.8 audit hardening
 
 - Přidán `frame-guard.js` proti vložení nasazeného LUDUSu do cizího rámu; same-origin rám AI Studia zůstává povolen.
