@@ -1,0 +1,182 @@
+name: E7 v4 LUDUS full Node24 and GARP P5 certification, no deploy
+
+on:
+  push:
+    branches:
+      - review/e7-v4-node24-cert-20261026
+
+permissions:
+  contents: read
+
+jobs:
+  stage07-full-checkout:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Refuse source drift and inspect E7 review-only changes
+        shell: bash
+        env:
+          SOURCE_PIN: a5ac946600fba95fe9c4f77ac7a7a5b440945f0d
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git cat-file -e "$SOURCE_PIN^{commit}"
+          git merge-base --is-ancestor "$SOURCE_PIN" HEAD
+          git diff --name-only "$SOURCE_PIN" HEAD | sort > /tmp/e7-review-diff.txt
+          printf '%s\n' \
+            '.github/workflows/e7-full-checkout-review.yml' \
+            '.github/workflows/e7-v4-review-cert.yml' \
+            'review-only/E7_v4_postprocess.xz.b85' \
+            'review-only/E7_review_sources.b85' \
+            'review-only/e7_release_sync_v3.py' | sort > /tmp/e7-allowed-diff.txt
+          cmp /tmp/e7-review-diff.txt /tmp/e7-allowed-diff.txt
+          echo 'Only isolated review input and CI workflow; production source unchanged.'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.8.0
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Decode and verify immutable E7 offline source bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64,hashlib,io,lzma,os,pathlib,tarfile
+          encoded=pathlib.Path('review-only/E7_review_sources.b85').read_text(encoding='ascii').strip()
+          xz=base64.b85decode(encoded)
+          expected='9eba49de0087774ff34b6b6df36eb30c301aa0793f7b1f77ed1fb238be4c39eb'
+          assert hashlib.sha256(xz).hexdigest()==expected, 'E7 archive identity mismatch'
+          dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'e7-kit'
+          allow={'modules/stage07-outbound.js','scripts/apply_stage07.py',
+           'tests/stage07-outbound.test.mjs','tests/stage07-ui-transport.test.mjs',
+           'tests/stage07-platform-bridge.test.mjs'}
+          with tarfile.open(fileobj=io.BytesIO(lzma.decompress(xz)),mode='r:') as archive:
+            names={item.name for item in archive}
+            assert names==allow, f'Unexpected source bundle members: {names ^ allow}'
+            for item in archive:
+              assert item.isfile() and item.name in allow
+              target=dest/item.name
+              target.parent.mkdir(parents=True,exist_ok=True)
+              target.write_bytes(archive.extractfile(item).read())
+          print('E7 reviewed bundle SHA256 verified; 5 source/test files extracted to ephemeral workspace.')
+          PY
+      - name: Apply E7 to a new isolated copy of authentic LUDUS main
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/e7-kit/scripts/apply_stage07.py" "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/Ludus-E7-REVIEW"
+          echo "E7_REVIEW=$RUNNER_TEMP/Ludus-E7-REVIEW" >> "$GITHUB_ENV"
+      - name: Align reviewed AI operations identity with version 1.16.32
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          path=pathlib.Path(os.environ['E7_REVIEW'])/'public/ai-operations.json'
+          doc=json.loads(path.read_text(encoding='utf8'))
+          assert doc['appId']=='ludus' and doc['appVersion']=='1.16.31' and len(doc['operations'])==2
+          doc['appVersion']='1.16.32'
+          path.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+          print('Version-pinned AI operations updated only inside isolated E7 checkout.')
+          manifest=pathlib.Path(os.environ['E7_REVIEW'])/'public/config/data-manifest.json'
+          data=json.loads(manifest.read_text(encoding='utf8'))
+          assert data['appId']=='ludus' and data['appVersion']=='1.16.31'
+          assert data['export']['artifactTypes']==[]
+          assert data['import']['artifactTypes']==['studio-material','ludus-content']
+          consumer=json.loads((pathlib.Path(os.environ['E7_REVIEW'])/'ghrab-platform.consumer.json').read_text(encoding='utf8'))
+          assert consumer['appVersion']=='1.16.32' and consumer['artifact']['exports']==['studio-material']
+          data['appVersion']='1.16.32'
+          data['export']['artifactTypes']=list(consumer['artifact']['exports'])
+          manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+          print('E7 data manifest export contract and release version synchronized with audited consumer metadata.')
+          PY
+      - name: Synchronize E7 release references from immutable baseline (review only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 review-only/e7_release_sync_v3.py "$E7_REVIEW"
+      - name: Decode pinned E7 v4 postprocessor and apply final lazy-load and signed grant hardening
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64,hashlib,lzma,os,pathlib
+          src=pathlib.Path('review-only/E7_v4_postprocess.xz.b85').read_text(encoding='ascii').strip()
+          archive=base64.b85decode(src)
+          assert hashlib.sha256(archive).hexdigest()=='9d220e28170af0748c86611b5ca7c6e21a13376444b3dadeed8b6fc68ae92ce3', 'v4 postprocessor SHA256 mismatch'
+          code=lzma.decompress(archive)
+          assert len(code)==9213, 'v4 source identity mismatch'
+          dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'e7-v4-postprocess.py'
+          dest.write_bytes(code)
+          print('Reviewed v4 source decoded with pinned SHA-256.')
+          PY
+          python3 "$RUNNER_TEMP/e7-v4-postprocess.py" "$E7_REVIEW"
+      - name: Install exact locked dependencies in reviewed LUDUS source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$E7_REVIEW"
+          npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org
+      - name: Verify preinstalled Chrome/Playwright provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$E7_REVIEW"
+          node -e "const p=require('./node_modules/playwright/package.json');if(p.version!=='1.61.1')process.exit(1)"
+          node --input-type=module <<'NODE'
+          import {chromium} from 'playwright';
+          import {accessSync,constants,appendFileSync} from 'node:fs';
+          if(process.env.PLAYWRIGHT_BROWSERS_PATH!=='/ms-playwright')throw Error('Unpinned Chromium');
+          const p=chromium.executablePath();accessSync(p,constants.X_OK);
+          const b=await chromium.launch();try{console.log('Chrome',b.version());}finally{await b.close();}
+          appendFileSync(process.env.GITHUB_ENV,'CHROMIUM_PATH='+p+'\n');
+          NODE
+      - name: Build actual E7 and verify GHRAB Platform 1.1.3 conformance
+        shell: bash
+        run: |
+          cd "$E7_REVIEW"
+          npm run build:unofficial
+          npm run verify:platform
+      - name: Verify all original 102 P3 security, performance and quality metrics
+        shell: bash
+        run: |
+          cd "$E7_REVIEW"
+          npm run qa:quality
+      - name: Execute all E7 tests, including 3 actual vendor Platform contracts
+        shell: bash
+        run: |
+          cd "$E7_REVIEW"
+          npm run test:stage07
+      - name: Full original LUDUS test gate with E7 inserted
+        shell: bash
+        run: |
+          cd "$E7_REVIEW"
+          npm test
+      - name: Full GARP/Platform/P5 release gate (no deploy)
+        shell: bash
+        env:
+          GARP27_TRUSTED_POLICY_SHA256: ${{ vars.GARP27_TRUSTED_POLICY_SHA256 }}
+        run: |
+          cd "$E7_REVIEW"
+          npm run qa:p5:ci
+      - name: Upload sanitized review evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: e7-full-checkout-review-evidence
+          path: |
+            ${{ runner.temp }}/Ludus-E7-REVIEW/STAGE07_PATCH_MANIFEST.json
+            ${{ runner.temp }}/Ludus-E7-REVIEW/dist/qa-p5-*.json
+            ${{ runner.temp }}/Ludus-E7-REVIEW/dist/quality-report.json
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Do not claim authorized student/teacher UAT
+        if: always()
+        run: |
+          echo "E7 v4: signed school 6/6 remains NOT_CERTIFIED, never infer from synthetic CI."
+          echo "No production branch, site or secret was modified. Do not merge without release acceptance."
