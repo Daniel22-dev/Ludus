@@ -30,7 +30,8 @@ jobs:
           git diff --name-only "$SOURCE_PIN" HEAD | sort > /tmp/e7-review-diff.txt
           printf '%s\n' \
             '.github/workflows/e7-full-checkout-review.yml' \
-            'review-only/E7_review_sources.b85' | sort > /tmp/e7-allowed-diff.txt
+            'review-only/E7_review_sources.b85' \
+            'review-only/e7_release_sync_v3.py' | sort > /tmp/e7-allowed-diff.txt
           cmp /tmp/e7-review-diff.txt /tmp/e7-allowed-diff.txt
           echo 'Only isolated review input and CI workflow; production source unchanged.'
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -92,6 +93,11 @@ jobs:
           manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
           print('E7 data manifest export contract and release version synchronized with audited consumer metadata.')
           PY
+      - name: Synchronize E7 release references from immutable baseline (review only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 review-only/e7_release_sync_v3.py "$E7_REVIEW"
       - name: Install exact locked dependencies in reviewed LUDUS source
         shell: bash
         run: |
