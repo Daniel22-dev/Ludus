@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 3
+          fetch-depth: 0
       - name: Refuse source drift and inspect E7 review-only changes
         shell: bash
         env:
