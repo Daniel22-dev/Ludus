@@ -33,4 +33,18 @@ entry=(f'## {NEW} — 2026-10-26 — E7 pedagogický Material Flow do AI Studia\
        '- Synchronizována verze PWA, jedenácti herních enginů, privacy runtime, exportního manifestu a AI operations; bez tvrzení o dokončeném autorizovaném UAT.\n\n')
 p.write_text(s.replace('# Changelog\n\n','# Changelog\n\n'+entry,1),encoding='utf8',newline='\n')
 once('scripts/apply-ghrab-platform.mjs','      bridgeMaxBytes: consumer.bridge.maxBytes,','      bridgeMaxBytes: consumer.bridge.maxBytes,\n      bridgeWriteLegacy: false,')
+
+pkg_path=root/'package.json'
+pkg=rd('package.json')
+assert pkg['version']==NEW
+for key in ('garp25:sbom','garp25:sbom:check','garp25:sbom:verify',
+            'garp25:sbom:deploy','garp25:sbom:deploy:check',
+            'garp25:sbom:deploy:school-future'):
+ command=pkg['scripts'].get(key)
+ assert isinstance(command,str) and command.count('ludus-'+OLD)==1,(key,command)
+ pkg['scripts'][key]=command.replace('ludus-'+OLD,'ludus-'+NEW)
+wr('package.json',pkg)
+once('scripts/generate-cyclonedx-sbom.mjs',"{name:'ghrab-platform',version:'1.1.2'","{name:'ghrab-platform',version:'1.1.3'")
+once('scripts/generate-cyclonedx-sbom.mjs',"'ghrab/ghrab-platform-manifest-1.1.2.json'","'ghrab/ghrab-platform-manifest-1.1.3.json'")
+
 print('E7 REVIEW: 11 engines, privacy runtime, PWA, release docs and v2-only bridge config aligned.')
