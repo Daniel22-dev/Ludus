@@ -80,6 +80,17 @@ jobs:
           doc['appVersion']='1.16.32'
           path.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
           print('Version-pinned AI operations updated only inside isolated E7 checkout.')
+          manifest=pathlib.Path(os.environ['E7_REVIEW'])/'public/config/data-manifest.json'
+          data=json.loads(manifest.read_text(encoding='utf8'))
+          assert data['appId']=='ludus' and data['appVersion']=='1.16.31'
+          assert data['export']['artifactTypes']==[]
+          assert data['import']['artifactTypes']==['studio-material','ludus-content']
+          consumer=json.loads((pathlib.Path(os.environ['E7_REVIEW'])/'ghrab-platform.consumer.json').read_text(encoding='utf8'))
+          assert consumer['appVersion']=='1.16.32' and consumer['artifact']['exports']==['studio-material']
+          data['appVersion']='1.16.32'
+          data['export']['artifactTypes']=list(consumer['artifact']['exports'])
+          manifest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+          print('E7 data manifest export contract and release version synchronized with audited consumer metadata.')
           PY
       - name: Install exact locked dependencies in reviewed LUDUS source
         shell: bash
