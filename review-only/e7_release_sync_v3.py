@@ -71,4 +71,14 @@ assert test_source.count('NOT-FOR-EXPORT')==2
 ui_file.write_text(test_source.replace('NOT-FOR-EXPORT','TEST_SYNTHETIC_KEY_NOT_A_SECRET'),
                    encoding='utf8',newline='\n')
 
+# GARP 2.7 contract identities must match this application release exactly.
+# Do not rewrite protocol digests, authority decisions or live eligibility.
+for rel in ('security/garp27/contracts/app-profile.json',
+            'security/garp27/contracts/capability-inventory.json'):
+ contract=rd(rel)
+ assert contract['appId']=='ludus' and contract['appVersion']==OLD,rel
+ assert contract['garpVersion']=='2.7',rel
+ contract['appVersion']=NEW
+ wr(rel,contract)
+
 print('E7 REVIEW: 11 engines, privacy runtime, PWA, release docs and v2-only bridge config aligned.')
