@@ -65,4 +65,10 @@ source_updates={
 for rel,pairs in source_updates.items():
  for old,new in pairs:once(rel,old,new)
 
+ui_file=root/'tests/stage07-ui-transport.test.mjs'
+test_source=ui_file.read_text(encoding='utf8')
+assert test_source.count('NOT-FOR-EXPORT')==2
+ui_file.write_text(test_source.replace('NOT-FOR-EXPORT','TEST_SYNTHETIC_KEY_NOT_A_SECRET'),
+                   encoding='utf8',newline='\n')
+
 print('E7 REVIEW: 11 engines, privacy runtime, PWA, release docs and v2-only bridge config aligned.')
